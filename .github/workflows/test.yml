@@ -5,9 +5,17 @@ on:
     branches: [main, develop]
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   test:
+    name: Pytest Matrix
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12', '3.13']
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -15,8 +23,9 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: ${{ matrix.python-version }}
           cache: 'pip'
+          cache-dependency-path: 'pipeline/requirements.txt'
 
       - name: Install Dependencies
         run: |
@@ -25,3 +34,90 @@ jobs:
 
       - name: Run Pytest
         run: pytest pipeline/tests/
+
+  build-validation:
+    name: Build Artifact Validation
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Validate anomalies.json schema
+        run: |
+          python -c "
+          import json
+          data = json.load(open('docs/data/anomalies.json'))
+          assert 'anomalies' in data, 'Missing top-level anomalies key'
+          for anomaly in data['anomalies']:
+              assert 0 <= anomaly['confidence'] <= 1, f'Confidence out of [0,1]: {anomaly[\"id\"]}'
+              assert anomaly['confidence_ci_low'] <= anomaly['confidence'] <= anomaly['confidence_ci_high']
+              assert anomaly['confidence_ci_high'] <= 1.0, f'CI high > 1.0: {anomaly[\"id\"]}'
+              for key in ['id', 'lat', 'lon', 'type', 'sensor', 'anomaly_score']:
+                  assert key in anomaly, f'Missing key {key}: {anomaly[\"id\"]}'
+          print(f'anomalies.json VALID — {len(data[\"anomalies\"])} records')
+          "
+
+      - name: Validate GeoJSON RFC 7946 compliance
+        run: |
+          python -m pip install --upgrade pip
+          pip install geojson
+          python -c "
+          import geojson
+          with open('docs/data/regions.geojson') as handle:
+              data = geojson.load(handle)
+          assert data.is_valid, f'Invalid GeoJSON: {data.errors()}'
+          print('regions.geojson RFC 7946 VALID')
+          "
+
+      - name: Validate OpenAPI spec
+        run: |
+          python -m pip install --upgrade pip
+          pip install openapi-spec-validator pyyaml
+          python -c "
+          from openapi_spec_validator import OpenAPIV30SpecValidator
+          import yaml
+          with open('docs/openapi.yaml') as handle:
+              spec = yaml.safe_load(handle)
+          OpenAPIV30SpecValidator(spec).validate()
+          print('openapi.yaml VALID — OpenAPI 3.0')
+          "
+
+      - name: Validate all API v1 endpoint JSONs
+        run: |
+          python -c "
+          import json
+          from pathlib import Path
+          api_dir = Path('docs/api/v1')
+          count = 0
+          for json_file in api_dir.rglob('*.json'):
+              json.load(open(json_file))
+              count += 1
+          print(f'API endpoint JSONs VALID — {count} files')
+          "
+
+      - name: Validate PWA manifest
+        run: |
+          python -c "
+          import json
+          manifest = json.load(open('docs/manifest.json'))
+          required = ['name', 'short_name', 'start_url', 'display', 'icons']
+          for key in required:
+              assert key in manifest, f'Missing PWA manifest key: {key}'
+          assert any(icon['sizes'] == '512x512' for icon in manifest['icons']), 'Missing 512x512 icon'
+          print('manifest.json VALID PWA manifest')
+          "
+
+      - name: Check HTML files parse correctly
+        run: |
+          python -m pip install --upgrade pip
+          pip install html5lib
+          python -c "
+          import html5lib
+          from pathlib import Path
+          for html_file in Path('docs').glob('*.html'):
+              with open(html_file, 'rb') as handle:
+                  parser = html5lib.HTMLParser(strict=False)
+                  parser.parse(handle)
+          print('All HTML files parseable')
+          "
