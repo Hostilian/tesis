@@ -41,6 +41,33 @@ jobs:
           path: pip-audit-report.json
           retention-days: 30
 
+  # ── Python Bandit Scan ───────────────────────────────────────────────────────
+  bandit-scan:
+    name: Bandit Python Security Linter
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Bandit
+        run: |
+          python -m pip install --upgrade pip
+          pip install bandit[toml]
+
+      - name: Run Bandit
+        run: bandit -r pipeline/src/ -c pyproject.toml --exit-zero --format json -o bandit-report.json
+
+      - name: Upload Bandit Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: bandit-security-report
+          path: bandit-report.json
+
   # ── JavaScript Dependency Audit ──────────────────────────────────────────────
   js-dependency-audit:
     name: npm audit (docs/ JS)
