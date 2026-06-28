@@ -16,3 +16,4 @@ pip-audit==2.9.0
 
 # Type stubs
 numpy>=2.0
+types-requests>=2.31.0

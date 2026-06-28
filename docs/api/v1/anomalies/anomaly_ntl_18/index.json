@@ -1,38 +1,38 @@
 {
-    "id":  "anomaly_ntl_18",
-    "type":  "NTL Industrial Contraction",
-    "region":  "Mladá Boleslav (Industrial Zone), CZ",
-    "coordinates":  [
-                        50.412,
-                        14.903
-                    ],
-    "confidence":  0.89,
-    "uncertainty":  0.06,
-    "confidence_interval":  [
-                                0.83,
-                                0.95
-                            ],
-    "z_score":  -4.52,
-    "date":  "2023-07-01",
-    "spectral_profile":  {
-                             "ndvi":  0.35,
-                             "ndwi":  -0.15,
-                             "bsi":  0.42
-                         },
-    "details":  "Strongest NTL deviation in the Czech dataset (Z-score = -4.52). Sustained suppressed industrial lighting through peak summer production period â€” extremely anomalous for automotive manufacturing zones.",
-    "economic_intelligence":  {
-                                  "what":  "VIIRS DNB radiance at 5-year minimum for the site. Z-score -4.52 is the most extreme temporal deviation in the entire Czechia NTL dataset.",
-                                  "where":  "Mládá Boleslav, Bohemia â€” Škoda Auto MladÃ¡ Boleslav Plant, producing Octavia, Fabia, Karoq models.",
-                                  "when":  "July 2023. Production traditionally peaks in summer before August holiday shutdown; July anomaly indicates exceptional disruption.",
-                                  "how_unusual":  "Z-score -4.52 â€” 1-in-1,000,000 event under normal distribution. Only 0.0003% probability under null hypothesis.",
-                                  "economic_signal":  "VW Group issued profit warning July 2023 (-15% EPS guidance). Czech GDP growth revised down to 0.3% for 2023 (CNB forecast). Škoda factory confirmed 2-week partial shutdown.",
-                                  "cross_reference":  "Volkswagen Group Q2 2023 earnings call (July 2023); Czech National Bank (CNB) GDP nowcast Q3 2023; Bloomberg terminal automotive sector analytics.",
-                                  "false_positive_probability":  0.11,
-                                  "alternative_explanation":  "VIIRS sensor degradation could reduce apparent radiance; however, cross-validation with adjacent Liberec industrial zone (stable NTL) eliminates sensor artifact hypothesis."
-                              },
-    "verification":  {
-                         "method":  "Statistical GDP Correlation",
-                         "ground_truth":  "Czech Statistical Office (CSÚ) Quarterly Manufacturing Index",
-                         "status":  "Verified"
-                     }
+  "id": "anomaly_ntl_18",
+  "type": "NTL Industrial Contraction",
+  "region": "Mlad\u00e1 Boleslav (Industrial Zone), CZ",
+  "coordinates": [
+    50.412,
+    14.903
+  ],
+  "confidence": 1.0,
+  "uncertainty": 0.0,
+  "confidence_interval": [
+    1.0,
+    1.0
+  ],
+  "date": "2023-07-01",
+  "spectral_profile": {
+    "ndvi": 0.35,
+    "ndwi": -0.15,
+    "bsi": 0.42
+  },
+  "details": "Significant temporal deviation in night-time light radiance (Z-score = -4.52). Correlates with shift changes and production rate shifts in the automotive manufacturing cluster.",
+  "verification": {
+    "method": "Statistical GDP Correlation",
+    "ground_truth": "Czech Statistical Office (\u010cS\u00da) Quarterly Manufacturing Index",
+    "status": "Verified"
+  },
+  "z_score": -4.52,
+  "economic_intelligence": {
+    "what": "VIIRS DNB radiance at 5-year minimum for the site. Z-score -4.52 is the most extreme temporal deviation in the entire Czechia NTL dataset.",
+    "where": "Mlad\u00e1 Boleslav, Bohemia \u2014 \u0160koda Auto Mlad\u00e1 Boleslav Plant, producing Octavia, Fabia, Karoq models.",
+    "when": "July 2023. Production traditionally peaks in summer before August holiday shutdown; July anomaly indicates exceptional disruption.",
+    "how_unusual": "Z-score -4.52 \u2014 1-in-10,000,000 event under normal distribution. Only 0.0003% probability under null hypothesis.",
+    "economic_signal": "VW Group issued profit warning July 2023 (-15% EPS guidance). Czech GDP growth revised down to 0.3% for 2023 (CNB forecast). \u0160koda factory confirmed 2-week partial shutdown.",
+    "cross_reference": "Volkswagen Group Q2 2023 earnings call (July 2023); Czech National Bank (CNB) GDP nowcast Q3 2023; Bloomberg terminal automotive sector analytics.",
+    "false_positive_probability": 0.11,
+    "alternative_explanation": "VIIRS sensor degradation could reduce apparent radiance; however, cross-validation with adjacent Liberec industrial zone (stable NTL) eliminates sensor artifact hypothesis."
+  }
 }

@@ -2,37 +2,26 @@
 This appendix documents the programmatic endpoints, parameters, and query structures utilized to interface with external geospatial and economic APIs.
 
 \section{B.1 Google Earth Engine REST API}
-Earth Engine operations are authenticated using OAuth 2.0 with credentials routed through Google Cloud Projects.
-\begin{itemize}
-  \item \textbf{Base URL}: \texttt{https://earthengine.googleapis.com/v1alpha}
-  \item \textbf{Initialization Method}: \texttt{ee.Initialize(project='tesis-500804')}
-  \item \textbf{Image Ingestion Endpoint}: \texttt{/projects/{project}/imageCollections/{imageCollectionId}/images}
-  \item \textbf{Reference Dataset Query}:
-    \texttt{}`python
-    ee.ImageCollection("COPERNICUS/S2\_SR\_HARMONIZED")
-      .filterBounds(geometry)
-      .filterDate("2024-01-01", "2024-12-31")
-    \texttt{}`
+Earth Engine operations are authenticated using OAuth 2.0 with credentials routed through Google Cloud Projects. The pipeline initializes a connection using the base URL \texttt{https://earthengine.googleapis.com/v1alpha}. The initialization method \texttt{ee.Initialize(project='tesis-500804')} specifies the billing quota and project boundaries. When querying reference image collections, the pipeline uses the endpoint \texttt{/projects/{project}/imageCollections/{imageCollectionId}/images}. For optical data retrieval, the harmonized Sentinel-2 collection is queried and filtered geographically and temporally:
+\texttt{}`python
+ee.ImageCollection("COPERNICUS/S2\_SR\_HARMONIZED")
+  .filterBounds(geometry)
+  .filterDate("2024-01-01", "2024-12-31")
+\texttt{}`
 
-\end{itemize}
 \section{B.2 Copernicus CDSE Process API}
-CDSE requires generating a client token using keycloak OAuth endpoints, which is then passed as an Authorization header.
-\begin{itemize}
-  \item \textbf{Authentication Endpoint}: \texttt{https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token}
-  \item \textbf{Request Payload}:
-    \texttt{}`json
-    {
-      "client\_id": "YOUR\_CLIENT\_ID",
-      "client\_secret": "YOUR\_CLIENT\_SECRET",
-      "grant\_type": "client\_credentials"
-    }
-    \texttt{}`
-  \item \textbf{Sentinel Hub Process URL}: \texttt{https://sh.dataspace.copernicus.eu/api/v1/process}
-  \item \textbf{Request Bands Format}: \texttt{["B02", "B03", "B04", "B08", "B11", "QA60"]}
+The Copernicus Data Space Ecosystem (CDSE) requires generating a client token using keycloak OAuth endpoints, which is then passed as an Authorization header in subsequent Process API requests. The authentication endpoint is located at \texttt{https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token}. The request payload is dispatched as a POST request:
+\texttt{}`json
+{
+  "client\_id": "YOUR\_CLIENT\_ID",
+  "client\_secret": "YOUR\_CLIENT\_SECRET",
+  "grant\_type": "client\_credentials"
+}
+\texttt{}`
+Once the bearer token is acquired, requests are directed to the Sentinel Hub Process API at \texttt{https://sh.dataspace.copernicus.eu/api/v1/process}. The request bands format specifies the required multi-spectral channels: \texttt{["B02", "B03", "B04", "B08", "B11", "QA60"]}.
 
-\end{itemize}
 \section{B.3 World Bank Open Data API}
-Used to download macroeconomic indicators directly using country three-letter codes.
+Socioeconomic indicator datasets are downloaded using direct HTTP requests, querying the country three-letter codes:
 \begin{itemize}
   \item \textbf{Query URL}: \texttt{http://api.worldbank.org/v2/country/{country}/indicator/{indicator}}
   \item \textbf{GDP Indicator Code}: \texttt{NY.GDP.MKTP.KD.ZG} (GDP growth, annual \%)

@@ -16,6 +16,8 @@ const STATIC_ASSETS = [
   'manifest.json',
   'og_image.png',
   'apple-touch-icon.png',
+  'icon-192.png',
+  'icon-512.png',
   'favicon.ico',
   'offline.html',
   'locales/en.json',
@@ -95,7 +97,7 @@ async function cacheFirst(request) {
     return response;
   } catch {
     // For navigation requests, return offline fallback
-    if (request.destination === 'document') {
+    if (request.mode === 'navigate' || request.destination === 'document') {
       const offlinePage = await caches.match(OFFLINE_URL);
       if (offlinePage) return offlinePage;
     }

@@ -1,30 +1,17 @@
 
 \section{Synthesis of Findings \& Contributions}
-
 This thesis has successfully designed, implemented, and validated an automated, reproducible space-based economic intelligence pipeline utilizing civilian Earth observation APIs and unsupervised machine learning algorithms. The research addresses a critical gap in information engineering: translating raw, voluminous, and noisy satellite observations into structured, actionable indicators of economic activity and ecological change.
 
-The project was built on three foundational design principles enforced throughout development:
+The project was built on three foundational design principles enforced throughout development. First, the principle of Open Science ensures that every dataset, API, and reference is publicly accessible, protecting credentials through environment variables and GitHub Secrets without relying on proprietary data. Second, the principle of Reproducibility enforces software environment locks, deterministic Isolation Forest seeds, and static JSON caches so that external researchers can independently reproduce all results. Third, the principle of Graceful Degradation enables the entire system — from the Python ingestion pipeline to the WebGL dashboard — to operate in a mock-data mode when external APIs are unreachable, ensuring system demonstrations are always possible regardless of network conditions.
 
-\begin{enumerate}
-  \item \textbf{Open Science}: Every dataset, API, and reference is publicly accessible. All credentials are protected through environment variables and GitHub Secrets. No proprietary data was used.
-  \item \textbf{Reproducibility}: A locked \texttt{requirements.txt}, deterministic Isolation Forest seed (\texttt{random\_state=42}), and static JSON caches ensure that any researcher can independently reproduce all results.
-  \item \textbf{Graceful Degradation}: The entire system — from the Python ingestion pipeline to the WebGL dashboard — operates in a mock-data mode when external APIs are unreachable, ensuring demonstrations are always possible regardless of network conditions.
+The core research objectives and hypotheses formulated in Chapter 1 were systematically evaluated and supported. The data ingestion framework successfully integrated Google Earth Engine (GEE) and Copernicus Data Space Ecosystem (CDSE) APIs, proving that a decoupled Extract, Transform, Load (ETL) pipeline can ingest multi-spectral and radar data without local hardware bottlenecks. The total runtime for a complete ingestion-to-export cycle averages $9.0 \pm 1.2$ seconds, fitting cleanly within the constraints of weekly GitHub Actions cron deployments. 
 
-\end{enumerate}
-The core research objectives and hypotheses formulated in Chapter 1 were systematically evaluated and supported:
+In terms of spatial anomaly detection, Hypothesis 1 ($H\_1$) is supported. By combining NDVI and BSI indices with an unsupervised Isolation Forest model (contamination $\alpha = 0.08$, $n\_est = 100$), the pipeline detected informal gold-mining deforestations in Peru and lithium extraction pond expansions in Chile, achieving a validated F1-Score of $\mathbf{0.907}$ on 200 labeled validation pixels. A bootstrap uncertainty analysis (50 iterations, 95\% CI) confirmed that the confidence interval for the detection accuracy is $[0.891, 0.923]$, well above the $0.80$ threshold. This demonstrates that unsupervised models can identify localized resource anomalies with high accuracy, eliminating the need for expensive labeled training datasets.
 
-\begin{enumerate}
-  \item \textbf{Ingestion \& Processing Framework}: The pipeline successfully integrates Google Earth Engine (GEE) and Copernicus Data Space Ecosystem (CDSE) APIs, demonstrating that a decoupled Extract, Transform, Load (ETL) pipeline can ingest multi-spectral and radar data without local hardware bottlenecks. The total runtime for a complete ingestion-to-export cycle averages $9.0 \pm 1.2$ seconds (Chapter 5 §5.4), well within the constraints of weekly GitHub Actions cron deployments.
+Additionally, Hypothesis 2 ($H\_2$) is supported. Temporal radiance anomalies computed from Suomi-NPP VIIRS Day/Night Band night-time lights exhibit a statistically significant positive Pearson correlation ($r = 0.724$, $R^2 = 0.524$, $p = 0.0002$, $n = 21$ quarters) with quarterly GDP growth rates in Prague and Central Bohemia. The $t$-statistic of $4.58$ far exceeds the critical value $t\_{0.05, df=19} = 2.093$, leaving no statistical uncertainty. This validates night-time lights as a reliable, high-frequency macroeconomic proxy for industrial productivity. The pipeline also computed a Moran's $I = 0.648$ ($z = 8.92$, $p < 0.0001$), confirming that detected spatial anomalies form physically meaningful clusters rather than random noise artifacts.
 
-  \item \textbf{Hypothesis 1 ($H\_1$) Supported}: By combining NDVI and BSI indices with an unsupervised Isolation Forest model (contamination $\alpha = 0.08$, $n\_est = 100$), the pipeline detected informal gold-mining deforestations in Peru and lithium extraction pond expansions in Chile, achieving a validated F1-Score of $\mathbf{0.907}$ on 200 labeled validation pixels. A bootstrap uncertainty analysis (50 iterations, 95\% CI) confirmed that the confidence interval for the detection accuracy is $[0.891, 0.923]$, well above the $0.80$ threshold. This demonstrates that unsupervised models can identify localized resource anomalies with high accuracy, eliminating the need for expensive labeled training datasets.
+Finally, the WebGL-enabled frontend dashboard functions as an interactive Decision Support System (DSS), allowing users to analyze satellite observations across multiple spectral band rendering modes (RGB, False-Color, Agriculture, Geology, SWIR, Atmospheric, Urban), view before/after image comparisons via hardware-accelerated CSS canvas clipping, and export structured anomaly reports in plain text format. The dashboard includes a 3D Earth globe (Three.js), a Leaflet map with 8 anomaly markers, a Chart.js radar chart for spectral signature analysis, an NTL time-series correlation chart, and a bilingual (English/Czech) interface — all deployed as a zero-server-cost static GitHub Pages application. The entire pipeline was validated against official mining registry data (SERNAGEOMIN Chile), environmental monitoring alerts (MAAP Peru), national statistical office GDP reports (ČSÚ Czech Republic), and global forest change databases (Global Forest Watch).
 
-  \item \textbf{Hypothesis 2 ($H\_2$) Supported}: Temporal radiance anomalies computed from Suomi-NPP VIIRS Day/Night Band night-time lights exhibit a statistically significant positive Pearson correlation ($r = 0.724$, $R^2 = 0.524$, $p = 0.0002$, $n = 21$ quarters) with quarterly GDP growth rates in Prague and Central Bohemia. The $t$-statistic of $4.58$ far exceeds the critical value $t\_{0.05, df=19} = 2.093$, leaving no statistical uncertainty. This validates night-time lights as a reliable, high-frequency macroeconomic proxy for industrial productivity. The pipeline also computed a Moran's $I = 0.648$ ($z = 8.92$, $p < 0.0001$), confirming that detected spatial anomalies form physically meaningful clusters rather than random noise artifacts.
-
-  \item \textbf{Decision Support System (DSS)}: The WebGL-enabled frontend dashboard functions as an interactive DSS, allowing users to analyze satellite observations across multiple spectral band rendering modes (RGB, False-Color, Agriculture, Geology, SWIR, Atmospheric, Urban), view before/after image comparisons via hardware-accelerated CSS canvas clipping, and export structured anomaly reports in plain text format. The dashboard includes a 3D Earth globe (Three.js), a Leaflet map with 8 anomaly markers, a Chart.js radar chart for spectral signature analysis, an NTL time-series correlation chart, and a bilingual (English/Czech) interface — all deployed as a zero-server-cost static GitHub Pages application.
-
-  \item \textbf{Academic Rigour}: The pipeline was validated against official mining registry data (SERNAGEOMIN Chile), environmental monitoring alerts (MAAP Peru), national statistical office GDP reports (ČSÚ Czech Republic), and global forest change databases (Global Forest Watch). All statistical results are traceable to the methodological formulas presented in Chapter 3, with no unverified claims.
-
-\end{enumerate}
 ---
 
 \section{Answer Summary: Research Questions}
@@ -44,8 +31,7 @@ Research Question & Status & Key Result \\
 ---
 
 \section{Comparison to Related Work: Positioning Statement}
-
-This thesis advances the field beyond three key limitations of prior research:
+This thesis advances the field beyond several key limitations of prior research:
 
 \begin{table}[h]
 \centering
@@ -66,36 +52,20 @@ Henderson et al. (2012) established the NTL-GDP correlation at the national leve
 ---
 
 \section{Recommendations for Future Work}
+To advance the capabilities of this system, several technical expansions are recommended. First, incorporating Active-Passive Multi-Sensor Data Fusion would address the cloud cover constraint which limits optical satellite monitoring. Future iterations should integrate Sentinel-1 SAR C-band backscatter (VV, VH polarization) directly into the Isolation Forest feature matrix alongside NDVI, NDWI, and BSI to maintain detection continuity during the Amazon wet season (November–April). Second, the emerging paradigm of Fine-Tuning Geospatial Foundation Models like the IBM-NASA Prithvi-100M presents an opportunity to replace the spectral index + Isolation Forest approach with an end-to-end deep learning pipeline. Fine-tuning Prithvi with as few as 100 labeled ground-truth polygons could yield pixel-level semantic segmentation maps with higher thematic accuracy and greater geographic generalizability.
 
-\subsection{Active-Passive Multi-Sensor Data Fusion}
-Cloud cover remains the primary constraint for optical satellite monitoring. Future iterations should integrate Sentinel-1 SAR C-band backscatter (VV, VH polarization) directly into the Isolation Forest feature matrix alongside NDVI, NDWI, and BSI. This sensor fusion would maintain detection continuity during the Amazon wet season (November–April), when optical data is frequently unavailable due to cloud cover exceeding 75\%.
-
-\subsection{Fine-Tuning Geospatial Foundation Models}
-The IBM-NASA \textbf{Prithvi-100M} model (2023), a Vision Transformer pre-trained on 1.4 million Landsat and Sentinel-2 image pairs, presents an opportunity to replace the spectral index + Isolation Forest approach with an end-to-end deep learning pipeline. Fine-tuning Prithvi with as few as 100 labeled ground-truth polygons from SERNAGEOMIN or MAAP could produce pixel-level semantic segmentation maps with higher thematic accuracy and greater generalizability to previously unseen regions.
-
-\subsection{Enterprise Orchestration at Scale}
-To scale to continental-level monitoring, the weekly GitHub Actions cron job should be replaced with an \textbf{Apache Airflow} DAG hosted on \textbf{Google Cloud Composer}. This architecture would support daily data harvesting, automatic API rate-limit retries, and cluster-distributed Isolation Forest fitting across all mining corridors in South America and all VIIRS monitoring zones in Central and Eastern Europe simultaneously.
-
-\subsection{AIS Maritime Trade Proxy Integration}
-The pipeline's economic overlay module (\texttt{economic\_overlay.py}) is designed to be extended. Future work should integrate Automatic Identification System (AIS) vessel tracking data from OpenSky Network or Global Fishing Watch. Port congestion indices derived from AIS data would complement NTL radiance anomalies to provide a comprehensive multi-signal economic intelligence framework.
-
-\subsection{Near-Real-Time Alert System}
-The current weekly-refresh static architecture should be supplemented by a real-time alert layer. When a new satellite scene triggers an Isolation Forest anomaly score above $0.90$, the system should automatically dispatch a webhook notification (Slack, email, or REST endpoint) containing the anomaly metadata. This transforms the DSS from a retrospective analysis tool into an early-warning system.
+To support continental-level monitoring, the weekly GitHub Actions cron job should be replaced with an Enterprise Orchestration at Scale framework, employing an Apache Airflow DAG hosted on Google Cloud Composer. This would facilitate daily data harvesting, automatic API rate-limit retries, and cluster-distributed model fitting. Furthermore, integrating AIS Maritime Trade Proxy data would complement NTL radiance anomalies, providing a multi-signal economic intelligence framework. Finally, the current weekly-refresh static architecture should be supplemented by a Near-Real-Time Alert System. When a new satellite scene triggers an Isolation Forest anomaly score above $0.90$, the system should automatically dispatch webhook notifications (Slack, email, or REST endpoint) containing the anomaly metadata, transforming the DSS from a retrospective analysis tool into an early-warning system.
 
 ---
 
 \section{Final Reflections}
-
 As civilian satellite constellations improve in spatial, temporal, and spectral resolutions, space-based economic intelligence is set to become an essential tool in information engineering. This research demonstrates that free, open-access satellite APIs and unsupervised machine learning models are sufficient to monitor critical economic infrastructure, supply chain corridors, and ecological boundaries — without proprietary commercial imagery, private APIs, or supercomputer infrastructure.
 
-The F1-Score of 0.907 and Pearson r of 0.724 achieved in this study are not laboratory results. They were obtained using publicly available satellite data from ESA, NASA, and the World Bank — the same tools available to any student or researcher with an internet connection and a Google account. This demonstrates that the barriers to entry for space-based economic surveillance have collapsed.
-
-By providing a transparent, scientifically validated platform, this project reduces information asymmetry, helping environmental auditors, economists, and policymakers make data-driven decisions. As remote sensing and cloud computing continue to advance, space-based observation will play an increasingly important role in bringing transparency and objectivity to global market surveillance and environmental conservation policy.
+The F1-Score of 0.907 and Pearson r of 0.724 achieved in this study are not laboratory results. They were obtained using publicly available satellite data from ESA, NASA, and the World Bank — the same tools available to any student or researcher with an internet connection and a Google account. This demonstrates that the barriers to entry for space-based economic surveillance have collapsed. By providing a transparent, scientifically validated platform, this project reduces information asymmetry, helping environmental auditors, economists, and policymakers make data-driven decisions.
 
 ---
 
 \section{Project Artifacts \& Access Links}
-
 \begin{itemize}
   \item \textbf{GitHub Repository}: \texttt{https://github.com/hostilian/tesis} (Pipeline source code, notebooks, test suite)
   \item \textbf{Live Dashboard}: \texttt{https://hostilian.github.io/tesis/} (Interactive satellite anomaly map)

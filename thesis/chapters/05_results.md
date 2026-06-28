@@ -22,11 +22,8 @@ To guarantee spectral consistency, all optical scenes were processed at Bottom-o
 ## 5.2 Case Study Results & Interpretations
 
 ### 5.2.1 Case Study A: Lithium Mining Expansion (Atacama, Chile)
-The Salar de Atacama is the world's largest active lithium extraction basin. Lithium is harvested by pumping mineral-rich brine from subsurface aquifers into large evaporation ponds. Over several months, solar radiation evaporates the water, leaving a concentrated lithium chloride solution.
+The Salar de Atacama is the world's largest active lithium extraction basin. Lithium is harvested by pumping mineral-rich brine from subsurface aquifers into large evaporation ponds. Over several months, solar radiation evaporates the water, leaving a concentrated lithium chloride solution. The unsupervised Isolation Forest model, operating on a feature matrix of BSI, NDWI, and NDVI, flagged a significant anomaly cluster in October 2024 at coordinates $-23.472, -68.349$.
 
-The unsupervised Isolation Forest model, operating on a feature matrix of BSI, NDWI, and NDVI, flagged a significant anomaly cluster in October 2024 at coordinates $-23.472, -68.349$.
-
-#### Spectral Profile Analysis
 The spectral signature of the flagged pixels exhibits a sharp contrast compared to the normal background profile of the surrounding salt crust:
 
 | Spectral Feature | Surrounding Salt Crust (Baseline Mean) | Evaporation Pond Anomaly (Flagged Cluster) | Spectral Difference ($\Delta$) |
@@ -36,18 +33,13 @@ The spectral signature of the flagged pixels exhibits a sharp contrast compared 
 | **BSI** | $+0.68 \pm 0.04$ | $-0.24 \pm 0.05$ | $-0.92$ (Albedo collapse) |
 | **SWIR1 Reflectance** | $0.48 \pm 0.03$ | $0.08 \pm 0.01$ | $-0.40$ |
 
-*   **NDWI Surge**: The surge in NDWI (from $-0.32$ to $+0.58$) indicates a transition from dry land to open water, matching the filling of new brine evaporation ponds.
-*   **BSI Collapse**: The drop in BSI (from $+0.68$ to $-0.24$) indicates the replacement of the high-albedo salt crust with dark, light-absorbing brine pools, which absorb most solar radiation in the SWIR spectrum.
-*   **Validation**: This spatial anomaly was cross-referenced with official mining registry filings from the Chilean National Geology and Mining Service (SERNAGEOMIN), which confirmed that the SQM chemical company completed a planned expansion of its extraction ponds in late 2024.
+The surge in NDWI (from $-0.32$ to $+0.58$) indicates a transition from dry land to open water, matching the filling of new brine evaporation ponds. The drop in BSI (from $+0.68$ to $-0.24$) indicates the replacement of the high-albedo salt crust with dark, light-absorbing brine pools, which absorb most solar radiation in the SWIR spectrum. This spatial anomaly was cross-referenced with official mining registry filings from the Chilean National Geology and Mining Service (SERNAGEOMIN), which confirmed that the SQM chemical company completed a planned expansion of its extraction ponds in late 2024.
 
 ---
 
 ### 5.2.2 Case Study B: Illegal Gold Mining & Deforestation (Madre de Dios, Peru)
-In the Madre de Dios region of the Peruvian Amazon, informal and illegal artisanal gold mining (ASGM) has caused widespread forest degradation. Miners clear dense rainforest canopies, excavate the soil, and use mercury to extract gold from alluvial deposits, leaving behind barren mud flats and contaminated tailings ponds.
+In the Madre de Dios region of the Peruvian Amazon, informal and illegal artisanal gold mining (ASGM) has caused widespread forest degradation. Miners clear dense rainforest canopies, excavate the soil, and use mercury to extract gold from alluvial deposits, leaving behind barren mud flats and contaminated tailings ponds. The pipeline analyzed a time series of Sentinel-2 optical bands and Sentinel-1 SAR backscatter, flagging a major deforestation anomaly cluster in March 2025 at coordinates $-12.894, -69.912$.
 
-The pipeline analyzed a time series of Sentinel-2 optical bands and Sentinel-1 SAR backscatter, flagging a major deforestation anomaly cluster in March 2025 at coordinates $-12.894, -69.912$.
-
-#### Multi-Modal Signature Analysis
 The spatial anomaly is characterized by a simultaneous change in optical indices and microwave backscatter:
 
 | Remote Sensing Metric | Undisturbed Rainforest (Baseline Mean) | Active Mining Site (Flagged Cluster) | Observed Change ($\Delta$) |
@@ -57,16 +49,13 @@ The spatial anomaly is characterized by a simultaneous change in optical indices
 | **VV Backscatter (dB)** | $-8.2 \pm 0.5\text{ dB}$ | $-12.4 \pm 0.9\text{ dB}$ | $-4.2\text{ dB}$ (Surface smoothing) |
 | **VH Backscatter (dB)** | $-14.6 \pm 0.6\text{ dB}$ | $-21.8 \pm 1.2\text{ dB}$ | $-7.2\text{ dB}$ (Canopy loss) |
 
-*   **NDVI and VH Backscatter Drops**: The drop in NDVI (from $+0.84$ to $+0.32$) and the $7.2\text{ dB}$ reduction in cross-polarized VH backscatter indicate a severe loss of forest vegetation. The loss of leafy canopy eliminates volume scattering, allowing the radar signal to reach the ground.
-*   **BSI and VV Backscatter Changes**: The increase in BSI and the $4.2\text{ dB}$ drop in copolarized VV backscatter indicate exposed, wet soil and standing water in tailing ponds. The water surface acts as a specular reflector, bouncing the radar pulse away from the sensor.
-*   **Validation**: The anomaly coordinates were cross-referenced with alerts from the Monitoring of the Andean Amazon Project (MAAP), confirming the expansion of unauthorized mining corridors outside the official mining zone.
+The drop in NDVI (from $+0.84$ to $+0.32$) and the $7.2\text{ dB}$ reduction in cross-polarized VH backscatter indicate a severe loss of forest vegetation. The loss of leafy canopy eliminates volume scattering, allowing the radar signal to reach the ground. The increase in BSI and the $4.2\text{ dB}$ drop in copolarized VV backscatter indicate exposed, wet soil and standing water in tailing ponds. The water surface acts as a specular reflector, bouncing the radar pulse away from the sensor. These coordinates were cross-referenced with alerts from the Monitoring of the Andean Amazon Project (MAAP), confirming the expansion of unauthorized mining corridors outside the official mining zone.
 
 ---
 
 ### 5.2.3 Case Study C: Night-time Lights Economic Pulse (Prague & Central Bohemia, CZ)
 To evaluate the relationship between satellite indicators and macroeconomic activity, the pipeline analyzed monthly VIIRS DNB night-time lights radiance across Prague and the surrounding industrial manufacturing zones in Central Bohemia.
 
-#### Empirical Radiance & GDP Time-Series Data
 The table below displays the mean monthly VIIRS radiance values, calculated Z-scores, and official quarterly GDP growth rates from the Czech Statistical Office (ČSÚ) for Prague and Central Bohemia from Q1 2021 to Q1 2026:
 
 | Period (Quarter) | Mean Radiance ($\text{nW}\cdot\text{cm}^{-2}\cdot\text{sr}^{-1}$) | Radiance Z-Score ($Z_t$) | Czech GDP Growth (YoY %) | Model Residuals ($e_t$) |
@@ -93,8 +82,7 @@ The table below displays the mean monthly VIIRS radiance values, calculated Z-sc
 | **Q4 2025** | $28.92$ | $+2.10$ | $+2.8\%$ | $-0.15$ |
 | **Q1 2026** | $28.50$ | $+1.85$ | $+2.5\%$ | $-0.20$ |
 
-*   **The 2023 Energy Shock**: The model flagged a significant negative radiance anomaly ($Z_t = -2.85$) in Q1 2023. This matches the European energy crisis, when manufacturing plants in Central Bohemia (such as industrial hubs in Mladá Boleslav and Kolín) implemented energy-saving measures, reduced night shifts, and experienced production slowdowns.
-*   **The 2025 Economic Recovery**: The positive anomaly in Q2 2025 ($Z_t = +2.61$) reflects an increase in night-time light radiance, correlating with a recovery in Czech manufacturing and industrial output.
+The model flagged a significant negative radiance anomaly ($Z_t = -2.85$) in Q1 2023, matching the peak of the European energy crisis, when manufacturing plants in Central Bohemia (such as automotive installations in Mladá Boleslav and Kolín) implemented energy-saving protocols, curtailed night shifts, and experienced economic slowdowns. Conversely, the positive anomaly in Q2 2025 ($Z_t = +2.61$) reflects an increase in night-time light radiance, which correlates directly with the subsequent recovery in Czech industrial manufacturing and economic productivity.
 
 ---
 
@@ -104,18 +92,18 @@ The table below displays the mean monthly VIIRS radiance values, calculated Z-sc
 *   *Statement*: Multi-spectral indices (BSI and NDVI) with unsupervised Isolation Forests can detect unauthorized mining activity with an F1-score exceeding 0.80.
 *   *Method*: The model was evaluated against 200 validation pixels in Madre de Dios, Peru, labeled as mining or forest/water using 3-meter resolution PlanetScope imagery.
 
-#### Classification Results
+The classification outcomes yielded the following confusion matrix results:
 *   **True Positives (TP)**: $88$ (Correctly flagged mining pixels)
 *   **False Positives (FP)**: $6$ (Forest/river pixels incorrectly flagged as mining)
 *   **False Negatives (FN)**: $12$ (Mining pixels missed by the model)
 *   **True Negatives (TN)**: $94$ (Forest/river pixels correctly classified as normal)
 
+Using these outcomes, precision, recall, and F1-score are derived mathematically:
 $$\text{Precision} = \frac{TP}{TP + FP} = \frac{88}{88 + 6} = \mathbf{0.936}$$
 $$\text{Recall} = \frac{TP}{TP + FN} = \frac{88}{88 + 12} = \mathbf{0.880}$$
 $$\text{F1-Score} = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}} = 2 \cdot \frac{0.936 \cdot 0.880}{0.936 + 0.880} = \mathbf{0.907}$$
 
-#### Hyperparameter Sensitivity Analysis
-To evaluate model stability, the F1-Score was calculated across different configuration parameters:
+To evaluate the stability and generalizability of these classification results, a hyperparameter sensitivity analysis was conducted by testing varying contamination rates ($\alpha$) and estimator counts:
 
 | Contamination Rate ($\alpha$) | Number of Trees ($n\_est$) | Precision | Recall | F1-Score |
 |---|---|---|---|---|
@@ -124,8 +112,7 @@ To evaluate model stability, the F1-Score was calculated across different config
 | **0.10** | 150 | $0.890$ | $0.890$ | $0.890$ |
 | **0.12** | 200 | $0.824$ | $0.920$ | $0.869$ |
 
-*   **Analysis**: Lower contamination rates ($\alpha = 0.05$) increase Precision but reduce Recall, missing active mining expansions. Higher rates ($\alpha = 0.12$) capture more mining pixels but introduce false positives in sandy riverbanks. The selected contamination rate of $0.08$ balances these metrics.
-*   **Decision**: Because the F1-Score ($0.907$) exceeds the $0.80$ threshold, **Hypothesis 1 ($H_1$) is supported**.
+Lower contamination rates ($\alpha = 0.05$) increase Precision but reduce Recall, missing active mining expansions. Higher rates ($\alpha = 0.12$) capture more mining pixels but introduce false positives in sandy riverbanks. The selected contamination rate of $0.08$ balances these metrics. Because the F1-Score ($0.907$) exceeds the $0.80$ threshold, **Hypothesis 1 ($H_1$) is supported**.
 
 ---
 
@@ -133,7 +120,6 @@ To evaluate model stability, the F1-Score was calculated across different config
 *   *Statement*: Temporal radiance anomalies computed from VIIRS DNB night-time lights exhibit a statistically significant positive correlation ($r \ge 0.65$, $p < 0.05$) with quarterly regional GDP changes.
 *   *Method*: Calculated the Pearson product-moment correlation coefficient ($r$) between quarterly mean VIIRS radiance anomalies and quarterly GDP growth rates from the Czech Statistical Office ($N = 21$ quarters).
 
-#### Correlation Calculations
 Let $X$ represent the radiance Z-scores and $Y$ represent quarterly GDP growth rates:
 *   Mean of $X$ ($\bar{X}$): $0.239$
 *   Mean of $Y$ ($\bar{Y}$): $1.857\%$
@@ -144,14 +130,10 @@ Let $X$ represent the radiance Z-scores and $Y$ represent quarterly GDP growth r
 $$r = \frac{SS_{xy}}{\sqrt{SS_{xx} \cdot SS_{yy}}} = \frac{54.492}{\sqrt{42.825 \cdot 132.485}} = \mathbf{0.724}$$
 $$R^2 = (0.724)^2 = \mathbf{0.524}$$
 
-#### Significance Testing (Student's t-test)
 To verify the statistical significance of the correlation, the $t$-statistic is calculated under $N - 2 = 19$ degrees of freedom:
 $$t = r \sqrt{\frac{N - 2}{1 - r^2}} = 0.724 \sqrt{\frac{19}{1 - 0.524}} = \mathbf{4.58}$$
 
-Using a standard two-tailed $t$-distribution table with $df = 19$, the critical value for significance at the $\alpha = 0.05$ level is $2.093$. 
-Since our calculated $t$-statistic ($4.58$) is much greater than the critical value, the result is statistically significant. The corresponding $p$-value is $0.0002$.
-
-*   **Decision**: Because the Pearson correlation coefficient ($r = 0.724$) exceeds the $0.65$ threshold and the $p$-value ($0.0002$) is well below the significance level ($p < 0.05$), **Hypothesis 2 ($H_2$) is supported**.
+Using a standard two-tailed $t$-distribution table with $df = 19$, the critical value for significance at the $\alpha = 0.05$ level is $2.093$. Since our calculated $t$-statistic ($4.58$) is much greater than the critical value, the result is statistically significant. The corresponding $p$-value is $0.0002$. Because the Pearson correlation coefficient ($r = 0.724$) exceeds the $0.65$ threshold and the $p$-value ($0.0002$) is well below the significance level ($p < 0.05$), **Hypothesis 2 ($H_2$) is supported**.
 
 ---
 
@@ -178,4 +160,4 @@ To evaluate the pipeline's efficiency under free-tier API limits, the execution 
 | **GeoJSON/JSON Serialization** | $0.5 \pm 0.1\text{ s}$ | $52\text{ MB}$ | $0\text{ MB}$ |
 | **Total Ingestion & Process Run** | **$9.0 \pm 1.2\text{ s}$** | **$310\text{ MB}$** | **$<3\text{ MB}$** |
 
-*   **Analysis**: The entire ETL pipeline runs in under 10 seconds, and peak RAM usage remains below 310 MB. This demonstrates that the system can run within standard Python environments and is suitable for automated serverless deployments (such as GitHub Actions).
+The entire ETL pipeline runs in under 10 seconds, and peak RAM usage remains below 310 MB. This demonstrates that the system can run within standard Python environments and is suitable for automated serverless deployments (such as GitHub Actions).

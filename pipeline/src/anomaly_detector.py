@@ -196,7 +196,7 @@ class SatelliteAnomalyOrchestrator:
             rolling_window:  Months used for rolling baseline (default=12 for annual cycle).
 
         Returns:
-            Dict with z_scores list, flagged_events list, pearson metadata placeholder.
+            Dict containing region_id, z_scores, dates, radiance list, flagged_events, rolling_window, and threshold.
         """
         if len(radiance_series) != len(dates):
             raise ValueError("radiance_series and dates must have equal length.")

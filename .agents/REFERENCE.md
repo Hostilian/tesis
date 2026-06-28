@@ -34,7 +34,14 @@ This log is the verification backbone of the Space-Based Economic Intelligence t
 | `scikit-learn` | 1.9.0 | PyPI | BSD-3-Clause | 2026-06-27 |
 | `numpy` | 2.5.0 | PyPI | BSD-3-Clause | 2026-06-27 |
 | `pandas` | 3.0.3 | PyPI | BSD-3-Clause | 2026-06-27 |
+| `scipy` | 1.15.3 | PyPI | BSD-3-Clause | 2026-06-28 |
+| `torch` | 2.6.0 | PyPI | BSD-3-Clause | 2026-06-28 |
+| `torchvision` | 0.21.0 | PyPI | BSD-3-Clause | 2026-06-28 |
 | `matplotlib` | 3.11.0 | PyPI | PSF-2.0 | 2026-06-27 |
+| `plotly` | 6.1.2 | PyPI | MIT | 2026-06-28 |
+| `folium` | 0.19.7 | PyPI | MIT | 2026-06-28 |
+| `statsmodels` | 0.14.4 | PyPI | BSD-3-Clause | 2026-06-28 |
+| `requests` | 2.32.4 | PyPI | Apache-2.0 | 2026-06-28 |
 | `pytest` | 9.1.1 | PyPI | MIT | 2026-06-27 |
 | `python-dotenv` | 1.0.0 | PyPI | BSD-3-Clause | 2026-06-27 |
 | `black` | 24.10.0 | PyPI (dev) | MIT | 2026-06-28 |
@@ -42,6 +49,9 @@ This log is the verification backbone of the Space-Based Economic Intelligence t
 | `mypy` | 1.15.0 | PyPI (dev) | MIT | 2026-06-28 |
 | `pip-audit` | 2.9.0 | PyPI (dev) | Apache-2.0 | 2026-06-28 |
 | `pytest-cov` | 6.2.1 | PyPI (dev) | MIT | 2026-06-28 |
+| `leaflet` | 1.9.4 | npm (dev) | BSD-2-Clause | 2026-06-28 |
+| `chart.js` | 4.4.1 | npm (dev) | MIT | 2026-06-28 |
+| `tailwindcss` | 3.4.1 | npm (dev) | MIT | 2026-06-28 |
 
 ---
 

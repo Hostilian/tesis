@@ -1,5 +1,8 @@
 import os
 import sys
+# Inject parent directory into path so that config, engine, and ui modules are resolved locally
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
 import argparse
 from prompt_toolkit import PromptSession
 from prompt_toolkit.history import FileHistory

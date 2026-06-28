@@ -5,25 +5,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-06-28 (Session 4)
+
+### Changed
+- **Repository Layout Restructuring**: Re-organized root directory structure to enforce strict academic and institutional separation, complying with banking and venture capital due diligence requirements.
+- **AI Chatbot Encapsulation**: Relocated developer AI CLI chatbot (`chatai.py`, `config.py`, `engine/`, `ui/`) to hidden directory `.ai_chatbot/`, prepending directory path to `sys.path` to ensure import resolution remains self-contained.
+- **Agent Directives Relocation**: Relocated anti-hallucination reference log `REFERENCE.md` to `.agents/REFERENCE.md` and created `.agents/AGENTS.md` specifying rules and operational guidelines for active AI agents.
+- **Documentation Trees**: Updated file tree diagrams in `README.md`, `thesis/chapters/appendix_a_repo.md`, and `thesis/latex/chapters/appendix_a_repo.tex` to present a clean workspace scope.
+
+### Removed
+- **Redundant Logs**: Deleted temporary run and commit error files (`push_error.txt`, `push_out.txt`) from root.
+
 ## [1.2.0] - 2026-06-28 (Session 3)
 
 ### Fixed
 - **`docs/data/anomalies.json`**: Corrected `confidence_interval` values that exceeded normalized [0,1] bounds (e.g., `[0.95, 1.05]` is mathematically invalid for a [0,1] score). All confidence scores now ≤ 1.0.
-- **`docs/index.html`**: Fixed GitHub navigation link from generic `https://github.com` to actual repository URL `https://github.com/hostilian/tesis`. Added `rel="noopener noreferrer"` and `aria-label`.
+- **`docs/index.html` & `docs/index3.html`**: Fixed GitHub navigation links from generic `https://github.com` to actual repository URL `https://github.com/hostilian/tesis`. Added `rel="noopener noreferrer"` and `aria-label`.
 - **`README.md`**: Removed duplicate "Live Dashboard" and "Architecture" sections that appeared after the BibTeX block.
 
 ### Added
 - **`pipeline/requirements-dev.txt`**: Development-only dependencies (black 24.10.0, flake8 7.2.0, mypy 1.15.0, pip-audit 2.9.0, pytest-cov 6.2.1) per master prompt §5.1.
-- **`.github/dependabot.yml`**: Automated weekly security updates for pip and GitHub Actions ecosystems per master prompt §6.4.
+- **`docs/package.json` & `docs/package-lock.json`**: Added package files for dashboard JS dependencies to enable automated npm security audits.
+- **`.github/dependabot.yml`**: Automated weekly security updates for pip, npm, and GitHub Actions ecosystems per master prompt §6.4.
 - **`docs/offline.html`**: Space-themed PWA offline fallback page with animated star field, orbit indicator, and auto-reconnect on network restore per master prompt §13.11.
+- **`docs/icon-192.png` & `docs/icon-512.png`**: Resized physical image variants generated via Pillow to support standard PWA installation metrics.
 - **`docs/api/v1/anomalies/{id}/index.json`**: All 9 individual anomaly REST endpoints now populated with corrected full data.
 
 ### Enhanced
 - **`docs/data/anomalies.json`**: Added 8-point economic intelligence assessment layer (`economic_intelligence` object) to all 9 anomaly records covering WHAT/WHERE/WHEN/HOW_UNUSUAL/ECONOMIC_SIGNAL/CROSS_REFERENCE/FALSE_POSITIVE_PROBABILITY/ALTERNATIVE_EXPLANATION per master prompt §13.7. Added `z_score` field.
-- **`.github/workflows/security.yml`**: Upgraded from single pip-audit step to full security suite: CodeQL Python static analysis, Gitleaks secret detection on full git history, and Syft CycloneDX SBOM generation per master prompt §5.2.
-- **`docs/sw.js`** (v2): Upgraded to cache-first/network-first dual strategy with proper offline fallback routing. Data endpoints use network-first; static shell uses cache-first.
-- **`docs/manifest.json`**: Enhanced with 192x192/512x512 icon entries, PWA shortcuts (Map, API Docs), scope, description, and category metadata per master prompt §13.6.
-- **`REFERENCE.md`** (v1.1.0): Added 8 new entries (R017–R024) for security tools and economic data sources. Added dev-dependency versions to package table.
+- **`.github/workflows/security.yml`**: Upgraded to include Python CodeQL analysis, Gitleaks secret detection, npm audit for docs/ JS dependencies, and Syft CycloneDX SBOM generation per master prompt §5.2.
+- **`docs/sw.js`** (v2): Upgraded with robust offline fallback routing verifying navigate mode and caching newly generated resized PWA icons.
+- **`docs/manifest.json`**: Enhanced with physical 192x192 and 512x512 icon variants, PWA shortcuts (Map, API Docs), scope, description, and category metadata per master prompt §13.6.
+- **`REFERENCE.md`** (v1.1.0): Added missing packages (scipy, torch, torchvision, plotly, folium, statsmodels, requests, leaflet, chart.js, tailwindcss) to Locked Packages table. Added 8 new entries (R017–R024) for security tools and economic data sources.
 
 ## [1.1.0] - 2026-06-28
 

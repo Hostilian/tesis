@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex Capital Partners | Space-Based Investment Intelligence Console</title>
+    
+    <!-- SEO and Academic Discovery Metadata -->
+    <meta name="description" content="Institutional portfolio telemetry and Vanguard fund analyzer leveraging space-based remote sensing and unsupervised machine learning.">
+    <meta name="keywords" content="satellite anomaly detection, remote sensing, economic intelligence, venture capital, hedge fund, portfolio allocation, Vanguard, Apex Capital, Y Combinator">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    
+    <!-- Meta and Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval';
+        script-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://cdn.tailwindcss.com 'unsafe-inline';
+        style-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com https://cdnjs.cloudflare.com 'unsafe-inline';
+        font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+        img-src 'self' data: https:;
+        connect-src 'self' https:;
+    ">
+    
+    <!-- CSS Dependencies -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="index.css" />
+    <link rel="manifest" href="manifest.json" />
+    
+    <!-- Tailwind Configuration for customized elite institutional space theme -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        void: '#020208',
+                        spacedark: '#060713',
+                        spacemid: '#0d0f22',
+                        neoncyan: '#00f59b', // Return Emerald
+                        neonblue: '#3b82f6', // Institutional Blue
+                        gold: '#d4af37',     // Venture Gold
+                        amberaccent: '#f59e0b',
+                        critical: '#ef4444',
+                        warning: '#f59e0b',
+                        safe: '#10b981'
+                    },
+                    fontFamily: {
+                        display: ['Orbitron', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                        code: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Version 4 Institutional Custom UI Styles -->
+    <style>
+        .hud-panel {
+            position: relative;
+            border: 1px solid rgba(0, 245, 155, 0.15);
+            background: rgba(13, 15, 34, 0.65);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(0, 245, 155, 0.03);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .hud-panel::before {
+            content: '';
+            position: absolute;
+            top: -1px; left: -1px; width: 12px; height: 12px;
+            border-top: 2px solid #d4af37; border-left: 2px solid #d4af37;
+            pointer-events: none;
+        }
+        .hud-panel::after {
+            content: '';
+            position: absolute;
+            bottom: -1px; right: -1px; width: 12px; height: 12px;
+            border-bottom: 2px solid #00f59b; border-right: 2px solid #00f59b;
+            pointer-events: none;
+        }
+        .hud-panel:hover {
+            border-color: rgba(212, 175, 55, 0.3);
+            box-shadow: 0 15px 50px 0 rgba(0, 0, 0, 0.75), 0 0 25px rgba(0, 245, 155, 0.08), inset 0 0 25px rgba(212, 175, 55, 0.05);
+        }
+        
+        .hud-grid-bg {
+            background-image: 
+                linear-gradient(rgba(0, 245, 155, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 245, 155, 0.02) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        .status-dot-pulse {
+            position: relative;
+        }
+        .status-dot-pulse::after {
+            content: '';
+            position: absolute;
+            width: 100%; height: 100%;
+            top: 0; left: 0;
+            border-radius: 50%;
+            background-color: inherit;
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.610, 0.355, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.35); opacity: 1; }
+            80%, 100% { transform: scale(2.2); opacity: 0; }
+        }
+
+        .scanner-sweep {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, transparent 40%, rgba(0, 245, 155, 0.04) 50%, transparent 60%);
+            background-size: 100% 200%;
+            animation: sweep 8s linear infinite;
+            pointer-events: none;
+            z-index: 15;
+        }
+        @keyframes sweep {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 0% 200%; }
+        }
+
+        /* Flowing data packets animation */
+        @keyframes flowPacket {
+            0% { stroke-dashoffset: 24; }
+            100% { stroke-dashoffset: 0; }
+        }
+        .flow-line {
+            stroke-dasharray: 6, 6;
+            animation: flowPacket 1s linear infinite;
+        }
+
+        /* Glowing text elements */
+        .text-glow-emerald {
+            text-shadow: 0 0 10px rgba(0, 245, 155, 0.4);
+        }
+        .text-glow-gold {
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+        }
+    </style>
+</head>
+<body class="bg-void text-slate-200 font-body min-h-screen overflow-x-hidden relative hud-grid-bg">
+    
+    <!-- Parallax Starfield Warp Canvas -->
+    <canvas id="stars-canvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+    <!-- TOP GLASS NAVIGATION BAR -->
+    <nav class="sticky top-0 z-50 backdrop-blur-md bg-void/85 border-b border-gold/20 px-6 py-4 flex items-center justify-between shadow-lg">
+        <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-full border-2 border-gold/40 flex items-center justify-center text-gold status-dot-pulse bg-gold/10">
+                <i class="fa-solid fa-satellite animate-spin" style="animation-duration: 30s;"></i>
+            </div>
+            <div>
+                <h1 class="font-display font-black tracking-widest text-gold text-sm sm:text-base flex items-center">
+                    APEX CAPITAL PARTNERS <span class="ml-1.5 text-[8px] px-1.5 py-0.5 border border-gold/40 bg-gold/10 text-white rounded font-code font-normal">PORTFOLIO V4</span>
+                </h1>
+                <p class="text-[9px] text-slate-400 font-code tracking-widest uppercase">Space-Based Equity Arbitrage Console • SEC-Registered</p>
+            </div>
+        </div>
+        
+        <div class="hidden lg:flex items-center space-x-8 text-[10px] font-display tracking-widest uppercase font-bold text-slate-350">
+            <a href="#hero" class="hover:text-gold transition-colors flex items-center"><i class="fa-solid fa-layer-group mr-1"></i> Executive Summary</a>
+            <a href="#pipeline" class="hover:text-gold transition-colors flex items-center"><i class="fa-solid fa-diagram-project mr-1"></i> Space Pipeline</a>
+            <a href="#screener" class="hover:text-gold transition-colors flex items-center"><i class="fa-solid fa-chart-line mr-1"></i> Vanguard Screener</a>
+            <a href="#explorer" class="hover:text-gold transition-colors flex items-center"><i class="fa-solid fa-earth-americas mr-1"></i> Telemetry Map</a>
+            <a href="#academic" class="hover:text-gold transition-colors flex items-center"><i class="fa-solid fa-shield mr-1"></i> CRO Due Diligence</a>
+        </div>
+        
+        <div class="flex items-center space-x-4">
+            <!-- Dashboard Version Selector -->
+            <div class="flex items-center space-x-1.5 border border-gold/30 rounded px-2 py-1 bg-spacemid/40 text-[10px] font-code font-bold">
+                <span class="text-slate-500 uppercase font-normal">Version:</span>
+                <a href="index.html" class="text-slate-400 hover:text-gold transition-colors uppercase" title="Switch to Version 2 (Original)">V2</a>
+                <span class="text-slate-600">|</span>
+                <a href="index3.html" class="text-slate-400 hover:text-gold transition-colors uppercase" title="Switch to Version 3 (Sci-Fi HUD)">V3</a>
+                <span class="text-slate-600">|</span>
+                <span class="text-gold uppercase text-glow-gold font-bold">V4 (INSTITUTIONAL)</span>
+            </div>
+
+            <button id="lang-toggle" class="text-slate-400 hover:text-gold border border-slate-800 hover:border-gold/30 px-2 py-1 rounded bg-spacemid/20 transition-colors text-xs font-display flex items-center">
+                <i class="fa-solid fa-globe mr-1.5"></i> <span id="lang-label">EN</span>
+            </button>
+            <a href="https://github.com/hostilian/tesis" target="_blank" rel="noopener noreferrer" aria-label="View source code on GitHub" class="text-slate-400 hover:text-gold transition-colors text-lg">
+                <i class="fa-brands fa-github"></i>
+            </a>
+        </div>
+    </nav>
+
+    <!-- LIVE STATS TICKER BAR -->
+    <div class="relative z-10 w-full bg-spacemid/35 border-b border-gold/10 py-2.5 px-6 overflow-hidden flex items-center whitespace-nowrap shadow-inner">
+        <div class="flex space-x-12 animate-ticker text-xs font-code text-slate-400">
+            <span>💼 APEX CAPITAL AUM: $2.4B</span>
+            <span class="text-gold font-bold">● BENCHMARK: S&P 500 (TR)</span>
+            <span>🛰️ TELEMETRY SYSTEM: live orbital feeds connected (Sentinel/Landsat)</span>
+            <span class="text-neoncyan font-bold">● PEER PERFORMANCE: 83% of Vanguard funds outperformed medians over 10Y</span>
+            <span>📡 ACTIVE DETECTIONS: 8 resource and supply chain anomalies verified</span>
+            <span class="text-warning font-bold">● CRO THRESHOLD: $50M single-holding limit active</span>
+        </div>
+    </div>
+
+    <!-- MAIN DASHBOARD CONTENT -->
+    <main class="relative z-10 max-w-7xl mx-auto px-4 py-8 space-y-12">
+        
+        <!-- HERO SECTION (Executive Summary & Globe) -->
+        <section id="hero" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center min-h-[50vh] py-4">
+            <div class="lg:col-span-7 space-y-6">
+                <div class="inline-flex items-center space-x-2 bg-gold/10 border border-gold/30 text-gold px-3 py-1 rounded-full text-xs font-code shadow-sm">
+                    <span class="w-2 h-2 bg-gold rounded-full status-dot-pulse"></span>
+                    <span id="hero-badge-label">Y Combinator Investor Preview</span>
+                </div>
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-display font-extrabold tracking-tight leading-none text-white">
+                    <span id="hero-title-prefix">Institutional</span> <br>
+                    <span id="typewriter-headline" class="text-transparent bg-clip-text bg-gradient-to-r from-gold to-neoncyan text-glow-emerald">Venture Telemetry</span><span class="animate-pulse text-gold font-light">|</span>
+                </h1>
+                <p id="hero-subtitle" class="text-slate-400 text-sm sm:text-base max-w-xl leading-relaxed">
+                    Apex Capital Partners' proprietary pipeline translating Earth Observation (EO) satellite reflectance bands and night-lights datasets into institutional alpha. Directly evaluate Vanguard fund efficiencies, perform compliance checks, and trace asset correlations.
+                </p>
+                
+                <!-- Satellite Constellation Telemetry Feed -->
+                <div class="font-code text-xs text-neoncyan flex flex-col space-y-2 border border-neoncyan/10 bg-neoncyan/5 px-4 py-3 rounded-lg max-w-xl shadow-md">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-satellite-dish animate-pulse"></i>
+                        <span class="font-bold text-white uppercase tracking-wider">Apex Constellation Fleet Status:</span>
+                        <span id="live-satellite-counter" class="font-bold text-white bg-neoncyan/20 px-2 rounded border border-neoncyan/30">ACP-1, ACP-2, ACP-3</span>
+                    </div>
+                    <div id="satellite-telemetry-feed" class="text-slate-300 text-[11px] h-5 overflow-hidden italic">
+                        📡 ACP-1 (SENTINEL-2): Multi-spectral scan at Atacama Lithium ponds completed...
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-4 pt-2">
+                    <a href="#pipeline" class="bg-gradient-to-r from-gold to-amberaccent text-void font-display font-bold text-xs uppercase px-6 py-3.5 rounded tracking-widest shadow-lg hover:shadow-gold/20 transform hover:-translate-y-0.5 transition-all">
+                        Inspect ML Pipeline
+                    </a>
+                    <a href="#screener" class="border border-slate-700 hover:border-gold text-slate-350 hover:text-white font-display text-xs uppercase px-6 py-3.5 rounded tracking-widest transition-colors bg-spacemid/25">
+                        Launch Vanguard Allocator
+                    </a>
+                </div>
+            </div>
+            
+            <div class="lg:col-span-5 flex justify-center relative">
+                <!-- Three.js 3D Globe Container -->
+                <div class="w-full max-w-[400px] aspect-square relative border border-gold/15 rounded-full p-2 bg-spacemid/10">
+                    <div id="globe-container" class="w-full h-full flex items-center justify-center relative rounded-full overflow-hidden">
+                        <div class="scanner-sweep"></div>
+                        <!-- Loading skeleton / Fallback -->
+                        <div id="globe-fallback" class="absolute inset-0 flex items-center justify-center border border-gold/10 rounded-full bg-spacemid/20">
+                            <i class="fa-solid fa-earth-americas text-6xl text-gold/20 animate-pulse"></i>
+                        </div>
+                    </div>
+                    <!-- Sci-fi Corner Brackets overlay for Globe container -->
+                    <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-gold/40 pointer-events-none"></div>
+                    <div class="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-gold/40 pointer-events-none"></div>
+                    <div class="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-gold/40 pointer-events-none"></div>
+                    <div class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-gold/40 pointer-events-none"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SATELLITE MACHINE LEARNING PIPELINE DIAGRAM SECTION (Innovative Custom SVG) -->
+        <section id="pipeline" class="space-y-6 scroll-mt-20">
+            <div class="border-b border-gold/15 pb-4">
+                <span class="text-[9px] font-code text-gold uppercase tracking-widest block"><i class="fa-solid fa-diagram-project mr-1"></i> Institutional IP</span>
+                <h2 class="font-display text-2xl font-bold text-white tracking-wide">END-TO-END REMOTE SENSING PIPELINE</h2>
+                <p class="text-slate-400 text-xs mt-0.5">Click on pipeline components below to inspect technical specifications and ML data schemas.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Interactive Flowchart Diagram Panel -->
+                <div class="lg:col-span-8 hud-panel rounded-xl p-6 flex flex-col justify-center bg-spacemid/30 relative">
+                    <div class="scanner-sweep"></div>
+                    
+                    <div class="w-full overflow-x-auto py-4">
+                        <svg id="pipeline-svg" class="mx-auto min-w-[650px] h-[160px]" viewBox="0 0 800 180" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Definitions for markers and filters -->
+                            <defs>
+                                <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#d4af37" />
+                                </marker>
+                                <filter id="glow-gold" x="-20%" y="-20%" width="140%" height="140%">
+                                    <feGaussianBlur stdDeviation="3" result="blur" />
+                                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                                </filter>
+                                <filter id="glow-emerald" x="-20%" y="-20%" width="140%" height="140%">
+                                    <feGaussianBlur stdDeviation="3" result="blur" />
+                                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                                </filter>
+                            </defs>
+
+                            <!-- Background Flow Lines with traveling dashes (telemetry packets) -->
+                            <path d="M 90 90 L 210 90" stroke="rgba(212, 175, 55, 0.4)" stroke-width="2" marker-end="url(#arrow)" />
+                            <path class="flow-line" d="M 90 90 L 210 90" stroke="#d4af37" stroke-width="2.5" fill="none" />
+
+                            <path d="M 310 90 L 430 90" stroke="rgba(0, 245, 155, 0.4)" stroke-width="2" marker-end="url(#arrow)" />
+                            <path class="flow-line" d="M 310 90 L 430 90" stroke="#00f59b" stroke-width="2.5" fill="none" />
+
+                            <path d="M 530 90 L 650 90" stroke="rgba(212, 175, 55, 0.4)" stroke-width="2" marker-end="url(#arrow)" />
+                            <path class="flow-line" d="M 530 90 L 650 90" stroke="#d4af37" stroke-width="2.5" fill="none" />
+
+                            <!-- Pipeline Component Nodes -->
+                            <!-- Node 1: Satellite Raw Telemetry -->
+                            <g id="node-raw" class="cursor-pointer group">
+                                <circle cx="50" cy="90" r="36" fill="#0d0f22" stroke="#d4af37" stroke-width="2" filter="url(#glow-gold)" />
+                                <text x="50" y="85" fill="#ffffff" font-family="Orbitron" font-size="9" text-anchor="middle" font-weight="bold">SATELLITE</text>
+                                <text x="50" y="98" fill="#d4af37" font-family="JetBrains Mono" font-size="8" text-anchor="middle">SENSORS</text>
+                                <text x="50" y="110" fill="#8899bb" font-family="Inter" font-size="7" text-anchor="middle">ESA & NASA</text>
+                            </g>
+
+                            <!-- Node 2: Ingestion & API Processing -->
+                            <g id="node-ingestion" class="cursor-pointer group">
+                                <rect x="210" y="54" width="100" height="72" rx="8" fill="#0d0f22" stroke="#00f59b" stroke-width="1.5" filter="url(#glow-emerald)" />
+                                <text x="260" y="78" fill="#ffffff" font-family="Orbitron" font-size="9" text-anchor="middle" font-weight="bold">COPERNICUS</text>
+                                <text x="260" y="92" fill="#00f59b" font-family="JetBrains Mono" font-size="8" text-anchor="middle">CDSE API</text>
+                                <text x="260" y="106" fill="#8899bb" font-family="Inter" font-size="7" text-anchor="middle">Raster Ingestion</text>
+                            </g>
+
+                            <!-- Node 3: AI Model Execution -->
+                            <g id="node-ai" class="cursor-pointer group">
+                                <polygon points="480,50 530,90 480,130 430,90" fill="#0d0f22" stroke="#d4af37" stroke-width="1.5" filter="url(#glow-gold)" />
+                                <text x="480" y="86" fill="#ffffff" font-family="Orbitron" font-size="8" text-anchor="middle" font-weight="bold">ISOLATION</text>
+                                <text x="480" y="96" fill="#d4af37" font-family="JetBrains Mono" font-size="8" text-anchor="middle">FOREST</text>
+                                <text x="480" y="106" fill="#8899bb" font-family="Inter" font-size="7" text-anchor="middle">Unsupervised</text>
+                            </g>
+
+                            <!-- Node 4: Portfolio overlay and Vanguard allocation -->
+                            <g id="node-allocator" class="cursor-pointer group">
+                                <rect x="650" y="54" width="100" height="72" rx="8" fill="#0d0f22" stroke="#00f59b" stroke-width="1.5" filter="url(#glow-emerald)" />
+                                <text x="700" y="78" fill="#ffffff" font-family="Orbitron" font-size="9" text-anchor="middle" font-weight="bold">PORTFOLIO</text>
+                                <text x="700" y="92" fill="#00f59b" font-family="JetBrains Mono" font-size="8" text-anchor="middle">ALLOCATOR</text>
+                                <text x="700" y="106" fill="#8899bb" font-family="Inter" font-size="7" text-anchor="middle">Alpha overlay</text>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Pipeline Inspector Output Drawer -->
+                <div class="lg:col-span-4 hud-panel rounded-xl p-5 flex flex-col justify-between bg-spacemid/40 relative">
+                    <div class="scanner-sweep"></div>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                            <span class="text-[9px] font-code text-gold uppercase tracking-wider">PIPELINE INSPECTOR</span>
+                            <span id="pipeline-status-badge" class="bg-neoncyan/15 text-neoncyan border border-neoncyan/30 text-[9px] font-code px-2 py-0.5 rounded">ACTIVE</span>
+                        </div>
+                        <div>
+                            <h3 id="pipeline-node-name" class="font-display text-lg font-bold text-white">Select a Node</h3>
+                            <p id="pipeline-node-desc" class="text-xs text-slate-400 mt-2 leading-relaxed">
+                                Click on any element in the diagram to inspect real-time data flow, API pipelines, machine learning structures, and spatial-to-financial translations.
+                            </p>
+                        </div>
+                        <div class="bg-void/40 p-3 rounded border border-slate-800 font-code text-[10px] space-y-1.5">
+                            <div class="text-slate-500 uppercase tracking-widest font-bold">Node Parameters:</div>
+                            <div id="pipeline-node-meta" class="text-slate-350 space-y-1">
+                                <p>• telemetery: pending selection</p>
+                                <p>• latency: -- ms</p>
+                                <p>• data_format: null</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VANGUARD FUND SCREENER & PERFORMANCE ATTRIBUTION CALCULATOR (Compliance and CRO Tool) -->
+        <section id="screener" class="space-y-6 scroll-mt-20">
+            <div class="border-b border-gold/15 pb-4 flex flex-col md:flex-row md:items-end justify-between gap-4">
+                <div>
+                    <span class="text-[9px] font-code text-neoncyan uppercase tracking-widest block"><i class="fa-solid fa-calculator mr-1"></i> Cost & Allocation Layer</span>
+                    <h2 class="font-display text-2xl font-bold text-white tracking-wide">VANGUARD PRODUCT SCREENER & ATTRIBUTION</h2>
+                    <p class="text-slate-400 text-xs mt-0.5">Apex Capital compliance monitor. Standard fee threshold: 0.20%. CRO Flag: $50M limit. Standard Vanguard disclaimer applies.</p>
+                </div>
+                <div class="flex items-center space-x-2 bg-spacemid/30 border border-slate-800 p-2 rounded-lg text-xs font-code">
+                    <span class="text-slate-400">Total Simulation Capital:</span>
+                    <div class="relative">
+                        <span class="absolute left-2.5 top-1 text-gold">$</span>
+                        <input id="portfolio-capital" type="number" value="250" min="1" max="1000" class="w-20 pl-5 pr-2 py-0.5 rounded bg-void text-white border border-gold/30 focus:border-gold outline-none font-bold text-right" />
+                    </div>
+                    <span class="text-gold font-bold">M</span>
+                </div>
+            </div>
+
+            <!-- CHIEF RISK OFFICER WARNING BANNER -->
+            <div id="cro-alert-banner" class="hidden bg-critical/10 border border-critical/50 text-critical px-4 py-3 rounded-lg flex items-center justify-between animate-pulse">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-triangle-exclamation text-lg"></i>
+                    <div>
+                        <p class="text-xs font-bold uppercase tracking-wider">CHIEF RISK OFFICER (CRO) EXPOSURE ALERT</p>
+                        <p class="text-[10px] text-slate-300">Holding allocation exceeds the $50M portfolio limit. Escalate to Risk Operations immediately.</p>
+                    </div>
+                </div>
+                <span class="bg-critical text-white font-code text-[9px] font-bold px-2 py-0.5 rounded">CRO ESCALATED</span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Vanguard Fund Table -->
+                <div class="lg:col-span-8 hud-panel rounded-xl p-5 overflow-hidden flex flex-col justify-between">
+                    <div class="scanner-sweep"></div>
+                    <div class="w-full overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs font-code">
+                            <thead>
+                                <tr class="border-b border-slate-850 text-slate-400 uppercase text-[9px]">
+                                    <th class="py-2.5 px-3">Ticker</th>
+                                    <th class="py-2.5 px-3">Fund Name</th>
+                                    <th class="py-2.5 px-3 text-center">Vehicle</th>
+                                    <th class="py-2.5 px-3 text-right">Expense Ratio</th>
+                                    <th class="py-2.5 px-3 text-right">3Y Return</th>
+                                    <th class="py-2.5 px-3 text-right">10Y Return</th>
+                                    <th class="py-2.5 px-3 text-right">AUM</th>
+                                    <th class="py-2.5 px-3 text-center">Status</th>
+                                    <th class="py-2.5 px-3 text-center">Select</th>
+                                </tr>
+                            </thead>
+                            <tbody id="vanguard-fund-table-body" class="text-slate-300">
+                                <!-- Dynamic rows inserted by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="mt-4 pt-3 border-t border-slate-850 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[10px] text-slate-500">
+                        <span>* Medians based on Lipper Peer-Group Averages. Fee flag threshold: 0.20%.</span>
+                        <span class="italic">"Past performance is not a guarantee of future results." (Vanguard Standard)</span>
+                    </div>
+                </div>
+
+                <!-- Interactive Analysis Calculator Panel -->
+                <div class="lg:col-span-4 hud-panel rounded-xl p-6 flex flex-col justify-between space-y-4">
+                    <div class="scanner-sweep"></div>
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between border-b border-slate-850 pb-2">
+                            <h3 class="font-display text-sm font-bold text-white">RISK & ATTRIBUTION MODEL</h3>
+                            <span id="fund-calc-ticker" class="bg-gold/15 text-gold border border-gold/30 text-[9px] font-bold px-2 py-0.5 rounded">VOO</span>
+                        </div>
+                        
+                        <!-- Mini Risk Readouts -->
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            <div class="bg-void/45 p-2 rounded border border-slate-850">
+                                <span class="text-slate-500 block text-[9px]">SHARPE RATIO (3Y)</span>
+                                <span id="val-sharpe" class="font-bold text-white text-sm">--</span>
+                            </div>
+                            <div class="bg-void/45 p-2 rounded border border-slate-850">
+                                <span class="text-slate-500 block text-[9px]">BETA VS S&P 500</span>
+                                <span id="val-beta" class="font-bold text-white text-sm">--</span>
+                            </div>
+                            <div class="bg-void/45 p-2 rounded border border-slate-850">
+                                <span class="text-slate-500 block text-[9px]">MAX DRAWDOWN</span>
+                                <span id="val-drawdown" class="font-bold text-white text-sm">--</span>
+                            </div>
+                            <div class="bg-void/45 p-2 rounded border border-slate-850">
+                                <span class="text-slate-500 block text-[9px]">SIM HOLDING SIZE</span>
+                                <span id="val-holdingsize" class="font-bold text-white text-sm">--</span>
+                            </div>
+                        </div>
+
+                        <!-- 4 Core Investment Principles Checks -->
+                        <div class="space-y-2 text-xs pt-1">
+                            <div class="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Vanguard Principles Screening</div>
+                            
+                            <div class="flex items-center justify-between">
+                                <span class="text-slate-400">1. GOALS Alignment</span>
+                                <span id="check-goals" class="text-safe"><i class="fa-solid fa-circle-check"></i> PASS</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-slate-400">2. BALANCE (Diversification)</span>
+                                <span id="check-balance" class="text-safe"><i class="fa-solid fa-circle-check"></i> PASS</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-slate-400">3. COSTS Efficiency (≤0.20%)</span>
+                                <span id="check-costs" class="text-safe"><i class="fa-solid fa-circle-check"></i> PASS</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-slate-400">4. DISCIPLINE (≥3Y History)</span>
+                                <span id="check-discipline" class="text-safe"><i class="fa-solid fa-circle-check"></i> PASS</span>
+                            </div>
+                        </div>
+
+                        <!-- Asset Recommendation Output -->
+                        <div class="p-3 bg-void/50 rounded-lg border border-gold/25 space-y-1">
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="text-slate-400 uppercase font-semibold text-[9px]">RECOMMENDED POSITION</span>
+                                <span id="calc-recommendation" class="text-gold font-bold px-2 py-0.5 bg-gold/10 border border-gold/30 rounded text-[9px]">OVERWEIGHT</span>
+                            </div>
+                            <p id="calc-rationale" class="text-[10px] text-slate-300 leading-normal italic">
+                                Strong risk-adjusted performance with highly efficient costs under threshold. Historical tracking error aligns with target overlay.
+                            </p>
+                        </div>
+                    </div>
+
+                    <button id="btn-export-fund" class="w-full bg-gradient-to-r from-gold to-amberaccent text-void font-display font-bold text-xs uppercase py-2.5 rounded tracking-wider flex items-center justify-center space-x-1.5 shadow hover:shadow-gold/15 transition-all">
+                        <i class="fa-solid fa-file-code"></i>
+                        <span>Generate Compliance JSON</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- COMPLIANCE EXPORT DRAWER (Interactive Terminal Code Output) -->
+        <section id="compliance-drawer" class="space-y-4">
+            <div class="border-b border-gold/15 pb-2">
+                <h3 class="font-display text-sm font-bold text-white uppercase tracking-wider"><i class="fa-solid fa-terminal mr-1 text-gold"></i> Compliance Fund Analysis Output</h3>
+            </div>
+            <div class="hud-panel rounded-xl p-5 bg-spacemid/50 font-code text-xs relative">
+                <div class="scanner-sweep"></div>
+                <div class="absolute top-4 right-4 z-20">
+                    <button id="btn-copy-json" class="px-3 py-1 rounded bg-slate-800 text-gold border border-slate-700 hover:border-gold hover:bg-spacemid transition-all flex items-center space-x-1 shadow-md">
+                        <i class="fa-solid fa-copy"></i>
+                        <span id="copy-btn-text">Copy JSON</span>
+                    </button>
+                </div>
+                <pre id="json-compliance-output" class="text-neoncyan overflow-x-auto max-h-[300px] leading-relaxed p-1">
+&lt;fund_analysis&gt;
+{
+  "ticker": "VOO",
+  "fund_name": "Vanguard S&P 500 ETF",
+  "vehicle": "ETF",
+  "category": "Large Cap Blend",
+  "expense_ratio_pct": 0.03,
+  "performance": {
+    "1y": 24.12, "3y": 8.54, "5y": 14.22, "10y": 12.85
+  },
+  "risk_metrics": {
+    "sharpe_3y": 0.72,
+    "std_dev_3y": 17.50,
+    "max_drawdown": -24.40,
+    "beta_vs_benchmark": 1.00
+  },
+  "aum_bn": 1140.50,
+  "track_record_yrs": 15,
+  "lipper_percentile_10y": 92,
+  "recommendation": "OVERWEIGHT",
+  "rationale": "Vanguard S&P 500 ETF (VOO) exhibits top-tier cost efficiency with a 0.03% expense ratio. Risk metrics fall perfectly within expected benchmark limits. Track record exceeds minimum Discipline principles.",
+  "risk_flags": [],
+  "data_as_of": "2026-06-28T18:21:51+02:00"
+}
+&lt;/fund_analysis&gt;
+                </pre>
+            </div>
+        </section>
+
+        <!-- SATELLITE MAP INTERACTIVE MONITOR -->
+        <section id="explorer" class="space-y-6 scroll-mt-20">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-gold/15 pb-4">
+                <div>
+                    <span class="text-[9px] font-code text-gold uppercase tracking-widest block"><i class="fa-solid fa-circle-dot animate-ping mr-1"></i> Telemetry Grid Node 001</span>
+                    <h2 class="font-display text-2xl font-bold text-white tracking-wide">STUDY MONITORING GRID</h2>
+                    <p class="text-slate-400 text-xs mt-0.5">Live geospatial mapping of satellite detected industrial anomalies linked to primary equities.</p>
+                </div>
+                <div class="flex items-center space-x-2 bg-spacemid/30 border border-slate-800 p-1 rounded-lg text-xs font-code">
+                    <button id="btn-layer-all" class="px-3 py-1 rounded bg-gold text-void font-bold transition-all shadow-[0_0_10px_rgba(212,175,55,0.2)]">All Areas</button>
+                    <button id="btn-layer-all-chile" class="px-3 py-1 rounded text-slate-400 hover:text-white hover:bg-slate-800 transition-all">Chile (Lithium)</button>
+                    <button id="btn-layer-all-peru" class="px-3 py-1 rounded text-slate-400 hover:text-white hover:bg-slate-800 transition-all">Peru (Gold)</button>
+                    <button id="btn-layer-all-czech" class="px-3 py-1 rounded text-slate-400 hover:text-white hover:bg-slate-800 transition-all">Czechia (NTL)</button>
+                </div>
+            </div>
+
+            <!-- MAP CONTAINER & SIDE DRAWER PANEL GRID -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Map wrapper -->
+                <div class="lg:col-span-8 hud-panel rounded-xl overflow-hidden relative min-h-[500px] flex flex-col">
+                    <div class="scanner-sweep"></div>
+                    <div class="flex-grow relative z-10">
+                        <div id="map" class="absolute inset-0"></div>
+                        
+                        <!-- Map HUD Controls (Floating Overlay) -->
+                        <div class="absolute top-4 right-4 z-20 flex flex-col space-y-2">
+                            <!-- Basemap toggle -->
+                            <div class="glass-panel px-3 py-2 rounded-lg text-xs font-code flex items-center space-x-2 text-white border border-gold/30 shadow-[0_0_10px_rgba(0,0,0,0.5)]">
+                                <span id="basemap-hud-label">Basemap:</span>
+                                <button id="btn-basemap-dark" class="px-2 py-0.5 rounded bg-gold text-void font-bold shadow-[0_0_8px_rgba(212,175,55,0.4)]">Dark</button>
+                                <button id="btn-basemap-sat" class="px-2 py-0.5 rounded text-slate-400 hover:text-white hover:bg-slate-800 transition-all">Satellite</button>
+                            </div>
+                            
+                            <!-- Heatmap toggle -->
+                            <div class="glass-panel px-3 py-2 rounded-lg text-xs font-code flex items-center justify-between text-white border border-gold/30 shadow-[0_0_10px_rgba(0,0,0,0.5)]">
+                                <span id="heatmap-hud-label">Heatmap Overlay:</span>
+                                <button id="btn-toggle-heatmap" class="ml-2 px-2 py-0.5 rounded bg-slate-800 border border-slate-700 hover:border-gold transition-all">OFF</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Coordinate HUD (Bottom Left) -->
+                        <div class="absolute bottom-4 left-4 z-20 glass-panel px-3 py-1.5 rounded-lg text-[10px] font-code text-slate-400 border border-gold/20 pointer-events-none">
+                            <span>GPS: </span><span id="hud-coordinates" class="text-gold font-bold">0.00000, 0.00000</span>
+                        </div>
+
+                        <!-- Sync Mini Map -->
+                        <div id="minimap" class="absolute bottom-16 right-4 z-20 w-28 h-24 border border-gold/30 rounded overflow-hidden shadow-lg hidden sm:block pointer-events-none opacity-85"></div>
+
+                        <!-- Export Viewport HUD (Bottom Right) -->
+                        <button id="btn-export-viewport" class="absolute bottom-4 right-4 z-20 glass-panel px-3 py-2 rounded-lg text-xs font-code text-gold border border-gold/30 hover:bg-gold hover:text-void hover:border-gold transition-all flex items-center space-x-1.5 shadow-[0_0_10px_rgba(0,0,0,0.5)]">
+                            <i class="fa-solid fa-file-export"></i>
+                            <span>Export Viewport</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Timeline Slider Control (Docked below map) -->
+                    <div class="bg-spacemid/60 border-t border-slate-800 p-4 font-code z-10 relative">
+                        <div class="flex items-center justify-between text-xs mb-2">
+                            <span class="text-slate-400 uppercase tracking-wider"><i class="fa-solid fa-clock text-gold mr-1.5 animate-pulse"></i><span>Temporal Navigation Timeline</span></span>
+                            <span id="timeline-date-label" class="text-gold font-bold border border-gold/20 px-2 py-0.5 bg-void/60 rounded">All Time</span>
+                        </div>
+                        <input id="timeline-slider" type="range" min="0" max="4" value="4" class="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-gold">
+                        <div class="flex justify-between text-[10px] text-slate-500 mt-1">
+                            <span>2021</span>
+                            <span>2022</span>
+                            <span>2023</span>
+                            <span>2024</span>
+                            <span>2025+</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SIDE DETAIL DRAWER PANEL (Floating Glassmorphism Cyber HUD) -->
+                <div class="lg:col-span-4 hud-panel rounded-xl p-6 backdrop-blur-md flex flex-col justify-between space-y-6 relative overflow-hidden min-h-[500px]">
+                    <!-- Scanner sweep effect inside the drawer -->
+                    <div class="scanner-sweep" style="animation-duration: 9s;"></div>
+                    
+                    <div class="relative z-10 space-y-5">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[9px] font-code text-gold tracking-widest uppercase">Anomaly Selected</span>
+                            <span id="anomaly-badge" class="bg-critical/15 border border-critical/30 text-critical text-[9px] font-code px-2 py-0.5 rounded uppercase">Pending Selection</span>
+                        </div>
+                        
+                        <div>
+                            <h3 id="anomaly-title" class="font-display text-xl font-bold text-white uppercase tracking-wider">No Region Selected</h3>
+                            <p id="anomaly-region" class="text-xs text-slate-400 font-code mt-1"><i class="fa-solid fa-location-dot text-gold mr-1"></i> Coordinates Pending</p>
+                        </div>
+                        
+                        <!-- Confidence Score Bar -->
+                        <div class="space-y-1">
+                            <div class="flex justify-between text-xs font-code">
+                                <span class="text-slate-400">Detection Confidence</span>
+                                <span id="confidence-percentage" class="text-gold font-bold">0%</span>
+                            </div>
+                            <div class="w-full h-2 bg-slate-850 rounded overflow-hidden p-0.5 border border-slate-800">
+                                <div id="confidence-bar" class="h-full bg-gradient-to-r from-neonblue to-neoncyan transition-all duration-500" style="width: 0%;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Statistical metrics -->
+                        <div class="grid grid-cols-2 gap-3 text-xs pt-2">
+                            <div class="border border-slate-850 bg-void/35 p-3 rounded">
+                                <span class="text-slate-500 block text-[9.5px]">Z-SCORE</span>
+                                <span id="metric-zscore" class="font-bold text-white text-lg">--</span>
+                            </div>
+                            <div class="border border-slate-850 bg-void/35 p-3 rounded">
+                                <span class="text-slate-500 block text-[9.5px]">UNCERTAINTY</span>
+                                <span id="metric-uncertainty" class="font-bold text-white text-lg">--</span>
+                            </div>
+                        </div>
+
+                        <!-- Economic Signal Info -->
+                        <div class="space-y-2">
+                            <span class="text-[9px] font-code text-gold uppercase tracking-wider block">Investment Implications</span>
+                            <p id="anomaly-description" class="text-xs text-slate-400 leading-relaxed italic bg-void/30 p-2 rounded border border-slate-850/50">
+                                Select an anomaly on the study monitor grid to evaluate active extraction trends, correlation coefficients, and downstream industrial impacts.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Custom Radar chart or Spectral Signatures -->
+                    <div class="relative z-10 h-32 flex items-center justify-center border border-slate-850 bg-void/25 rounded p-2 overflow-hidden">
+                        <canvas id="radarChart" class="max-h-full max-w-full"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ACADEMIC FOUNDATIONS: UN-SUPERVISED AI RESEARCH FOR INSTITUTIONAL ALPHA -->
+        <section id="academic" class="space-y-6 scroll-mt-20">
+            <div class="border-b border-gold/15 pb-4 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                <div>
+                    <span class="text-[9px] font-code text-gold uppercase tracking-widest block"><i class="fa-solid fa-graduation-cap mr-1"></i> Research Backing</span>
+                    <h2 class="font-display text-2xl font-bold text-white tracking-wide">ACADEMIC METHODOLOGY & ALGORITHMS</h2>
+                    <p class="text-slate-400 text-xs mt-0.5">Underlying intelligence system developed as an information engineering thesis project (CZU Prague) by Eren Ozturk.</p>
+                </div>
+                <!-- Interactive Chapter selector dropdown -->
+                <div class="flex items-center space-x-2 text-xs font-code">
+                    <span class="text-slate-400">Thesis Chapter:</span>
+                    <select id="chapter-select" class="bg-spacemid border border-gold/30 text-white rounded px-2 py-1 focus:border-gold outline-none font-bold cursor-pointer font-code">
+                        <option value="1">Chapter 1: Introduction</option>
+                        <option value="2">Chapter 2: Theoretical Framework</option>
+                        <option value="3">Chapter 3: Methodology</option>
+                        <option value="4">Chapter 4: System Design</option>
+                        <option value="5">Chapter 5: Results & Analysis</option>
+                        <option value="6">Chapter 6: Discussion & Conclusion</option>
+                        <option value="7">Chapter 7: Summary</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Chapter Content Panel -->
+            <div class="hud-panel rounded-xl p-6 bg-spacemid/20 space-y-4">
+                <div class="scanner-sweep"></div>
+                <div class="flex items-center justify-between border-b border-slate-850 pb-2">
+                    <h3 id="chapter-title" class="font-display text-lg font-bold text-gold uppercase text-glow-gold">Chapter 1: Introduction</h3>
+                    <span id="chapter-node-badge" class="bg-gold/10 text-gold border border-gold/20 text-[9px] font-code px-2.5 py-0.5 rounded-full uppercase">§1.0 DEPLOYED</span>
+                </div>
+                <div id="chapter-content" class="text-slate-300 text-xs leading-relaxed space-y-4 font-body">
+                    <!-- Loaded dynamically by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER DISCLAIMER -->
+    <footer class="relative z-10 w-full bg-void border-t border-gold/15 py-8 px-6 mt-16 text-center space-y-3">
+        <p class="text-[11px] text-slate-500 max-w-2xl mx-auto leading-relaxed">
+            <strong>Apex Capital Partners LP Regulatory Disclosure</strong>: This dashboard serves strictly for internal research, co-investment analysis, and decision-support. No trade orders, executions, or confirmations can be initiated from this platform. Past performance is not a guarantee of future results. SEC Registered.
+        </p>
+        <p class="text-[10px] text-slate-600 font-code">
+            © 2026 Apex Capital Partners. Space-Based Arbitrage Engine. Version 4.0.0 (Institutional Pitch Edition).
+        </p>
+    </footer>
+
+    <!-- Three.js and Leaflet Dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Institutional Controller JS -->
+    <script src="app4.js"></script>
+</body>
+</html>

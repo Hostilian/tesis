@@ -1,10 +1,7 @@
 # Chapter 4: System Design & Implementation
 
 ## 4.1 Architecture Overview
-The system is designed as a modular, decoupled data engineering pipeline that separates high-performance geospatial extraction from lightweight, interactive user rendering. This architecture is divided into three distinct layers:
-1.  **Ingestion & Processing Layer (Python/GEE/CDSE)**: Fetches and clean-masks raw multi-spectral and radar rasters. Computes spectral indices and fits unsupervised machine learning anomaly models.
-2.  **Storage & Serialization Layer (JSON/GeoJSON)**: Serializes processed anomaly data, spatial polygon boundaries, and temporal statistics into standard flat file formats.
-3.  **Visualization Dashboard Layer (HTML5/CSS3/Vanilla JS)**: A futuristic single-page application (SPA) that acts as the user interface (UI) and Decision Support System (DSS), loading static serialized feeds from GitHub Pages.
+The system is designed as a modular, decoupled data engineering pipeline that separates high-performance geospatial extraction from lightweight, interactive user rendering. This architecture is divided into three distinct layers: the Ingestion and Processing Layer, the Storage and Serialization Layer, and the Visualization Dashboard Layer. The Ingestion and Processing Layer, written in Python, interfaces directly with cloud-based geospatial databases (GEE and CDSE) to download, mask, and compute spectral and radar matrices, fitting unsupervised machine learning models to detect outliers. The Storage and Serialization Layer stores these processed results in static, compressed JSON and RFC 7946 GeoJSON formats. Finally, the Visualization Dashboard Layer, built as a responsive single-page web application (SPA) using HTML5, CSS3, and Vanilla JavaScript, functions as a user-friendly Decision Support System (DSS) that loads these pre-computed files from a static hosting provider (such as GitHub Pages), minimizing server overhead.
 
 ```
 +-----------------------------------------------------------------------------------+
@@ -34,9 +31,9 @@ The system is designed as a modular, decoupled data engineering pipeline that se
 |          |    anomalies.json    |            |    regions.geojson    |            |
 |          +----------+-----------+            +-----------+-----------+            |
 +---------------------|------------------------------------|------------------------+
-                      |                                    |
-                      | (Deploys statically via CI/CD)     |
-                      v                                    v
+                       |                                    |
+                       | (Deploys statically via CI/CD)     |
+                       v                                    v
 +-----------------------------------------------------------------------------------+
 |                         DECISION SUPPORT SYSTEM (FRONTEND SPA)                    |
 |                                                                                   |
@@ -46,7 +43,7 @@ The system is designed as a modular, decoupled data engineering pipeline that se
 +-----------------------------------------------------------------------------------+
 ```
 
-By decoupling the high-performance back-end from the front-end visualization, the system bypasses the need to run resource-heavy geospatial libraries (such as GDAL, Rasterio, or Fiona) within the user's browser. Instead, the heavy computations are performed asynchronously, and the client browser only loads lightweight, pre-processed vector datasets.
+By decoupling the high-performance back-end execution from the front-end visualization, the system bypasses the need to run resource-heavy geospatial libraries (such as GDAL, Rasterio, or Fiona) within the user's browser. Instead, the heavy computations are performed asynchronously, and the client browser only loads lightweight, pre-processed vector datasets.
 
 ---
 
@@ -68,12 +65,7 @@ except Exception as e:
 When querying satellite image collections (e.g., Landsat-8/9 OLI), spatial queries are constrained using bounding boxes represented as `ee.Geometry.Polygon`. The temporal filter is applied using `ee.Filter.date(start_date, end_date)`.
 
 ### 4.2.2 Copernicus CDSE REST API Contract
-To query high-resolution Sentinel-2 MSI data, the pipeline communicates with the CDSE OData endpoint.
-1.  **Authentication**: The pipeline sends a POST request with the client credentials payload to:
-    `https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token`
-2.  **OData Search Request**: A GET request queries available granules using filter strings:
-    `https://catalogue.dataspace.copernicus.eu/odata/v1/Products?$filter=Attributes/OData.CSC.DoubleAttribute/any(att:att/Name eq 'cloudCover' and att/Value lt 20.0) and OData.CSC.Intersects(area=geography'SRID=4326;POLYGON((...))')`
-3.  **Process API**: Fetches orthorectified surface reflectance bands directly as NumPy arrays, limiting network overhead.
+To query high-resolution Sentinel-2 MSI data, the pipeline communicates with the CDSE OData endpoint. Authentication is established by dispatching a POST request with the client credentials payload to the Keycloak server at `https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token`, which returns a short-lived bearer token. Next, the pipeline executes an OData search query via a GET request containing spatial intersection and cloud cover filters at the catalogue endpoint. Finally, the target orthorectified surface reflectance bands are fetched as scaled NumPy arrays directly from the CDSE Process API, avoiding raw imagery download and limiting network overhead.
 
 ### 4.2.3 World Bank Data REST API Contract
 Economic indicator datasets are downloaded using direct HTTP requests:
@@ -101,23 +93,21 @@ To eliminate cloud obstruction from spectral calculations, the pipeline performs
 *   **Landsat-8/9 OLI**: The `QA_PIXEL` band contains cloud (bit 3) and cloud shadow (bit 4) flags. The pipeline shifts these bits to isolate clear surface pixels.
 
 ### 4.3.2 Unsupervised Anomaly Engine (Isolation Forest)
-For multi-spectral anomaly detection (e.g., Peru gold mining excavations and Chile lithium evaporation pond expansions), the processed spectral feature bands are flattened into a 2D matrix:
-1.  **Feature Assembly**: A matrix $X \in \mathbb{R}^{N \times D}$ is constructed, where each row represents a pixel, and the columns contain computed index values ($\text{NDVI}, \text{NDWI}, \text{BSI}$).
-2.  **Model Training**: An `IsolationForest` model (from `scikit-learn`) is trained with a locked random seed and configured contamination threshold:
-    ```python
-    from sklearn.ensemble import IsolationForest
+For multi-spectral anomaly detection (e.g., Peru gold mining excavations and Chile lithium evaporation pond expansions), the processed spectral feature bands are flattened into a 2D matrix. First, a feature matrix $X \in \mathbb{R}^{N \times D}$ is assembled where each row represents a spatial pixel and columns contain the corresponding spectral index values ($\text{NDVI}$, $\text{NDWI}$, $\text{BSI}$). Next, an `IsolationForest` estimator is fitted to this matrix with a contamination parameter of $\alpha = 0.08$ and a locked random seed to ensure deterministic splits. Finally, the outlier predictions are reshaped back to the original spatial dimensions, and contiguous outlier pixel clusters are vectorized into polygon features with confidence metrics computed from their forest path lengths.
 
-    # Initialize Isolation Forest with fixed seed for reproducibility
-    clf = IsolationForest(
-        n_estimators=100,
-        contamination=0.08,  # Expected 8% outlier rate
-        random_state=42
-    )
-    
-    # Fit model and predict outlier flags (-1 indicates anomaly)
-    predictions = clf.fit_predict(X)
-    ```
-3.  **Spatial Projection**: Outliers are reshaped back to the original raster grid. Spatial clusters (groups of contiguous outlier pixels) are vectorized into centroid coordinates and assigned a confidence score based on their isolation path lengths.
+```python
+from sklearn.ensemble import IsolationForest
+
+# Initialize Isolation Forest with fixed seed for reproducibility
+clf = IsolationForest(
+    n_estimators=100,
+    contamination=0.08,  # Expected 8% outlier rate
+    random_state=42
+)
+
+# Fit model and predict outlier flags (-1 indicates anomaly)
+predictions = clf.fit_predict(X)
+```
 
 ---
 
@@ -211,40 +201,42 @@ The geographic visualizer is built using `Leaflet.js` mapped to a dark tile laye
     ```
 
 ### 4.5.2 Dual-Canvas Image Split Slider
-To allow users to visually inspect spatial changes without downloading large GIS files, the dashboard uses a dual-canvas layout:
-1.  **Structure**: Two HTML5 `<canvas>` elements are layered on top of each other inside a relative-positioned container. The baseline image is drawn on the bottom canvas, and the anomaly image is drawn on the top canvas.
-2.  **Clipping Event Loop**: A vertical separator bar tracks dragging inputs (`mousedown` / `touchstart`). The horizontal split percentage is calculated, and the top canvas is cropped using the CSS `clip-path` property:
-    ```javascript
-    function applyClipEffect() {
-        const containerWidth = container.clientWidth;
-        const splitX = containerWidth * sliderSplitPercent;
-        
-        // Position handle element
-        handle.style.left = `${sliderSplitPercent * 100}%`;
-        
-        // Clip top canvas (anomaly image) on the left side to reveal the baseline image
-        anomalyCanvas.style.clipPath = `inset(0 0 0 ${splitX}px)`;
-    }
-    ```
-3.  **Performance Optimization**: By using hardware-accelerated CSS clipping instead of redrawing pixel blocks on every frame, the interface achieves a smooth rendering rate of 60 frames per second (FPS), even on mobile web browsers.
+To allow users to visually inspect spatial changes without downloading large GIS files, the dashboard uses a dual-canvas layout. Two HTML5 `<canvas>` elements are stacked inside a relative container. The baseline image is rendered on the bottom canvas, while the anomaly image is drawn on the top canvas. A vertical slider bar captures mouse and touch interactions, computing the horizontal division percentage. This split boundary is then applied as a CSS `clip-path` inset boundary on the top canvas, dynamically revealing the baseline underneath. This hardware-accelerated clipping bypasses heavy raster recalculations, ensuring a smooth 60 frames per second (FPS) rendering speed even on lower-end mobile devices.
+
+```javascript
+function applyClipEffect() {
+    const containerWidth = container.clientWidth;
+    const splitX = containerWidth * sliderSplitPercent;
+    
+    // Position handle element
+    handle.style.left = `${sliderSplitPercent * 100}%`;
+    
+    // Clip top canvas (anomaly image) on the left side to reveal the baseline image
+    anomalyCanvas.style.clipPath = `inset(0 0 0 ${splitX}px)`;
+}
+```
 
 ### 4.5.3 Chart.js Spectral Radar Chart
 A radar chart displays the multi-spectral signature of the selected anomaly:
 *   **Axes**: NDVI, NDWI, BSI, and SWIR reflectance.
 *   **Visual Styling**: The selected anomaly's signature is drawn in fluorescent cyan, and the baseline normal profile is rendered in deep blue, allowing users to quickly assess land cover anomalies.
 
+### 4.5.4 Multi-Version Dashboard Iterations (V2, V3, and V4 YC Institutional Edition)
+To support different stakeholders—ranging from academic reviewers to venture capital partners—the front-end Decision Support System implements three distinct visual and functional versions:
+*   **Version 2 (Original / Academic Baseline)**: Focuses on core GIS rendering, offering Leaflet map markers, NDVI/BSI comparison sliders, and standard thesis draft viewing nodes.
+*   **Version 3 (Sci-Fi Cyber HUD)**: Optimized for immersive visualization with WebGL starfields, an interactive 3D Earth wireframe globe (Three.js), scanner sweep animations, and cybernetic HUD diagnostics.
+*   **Version 4 (Institutional YC Investor & Portfolio Telemetry Console)**: Tailored for venture-scale presentations, this dashboard adopts a professional space boardroom palette (deep navy, gold, and return-emerald green) and introduces three advanced analytical layers:
+    1.  *Interactive SVG Pipeline Diagram*: A dynamic, hover-active SVG flow chart showing live telemetry data packets moving from raw sensors, through the Isolation Forest engine, to the portfolio allocator.
+    2.  *Vanguard Screener & CRO Warning Dashboard*: Evaluates Vanguard mutual funds and ETFs using the four core principles of Goals, Balance, Costs (flagging ratios > 0.20%), and Discipline. It implements an interactive simulator that triggers a blinking Chief Risk Officer (CRO) escalation warning if any simulated holding size exceeds the institutional limit of $50M.
+    3.  *Compliance Exporter Terminal*: Generates standard-compliant `<fund_analysis>` structured JSON outputs with automated risk-flag compiling (e.g., `OVER_LIMIT_50M`, `INSUFFICIENT_HISTORY`, `HIGH_EXPENSE_RATIO`).
+    4.  *Equity Indicator Linkage*: Maps geospatial anomaly polygons directly to active corporate stock symbols (e.g. Salar de Atacama coordinates correlate directly to SQM/Albemarle holdings) to demonstrate down-market financial arbitrage.
+
 ---
 
 ## 4.6 Deployment Architecture & CI/CD
-The project uses GitHub Actions for deployment and scheduling:
-*   **Build Pipeline (`test.yml`)**: Installs Python dependencies, executes tests, and verifies that the code builds correctly on every pull request to `main`.
-*   **Deployment Pipeline (`deploy.yml`)**: Deploys the static assets in the `/docs` directory to GitHub Pages upon merging changes.
-*   **Scheduled Pipeline (`data-refresh.yml`)**: Runs weekly via a cron schedule. It executes the Python data ingestion pipeline headlessly, queries Earth Engine for new data, updates `anomalies.json`, and commits the updated cache files back to the repository.
+The project uses GitHub Actions for deployment and scheduling. The build pipeline (`test.yml`) installs Python packages, executes tests, and verifies that the code builds correctly on every pull request to `main`. The deployment pipeline (`deploy.yml`) deploys the static assets in the `/docs` directory to GitHub Pages upon merging changes. The scheduled pipeline (`data-refresh.yml`) runs weekly via a cron schedule, executing the Python data ingestion pipeline headlessly, querying Earth Engine for new data, updating `anomalies.json`, and committing the updated cache files back to the repository.
 
 ---
 
 ## 4.7 Security & Vulnerability Auditing
-To secure the serverless system, the following protocols are implemented:
-*   **API Credential Isolation**: No credentials or private keys are stored in the repository. Local testing relies on `.env` files (excluded from version control via `.gitignore`), while automated scripts access secrets configured in the GitHub Actions environment.
-*   **Content Security Policy (CSP)**: To protect against cross-site scripting (XSS) and code injection, a meta tag restricts scripts and stylesheet sources to the local domain and verified CDN hosts.
-*   **Dependency Auditing**: The CI/CD pipeline runs `pip-audit` to scan Python packages for vulnerabilities and executes `npm audit` to check frontend dependencies, ensuring the code remains secure and up to date.
+To secure the serverless system, the following protocols are implemented. API credentials and private keys are completely isolated from version control by employing local `.env` files matching the `.gitignore` specification, while production credentials are provided dynamically through encrypted GitHub Action Secrets. A strict Content Security Policy (CSP) is configured via meta tags to restrict stylesheet and script sources to the local domain and verified content delivery networks (CDNs), preventing cross-site scripting (XSS) attacks. Additionally, security audits are automated in the CI/CD pipeline, invoking `pip-audit` to inspect Python packages and running CodeQL scans alongside secret scanners to prevent vulnerability leaks.

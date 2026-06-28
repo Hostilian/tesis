@@ -1,7 +1,7 @@
 # Chapter 3: Methodology
 
 ## 3.1 Research Design & Paradigm
-This study is structured under a **positivist, quantitative-dominant research design**, employing empirical geospatial observations, multi-spectral band math, and unsupervised machine learning algorithms to evaluate orbital data as a proxy for real-world economic activity. The research paradigm is grounded in the physical sciences: satellite sensors measure raw solar reflectance and microwave backscatter, which are objective physical properties of the Earth's surface. 
+This study is structured under a positivist, quantitative-dominant research design, employing empirical geospatial observations, multi-spectral band mathematics, and unsupervised machine learning algorithms to evaluate orbital data as a proxy for real-world economic activity. The research paradigm is grounded in the physical sciences: satellite sensors measure raw solar reflectance and microwave backscatter, which are objective physical properties of the Earth's surface. 
 
 These physical observations are processed through a structured Information Engineering pipeline, transforming unstructured raster bands into structured anomaly events. While the core processing and modeling are quantitative, a qualitative ground-truthing layer is integrated to cross-reference detected anomalies with news reports, corporate press releases, and official mining registries, establishing a robust mixed-method validation framework.
 
@@ -63,18 +63,20 @@ Nocturnal radiance values correlate directly with economic factors such as elect
 ## 3.4 Unsupervised Anomaly Detection Mathematics
 
 ### 3.4.1 Spatial Anomaly Detection (Isolation Forest)
-For multi-spectral pixels in mining and industrial Regions of Interest (ROIs), an unsupervised **Isolation Forest** is trained. The core premise is that anomalies are few and spectrally distinct, making them easier to isolate than normal pixels.
+For multi-spectral pixels in mining and industrial Regions of Interest (ROIs), an unsupervised Isolation Forest is trained. The core premise is that anomalies are few and spectrally distinct, making them easier to isolate than normal pixels.
 
-Let $X = \{x_1, x_2, \dots, x_N\}$ be a dataset of $N$ spatial observations in a $D$-dimensional space, where $D = [\text{NDVI}, \text{NDWI}, \text{BSI}, \rho_{\text{SWIR1}}]$. The algorithm recursively splits the dataset by randomly selecting a feature and a random split value between the minimum and maximum values of that feature, constructing an ensemble of Isolation Trees ($iTrees$).
+Let $X = \{x_1, x_2, \dots, x_N\}$ be a dataset of $N$ spatial observations in a $D$-dimensional space, where $D = [\text{NDVI}, \text{NDWI}, \text{BSI}, \rho_{\text{SWIR1}}]$ represents the selected multi-spectral feature set. The algorithm recursively splits the dataset by randomly selecting a feature and a random split value between the minimum and maximum values of that feature, constructing an ensemble of Isolation Trees ($iTrees$).
 
 The anomaly score $s(x, n)$ for an observation $x$ is defined as:
 $$s(x, n) = 2^{-\frac{\mathbb{E}(h(x))}{c(n)}}$$
 Where:
+*   $x$ represents a multi-spectral pixel vector in $\mathbb{R}^D$ where $D = [\text{NDVI}, \text{NDWI}, \text{BSI}, \rho_{\text{SWIR1}}]$.
+*   $n$ is the number of samples used to construct the tree.
 *   $h(x)$ is the path length (number of edges traversed from the root node to a terminating leaf node) of sample $x$ in an individual tree.
 *   $\mathbb{E}(h(x))$ is the expected (average) path length of $x$ across the forest of $T$ trees.
 *   $c(n)$ is the average path length of an unsuccessful search in a Binary Search Tree (BST) built from $n$ nodes, serving as a normalization factor:
 $$c(n) = 2\ln(n - 1) + 2\gamma - \frac{2(n - 1)}{n}$$
-Here, $\gamma \approx 0.5772156649$ is the **Euler-Mascheroni constant**.
+Here, $\gamma \approx 0.5772156649$ is the Euler-Mascheroni constant.
 
 **Anomaly Thresholding**:
 *   If $s(x, n) \approx 1.0$: The sample exhibits short path lengths across the forest, indicating that it is easily isolated and flagged as an anomaly.
@@ -100,22 +102,34 @@ To validate the reliability of detected satellite anomalies, three statistical m
 
 ### 3.5.1 Spatial Classification Performance
 Using verified ground-truth shapes (e.g., official mining registry maps), the spatial anomalies are evaluated using a confusion matrix:
-$$\text{Precision} = \frac{\text{True Positives (TP)}}{\text{True Positives (TP)} + \text{False Positives (FP)}}$$
-$$\text{Recall} = \frac{\text{True Positives (TP)}}{\text{True Positives (TP)} + \text{False Negatives (FN)}}$$
-$$\text{F1-Score} = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}$$
+$$\text{Precision} = \frac{\text{TP}}{\text{TP} + \text{FP}}$$
+$$\text{Recall} = \frac{\text{TP}}{\text{TP} + \text{FN}}$$
+$$\text{F1-Score} = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}} = \frac{2 \cdot \text{TP}}{2 \cdot \text{TP} + \text{FP} + \text{FN}}$$
+Where:
+*   $\text{TP}$ represents True Positives (pixels correctly classified as anomalies).
+*   $\text{FP}$ represents False Positives (pixels incorrectly classified as anomalies).
+*   $\text{FN}$ represents False Negatives (anomalous pixels missed by the model).
 
 ### 3.5.2 Temporal Economic Correlation
 To evaluate the correlation between night-time lights radiance anomalies ($Z_t$) and official quarterly GDP growth, the pipeline computes Pearson's product-moment correlation coefficient ($r$):
 $$r = \frac{\sum_{i=1}^n (X_i - \bar{X})(Y_i - \bar{Y})}{\sqrt{\sum_{i=1}^n (X_i - \bar{X})^2 \sum_{i=1}^n (Y_i - \bar{Y})^2}}$$
-Where $X_i$ is the satellite radiance anomaly score, $Y_i$ is the GDP growth rate, and $n$ is the number of observation quarters. 
+Where $X_i$ is the satellite radiance anomaly score, $Y_i$ is the GDP growth rate, and $n$ is the number of observation quarters.
 
-A two-tailed Student's t-test is used to calculate the $p$-value, ensuring the correlation is statistically significant ($p < 0.05$).
+To assess the statistical significance of the correlation, the Student's t-statistic is computed:
+$$t = r\sqrt{\frac{n-2}{1-r^2}}$$
+This statistic follows a Student's t-distribution with $n-2$ degrees of freedom. A two-tailed Student's t-test is used to calculate the $p$-value, ensuring the correlation is statistically significant ($p < 0.05$).
 
 ### 3.5.3 Spatial Autocorrelation (Moran's I)
 To account for spatial dependency—the principle that neighboring pixels are more likely to exhibit similar anomaly scores—we compute Moran's $I$ coefficient to verify spatial clustering:
 $$I = \frac{N}{S_0} \frac{\sum_{i=1}^N \sum_{j=1}^N w_{ij}(x_i - \bar{x})(x_j - \bar{x})}{\sum_{i=1}^N (x_i - \bar{x})^2}$$
-Where $N$ is the number of spatial units indexed by $i$ and $j$, $x$ is the anomaly score, $\bar{x}$ is the mean, $w_{ij}$ is the spatial weight matrix, and $S_0$ is the sum of all weights:
+Where:
+*   $N$ is the number of spatial units indexed by $i$ and $j$.
+*   $x_i$ is the anomaly score of pixel $i$.
+*   $\bar{x}$ is the mean anomaly score across all units.
+*   $w_{ij}$ is the spatial weight matrix representing the proximity or adjacency between pixel $i$ and pixel $j$ (typically structured as an inverse-distance weighting scheme or binary contiguity matrix).
+*   $S_0$ is the sum of all weights:
 $$S_0 = \sum_{i=1}^N \sum_{j=1}^N w_{ij}$$
+
 Moran's $I > 0$ indicates spatial clustering, while $I < 0$ indicates spatial dispersion, helping validate the structural consistency of detected mining footprints.
 
 ---

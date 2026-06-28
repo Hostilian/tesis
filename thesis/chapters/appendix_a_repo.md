@@ -1,6 +1,6 @@
 # Appendix A: Full Code Repository Structure
 
-This appendix illustrates the structured layout of the thesis software repository, mapping out data modules, dashboard components, and deployment pipelines.
+This appendix illustrates the structured layout of the thesis software repository, mapping out data modules, dashboard components, and deployment pipelines. The repository is organized to enforce the decoupled architecture described in Chapter 4, separating the Python geospatial ingestion and modeling pipeline (`/pipeline`) from the static frontend visualization files (`/docs`).
 
 ```
 space-economic-intelligence/
@@ -10,11 +10,11 @@ space-economic-intelligence/
 │   │   ├── bug_report.md          # Technical pipeline bug logger
 │   │   └── feature_request.md     # Extension request template
 │   └── workflows/                 # CI/CD automated actions
-│       ├── deploy.yml             # Automatic push-to-deploy for Pages
-│       ├── test.yml               # Automated pytest runner
-│       ├── lint.yml               # Flake8 and Black code format checks
-│       └── data-refresh.yml       # Weekly cron automated pipeline
-│
+│   │   ├── deploy.yml             # Automatic push-to-deploy for Pages
+│   │   ├── test.yml               # Automated pytest runner
+│   │   ├── lint.yml               # Flake8 and Black code format checks
+│   │   └── data-refresh.yml       # Weekly cron automated pipeline
+│   
 ├── docs/                          # Web visualization dashboard
 │   ├── index.html                 # Semantic structure of the dashboard
 │   ├── index.css                  # Animations and custom layout rules
@@ -44,7 +44,6 @@ space-economic-intelligence/
 │       ├── main.tex               # Master typesetting document
 │       └── references.bib         # BibTeX citation collection
 │
-├── REFERENCE.md                   # Citation log and API version record
 ├── SECURITY.md                    # Key protection and disclosure policy
 ├── CONTRIBUTING.md                # Development and branching standards
 ├── CHANGELOG.md                   # Project semver release logs

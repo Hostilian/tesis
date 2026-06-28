@@ -3,7 +3,7 @@
 This appendix lists the sensor specifications, band wavelengths, and spatial resolutions of the primary satellite datasets utilized in this thesis.
 
 ## C.1 Sentinel-2 MSI Spectral Bands
-The Multi-Spectral Instrument (MSI) aboard Sentinel-2 provides 13 spectral bands at varying resolutions:
+The Multi-Spectral Instrument (MSI) aboard Sentinel-2 provides 13 spectral bands at varying resolutions. The table below documents the central wavelengths, spatial resolutions, and specific uses within our data pipeline:
 
 | Band Number | Band Name | Central Wavelength (nm) | Spatial Resolution (m) | Use in Pipeline |
 |---|---|---|---|---|
@@ -15,7 +15,7 @@ The Multi-Spectral Instrument (MSI) aboard Sentinel-2 provides 13 spectral bands
 | **QA60** | Quality Assessment | N/A | 60 | Cloud and cirrus bitmasking |
 
 ## C.2 Landsat-8/9 OLI Spectral Bands
-The Operational Land Imager (OLI) on Landsat 8/9 aligns closely with Sentinel-2 bands:
+The Operational Land Imager (OLI) on Landsat 8/9 aligns closely with Sentinel-2 bands, providing comparable spectral signatures at a standard 30-meter resolution:
 
 | Band Number | Band Name | Central Wavelength (nm) | Spatial Resolution (m) | Use in Pipeline |
 |---|---|---|---|---|
@@ -27,7 +27,4 @@ The Operational Land Imager (OLI) on Landsat 8/9 aligns closely with Sentinel-2 
 | **QA_PIXEL** | Pixel Quality | N/A | 30 | Cloud and shadow masking |
 
 ## C.3 Suomi-NPP VIIRS Day/Night Band (DNB)
-*   **Sensor Type**: Visible Infrared Imaging Radiometer Suite (VIIRS).
-*   **Spatial Resolution**: 15 arc-seconds (approximately 500 meters at the equator).
-*   **Spectral Range**: 500–900 nm (panchromatic visible/near-infrared band sensitive to low-light).
-*   **Radiometric Calibration**: Absolute radiance in units of $\text{nW}\cdot\text{cm}^{-2}\cdot\text{sr}^{-1}$.
+The Visible Infrared Imaging Radiometer Suite (VIIRS) Day/Night Band (DNB) captures low-light emissions at a spatial resolution of 15 arc-seconds (approximately 500 meters at the equator). The sensor operates in a panchromatic range of 500–900 nm, rendering it highly sensitive to nocturnal light emissions. Unlike legacy sensors, the VIIRS DNB undergoes absolute radiometric calibration, reporting radiance in units of $\text{nW}\cdot\text{cm}^{-2}\cdot\text{sr}^{-1}$.

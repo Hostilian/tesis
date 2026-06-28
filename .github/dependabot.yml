@@ -22,6 +22,18 @@ updates:
           - "earthaccess"
           - "sentinelhub"
 
+  # JavaScript/npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/docs"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    labels:
+      - "dependencies"
+      - "javascript"
+    open-pull-requests-limit: 5
+
   # GitHub Actions versions
   - package-ecosystem: "github-actions"
     directory: "/"

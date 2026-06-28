@@ -1,13 +1,35 @@
+# pipeline/requirements.txt — Production dependencies (pinned)
+# Install: pip install -r pipeline/requirements.txt
+# For development tools (pytest, black, flake8, mypy, pip-audit):
+#   pip install -r pipeline/requirements-dev.txt
+
+# ── Satellite & Geospatial APIs ───────────────────────────────────────────────
 earthengine-api==1.7.32
 sentinelhub==3.11.5
 openeo==0.39.1
 earthaccess==0.18.0
 rasterio==1.5.0
 geopandas==1.1.4
-scikit-learn==1.9.0
 rioxarray==0.22.0
+
+# ── Scientific Computing ──────────────────────────────────────────────────────
 numpy==2.5.0
 pandas==3.0.3
+scipy==1.15.3
+scikit-learn==1.9.0
+
+# ── Deep Learning (Prithvi foundation model support) ─────────────────────────
+torch==2.6.0
+torchvision==0.21.0
+
+# ── Visualization ─────────────────────────────────────────────────────────────
 matplotlib==3.11.0
-pytest==9.1.1
+plotly==6.1.2
+folium==0.19.7
+
+# ── Statistics & Analysis ─────────────────────────────────────────────────────
+statsmodels==0.14.4
+
+# ── Utilities ─────────────────────────────────────────────────────────────────
 python-dotenv==1.0.0
+requests==2.32.4

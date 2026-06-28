@@ -4,13 +4,13 @@
   "description": "Satellite anomaly detection and economic intelligence visualization — CZU Prague Bachelor Thesis by Eren Ozturk",
   "icons": [
     {
-      "src": "apple-touch-icon.png",
+      "src": "icon-192.png",
       "type": "image/png",
       "sizes": "192x192",
       "purpose": "any"
     },
     {
-      "src": "apple-touch-icon.png",
+      "src": "icon-512.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "maskable"

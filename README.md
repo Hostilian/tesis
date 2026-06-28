@@ -132,7 +132,6 @@ tesis/
 │       ├── references.bib      # 40+ ISO 690 / BibTeX entries
 │       └── chapters/*.tex
 │
-├── REFERENCE.md                # Living anti-hallucination reference log
 ├── README.md                   # This file
 ├── REPRODUCE.md                # Step-by-step reproducibility guide
 ├── SECURITY.md                 # Security policy
