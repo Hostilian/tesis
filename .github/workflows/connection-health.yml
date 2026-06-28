@@ -32,26 +32,31 @@ jobs:
         run: pip install -r pipeline/requirements.txt
 
       - name: Check GEE connectivity
+        continue-on-error: true
         env:
           GEE_SERVICE_ACCOUNT_KEY: ${{ secrets.GEE_SERVICE_ACCOUNT_KEY }}
           GCP_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
         run: python pipeline/src/health_check.py --provider gee --output health_gee.json
 
       - name: Check CDSE connectivity
+        continue-on-error: true
         env:
           CDSE_CLIENT_ID: ${{ secrets.CDSE_CLIENT_ID }}
           CDSE_CLIENT_SECRET: ${{ secrets.CDSE_CLIENT_SECRET }}
         run: python pipeline/src/health_check.py --provider cdse --output health_cdse.json
 
       - name: Check NASA EarthData
+        continue-on-error: true
         env:
           NASA_EARTHDATA_TOKEN: ${{ secrets.NASA_EARTHDATA_TOKEN }}
         run: python pipeline/src/health_check.py --provider nasa --output health_nasa.json
 
       - name: Check World Bank API
+        continue-on-error: true
         run: python pipeline/src/health_check.py --provider worldbank --output health_worldbank.json
 
       - name: Check IMF API
+        continue-on-error: true
         run: python pipeline/src/health_check.py --provider imf --output health_imf.json
 
       - name: Merge health reports
@@ -86,6 +91,22 @@ jobs:
         with:
           name: api-health-report-${{ github.run_id }}
           path: health_report.json
+
+      - name: Evaluate health report
+        if: always()
+        run: |
+          python -c "
+          import json
+          from pathlib import Path
+
+          data = json.loads(Path('health_report.json').read_text(encoding='utf-8'))
+          results = data['results']
+          if any(result['status'] == 'auth_failed' for result in results):
+              raise SystemExit(2)
+          if any(result['status'] not in {'ok', 'skipped'} for result in results):
+              raise SystemExit(1)
+          print('API health check passed')
+          "
 
       - name: Create issue on failure
         if: failure()
