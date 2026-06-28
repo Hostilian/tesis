@@ -1,0 +1,74 @@
+name: API Connection Health Check
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+  push:
+    paths:
+      - 'pipeline/src/ingestion.py'
+      - 'pipeline/src/health_check.py'
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check-satellite-apis:
+    name: Satellite API Health
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: 'pipeline/requirements.txt'
+
+      - name: Install dependencies
+        run: pip install -r pipeline/requirements.txt
+
+      - name: Check GEE connectivity
+        env:
+          GEE_SERVICE_ACCOUNT_KEY: ${{ secrets.GEE_SERVICE_ACCOUNT_KEY }}
+          GCP_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
+        run: python pipeline/src/health_check.py --provider gee
+
+      - name: Check CDSE connectivity
+        env:
+          CDSE_CLIENT_ID: ${{ secrets.CDSE_CLIENT_ID }}
+          CDSE_CLIENT_SECRET: ${{ secrets.CDSE_CLIENT_SECRET }}
+        run: python pipeline/src/health_check.py --provider cdse
+
+      - name: Check NASA EarthData
+        env:
+          NASA_EARTHDATA_TOKEN: ${{ secrets.NASA_EARTHDATA_TOKEN }}
+        run: python pipeline/src/health_check.py --provider nasa
+
+      - name: Check World Bank API
+        run: python pipeline/src/health_check.py --provider worldbank
+
+      - name: Check IMF API
+        run: python pipeline/src/health_check.py --provider imf
+
+      - name: Upload health report
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-health-report-${{ github.run_id }}
+          path: health_report.json
+
+      - name: Create issue on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `[AUTO] API Health Check Failed — ${new Date().toISOString()}`,
+              body: `The weekly API connectivity check failed. Run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+              labels: ['api-health', 'automated']
+            })
