@@ -35,24 +35,49 @@ jobs:
         env:
           GEE_SERVICE_ACCOUNT_KEY: ${{ secrets.GEE_SERVICE_ACCOUNT_KEY }}
           GCP_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
-        run: python pipeline/src/health_check.py --provider gee
+        run: python pipeline/src/health_check.py --provider gee --output health_gee.json
 
       - name: Check CDSE connectivity
         env:
           CDSE_CLIENT_ID: ${{ secrets.CDSE_CLIENT_ID }}
           CDSE_CLIENT_SECRET: ${{ secrets.CDSE_CLIENT_SECRET }}
-        run: python pipeline/src/health_check.py --provider cdse
+        run: python pipeline/src/health_check.py --provider cdse --output health_cdse.json
 
       - name: Check NASA EarthData
         env:
           NASA_EARTHDATA_TOKEN: ${{ secrets.NASA_EARTHDATA_TOKEN }}
-        run: python pipeline/src/health_check.py --provider nasa
+        run: python pipeline/src/health_check.py --provider nasa --output health_nasa.json
 
       - name: Check World Bank API
-        run: python pipeline/src/health_check.py --provider worldbank
+        run: python pipeline/src/health_check.py --provider worldbank --output health_worldbank.json
 
       - name: Check IMF API
-        run: python pipeline/src/health_check.py --provider imf
+        run: python pipeline/src/health_check.py --provider imf --output health_imf.json
+
+      - name: Merge health reports
+        run: |
+          python -c "
+          import json
+          from pathlib import Path
+
+          files = [
+              Path('health_gee.json'),
+              Path('health_cdse.json'),
+              Path('health_nasa.json'),
+              Path('health_worldbank.json'),
+              Path('health_imf.json'),
+          ]
+          merged = {
+              'checked_at': None,
+              'results': [],
+          }
+          for file_path in files:
+              data = json.loads(file_path.read_text(encoding='utf-8'))
+              merged['checked_at'] = data['checked_at']
+              merged['results'].extend(data['results'])
+          Path('health_report.json').write_text(json.dumps(merged, indent=2) + '\n', encoding='utf-8')
+          print('Merged health report written to health_report.json')
+          "
 
       - name: Upload health report
         uses: actions/upload-artifact@v4
