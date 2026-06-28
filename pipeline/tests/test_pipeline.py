@@ -36,7 +36,14 @@ from pipeline.src.utils import (
 from pipeline.src.models import AnomalyDetector
 from pipeline.src.anomaly_detector import SatelliteAnomalyOrchestrator
 from pipeline.src.economic_overlay import EconomicOverlay
-from pipeline.src.ingestion import SatelliteDataIngester
+from pipeline.src.config import PipelineConfig
+from pipeline.src.ingestion import (
+    CopernicusSTACClient,
+    MockDataClient,
+    NASAEarthDataClient,
+    SatelliteDataIngester,
+)
+from pipeline.src.http_resilience import ResilientHTTPClient
 
 # ── 1. Spectral Index Formula Bounds ──────────────────────────────────────────
 
@@ -408,6 +415,51 @@ class TestEconomicOverlay:
         assert len(result) > 0
         for rec in result:
             assert "year" in rec and "gdp_growth_pct" in rec
+
+
+class TestEnterpriseIngestion:
+    def test_pipeline_config_validation_reports_missing_live_credentials(self):
+        config = PipelineConfig(mock_mode=True)
+        warnings = config.validate()
+        assert any("MOCK_MODE=true" in item for item in warnings)
+
+    def test_mock_sentinel2_summary_is_deterministic_and_bounded(self):
+        mock = MockDataClient(seed=42)
+        bbox = [-68.5, -23.8, -68.1, -23.2]
+        first = mock.spectral_summary(bbox, "2024-01-01", "2024-12-31", "Sentinel-2 L2A")
+        second = mock.spectral_summary(bbox, "2024-01-01", "2024-12-31", "Sentinel-2 L2A")
+        assert first == second
+        assert -1.0 <= first["ndvi"] <= 1.0
+        assert -1.0 <= first["ndwi"] <= 1.0
+        assert -1.0 <= first["bsi"] <= 1.0
+
+    def test_cdse_mock_search_returns_stac_like_item(self):
+        config = PipelineConfig(mock_mode=True)
+        client = CopernicusSTACClient(config, ResilientHTTPClient(), MockDataClient())
+        items = client.search_sentinel2_scenes(
+            [-70.2, -13.1, -69.6, -12.6],
+            "2025-01-01T00:00:00Z",
+            "2025-06-30T23:59:59Z",
+        )
+        assert len(items) == 1
+        assert "assets" in items[0]
+        assert items[0]["properties"]["sbei:mock"] is True
+
+    def test_nasa_mock_cmr_search_returns_metadata_list(self):
+        config = PipelineConfig(mock_mode=True)
+        client = NASAEarthDataClient(config, ResilientHTTPClient(), MockDataClient())
+        granules = client.search_viirs_ntl_granules(
+            "-70.2,-13.1,-69.6,-12.6",
+            "2025-01-01T00:00:00Z,2025-06-30T23:59:59Z",
+        )
+        assert isinstance(granules, list)
+        assert granules[0]["id"] == "NASA_MOCK_SCENE_001"
+
+    def test_mineral_dependency_index_has_expected_components(self):
+        ingester = SatelliteDataIngester(config=PipelineConfig(mock_mode=True))
+        result = ingester.fetch_mineral_dependency_index("CHL")
+        assert result["score"] > 0
+        assert "mineral_exports_pct" in result["components"]
 
 
 # ── 9. Temporal Z-Score ───────────────────────────────────────────────────────

@@ -48,14 +48,15 @@ jobs:
           python -c "
           import json
           data = json.load(open('docs/data/anomalies.json'))
-          assert 'anomalies' in data, 'Missing top-level anomalies key'
-          for anomaly in data['anomalies']:
+          assert isinstance(data, list), 'anomalies.json must be a top-level array'
+          for anomaly in data:
               assert 0 <= anomaly['confidence'] <= 1, f'Confidence out of [0,1]: {anomaly[\"id\"]}'
-              assert anomaly['confidence_ci_low'] <= anomaly['confidence'] <= anomaly['confidence_ci_high']
-              assert anomaly['confidence_ci_high'] <= 1.0, f'CI high > 1.0: {anomaly[\"id\"]}'
-              for key in ['id', 'lat', 'lon', 'type', 'sensor', 'anomaly_score']:
+              ci_low, ci_high = anomaly['confidence_interval']
+              assert ci_low <= anomaly['confidence'] <= ci_high
+              assert ci_high <= 1.0, f'CI high > 1.0: {anomaly[\"id\"]}'
+              for key in ['id', 'type', 'region', 'coordinates', 'confidence', 'date', 'spectral_profile']:
                   assert key in anomaly, f'Missing key {key}: {anomaly[\"id\"]}'
-          print(f'anomalies.json VALID — {len(data[\"anomalies\"])} records')
+          print(f'anomalies.json VALID - {len(data)} records')
           "
 
       - name: Validate GeoJSON RFC 7946 compliance

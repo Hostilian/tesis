@@ -8,6 +8,8 @@ earthengine-api==1.7.32
 sentinelhub==3.11.5
 openeo==0.39.1
 earthaccess==0.18.0
+planetary-computer==1.0.0
+pystac-client==0.8.6
 rasterio==1.5.0
 geopandas==1.1.4
 rioxarray==0.22.0

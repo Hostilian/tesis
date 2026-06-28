@@ -30,9 +30,9 @@ class CircuitState(str, Enum):
 
 @dataclass(frozen=True)
 class RetryPolicy:
-    max_attempts: int = 3
-    base_delay: float = 0.8
-    max_delay: float = 8.0
+    max_attempts: int = 5
+    base_delay: float = 1.5
+    max_delay: float = 30.0
     jitter: float = 0.25
     retry_statuses: tuple[int, ...] = (429, 500, 502, 503, 504)
 
@@ -100,6 +100,7 @@ class ResilientHTTPClient:
         headers: Optional[dict[str, str]] = None,
         params: Optional[dict[str, Any]] = None,
         json_body: Optional[dict[str, Any]] = None,
+        data_body: Optional[dict[str, Any]] = None,
         fallback: Optional[Callable[[], Any]] = None,
         service_name: str = "external-api",
     ) -> Any:
@@ -119,6 +120,7 @@ class ResilientHTTPClient:
                     headers=headers,
                     params=params,
                     json=json_body,
+                    data=data_body,
                 )
                 if response.status_code in self.retry_policy.retry_statuses:
                     raise requests.HTTPError(

@@ -1,0 +1,15 @@
+[tool.bandit]
+exclude_dirs = ["pipeline/tests", ".venv", ".agents", ".ai_chatbot"]
+skips = ["B101"]
+severity = "MEDIUM"
+confidence = "HIGH"
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["pipeline/tests"]
+pythonpath = ["."]

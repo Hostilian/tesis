@@ -177,6 +177,20 @@ earthengine authenticate
 echo "GCP_PROJECT=your-google-cloud-project-id" > .env
 ```
 
+For CI/CD and live provider access, configure these GitHub Actions secrets:
+
+| Secret | Purpose |
+|---|---|
+| `GEE_SERVICE_ACCOUNT_KEY` | Base64-encoded Google Earth Engine service account JSON |
+| `GCP_PROJECT_ID` | Google Cloud project ID used by Earth Engine |
+| `CDSE_CLIENT_ID` | Copernicus Data Space OAuth2 client ID |
+| `CDSE_CLIENT_SECRET` | Copernicus Data Space OAuth2 client secret |
+| `NASA_EARTHDATA_TOKEN` | NASA EarthData bearer token for CMR/VIIRS access |
+| `SENTINELHUB_CLIENT_ID` | Sentinel Hub OAuth2 client ID for evalscript rendering |
+| `SENTINELHUB_CLIENT_SECRET` | Sentinel Hub OAuth2 client secret |
+| `COMTRADE_API_KEY` | UN COMTRADE key for mineral export cross-validation |
+| `FRED_API_KEY` | FRED key for commodity price context |
+
 ### Run the Pipeline
 
 ```bash
@@ -240,6 +254,7 @@ This project implements a full security pipeline:
 - **Static analysis**: GitHub CodeQL (Python)
 - **Secrets scanning**: Gitleaks on full git history
 - **SBOM**: CycloneDX Software Bill of Materials generated per release
+- **DAST and API fuzzing**: OWASP ZAP baseline plus OpenAPI fuzz tests in CI
 - **Dependabot**: Automated weekly dependency updates
 
 See [SECURITY.md](SECURITY.md) for the responsible disclosure policy.
