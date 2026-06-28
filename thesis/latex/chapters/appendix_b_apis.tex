@@ -28,3 +28,19 @@ Socioeconomic indicator datasets are downloaded using direct HTTP requests, quer
   \item \textbf{Default Output Format}: \texttt{json}
 
 \end{itemize}
+\section{B.4 NASA Earthdata Search \& Common Metadata Repository (CMR) API}
+The pipeline queries NASA's Common Metadata Repository (CMR) API to identify and locate Suomi-NPP VIIRS Day/Night Band (DNB) monthly composites.
+\begin{itemize}
+  \item \textbf{Base Query URL}: \texttt{https://cmr.earthdata.nasa.gov/search/granules.json}
+  \item \textbf{Parameters}: \texttt{short\_name=VNP46A1}, \texttt{temporal=2021-01-01T00:00:00Z,2026-05-31T23:59:59Z}, and bounding box filters.
+  \item \textbf{Authentication}: Requires a Bearer token generated using NASA Earthdata login credentials.
+
+\end{itemize}
+\section{B.5 UN COMTRADE API}
+The pipeline queries the UN COMTRADE database to fetch bilateral trade volumes for mineral commodity codes.
+\begin{itemize}
+  \item \textbf{Base Query URL}: \texttt{https://comtradeapi.un.org/data/v1/get/C/A/HS}
+  \item \textbf{Commodity Codes}: \texttt{282520} (Lithium Oxide and Hydroxide), \texttt{7108} (Gold).
+  \item \textbf{Authentication}: Requires a subscription key passed in the \texttt{Ocp-Apim-Subscription-Key} HTTP header.
+
+\end{itemize}

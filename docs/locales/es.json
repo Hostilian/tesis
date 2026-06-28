@@ -1,0 +1,95 @@
+{
+  "ui": {
+    "heroBadge": "Artefacto de Tesis de Grado",
+    "heroTitlePrefix": "Inteligencia Económica",
+    "heroSubtitle": "Detección de patrones ocultos de extracción de recursos, cambios en las cadenas de suministro y anomalías económicas regionales mediante consultas a las API abiertas de satélites de la ESA, la NASA y el USGS junto con modelos de aprendizaje automático no supervisados.",
+    "flightTrackerLabel": "SEGUIDOR DE VUELO ORBITAL:",
+    "flightTrackerSuffix": "cargas útiles activas registradas",
+    "heroBtnExplore": "Iniciar Explorador Satelital",
+    "heroBtnThesis": "Ver Borrador de Tesis",
+    "basemapHudLabel": "Mapa Base:",
+    "heatmapHudLabel": "Capa de Mapa de Calor:",
+    "btnExportViewport": "Exportar Vista",
+    "timelineTitleLabel": "Línea de Tiempo de Navegación Temporal",
+    "selectedHudLabel": "Anomalía Seleccionada",
+    "confidenceLabel": "Confianza de Detección",
+    "beforeAfterLabel": "Comparación de Imágenes Antes / Después",
+    "spectralBandModeLabel": "Modo de Renderizado de Banda Espectral",
+    "groundTruthHudLabel": "Registro de Verificación en Tierra",
+    "btnExportReport": "Exportar Informe",
+    "constellationTitle": "Red de Constelaciones API",
+    "constellationDesc": "Mapeo de relaciones entre sensores orbitales, capas de finanzas públicas y resultados procesados.",
+    "layerAll": "Todas las áreas",
+    "layerLithium": "Chile (Litio)",
+    "layerMining": "Perú (Oro)",
+    "layerNtl": "República Checa (NTL)",
+    "statHeaderBadge": "Motor de Verificación de Hipótesis",
+    "statHeaderTitle": "EVIDENCIA ESTADÍSTICA Y ANÁLISIS",
+    "statHeaderDesc": "Análisis cruzado de indicadores espaciales frente a la macroeconomía regional y registros en tierra.",
+    "statChartTitle": "Luces Nocturnas VIIRS vs. Correlación del PIB",
+    "statChartDesc": "La región sombreada en rojo indica la crisis energética industrial de 2023; la región sombreada en azul indica la recuperación del sector automotriz en 2025.",
+    "statMetricsTitle": "Métricas de Rendimiento Empírico",
+    "statLabelN": "Tamaño de la Muestra",
+    "statLabelTiles": "Cuota de Detección",
+    "bandDescriptions": {
+      "rgb": "RGB (Color Natural): Visualización real tal como la ve el ojo humano (B4, B3, B2).",
+      "fc": "Color Falso Infrarrojo: Resalta la vegetación saludable en rojo brillante, el agua en negro y las áreas urbanas en cian (B8, B4, B3).",
+      "agri": "Agricultura: Acentúa las etapas de crecimiento de los cultivos, la humedad del suelo y la cobertura densa del dosel (B11, B8, B2).",
+      "geol": "Geología: Identifica formaciones geológicas, fallas activas y cortezas minerales (B12, B11, B2).",
+      "swir": "SWIR (Infrarrojo de Onda Corta): Destaca la humedad del suelo, el albedo mineral y las costras de sal seca (B12, B8A, B4).",
+      "atmos": "Atmosférico: Penetra la neblina, el polvo atmosférico y los aerosoles de nubes delgadas (B12, B11, B4).",
+      "urban": "Urbano: Enfatiza infraestructuras de concreto, asfalto y metal construidas por el hombre (B12, B11, B8A)."
+    }
+  },
+  "chapters": {
+    "1": {
+      "title": "Capítulo 1: Introducción",
+      "sections": [
+        { "name": "1.1 Contexto y Motivación", "text": "En la economía digital moderna, la ingeniería de la información se ha expandido más allá de las fronteras terrestres. El surgimiento de las constelaciones de satélites de Observación de la Tierra (EO), junto con las plataformas de computación geoespacial en la nube, ha dado origen a un nuevo dominio: la Inteligencia Económica Basada en el Espacio. La teledetección por satélite ofrece una alternativa continua, independiente y espacialmente explícita. Las constelaciones civiles financiadas por la Agencia Espacial Europea (Copernicus de la ESA) y el Servicio Geológico de los Estados Unidos (USGS/NASA) capturan diariamente datos de alta resolución multiespectrales, de radar y atmosféricos." },
+        { "name": "1.2 Planteamiento del Problema", "text": "A pesar de la abundancia de datos abiertos de satélites, persiste una brecha crítica: cómo traducir las transmisiones de trama multiespectrales y sin procesar en anomalías de inteligencia económica estructuradas y accionables. Las imágenes de satélite sin procesar son voluminosas, ruidosas y carecen de estructura. El análisis geoespacial tradicional depende de la interpretación humana localizada o del enmascaramiento manual de cultivos, lo que no escala para el monitoreo nacional o continental." },
+        { "name": "1.3 Preguntas de Investigación", "text": "PI1: ¿Con qué fiabilidad pueden las API espectrales abiertas de satélites identificar anomalías localizadas en recursos industriales y mineros en comparación con los registros reales en tierra?<br>PI2: ¿Cuál es la correlación entre las fluctuaciones de luz nocturna de VIIRS y los indicadores macro/microeconómicos en las regiones objetivo?<br>PI3: ¿Qué limitaciones de latencia del flujo de procesamiento restringen la escalabilidad de las API gratuitas de satélites para el monitoreo económico en tiempo real?" }
+      ]
+    },
+    "2": {
+      "title": "Capítulo 2: Marco Teórico y Revisión de Literatura",
+      "sections": [
+        { "name": "2.1 Principios de Teledetección", "text": "La teledetección es la ciencia de adquirir información sobre la superficie de la Tierra sin contacto físico, principalmente midiendo la radiación electromagnética reflejada o emitida por sensores. Las modalidades incluyen sensores pasivos (Sentinel-2, Landsat) que capturan bandas solares reflejadas, y sensores activos (Sentinel-1 SAR) que emiten haces de radar y registran reflejos de retrodispersión, penetrando la cobertura de nubes." },
+        { "name": "2.2 Historia de la Inteligencia Económica", "text": "La huella minera, los índices de volumen de transporte y la radiancia de luces nocturnas urbanas (VIIRS DNB) actúan como indicadores económicos clave. Los modelos de anomalías no supervisados, como Isolation Forest, aíslan los valores atípicos sin requerir redes extensas etiquetadas de control en tierra." }
+      ]
+    },
+    "3": {
+      "title": "Capítulo 3: Metodología",
+      "sections": [
+        { "name": "3.1 Formulaciones de Índices Multiespectrales", "text": "Para detectar cambios, las bandas sin procesar se combinan matemáticamente:<br><strong>NDVI</strong> = (NIR - Rojo) / (NIR + Rojo) - mide la densidad forestal.<br><strong>NDWI</strong> = (Verde - NIR) / (Verde + NIR) - mide la superficie de agua abierta.<br><strong>BSI</strong> = ((SWIR1 + Rojo) - (NIR + Azul)) / ((SWIR1 + Rojo) + (NIR + Azul)) - aísla el suelo minero expuesto." },
+        { "name": "3.2 Motor de Inteligencia Artificial No Supervisado", "text": "Se extrae una matriz de características multiespectrales. Se entrena un Isolation Forest con una tasa de contaminación de 0.08, calculando las distribuciones de longitud de ruta para aislar las desviaciones anómalas de la cobertura del suelo." }
+      ]
+    },
+    "4": {
+      "title": "Capítulo 4: Diseño del Sistema e Implementación",
+      "sections": [
+        { "name": "4.1 Arquitectura GIS Desacoplada", "text": "Un extremo de ingeniería de datos en Python de alto rendimiento gestiona el procesamiento de tramas y el ajuste de modelos. Una capa de serialización JSON plana y ligera actúa como caché. Una interfaz interactiva WebGL/HTML5 renderiza mapas, deslizadores y gráficos de radar." },
+        { "name": "4.2 Protección de Credenciales", "text": "La inicialización de Google Earth Engine se basa en el aislamiento de ID de proyecto GCP, asegurando las credenciales en variables de entorno del backend y Colab UserData, manteniendo el despliegue de producción seguro y sin servidor." }
+      ]
+    },
+    "5": {
+      "title": "Capítulo 5: Resultados y Análisis",
+      "sections": [
+        { "name": "5.1 Aspectos Destacados de los Casos de Estudio", "text": "El Salar de Atacama (Chile) mostró extensiones de estanques de evaporación de litio (aumento de NDWI a 0.58). Madre de Dios (Perú) detectó claros de minería ilegal (caída de NDVI a -0.52). Los nodos industriales en Chequia mostraron una correlación trimestral del PIB (r = 0.724)." },
+        { "name": "5.2 Validación de Hipótesis", "text": "La hipótesis H1 (puntuación F1 > 0.80) se validó con un F1 = 0.907. La hipótesis H2 (correlación de radiancia NTL r >= 0.65) se validó con r = 0.724 (p = 0.0002)." }
+      ]
+    },
+    "6": {
+      "title": "Capítulo 6: Discusión y Conclusiones",
+      "sections": [
+        { "name": "6.1 Contribuciones de la Investigación", "text": "Esta tesis demuestra que las API abiertas de satélites, junto con Isolation Forests no supervisados, pueden detectar anomalías mineras e industriales ocultas con alta precisión, estableciendo un marco de trabajo para la auditoría de cadenas de suministro en tiempo real." },
+        { "name": "6.2 Limitaciones del Estudio", "text": "Las restricciones principales incluyen la obstrucción por nubes en canales ópticos y resoluciones espaciales (10m) que omiten operaciones a microescala, las cuales pueden mitigarse en trabajos futuros mediante Sentinel-1 SAR y fusión de sensores atmosféricos." }
+      ]
+    },
+    "7": {
+      "title": "Capítulo 7: Conclusión",
+      "sections": [
+        { "name": "7.1 Resumen de Contribuciones", "text": "Hemos desarrollado una canalización económica reproducible de extremo a extremo que conecta GEE, CDSE e indicadores del Banco Mundial. Los modelos de anomalías están completamente integrados y verificados a través de pruebas unitarias y despliegues automáticos en páginas de github." }
+      ]
+    }
+  }
+}

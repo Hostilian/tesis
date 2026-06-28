@@ -8,8 +8,11 @@ let anomaliesData = [];
 let regionsData = null;
 let currentSelectedAnomaly = null;
 
-let currentLang = 'EN';
-let translations = { EN: null, CS: null };
+let currentLang = localStorage.getItem("orbital_lang") || 'EN';
+if (!['EN', 'CS', 'ES'].includes(currentLang)) {
+    currentLang = 'EN';
+}
+let translations = { EN: null, CS: null, ES: null };
 
 // Advanced GIS & WebGL state
 let darkBasemapLayer, satelliteBasemapLayer;
@@ -121,6 +124,60 @@ const academicChaptersCS = {
         title: "Kapitola 7: Závěr",
         sections: [
             { name: "7.1 Souhrn přínosů", text: "Byl vytvořen plně reprodukovatelný model pro detekci ekonomických anomálií ze satelitních dat s interaktivním dashboardem nasazeným na GitHub Pages." }
+        ]
+    }
+};
+
+const academicChaptersES = {
+    "1": {
+        title: "Capítulo 1: Introducción",
+        sections: [
+            { name: "1.1 Contexto y Motivación", text: "En la economía digital moderna, la ingeniería de la información se ha expandido más allá de las fronteras terrestres. El surgimiento de las constelaciones de satélites de Observación de la Tierra (EO), junto con las plataformas de computación geoespacial en la nube, ha dado origen a un nuevo dominio: la Inteligencia Económica Basada en el Espacio. La teledetección ofrece alternativas continuas, independientes y espacialmente explícitas a los indicadores estadísticos tradicionales." },
+            { name: "1.2 Planteamiento del Problema", text: "Traducir transmisiones de trama multiespectrales ruidosas y sin procesar en anomalías de inteligencia económica estructuradas y accionables sigue siendo una brecha de ingeniería crítica. El análisis geoespacial tradicional depende de la fotointerpretación humana localizada, que no escala para el monitoreo nacional o continental." },
+            { name: "1.3 Preguntas de Investigación", text: "PI1: ¿Con qué fiabilidad pueden las API espectrales abiertas de satélites identificar anomalías localizadas en recursos industriales y mineros en comparación con los registros reales en tierra?<br>PI2: ¿Cuál es la correlación entre las fluctuaciones de luz nocturna de VIIRS y los indicadores macro/microeconómicos en las regiones objetivo?<br>PI3: ¿Qué limitaciones de latencia del flujo de procesamiento restringen la escalabilidad de las API gratuitas de satélites para el monitoreo económico en tiempo real?" }
+        ]
+    },
+    "2": {
+        title: "Capítulo 2: Marco Teórico y Revisión de Literatura",
+        sections: [
+            { name: "2.1 Principios de Teledetección", text: "La teledetección mide la radiación electromagnética reflejada o emitida por sensores. Las modalidades incluyen sensores pasivos (Sentinel-2, Landsat) que capturan bandas solares reflejadas, y sensores activos (Sentinel-1 SAR) que emiten haces de radar que penetran la cobertura de nubes." },
+            { name: "2.2 Indicadores Económicos", text: "La huella minera, los índices de volumen de transporte y la radiancia de luces nocturnas urbanas (VIIRS DNB) actúan como indicadores económicos clave. Los modelos de anomalías no supervisados, como Isolation Forest, aíslan los valores atípicos sin requerir redes extensas etiquetadas de control en tierra." }
+        ]
+    },
+    "3": {
+        title: "Capítulo 3: Metodología",
+        sections: [
+            { name: "3.1 Formulaciones de Índices Multiespectrales", text: "Para detectar cambios físicos, las bandas espectrales sin procesar se combinan matemáticamente:<br><strong>NDVI</strong> = (NIR - Rojo) / (NIR + Rojo) - mide la densidad forestal.<br><strong>NDWI</strong> = (Verde - NIR) / (Verde + NIR) - mide la superficie de agua abierta.<br><strong>BSI</strong> = ((SWIR1 + Rojo) - (NIR + Azul)) / ((SWIR1 + Rojo) + (NIR + Azul)) - aísla el suelo minero expuesto." },
+            { name: "3.2 Motor de Inteligencia Artificial No Supervisado", text: "Se extrae una matriz de características multiespectrales y se alimenta a un modelo de Isolation Forest (tasa de contaminación = 0.08) para calcular las distribuciones de longitud de ruta, aislando las desviaciones anómalas de la cobertura del suelo." }
+        ]
+    },
+    "4": {
+        title: "Capítulo 4: Diseño del Sistema e Implementación",
+        sections: [
+            { name: "4.1 Arquitectura GIS Desacoplada", text: "Un extremo de ingeniería de datos en Python de alto rendimiento gestiona el procesamiento de tramas y el ajuste de modelos. Una capa de serialización JSON plana y ligera actúa como caché. Una interfaz interactiva WebGL/HTML5 renderiza mapas, deslizadores y gráficos de radar." },
+            { name: "4.2 Protección de Credenciales", text: "La inicialización de Google Earth Engine se basa en el aislamiento de ID de proyecto GCP, asegurando las credenciales en variables de entorno del backend y Colab UserData, manteniendo el despliegue de producción seguro y sin servidor." },
+            { name: "4.5.4 Dashboard Multiversión", text: "Implementa tres versiones de interfaz: V2 (akademická verze), V3 (hud con globo 3D) y V4 (consola de telemetría de cartera e inversiones YC con diagramas interactivos, examinador Vanguard con alerta de límite de riesgo CRO de $50M y exportador de cumplimiento JSON)." }
+        ]
+    },
+    "5": {
+        title: "Capítulo 5: Resultados y Análisis",
+        sections: [
+            { name: "5.1 Aspectos Destacados de los Casos de Estudio", text: "El Salar de Atacama (Chile) mostró extensiones de estanques de evaporación de litio (aumento de NDWI a 0.58). Madre de Dios (Perú) detectó claros de minería ilegal (caída de NDVI a -0.52). Los nodos industriales en Chequia mostraron una correlación trimestral del PIB (r = 0.724)." },
+            { name: "5.2 Validación de Hipótesis", text: "La hipótesis H1 (puntuación F1 > 0.80) se validó con un F1 = 0.907. La hipótesis H2 (correlación de radiancia NTL r >= 0.65) se validó con r = 0.724 (p = 0.0002)." }
+        ]
+    },
+    "6": {
+        title: "Capítulo 6: Discusión y Conclusiones",
+        sections: [
+            { name: "6.1 Contribuciones de la Investigación", text: "Esta tesis demuestra que las API abiertas de satélites, junto con Isolation Forests no supervisados, pueden detectar anomalías mineras e industriales ocultas con alta precisión, estableciendo un marco de trabajo para la auditoría de cadenas de suministro en tiempo real." },
+            { name: "6.2 Limitaciones del Estudio", text: "Las restricciones principales incluyen la obstrucción por nubes en canales ópticos y resoluciones espaciales (10m) que omiten operaciones a microescala, las cuales pueden mitigarse en trabajos futuros mediante Sentinel-1 SAR y fusión de sensores atmosféricos." },
+            { name: "6.9 Aplicaciones de Cartera y Capital de Riesgo", text: "Demuestra el valor de traducción de la telemetría satelital para fondos de cobertura y capital de riesgo, vinculando índices de observación de la Tierra con reglas de asignación de cartera, límites de riesgo CRO ($50M) y exportaciones estructuradas de cumplimiento JSON." }
+        ]
+    },
+    "7": {
+        title: "Capítulo 7: Resumen",
+        sections: [
+            { name: "7.1 Resumen de Contribuciones", text: "Hemos desarrollado una canalización económica reproducible de extremo a extremo que conecta GEE, CDSE e indicadores del Banco Mundial. Los modelos de anomalías están completamente integrados y verificados a través de pruebas unitarias y despliegues automáticos en páginas de github." }
         ]
     }
 };
@@ -332,6 +389,9 @@ document.addEventListener("DOMContentLoaded", () => {
             feed.innerHTML = telemetryMessages[telemetryIndex];
         }
     }, 4500);
+
+    // 4. Run live API connection status checks
+    try { checkLiveAPIHealth(); } catch(e) { console.error("checkLiveAPIHealth failed:", e); }
 });
 
 // 1. STARFIELD PARALLAX WARP SYSTEM & DRIFTING APEX SATELLITES
@@ -1142,7 +1202,7 @@ function loadChapterContent(chapterId) {
     const contentEl = document.getElementById("chapter-content");
     const badgeEl = document.getElementById("chapter-node-badge");
     
-    const db = currentLang === 'CS' ? academicChaptersCS : academicChapters;
+    const db = currentLang === 'CS' ? academicChaptersCS : (currentLang === 'ES' ? academicChaptersES : academicChapters);
     const data = db[chapterId];
     if (!data) return;
     
@@ -1285,7 +1345,14 @@ function setupEventListeners() {
     const btnLang = document.getElementById("lang-toggle");
     if (btnLang) {
         btnLang.addEventListener("click", () => {
-            currentLang = currentLang === 'EN' ? 'CS' : 'EN';
+            if (currentLang === 'EN') {
+                currentLang = 'CS';
+            } else if (currentLang === 'CS') {
+                currentLang = 'ES';
+            } else {
+                currentLang = 'EN';
+            }
+            localStorage.setItem("orbital_lang", currentLang);
             document.getElementById("lang-label").innerText = currentLang;
             updateUILanguage();
             loadChapterContent(document.getElementById("chapter-select").value);
@@ -1298,15 +1365,46 @@ function setupEventListeners() {
 
 function updateUILanguage() {
     const isEn = currentLang === 'EN';
+    const isCs = currentLang === 'CS';
     
-    // Update headers and text fields
-    document.getElementById("hero-badge-label").innerText = isEn ? "Y Combinator Investor Preview" : "Y Combinator Náhled pro investory";
-    document.getElementById("hero-title-prefix").innerText = isEn ? "Institutional" : "Institucionální";
-    document.getElementById("typewriter-headline").innerText = isEn ? "Venture Telemetry" : "Investiční Telemetrie";
+    document.getElementById("hero-badge-label").innerText = isEn ? "Y Combinator Investor Preview" : (isCs ? "Y Combinator Náhled pro investory" : "Vista previa de inversores de Y Combinator");
+    document.getElementById("hero-title-prefix").innerText = isEn ? "Institutional" : (isCs ? "Institucionální" : "Telemetría");
+    document.getElementById("typewriter-headline").innerText = isEn ? "Venture Telemetry" : (isCs ? "Investiční Telemetrie" : "de Inversión Institucional");
     
     document.getElementById("hero-subtitle").innerText = isEn ? 
         "Apex Capital Partners' proprietary pipeline translating Earth Observation (EO) satellite reflectance bands and night-lights datasets into institutional alpha. Directly evaluate Vanguard fund efficiencies, perform compliance checks, and trace asset correlations." :
-        "Vlastní datová pipeline společnosti Apex Capital Partners pro převod spektrálních pásem satelitů dálkového průzkumu Země (EO) a nočního osvětlení na investiční alfu. Přímé hodnocení efektivnosti fondů Vanguard, provádění kontrol shody a analýza korelací aktiv.";
+        (isCs ? 
+            "Vlastní datová pipeline společnosti Apex Capital Partners pro převod spektrálních pásem satelitů dálkového průzkumu Země (EO) a nočního osvětlení na investiční alfu. Přímé hodnocení efektivnosti fondů Vanguard, provádění kontrol shody a analýza korelací aktiv." :
+            "La pipeline patentada de Apex Capital Partners que traduce las bandas de reflectancia de satélites de observación de la Tierra (EO) y conjuntos de datos de luces nocturnas en alfa institucional. Evalúe directamente las eficiencias de los fondos Vanguard, realice comprobaciones de cumplimiento y analice las correlaciones de activos.");
 
     document.getElementById("lang-label").innerText = currentLang;
+}
+
+function checkLiveAPIHealth() {
+    const apis = {
+        "gee": "https://earthengine.googleapis.com/",
+        "cdse": "https://catalogue.dataspace.copernicus.eu/odata/v1/",
+        "nasa": "https://cmr.earthdata.nasa.gov/search/",
+        "wb": "https://api.worldbank.org/v2/country/CZE?format=json",
+        "com": "https://comtradeapi.un.org/data/v1/get/C/A/282520?period=2024"
+    };
+
+    Object.entries(apis).forEach(([name, url]) => {
+        const dot = document.getElementById(`api-status-${name}`);
+        if (!dot) return;
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 6000);
+
+        fetch(url, { method: "GET", mode: "no-cors", signal: controller.signal })
+            .then(() => {
+                clearTimeout(timeoutId);
+                dot.className = "w-2 h-2 rounded-full bg-safe status-dot-pulse"; // green (success/active)
+            })
+            .catch((err) => {
+                clearTimeout(timeoutId);
+                console.warn(`API live status check failed for ${name}:`, err);
+                dot.className = "w-2 h-2 rounded-full bg-critical status-dot-pulse"; // red (offline/timeout)
+            });
+    });
 }

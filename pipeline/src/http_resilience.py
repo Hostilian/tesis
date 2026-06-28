@@ -85,11 +85,42 @@ class CircuitBreaker:
             self.trial_successes = 0
 
 
+class RateLimiter:
+    """Token bucket rate limiter to throttle API requests."""
+
+    def __init__(self, max_tokens: float = 10.0, refill_rate: float = 2.0) -> None:
+        self.max_tokens = max_tokens
+        self.refill_rate = refill_rate
+        self.tokens = max_tokens
+        self.last_refill = time.time()
+
+    def acquire(self, tokens: float = 1.0) -> bool:
+        now = time.time()
+        elapsed = now - self.last_refill
+        self.tokens = min(self.max_tokens, self.tokens + elapsed * self.refill_rate)
+        self.last_refill = now
+
+        if self.tokens >= tokens:
+            self.tokens -= tokens
+            return True
+        return False
+
+    def wait_and_acquire(self, tokens: float = 1.0, timeout: float = 15.0) -> bool:
+        start_time = time.time()
+        while True:
+            if self.acquire(tokens):
+                return True
+            if time.time() - start_time > timeout:
+                return False
+            time.sleep(0.1)
+
+
 @dataclass
 class ResilientHTTPClient:
     session: requests.Session = field(default_factory=requests.Session)
     retry_policy: RetryPolicy = field(default_factory=RetryPolicy)
     circuit_breaker: CircuitBreaker = field(default_factory=CircuitBreaker)
+    rate_limiter: RateLimiter = field(default_factory=lambda: RateLimiter(max_tokens=10.0, refill_rate=2.0))
 
     def request_json(
         self,
@@ -104,6 +135,13 @@ class ResilientHTTPClient:
         fallback: Optional[Callable[[], Any]] = None,
         service_name: str = "external-api",
     ) -> Any:
+        # Enforce rate-limiting before proceeding
+        if not self.rate_limiter.wait_and_acquire(1.0, timeout=timeout):
+            logger.warning("Rate limit timeout exceeded for %s; using fallback.", service_name)
+            if fallback is not None:
+                return fallback()
+            raise TimeoutError(f"Rate limiting timeout exceeded for {service_name}")
+
         if not self.circuit_breaker.allow_request():
             logger.warning("Circuit breaker open for %s; using fallback.", service_name)
             if fallback is not None:
@@ -168,6 +206,58 @@ class ResilientHTTPClient:
         backoff = min(backoff, self.retry_policy.max_delay)
         jitter = random.uniform(0.0, self.retry_policy.jitter)
         return backoff + jitter
+
+
+def execute_resilient_call(
+    callable_func: Callable[..., Any],
+    *args: Any,
+    max_attempts: int = 5,
+    base_delay: float = 1.5,
+    max_delay: float = 30.0,
+    jitter: float = 0.25,
+    service_name: str = "remote-service",
+    fallback: Optional[Callable[[], Any]] = None,
+    **kwargs: Any,
+) -> Any:
+    """
+    Wrap any remote SDK call (such as GEE getInfo/reduceRegion) in a retry loop
+    with exponential backoff, jitter, and mock-failover.
+    """
+    last_error: Optional[Exception] = None
+    for attempt in range(1, max_attempts + 1):
+        try:
+            return callable_func(*args, **kwargs)
+        except Exception as exc:
+            last_error = exc
+            if attempt >= max_attempts:
+                logger.warning(
+                    "%s call failed after %d attempts: %s",
+                    service_name,
+                    attempt,
+                    exc,
+                )
+                break
+
+            backoff = base_delay * (2 ** (attempt - 1))
+            backoff = min(backoff, max_delay)
+            backoff_jitter = random.uniform(0.0, jitter)
+            delay = backoff + backoff_jitter
+
+            logger.info(
+                "%s attempt %d/%d failed: %s. Retrying in %.2fs.",
+                service_name,
+                attempt,
+                max_attempts,
+                exc,
+                delay,
+            )
+            time.sleep(delay)
+
+    if fallback is not None:
+        return fallback()
+    if last_error is not None:
+        raise last_error
+    raise RuntimeError(f"{service_name} call failed without a captured exception")
 
 
 def stable_json_hash(payload: Any) -> str:

@@ -29,12 +29,12 @@ import netrc
 import os
 from pathlib import Path
 import time
-from typing import Any, Literal, TypedDict
+from typing import Any, Literal, TypedDict, cast
 
 import numpy as np
 
 from pipeline.src.config import PipelineConfig
-from pipeline.src.http_resilience import ResilientHTTPClient, RetryPolicy
+from pipeline.src.http_resilience import ResilientHTTPClient, RetryPolicy, execute_resilient_call
 
 logger = logging.getLogger(__name__)
 
@@ -295,7 +295,10 @@ class GoogleEarthEngineClient:
         if not self.authenticated and not self.authenticate():
             return _health("gee", "auth_failed", start, "Earth Engine credentials unavailable.")
         try:
-            ee.ImageCollection("COPERNICUS/S2_SR_HARMONIZED").limit(1).size().getInfo()  # type: ignore[union-attr]
+            execute_resilient_call(
+                ee.ImageCollection("COPERNICUS/S2_SR_HARMONIZED").limit(1).size().getInfo,
+                service_name="GEE Health Check",
+            )
             return _health("gee", "ok", start, None)
         except Exception as exc:
             self.authenticated = False
@@ -338,13 +341,14 @@ class GoogleEarthEngineClient:
                 "blue": mosaic.select("B2"),
             },
         ).rename("bsi")
-        stats = (
+        stats = execute_resilient_call(
             mosaic.addBands([ndvi, ndwi, bsi])
             .select(["ndvi", "ndwi", "bsi"])
-            .reduceRegion(ee.Reducer.mean(), region_ee_geometry, 10, maxPixels=1_000_000_000)  # type: ignore[union-attr]
-            .getInfo()
+            .reduceRegion(ee.Reducer.mean(), region_ee_geometry, 10, maxPixels=1_000_000_000)
+            .getInfo,
+            service_name="GEE Sentinel-2 stats reduceRegion",
         )
-        tile_count = int(collection.size().getInfo())
+        tile_count = int(execute_resilient_call(collection.size().getInfo, service_name="GEE Sentinel-2 size"))
         return {
             "ndvi": float(stats.get("ndvi") or 0.0),
             "ndwi": float(stats.get("ndwi") or 0.0),
@@ -367,9 +371,12 @@ class GoogleEarthEngineClient:
             .filter(ee.Filter.eq("instrumentMode", "IW"))  # type: ignore[union-attr]
         )
         image = collection.select(["VV", "VH"]).median()
-        stats = image.reduceRegion(
-            ee.Reducer.mean(), region_ee_geometry, 10, maxPixels=1_000_000_000  # type: ignore[union-attr]
-        ).getInfo()
+        stats = execute_resilient_call(
+            image.reduceRegion(
+                ee.Reducer.mean(), region_ee_geometry, 10, maxPixels=1_000_000_000
+            ).getInfo,
+            service_name="GEE Sentinel-1 stats reduceRegion",
+        )
         vv_mean = float(stats.get("VV") or 0.0)
         vh_mean = float(stats.get("VH") or 0.0)
         return {
@@ -392,13 +399,91 @@ class GoogleEarthEngineClient:
                 .select("avg_rad")
             )
             annual = collection.mean()
-            stats = annual.reduceRegion(
-                ee.Reducer.mean(), region_ee_geometry, 500, maxPixels=1_000_000_000  # type: ignore[union-attr]
-            ).getInfo()
+            stats = execute_resilient_call(
+                annual.reduceRegion(
+                    ee.Reducer.mean(), region_ee_geometry, 500, maxPixels=1_000_000_000
+                ).getInfo,
+                service_name=f"GEE VIIRS NTL annual stats reduceRegion ({year})",
+            )
             values.append(float(stats.get("avg_rad") or 0.0))
         for year, value, score in zip(range(year_start, year_end + 1), values, _z_scores(values)):
             records.append({"year": year, "ntl_radiance_mean": round(value, 4), "ntl_z_score": score})
         return records
+
+    def fetch_landsat_composite(
+        self,
+        region_ee_geometry: Any,
+        start_date: str,
+        end_date: str,
+        missions: list[int] | None = None,
+    ) -> SpectralSummary:
+        if not self.authenticated:
+            raise RuntimeError("GEE is not authenticated.")
+
+        def mask_landsat_clouds(image: Any) -> Any:
+            qa = image.select("QA_PIXEL")
+            shadow_mask = qa.bitwiseAnd(1 << 3).eq(0)
+            cloud_mask = qa.bitwiseAnd(1 << 5).eq(0)
+            scaled = image.select("SR_B.*").multiply(0.0000275).add(-0.2)
+            return image.addBands(scaled, overwrite=True).updateMask(shadow_mask.And(cloud_mask))
+
+        selected_missions = missions or [8, 9]
+        collections = []
+        if 8 in selected_missions:
+            collections.append(ee.ImageCollection("LANDSAT/LC08/C02/T1_L2"))
+        if 9 in selected_missions:
+            collections.append(ee.ImageCollection("LANDSAT/LC09/C02/T1_L2"))
+
+        if not collections:
+            raise ValueError("No valid Landsat missions specified.")
+
+        merged = collections[0]
+        for col in collections[1:]:
+            merged = merged.merge(col)
+
+        filtered = (
+            merged.filterBounds(region_ee_geometry)
+            .filterDate(start_date, end_date)
+            .filter(ee.Filter.lt("CLOUD_COVER", 20.0))
+            .map(mask_landsat_clouds)
+        )
+
+        mosaic = filtered.select(["SR_B2", "SR_B3", "SR_B4", "SR_B5", "SR_B6", "SR_B7"]).median()
+        renamed = mosaic.select(
+            ["SR_B2", "SR_B3", "SR_B4", "SR_B5", "SR_B6", "SR_B7"],
+            ["B2", "B3", "B4", "B8", "B11", "B12"]
+        )
+
+        ndvi = renamed.normalizedDifference(["B8", "B4"]).rename("ndvi")
+        ndwi = renamed.normalizedDifference(["B3", "B8"]).rename("ndwi")
+        bsi = renamed.expression(
+            "((swir + red) - (nir + blue)) / ((swir + red) + (nir + blue))",
+            {
+                "swir": renamed.select("B11"),
+                "red": renamed.select("B4"),
+                "nir": renamed.select("B8"),
+                "blue": renamed.select("B2"),
+            },
+        ).rename("bsi")
+
+        stats = execute_resilient_call(
+            renamed.addBands([ndvi, ndwi, bsi])
+            .select(["ndvi", "ndwi", "bsi"])
+            .reduceRegion(ee.Reducer.mean(), region_ee_geometry, 30, maxPixels=1_000_000_000)
+            .getInfo,
+            service_name="GEE Landsat stats reduceRegion",
+        )
+        tile_count = int(execute_resilient_call(filtered.size().getInfo, service_name="GEE Landsat size"))
+        return {
+            "ndvi": float(stats.get("ndvi") or 0.0),
+            "ndwi": float(stats.get("ndwi") or 0.0),
+            "bsi": float(stats.get("bsi") or 0.0),
+            "cloud_cover_pct": 20.0,
+            "tile_count": tile_count,
+            "date_range": f"{start_date}/{end_date}",
+            "sensor": "Landsat-8/9 OLI",
+        }
+
 
 
 @dataclass
@@ -770,8 +855,13 @@ class SatelliteDataIngester:
         end_date: str,
         missions: list[int] | None = None,
     ) -> SpectralSummary:
-        _ = missions or [8, 9]
+        if self.authenticated:
+            try:
+                return self.gee.fetch_landsat_composite(region_ee_geometry, start_date, end_date, missions)
+            except Exception as exc:
+                logger.warning("GEE Landsat composite failed; using mock landsat summary: %s", exc)
         return self.mock.spectral_summary([0.0, 0.0, 1.0, 1.0], start_date, end_date, "Landsat-8/9 OLI")
+
 
     def fetch_copernicus_catalog(self, bbox: list[float], start_date: str, end_date: str) -> dict[str, Any]:
         items = self.cdse.search_sentinel2_scenes(
@@ -816,7 +906,7 @@ class SatelliteDataIngester:
         if cache_path.exists():
             age_hours = (time.time() - cache_path.stat().st_mtime) / 3600
             if age_hours <= self.config.worldbank_cache_ttl_hours:
-                return json.loads(cache_path.read_text(encoding="utf-8"))
+                return cast(list[dict[str, Any]], json.loads(cache_path.read_text(encoding="utf-8")))
 
         url = (
             f"https://api.worldbank.org/v2/country/{country_iso3}/indicator/{indicator_code}"
@@ -829,7 +919,7 @@ class SatelliteDataIngester:
 
         raw = self.http.request_json("GET", url, timeout=15, service_name="World Bank API", fallback=lambda: [None, fallback()])
         records = raw[1] if isinstance(raw, list) and len(raw) > 1 else raw
-        result = [
+        result: list[dict[str, Any]] = [
             {
                 "year": int(record["date"]),
                 "value": float(record["value"]),
@@ -967,6 +1057,187 @@ class SatelliteDataIngester:
                     }
                 )
         return result
+
+    def fetch_comtrade_mineral_exports(
+        self,
+        reporter_iso3: str,
+        commodity_codes: list[str],
+        year: int,
+    ) -> dict[str, Any]:
+        """Fetch bilateral trade flows from UN COMTRADE API."""
+        api_key = self.config.comtrade_api_key
+        if self.config.mock_mode or not api_key:
+            return {
+                "reporter": reporter_iso3,
+                "year": year,
+                "commodity_codes": commodity_codes,
+                "trade_value_usd": 1523400000.0 if reporter_iso3 == "CHL" else 84200000.0,
+                "quantity": 125000.0,
+                "source": "Deterministic Mock UN COMTRADE",
+            }
+
+        commodity_str = ",".join(commodity_codes)
+        url = f"https://comtradeapi.un.org/data/v1/get/C/A/{commodity_str}"
+        headers = {"Ocp-Apim-Subscription-Key": api_key}
+        params = {"reporterCode": reporter_iso3, "period": str(year)}
+        
+        try:
+            raw = self.http.request_json(
+                "GET",
+                url,
+                headers=headers,
+                params=params,
+                timeout=20,
+                service_name="UN COMTRADE API",
+                fallback=lambda: {"data": []}
+            )
+            return {
+                "reporter": reporter_iso3,
+                "year": year,
+                "commodity_codes": commodity_codes,
+                "data": raw.get("data", []),
+                "source": "UN COMTRADE API",
+            }
+        except Exception as exc:
+            logger.warning("UN COMTRADE fetch failed: %s", exc)
+            return {
+                "reporter": reporter_iso3,
+                "year": year,
+                "commodity_codes": commodity_codes,
+                "trade_value_usd": 1523400000.0 if reporter_iso3 == "CHL" else 84200000.0,
+                "quantity": 125000.0,
+                "source": "Deterministic Mock UN COMTRADE (Fallback)",
+            }
+
+    def fetch_fred_commodity_prices(
+        self,
+        series_ids: list[str],
+        start_date: str,
+        end_date: str,
+    ) -> dict[str, list[dict[str, Any]]]:
+        """Fetch commodity price time series from Federal Reserve FRED API."""
+        api_key = self.config.fred_api_key
+        if self.config.mock_mode or not api_key:
+            rng = np.random.default_rng(42)
+            prices = []
+            current_date = datetime.strptime(start_date, "%Y-%m-%d")
+            end_dt = datetime.strptime(end_date, "%Y-%m-%d")
+            while current_date <= end_dt:
+                prices.append({
+                    "date": current_date.strftime("%Y-%m-%d"),
+                    "value": float(round(rng.uniform(1800.0, 2600.0), 2))
+                })
+                current_date += timedelta(days=30)
+            return {series_id: prices for series_id in series_ids}
+
+        results: dict[str, list[dict[str, Any]]] = {}
+        for series_id in series_ids:
+            url = f"https://api.stlouisfed.org/fred/series/observations"
+            params = {
+                "series_id": series_id,
+                "api_key": api_key,
+                "file_type": "json",
+                "observation_start": start_date,
+                "observation_end": end_date,
+            }
+            try:
+                raw = self.http.request_json(
+                    "GET",
+                    url,
+                    params=params,
+                    timeout=20,
+                    service_name=f"FRED API ({series_id})",
+                    fallback=lambda: {"observations": []}
+                )
+                results[series_id] = [
+                    {"date": obs["date"], "value": float(obs["value"])}
+                    for obs in raw.get("observations", [])
+                    if obs.get("value") not in {None, "."}
+                ]
+            except Exception as exc:
+                logger.warning("FRED API fetch failed for %s: %s", series_id, exc)
+                results[series_id] = []
+        return results
+
+    def fetch_osm_industrial_features(
+        self,
+        bbox: tuple[float, float, float, float],
+        tags: dict[str, str],
+    ) -> list[dict[str, Any]]:
+        """Query OpenStreetMap Overpass API for ground-truth mining/industrial features."""
+        lon_min, lat_min, lon_max, lat_max = bbox
+        
+        if self.config.mock_mode:
+            return [
+                {
+                    "type": "Feature",
+                    "properties": {"name": "Salar de Atacama Lithium Mine", "landuse": "industrial"},
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [
+                            [
+                                [lon_min + 0.05, lat_min + 0.05],
+                                [lon_max - 0.05, lat_min + 0.05],
+                                [lon_max - 0.05, lat_max - 0.05],
+                                [lon_min + 0.05, lat_max - 0.05],
+                                [lon_min + 0.05, lat_min + 0.05],
+                            ]
+                        ],
+                    },
+                }
+            ]
+
+        url = "https://overpass-api.de/api/interpreter"
+        headers = {"User-Agent": "SpaceBasedEconomicIntelligence/2.1.0 (XOZTE001@studenti.czu.cz)"}
+        tag_queries = "".join(f'["{k}"="{v}"]' for k, v in tags.items())
+        query = f"""
+        [out:json][timeout:25];
+        (
+          node{tag_queries}({lat_min},{lon_min},{lat_max},{lon_max});
+          way{tag_queries}({lat_min},{lon_min},{lat_max},{lon_max});
+          relation{tag_queries}({lat_min},{lon_min},{lat_max},{lon_max});
+        );
+        out body;
+        >;
+        out skel qt;
+        """
+        try:
+            response = self.http.session.post(url, data={"data": query}, headers=headers, timeout=30)
+            response.raise_for_status()
+            data = response.json()
+            features = []
+            for element in data.get("elements", []):
+                if element.get("type") == "node":
+                    features.append({
+                        "type": "Feature",
+                        "properties": element.get("tags", {}),
+                        "geometry": {"type": "Point", "coordinates": [element["lon"], element["lat"]]},
+                    })
+            return features
+        except Exception as exc:
+            logger.warning("OSM Overpass API fetch failed: %s. Using deterministic fallback.", exc)
+            return [
+                {
+                    "type": "Feature",
+                    "properties": {"name": "Salar de Atacama Lithium Mine", "landuse": "industrial"},
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [
+                            [
+                                [lon_min + 0.05, lat_min + 0.05],
+                                [lon_max - 0.05, lat_min + 0.05],
+                                [lon_max - 0.05, lat_max - 0.05],
+                                [lon_min + 0.05, lat_max - 0.05],
+                                [lon_min + 0.05, lat_min + 0.05],
+                            ]
+                        ],
+                    },
+                }
+            ]
+
+
+
+
 
 
 def _latest_value(records: list[dict[str, Any]]) -> float:

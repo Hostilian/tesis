@@ -22,8 +22,8 @@
     
     <!-- CSS Dependencies -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" integrity="sha512-Zcn6bjR/8RZbLEpLIeOwNtzREBAJnUKESxces60Mpoj+2okopSAcSUIUOseddDm0cxnGQzxIR7vJgsLZbdLE3w==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" />
     <link rel="stylesheet" href="index.css" />
     <link rel="manifest" href="manifest.json" />
     
@@ -178,7 +178,7 @@
                 <span class="text-gold uppercase text-glow-gold font-bold">V4 (INSTITUTIONAL)</span>
             </div>
 
-            <button id="lang-toggle" class="text-slate-400 hover:text-gold border border-slate-800 hover:border-gold/30 px-2 py-1 rounded bg-spacemid/20 transition-colors text-xs font-display flex items-center">
+            <button id="lang-toggle" aria-label="Toggle language preference" class="text-slate-400 hover:text-gold border border-slate-800 hover:border-gold/30 px-2 py-1 rounded bg-spacemid/20 transition-colors text-xs font-display flex items-center">
                 <i class="fa-solid fa-globe mr-1.5"></i> <span id="lang-label">EN</span>
             </button>
             <a href="https://github.com/hostilian/tesis" target="_blank" rel="noopener noreferrer" aria-label="View source code on GitHub" class="text-slate-400 hover:text-gold transition-colors text-lg">
@@ -226,6 +226,30 @@
                     </div>
                     <div id="satellite-telemetry-feed" class="text-slate-300 text-[11px] h-5 overflow-hidden italic">
                         📡 ACP-1 (SENTINEL-2): Multi-spectral scan at Atacama Lithium ponds completed...
+                    </div>
+                </div>
+
+                <!-- Live API Connection Status Panel -->
+                <div class="font-code text-[10px] grid grid-cols-5 gap-2 border border-slate-800 bg-space/65 p-2 rounded-lg max-w-xl shadow-md" aria-label="API Connectivity Telemetry Status Panel">
+                    <div class="flex items-center justify-between px-2 py-1 rounded bg-slate-900/60 border border-slate-800/80">
+                        <span class="text-slate-400">GEE</span>
+                        <span id="api-status-gee" class="w-2 h-2 rounded-full bg-slate-600 transition-colors duration-500 status-dot-pulse" title="Google Earth Engine API"></span>
+                    </div>
+                    <div class="flex items-center justify-between px-2 py-1 rounded bg-slate-900/60 border border-slate-800/80">
+                        <span class="text-slate-400">CDSE</span>
+                        <span id="api-status-cdse" class="w-2 h-2 rounded-full bg-slate-600 transition-colors duration-500 status-dot-pulse" title="Copernicus CDSE API"></span>
+                    </div>
+                    <div class="flex items-center justify-between px-2 py-1 rounded bg-slate-900/60 border border-slate-800/80">
+                        <span class="text-slate-400">NASA</span>
+                        <span id="api-status-nasa" class="w-2 h-2 rounded-full bg-slate-600 transition-colors duration-500 status-dot-pulse" title="NASA EarthData API"></span>
+                    </div>
+                    <div class="flex items-center justify-between px-2 py-1 rounded bg-slate-900/60 border border-slate-800/80">
+                        <span class="text-slate-400">W-BANK</span>
+                        <span id="api-status-wb" class="w-2 h-2 rounded-full bg-slate-600 transition-colors duration-500 status-dot-pulse" title="World Bank Open Data API"></span>
+                    </div>
+                    <div class="flex items-center justify-between px-2 py-1 rounded bg-slate-900/60 border border-slate-800/80">
+                        <span class="text-slate-400">COMTR</span>
+                        <span id="api-status-com" class="w-2 h-2 rounded-full bg-slate-600 transition-colors duration-500 status-dot-pulse" title="UN COMTRADE API"></span>
                     </div>
                 </div>
 
@@ -598,7 +622,7 @@
                             <span class="text-slate-400 uppercase tracking-wider"><i class="fa-solid fa-clock text-gold mr-1.5 animate-pulse"></i><span>Temporal Navigation Timeline</span></span>
                             <span id="timeline-date-label" class="text-gold font-bold border border-gold/20 px-2 py-0.5 bg-void/60 rounded">All Time</span>
                         </div>
-                        <input id="timeline-slider" type="range" min="0" max="4" value="4" class="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-gold">
+                        <input id="timeline-slider" aria-label="Temporal Navigation Timeline Slider" type="range" min="0" max="4" value="4" class="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-gold">
                         <div class="flex justify-between text-[10px] text-slate-500 mt-1">
                             <span>2021</span>
                             <span>2022</span>
@@ -676,7 +700,7 @@
                 <!-- Interactive Chapter selector dropdown -->
                 <div class="flex items-center space-x-2 text-xs font-code">
                     <span class="text-slate-400">Thesis Chapter:</span>
-                    <select id="chapter-select" class="bg-spacemid border border-gold/30 text-white rounded px-2 py-1 focus:border-gold outline-none font-bold cursor-pointer font-code">
+                    <select id="chapter-select" aria-label="Select Thesis Chapter" class="bg-spacemid border border-gold/30 text-white rounded px-2 py-1 focus:border-gold outline-none font-bold cursor-pointer font-code">
                         <option value="1">Chapter 1: Introduction</option>
                         <option value="2">Chapter 2: Theoretical Framework</option>
                         <option value="3">Chapter 3: Methodology</option>
@@ -714,10 +738,10 @@
     </footer>
 
     <!-- Three.js and Leaflet Dependencies -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" integrity="sha512-dLxUelApnYxpLt6K2iomGngnHO83iUvZytA3YjDUCjT0HDOHKXnVYdf3hU4JjM8uEhxf9nD1/ey98U3t2vZ0qQ==" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js" integrity="sha512-BwHfrr4c9kmRkLw6iXFdzcdWV/PGkVgiIyIWLLlTSXzWQzxuSg4DiQUCpauz/EWjgk5TYQqX/kvn9pG1NpYfqg==" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet.heat@0.2.0/dist/leaflet-heat.js" integrity="sha512-KhIBJeCI4oTEeqOmRi2gDJ7m+JARImhUYgXWiOTIp9qqySpFUAJs09erGKem4E5IPuxxSTjavuurvBitBmwE0w==" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" integrity="sha512-WoViKhKD4qI2WruSZqv9+kvM4WfFhUMQCLN4QlDTt5aU56fLQy2gYoxWIqlEnXqJy/+Ac5q/hk1oWfqnMDhwMA==" crossorigin="anonymous"></script>
     
     <!-- Institutional Controller JS -->
     <script src="app4.js"></script>

@@ -9,19 +9,25 @@ let regionsData = null;
 let currentSelectedAnomaly = null;
 
 let currentLang = 'EN';
-let translations = { EN: null, CS: null };
+let translations = { EN: null, CS: null, ES: null, UK: null };
 
 async function loadTranslations() {
     try {
         const responseEn = await fetch('locales/en.json');
         const responseCs = await fetch('locales/cs.json');
+        const responseEs = await fetch('locales/es.json');
+        const responseUk = await fetch('locales/uk.json');
         translations.EN = await responseEn.json();
         translations.CS = await responseCs.json();
+        translations.ES = await responseEs.json();
+        translations.UK = await responseUk.json();
         console.log("Translations loaded successfully");
     } catch (error) {
         console.error("Failed to load translations, utilizing fallbacks:", error);
         translations.EN = { ui: {}, chapters: {} };
         translations.CS = { ui: {}, chapters: {} };
+        translations.ES = { ui: {}, chapters: {} };
+        translations.UK = { ui: {}, chapters: {} };
     }
 }
 

@@ -1,0 +1,15 @@
+{
+  "run_id": "cf4c63ee-922b-4595-9b03-9d52492f84b4",
+  "started_at": "2026-06-28T21:20:58.954329Z",
+  "completed_at": "2026-06-28T21:21:17.193927Z",
+  "git_commit_sha": "unknown",
+  "git_branch": "unknown",
+  "python_version": "3.12.5 (tags/v3.12.5:ff3bc82, Aug  6 2024, 20:45:27) [MSC v.1940 64 bit (AMD64)]",
+  "dependency_hash": "88b02ded43b0f247a1f747d01dc69b9008578c41214705ee03fde45aec33b825",
+  "anomalies_produced": 10,
+  "providers_used": [
+    "mock"
+  ],
+  "mock_mode": true,
+  "operator": "local-dev"
+}

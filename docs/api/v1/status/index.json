@@ -1,6 +1,55 @@
 {
   "status": "online",
-  "last_pipeline_run": "2026-06-28T16:56:54.372443Z",
-  "anomalies_count": 9,
-  "environment": "development"
+  "last_pipeline_run": "2026-06-28T21:31:01.888875Z",
+  "anomalies_count": 10,
+  "environment": "development",
+  "recent_runs": [
+    {
+      "run_id": "847fd9a1-f29d-44f3-80c7-14aa8e2c3bf1",
+      "started_at": "2026-06-28T21:30:47.375796Z",
+      "completed_at": "2026-06-28T21:31:01.843300Z",
+      "git_commit_sha": "unknown",
+      "git_branch": "unknown",
+      "python_version": "3.12.5 (tags/v3.12.5:ff3bc82, Aug  6 2024, 20:45:27) [MSC v.1940 64 bit (AMD64)]",
+      "dependency_hash": "88b02ded43b0f247a1f747d01dc69b9008578c41214705ee03fde45aec33b825",
+      "anomalies_produced": 10,
+      "providers_used": [
+        "mock"
+      ],
+      "mock_mode": true,
+      "operator": "local-dev",
+      "signature": "641e6b7e71358259c67c8bf5f8c7faa7cd25a74aad1d7b0968296e67db8397b5"
+    },
+    {
+      "run_id": "cf4c63ee-922b-4595-9b03-9d52492f84b4",
+      "started_at": "2026-06-28T21:20:58.954329Z",
+      "completed_at": "2026-06-28T21:21:17.193927Z",
+      "git_commit_sha": "unknown",
+      "git_branch": "unknown",
+      "python_version": "3.12.5 (tags/v3.12.5:ff3bc82, Aug  6 2024, 20:45:27) [MSC v.1940 64 bit (AMD64)]",
+      "dependency_hash": "88b02ded43b0f247a1f747d01dc69b9008578c41214705ee03fde45aec33b825",
+      "anomalies_produced": 10,
+      "providers_used": [
+        "mock"
+      ],
+      "mock_mode": true,
+      "operator": "local-dev"
+    },
+    {
+      "run_id": "8ebe7d66-3033-498b-bc88-0db8d10c477c",
+      "started_at": "2026-06-28T21:20:33.866172Z",
+      "completed_at": "2026-06-28T21:20:38.432822Z",
+      "git_commit_sha": "unknown",
+      "git_branch": "unknown",
+      "python_version": "3.12.5 (tags/v3.12.5:ff3bc82, Aug  6 2024, 20:45:27) [MSC v.1940 64 bit (AMD64)]",
+      "dependency_hash": "88b02ded43b0f247a1f747d01dc69b9008578c41214705ee03fde45aec33b825",
+      "anomalies_produced": 10,
+      "providers_used": [
+        "mock"
+      ],
+      "mock_mode": true,
+      "operator": "local-dev"
+    }
+  ],
+  "provenance_hash": "f7016845097edcc5d96aaeca44e640368f0091b038230619d1c5485081060cbf"
 }

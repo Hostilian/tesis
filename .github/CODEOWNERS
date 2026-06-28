@@ -1,0 +1,14 @@
+# CODEOWNERS for Space-Based Economic Intelligence platform
+# Assigns automatic PR review requests based on academic supervisors and authors.
+
+# Author is the default owner for all files
+*                       XOZTE001@studenti.czu.cz
+
+# Core pipelines and algorithms require supervisorial review
+/pipeline/              brozekj@pef.czu.cz XOZTE001@studenti.czu.cz
+
+# Academic chapters require supervisorial review
+/thesis/                brozekj@pef.czu.cz XOZTE001@studenti.czu.cz
+
+# Dashboard code is maintained by the author
+/docs/                  XOZTE001@studenti.czu.cz

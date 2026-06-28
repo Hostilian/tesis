@@ -3,26 +3,40 @@
   "type": "Gold Mining / Deforestation",
   "region": "Madre de Dios, Peru",
   "coordinates": [
-    -12.745,
-    -69.72
+    -12.86,
+    -70.14
   ],
-  "confidence": 0.98,
-  "uncertainty": 0.062,
+  "confidence": 1.0,
+  "uncertainty": 0.06,
   "confidence_interval": [
-    0.918,
+    0.94,
     1.0
   ],
   "date": "2025-03-22",
   "spectral_profile": {
-    "ndvi": 0.302,
-    "ndwi": -0.118,
-    "bsi": 0.303
+    "ndvi": 0.31,
+    "ndwi": -0.107,
+    "bsi": 0.288
   },
-  "details": "Severe canopy forest degradation and raw soil exposure. The spectral footprint displays a sudden NDVI drop (loss of biomass volume) and elevated BSI (exposed mud/silt ponds associated with alluvial gold mining).",
+  "details": "Severe canopy forest degradation and raw soil exposure. The spectral footprint displays a sudden NDVI drop (loss of biomass volume) and elevated BSI (exposed mud/silt ponds associated with alluvial gold mining). Contextualized by gold price at $2408.91/oz.",
   "verification": {
     "method": "Temporal Radar backscatter (Sentinel-1 SAR)",
     "ground_truth": "MAAP Deforestation Alert #284",
     "status": "Verified (Critical)"
+  },
+  "provenance_hash": "93af463d96408b63b491bc7c6ddd506d8bade392adddc2380a338b486a759511",
+  "osm_overlap_pct": 0.0,
+  "data_lineage": {
+    "satellite_source": "Mock Sentinel-2 L2A Surface Reflectance",
+    "satellite_scene_ids": [
+      "S2A_MSIL2A_20250322T150901_N0509_R082_T19LBJ"
+    ],
+    "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
+    "economic_vintage": "2025-03-22T00:00:00Z",
+    "processing_pipeline_version": "2.1.0",
+    "git_commit": "unknown",
+    "processed_at": "2026-06-28T21:30:49.756856Z",
+    "reproduced_at": null
   },
   "z_score": 3.78,
   "economic_intelligence": {

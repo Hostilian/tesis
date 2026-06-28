@@ -533,3 +533,46 @@ class TestOrchestratorEdgeCases:
         if result["skipped_reason"] is None and result["confidence_mean"] > 0:
             assert result["confidence_ci_low"] <= result["confidence_mean"]
             assert result["confidence_mean"] <= result["confidence_ci_high"]
+
+
+# ── 11. Landsat composite and Signed Audit Trail tests ──────────────────────────
+
+class TestNewIngestionAndAudit:
+    def test_landsat_composite_mock_fetch(self):
+        """Test mock execution of fetch_landsat_composite in SatelliteDataIngester."""
+        from pipeline.src.config import PipelineConfig
+        from pipeline.src.ingestion import SatelliteDataIngester
+        config = PipelineConfig(mock_mode=True)
+        ingester = SatelliteDataIngester(config)
+        bbox = [-68.5, -23.8, -68.1, -23.2]
+        bands = ingester.fetch_landsat_composite(bbox, "2024-01-01", "2024-12-31")
+        assert "ndvi" in bands
+        assert "ndwi" in bands
+        assert "bsi" in bands
+
+    def test_pipeline_run_record_signature_validation(self):
+        """Test that PipelineRunRecord calculates and verifies signatures correctly."""
+        from pipeline.run_pipeline import PipelineRunRecord
+        # Instantiate a record
+        record = PipelineRunRecord(
+            run_id="test_run_123",
+            started_at="2026-06-28T21:20:00Z",
+            completed_at="2026-06-28T21:21:17Z",
+            git_commit_sha="a1b2c3d",
+            git_branch="main",
+            python_version="3.12.5",
+            dependency_hash="hash123",
+            anomalies_produced=9,
+            providers_used=["mock"],
+            mock_mode=True,
+            operator="academic-audit"
+        )
+        record.sign_record(secret_key="my_super_secret")
+        assert record.signature is not None
+        assert len(record.signature) == 64
+        # Verify it validates
+        assert record.verify_signature(secret_key="my_super_secret") is True
+        # Verify it fails for modified content
+        record.anomalies_produced = 10
+        assert record.verify_signature(secret_key="my_super_secret") is False
+

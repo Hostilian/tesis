@@ -35,3 +35,9 @@ statsmodels==0.14.4
 # ── Utilities ─────────────────────────────────────────────────────────────────
 python-dotenv==1.0.0
 requests==2.32.4
+
+# ── REST Webhooks & Task Queues (YC Enterprise Upgrades) ──────────────────────
+fastapi==0.111.0
+uvicorn==0.30.1
+celery==5.4.0
+redis==5.0.4

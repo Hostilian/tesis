@@ -13,10 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@692973e3d93d1264569f2d19d11d9a151250d182 # v4.1.7
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@82c7e631bb3eae9cfba2d2d03984cdc55c82996b # v5.1.0
         with:
           python-version: '3.12'
           cache: 'pip'

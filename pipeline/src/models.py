@@ -7,15 +7,16 @@ import numpy as np
 from sklearn.ensemble import IsolationForest
 
 from pipeline.src.utils import calculate_temporal_zscores
+from pipeline.src.engine.spatial_temporal_engine import SpatialTemporalEconomicEngine
 
 logger = logging.getLogger(__name__)
 
-try:  # pragma: no cover - optional dependency path
+# pragma: no cover - optional dependencies check
+try:
     import torch
     from transformers import AutoImageProcessor, AutoModelForSemanticSegmentation
-
     TORCH_AVAILABLE = True
-except Exception:  # pragma: no cover - optional dependency path
+except Exception:
     torch = None  # type: ignore[assignment]
     AutoImageProcessor = None  # type: ignore[assignment]
     AutoModelForSemanticSegmentation = None  # type: ignore[assignment]
@@ -24,55 +25,38 @@ except Exception:  # pragma: no cover - optional dependency path
 
 class AnomalyDetector:
     def __init__(self, contamination: float = 0.08, random_state: int = 42):
-        self.contamination = contamination
-        self.random_state = random_state
+        self.engine = SpatialTemporalEconomicEngine(contamination=contamination, random_state=random_state)
         self.spatial_model: IsolationForest | None = None
+
+    @property
+    def contamination(self) -> float:
+        return self.engine.contamination
+
+    @contamination.setter
+    def contamination(self, value: float) -> None:
+        self.engine.contamination = value
+
+    @property
+    def random_state(self) -> int:
+        return self.engine.random_state
+
+    @random_state.setter
+    def random_state(self, value: int) -> None:
+        self.engine.random_state = value
 
     def fit_predict_spatial(self, features: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
         """
         Train Isolation Forest on spatial spectral features and predict outlier masks.
-
-        Args:
-            features: 2D array of shape (N_pixels, D_features)
-
-        Returns:
-            predictions: Array of predictions (1 = normal, -1 = anomaly)
-            scores: Normalized anomaly scores in range [0, 1]
         """
-        logger.info("Fitting Isolation Forest on %d pixel samples...", features.shape[0])
-        self.spatial_model = IsolationForest(
-            contamination=self.contamination,
-            random_state=self.random_state,
-            n_estimators=100,
-        )
-
-        predictions = self.spatial_model.fit_predict(features)
-        raw_scores = self.spatial_model.decision_function(features)
-
-        min_raw, max_raw = raw_scores.min(), raw_scores.max()
-        if max_raw == min_raw:
-            scores = np.zeros_like(raw_scores)
-        else:
-            scores = 1.0 - ((raw_scores - min_raw) / (max_raw - min_raw))
-
-        logger.info("Isolation Forest fitting and scoring complete.")
+        predictions, scores = self.engine.fit_predict_spatial(features)
+        self.spatial_model = self.engine.spatial_model
         return predictions, scores
 
     def detect_temporal_ntl(self, radiance_series: list[float], rolling_window: int = 12) -> list[float]:
         """
         Detect temporal anomalies in night-time lights using rolling Z-scores.
-
-        Args:
-            radiance_series: List or array of monthly light radiance.
-            rolling_window: Window size for base calculation.
-
-        Returns:
-            List of Z-scores corresponding to each month.
         """
-        logger.info("Computing rolling Z-scores for NTL series with window size %d...", rolling_window)
-        values = np.array(radiance_series)
-        z_scores = calculate_temporal_zscores(values, rolling_window)
-        return z_scores.tolist()
+        return self.engine.detect_temporal_ntl(radiance_series, rolling_window)
 
 
 @dataclass(slots=True)

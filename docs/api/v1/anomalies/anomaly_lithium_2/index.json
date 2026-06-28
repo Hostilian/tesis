@@ -3,26 +3,41 @@
   "type": "Industrial Extraction",
   "region": "Salar de Atacama, Chile",
   "coordinates": [
-    -23.374,
-    -68.17999999999999
+    -23.512,
+    -68.46
   ],
-  "confidence": 0.98,
-  "uncertainty": 0.052,
+  "confidence": 1.0,
+  "uncertainty": 0.05,
   "confidence_interval": [
-    0.928,
+    0.95,
     1.0
   ],
   "date": "2024-10-12",
   "spectral_profile": {
-    "ndvi": 0.302,
-    "ndwi": -0.118,
-    "bsi": 0.303
+    "ndvi": 0.31,
+    "ndwi": -0.107,
+    "bsi": 0.288
   },
   "details": "Rapid spatial expansion of lithium brine evaporation ponds detected. Spectral signature exhibits elevated NDWI (brine water reflection) and high Bare Soil Index (albedo salt crust) with complete absence of vegetation.",
   "verification": {
     "method": "Spatial Overlay",
     "ground_truth": "SERNAGEOMIN Lithium Brine Expansion Plan (SQM)",
     "status": "Verified"
+  },
+  "provenance_hash": "aab414e1fd04db4e21641dafeafd37928b7e4ca08729796c4373d6b7b2562e10",
+  "osm_overlap_pct": 88.4,
+  "cross_reference_validated": true,
+  "data_lineage": {
+    "satellite_source": "Mock Sentinel-2 L2A Surface Reflectance",
+    "satellite_scene_ids": [
+      "S2A_MSIL2A_20241012T150901_N0509_R082_T19LBJ"
+    ],
+    "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
+    "economic_vintage": "2024-10-12T00:00:00Z",
+    "processing_pipeline_version": "2.1.0",
+    "git_commit": "unknown",
+    "processed_at": "2026-06-28T21:30:48.754427Z",
+    "reproduced_at": null
   },
   "z_score": 3.21,
   "economic_intelligence": {

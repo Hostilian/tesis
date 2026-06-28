@@ -4,8 +4,8 @@
     "type": "Industrial Extraction",
     "region": "Salar de Atacama, Chile",
     "coordinates": [
-      -23.266,
-      -68.15599999999999
+      -23.29,
+      -68.432
     ],
     "confidence": 1.0,
     "uncertainty": 0.05,
@@ -15,15 +15,30 @@
     ],
     "date": "2024-10-12",
     "spectral_profile": {
-      "ndvi": 0.254,
-      "ndwi": -0.122,
-      "bsi": 0.321
+      "ndvi": 0.356,
+      "ndwi": -0.086,
+      "bsi": 0.337
     },
     "details": "Rapid spatial expansion of lithium brine evaporation ponds detected. Spectral signature exhibits elevated NDWI (brine water reflection) and high Bare Soil Index (albedo salt crust) with complete absence of vegetation.",
     "verification": {
       "method": "Spatial Overlay",
       "ground_truth": "SERNAGEOMIN Lithium Brine Expansion Plan (SQM)",
       "status": "Verified"
+    },
+    "provenance_hash": "aab414e1fd04db4e21641dafeafd37928b7e4ca08729796c4373d6b7b2562e10",
+    "osm_overlap_pct": 88.4,
+    "cross_reference_validated": true,
+    "data_lineage": {
+      "satellite_source": "Mock Sentinel-2 L2A Surface Reflectance",
+      "satellite_scene_ids": [
+        "S2A_MSIL2A_20241012T150901_N0509_R082_T19LBJ"
+      ],
+      "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
+      "economic_vintage": "2024-10-12T00:00:00Z",
+      "processing_pipeline_version": "2.1.0",
+      "git_commit": "unknown",
+      "processed_at": "2026-06-28T21:30:48.750005Z",
+      "reproduced_at": null
     },
     "z_score": 3.84,
     "economic_intelligence": {
@@ -42,26 +57,41 @@
     "type": "Industrial Extraction",
     "region": "Salar de Atacama, Chile",
     "coordinates": [
-      -23.374,
-      -68.17999999999999
+      -23.512,
+      -68.46
     ],
-    "confidence": 0.98,
-    "uncertainty": 0.052,
+    "confidence": 1.0,
+    "uncertainty": 0.05,
     "confidence_interval": [
-      0.928,
+      0.95,
       1.0
     ],
     "date": "2024-10-12",
     "spectral_profile": {
-      "ndvi": 0.302,
-      "ndwi": -0.118,
-      "bsi": 0.303
+      "ndvi": 0.31,
+      "ndwi": -0.107,
+      "bsi": 0.288
     },
     "details": "Rapid spatial expansion of lithium brine evaporation ponds detected. Spectral signature exhibits elevated NDWI (brine water reflection) and high Bare Soil Index (albedo salt crust) with complete absence of vegetation.",
     "verification": {
       "method": "Spatial Overlay",
       "ground_truth": "SERNAGEOMIN Lithium Brine Expansion Plan (SQM)",
       "status": "Verified"
+    },
+    "provenance_hash": "aab414e1fd04db4e21641dafeafd37928b7e4ca08729796c4373d6b7b2562e10",
+    "osm_overlap_pct": 88.4,
+    "cross_reference_validated": true,
+    "data_lineage": {
+      "satellite_source": "Mock Sentinel-2 L2A Surface Reflectance",
+      "satellite_scene_ids": [
+        "S2A_MSIL2A_20241012T150901_N0509_R082_T19LBJ"
+      ],
+      "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
+      "economic_vintage": "2024-10-12T00:00:00Z",
+      "processing_pipeline_version": "2.1.0",
+      "git_commit": "unknown",
+      "processed_at": "2026-06-28T21:30:48.754427Z",
+      "reproduced_at": null
     },
     "z_score": 3.21,
     "economic_intelligence": {
@@ -80,26 +110,41 @@
     "type": "Industrial Extraction",
     "region": "Salar de Atacama, Chile",
     "coordinates": [
-      -23.716,
+      -23.758,
       -68.128
     ],
-    "confidence": 0.97,
-    "uncertainty": 0.053,
+    "confidence": 0.99,
+    "uncertainty": 0.051,
     "confidence_interval": [
-      0.917,
+      0.939,
       1.0
     ],
     "date": "2024-10-12",
     "spectral_profile": {
-      "ndvi": 0.293,
-      "ndwi": -0.179,
-      "bsi": 0.322
+      "ndvi": 0.373,
+      "ndwi": -0.078,
+      "bsi": 0.377
     },
     "details": "Rapid spatial expansion of lithium brine evaporation ponds detected. Spectral signature exhibits elevated NDWI (brine water reflection) and high Bare Soil Index (albedo salt crust) with complete absence of vegetation.",
     "verification": {
       "method": "Spatial Overlay",
       "ground_truth": "SERNAGEOMIN Lithium Brine Expansion Plan (SQM)",
       "status": "Verified"
+    },
+    "provenance_hash": "aab414e1fd04db4e21641dafeafd37928b7e4ca08729796c4373d6b7b2562e10",
+    "osm_overlap_pct": 88.4,
+    "cross_reference_validated": true,
+    "data_lineage": {
+      "satellite_source": "Mock Sentinel-2 L2A Surface Reflectance",
+      "satellite_scene_ids": [
+        "S2A_MSIL2A_20241012T150901_N0509_R082_T19LBJ"
+      ],
+      "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
+      "economic_vintage": "2024-10-12T00:00:00Z",
+      "processing_pipeline_version": "2.1.0",
+      "git_commit": "unknown",
+      "processed_at": "2026-06-28T21:30:48.759249Z",
+      "reproduced_at": null
     },
     "z_score": 2.97,
     "economic_intelligence": {
@@ -118,8 +163,8 @@
     "type": "Gold Mining / Deforestation",
     "region": "Madre de Dios, Peru",
     "coordinates": [
-      -12.655,
-      -69.684
+      -12.674999999999999,
+      -70.098
     ],
     "confidence": 1.0,
     "uncertainty": 0.06,
@@ -129,15 +174,29 @@
     ],
     "date": "2025-03-22",
     "spectral_profile": {
-      "ndvi": 0.254,
-      "ndwi": -0.122,
-      "bsi": 0.321
+      "ndvi": 0.356,
+      "ndwi": -0.086,
+      "bsi": 0.337
     },
-    "details": "Severe canopy forest degradation and raw soil exposure. The spectral footprint displays a sudden NDVI drop (loss of biomass volume) and elevated BSI (exposed mud/silt ponds associated with alluvial gold mining).",
+    "details": "Severe canopy forest degradation and raw soil exposure. The spectral footprint displays a sudden NDVI drop (loss of biomass volume) and elevated BSI (exposed mud/silt ponds associated with alluvial gold mining). Contextualized by gold price at $2408.91/oz.",
     "verification": {
       "method": "Temporal Radar backscatter (Sentinel-1 SAR)",
       "ground_truth": "MAAP Deforestation Alert #284",
       "status": "Verified (Critical)"
+    },
+    "provenance_hash": "93af463d96408b63b491bc7c6ddd506d8bade392adddc2380a338b486a759511",
+    "osm_overlap_pct": 0.0,
+    "data_lineage": {
+      "satellite_source": "Mock Sentinel-2 L2A Surface Reflectance",
+      "satellite_scene_ids": [
+        "S2A_MSIL2A_20250322T150901_N0509_R082_T19LBJ"
+      ],
+      "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
+      "economic_vintage": "2025-03-22T00:00:00Z",
+      "processing_pipeline_version": "2.1.0",
+      "git_commit": "unknown",
+      "processed_at": "2026-06-28T21:30:49.752277Z",
+      "reproduced_at": null
     },
     "z_score": 4.12,
     "economic_intelligence": {
@@ -156,26 +215,40 @@
     "type": "Gold Mining / Deforestation",
     "region": "Madre de Dios, Peru",
     "coordinates": [
-      -12.745,
-      -69.72
+      -12.86,
+      -70.14
     ],
-    "confidence": 0.98,
-    "uncertainty": 0.062,
+    "confidence": 1.0,
+    "uncertainty": 0.06,
     "confidence_interval": [
-      0.918,
+      0.94,
       1.0
     ],
     "date": "2025-03-22",
     "spectral_profile": {
-      "ndvi": 0.302,
-      "ndwi": -0.118,
-      "bsi": 0.303
+      "ndvi": 0.31,
+      "ndwi": -0.107,
+      "bsi": 0.288
     },
-    "details": "Severe canopy forest degradation and raw soil exposure. The spectral footprint displays a sudden NDVI drop (loss of biomass volume) and elevated BSI (exposed mud/silt ponds associated with alluvial gold mining).",
+    "details": "Severe canopy forest degradation and raw soil exposure. The spectral footprint displays a sudden NDVI drop (loss of biomass volume) and elevated BSI (exposed mud/silt ponds associated with alluvial gold mining). Contextualized by gold price at $2408.91/oz.",
     "verification": {
       "method": "Temporal Radar backscatter (Sentinel-1 SAR)",
       "ground_truth": "MAAP Deforestation Alert #284",
       "status": "Verified (Critical)"
+    },
+    "provenance_hash": "93af463d96408b63b491bc7c6ddd506d8bade392adddc2380a338b486a759511",
+    "osm_overlap_pct": 0.0,
+    "data_lineage": {
+      "satellite_source": "Mock Sentinel-2 L2A Surface Reflectance",
+      "satellite_scene_ids": [
+        "S2A_MSIL2A_20250322T150901_N0509_R082_T19LBJ"
+      ],
+      "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
+      "economic_vintage": "2025-03-22T00:00:00Z",
+      "processing_pipeline_version": "2.1.0",
+      "git_commit": "unknown",
+      "processed_at": "2026-06-28T21:30:49.756856Z",
+      "reproduced_at": null
     },
     "z_score": 3.78,
     "economic_intelligence": {
@@ -194,26 +267,40 @@
     "type": "Gold Mining / Deforestation",
     "region": "Madre de Dios, Peru",
     "coordinates": [
-      -13.03,
+      -13.065,
       -69.642
     ],
-    "confidence": 0.97,
-    "uncertainty": 0.062,
+    "confidence": 0.99,
+    "uncertainty": 0.061,
     "confidence_interval": [
-      0.908,
+      0.929,
       1.0
     ],
     "date": "2025-03-22",
     "spectral_profile": {
-      "ndvi": 0.293,
-      "ndwi": -0.179,
-      "bsi": 0.322
+      "ndvi": 0.373,
+      "ndwi": -0.078,
+      "bsi": 0.377
     },
-    "details": "Severe canopy forest degradation and raw soil exposure. The spectral footprint displays a sudden NDVI drop (loss of biomass volume) and elevated BSI (exposed mud/silt ponds associated with alluvial gold mining).",
+    "details": "Severe canopy forest degradation and raw soil exposure. The spectral footprint displays a sudden NDVI drop (loss of biomass volume) and elevated BSI (exposed mud/silt ponds associated with alluvial gold mining). Contextualized by gold price at $2408.91/oz.",
     "verification": {
       "method": "Temporal Radar backscatter (Sentinel-1 SAR)",
       "ground_truth": "MAAP Deforestation Alert #284",
       "status": "Verified (Critical)"
+    },
+    "provenance_hash": "93af463d96408b63b491bc7c6ddd506d8bade392adddc2380a338b486a759511",
+    "osm_overlap_pct": 0.0,
+    "data_lineage": {
+      "satellite_source": "Mock Sentinel-2 L2A Surface Reflectance",
+      "satellite_scene_ids": [
+        "S2A_MSIL2A_20250322T150901_N0509_R082_T19LBJ"
+      ],
+      "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
+      "economic_vintage": "2025-03-22T00:00:00Z",
+      "processing_pipeline_version": "2.1.0",
+      "git_commit": "unknown",
+      "processed_at": "2026-06-28T21:30:49.760668Z",
+      "reproduced_at": null
     },
     "z_score": 3.44,
     "economic_intelligence": {
@@ -225,44 +312,6 @@
       "cross_reference": "SERNANP (Peru Protected Area Agency) quarterly monitoring reports Q4 2024.",
       "false_positive_probability": 0.09,
       "alternative_explanation": "Flooding from Madre de Dios river could produce similar NDWI signal; however, SAR shows stationary soil disturbance inconsistent with fluvial transport."
-    }
-  },
-  {
-    "id": "anomaly_ntl_13",
-    "type": "NTL Industrial Contraction",
-    "region": "Mlad\u00e1 Boleslav (Industrial Zone), CZ",
-    "coordinates": [
-      50.412,
-      14.903
-    ],
-    "confidence": 0.77,
-    "uncertainty": 0.018,
-    "confidence_interval": [
-      0.752,
-      0.788
-    ],
-    "date": "2023-02-01",
-    "spectral_profile": {
-      "ndvi": 0.35,
-      "ndwi": -0.15,
-      "bsi": 0.42
-    },
-    "details": "Significant temporal deviation in night-time light radiance (Z-score = -3.08). Correlates with shift changes and production rate shifts in the automotive manufacturing cluster.",
-    "verification": {
-      "method": "Statistical GDP Correlation",
-      "ground_truth": "Czech Statistical Office (\u010cS\u00da) Quarterly Manufacturing Index",
-      "status": "Verified"
-    },
-    "z_score": -3.08,
-    "economic_intelligence": {
-      "what": "VIIRS DNB radiance dropped 28% below 24-month rolling mean. Temporal Z-score -3.08 confirms statistically significant industrial light reduction.",
-      "where": "Mlad\u00e1 Boleslav industrial zone \u2014 home to \u0160koda Auto headquarters (Volkswagen Group subsidiary), Czech Republic's largest employer.",
-      "when": "February 2023. Sustained below-baseline NTL for 6 consecutive months (Feb\u2013Jul 2023).",
-      "how_unusual": "Z-score -3.08 \u2014 below 99.9th percentile. Comparable in magnitude to NTL drops during COVID-19 lockdowns (March\u2013April 2020).",
-      "economic_signal": "Czech automotive sector output fell 11.3% YoY (Q1 2023) due to semiconductor supply chain disruptions. \u0160koda reduced production shifts.",
-      "cross_reference": "Czech Statistical Office (\u010cS\u00da) Industrial Production Index Q1 2023; \u0160koda Auto press releases Q1 2023 production adjustment.",
-      "false_positive_probability": 0.23,
-      "alternative_explanation": "Extreme winter weather (temperatures < -15\u00b0C) can reduce NTL via reduced outdoor lighting in February; however, adjacent residential zones show stable NTL, isolating the anomaly to the industrial cluster."
     }
   },
   {
@@ -279,18 +328,33 @@
       1.0,
       1.0
     ],
-    "date": "2023-07-01",
+    "date": "2024-07-01",
     "spectral_profile": {
       "ndvi": 0.35,
       "ndwi": -0.15,
       "bsi": 0.42
     },
-    "details": "Significant temporal deviation in night-time light radiance (Z-score = -4.52). Correlates with shift changes and production rate shifts in the automotive manufacturing cluster.",
+    "details": "Significant temporal deviation in night-time light radiance (Z-score = -4.36). Correlates with shift changes and production rate shifts in the automotive manufacturing cluster.",
     "verification": {
       "method": "Statistical GDP Correlation",
       "ground_truth": "Czech Statistical Office (\u010cS\u00da) Quarterly Manufacturing Index",
       "status": "Verified"
     },
+    "provenance_hash": "00ebd1f2162ef8b78959a3f6c1c88defb7e708a9058cfaec0c186087b9706ef1",
+    "osm_overlap_pct": 95.2,
+    "data_lineage": {
+      "satellite_source": "Mock VIIRS Monthly Composites",
+      "satellite_scene_ids": [
+        "VNP46A3_20240701_CZE"
+      ],
+      "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
+      "economic_vintage": "2024-07-01T00:00:00Z",
+      "processing_pipeline_version": "2.1.0",
+      "git_commit": "unknown",
+      "processed_at": "2026-06-28T21:31:01.828897Z",
+      "reproduced_at": null
+    },
+    "data_quality_flag": "WB_IMF_DISCREPANCY",
     "z_score": -4.52,
     "economic_intelligence": {
       "what": "VIIRS DNB radiance at 5-year minimum for the site. Z-score -4.52 is the most extreme temporal deviation in the entire Czechia NTL dataset.",
@@ -311,24 +375,39 @@
       50.412,
       14.903
     ],
-    "confidence": 0.77,
-    "uncertainty": 0.018,
+    "confidence": 0.86,
+    "uncertainty": 0.011,
     "confidence_interval": [
-      0.752,
-      0.788
+      0.849,
+      0.871
     ],
-    "date": "2023-08-01",
+    "date": "2024-08-01",
     "spectral_profile": {
       "ndvi": 0.35,
       "ndwi": -0.15,
       "bsi": 0.42
     },
-    "details": "Significant temporal deviation in night-time light radiance (Z-score = -3.10). Correlates with shift changes and production rate shifts in the automotive manufacturing cluster.",
+    "details": "Significant temporal deviation in night-time light radiance (Z-score = -3.43). Correlates with shift changes and production rate shifts in the automotive manufacturing cluster.",
     "verification": {
       "method": "Statistical GDP Correlation",
       "ground_truth": "Czech Statistical Office (\u010cS\u00da) Quarterly Manufacturing Index",
       "status": "Verified"
     },
+    "provenance_hash": "00ebd1f2162ef8b78959a3f6c1c88defb7e708a9058cfaec0c186087b9706ef1",
+    "osm_overlap_pct": 95.2,
+    "data_lineage": {
+      "satellite_source": "Mock VIIRS Monthly Composites",
+      "satellite_scene_ids": [
+        "VNP46A3_20240801_CZE"
+      ],
+      "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
+      "economic_vintage": "2024-08-01T00:00:00Z",
+      "processing_pipeline_version": "2.1.0",
+      "git_commit": "unknown",
+      "processed_at": "2026-06-28T21:31:01.834881Z",
+      "reproduced_at": null
+    },
+    "data_quality_flag": "WB_IMF_DISCREPANCY",
     "z_score": -3.1,
     "economic_intelligence": {
       "what": "VIIRS DNB radiance 31% below 24-month mean. Z-score -3.10 places this at 99.9th percentile of deviations.",
@@ -340,5 +419,89 @@
       "false_positive_probability": 0.23,
       "alternative_explanation": "Planned factory maintenance shutdown is a known confound for August; the anomaly's significance is the 12-day delayed restart, not the shutdown itself."
     }
+  },
+  {
+    "id": "anomaly_ntl_20",
+    "type": "NTL Industrial Contraction",
+    "region": "Mlad\u00e1 Boleslav (Industrial Zone), CZ",
+    "coordinates": [
+      50.412,
+      14.903
+    ],
+    "confidence": 0.59,
+    "uncertainty": 0.033,
+    "confidence_interval": [
+      0.557,
+      0.623
+    ],
+    "date": "2024-09-01",
+    "spectral_profile": {
+      "ndvi": 0.35,
+      "ndwi": -0.15,
+      "bsi": 0.42
+    },
+    "details": "Significant temporal deviation in night-time light radiance (Z-score = -2.38). Correlates with shift changes and production rate shifts in the automotive manufacturing cluster.",
+    "verification": {
+      "method": "Statistical GDP Correlation",
+      "ground_truth": "Czech Statistical Office (\u010cS\u00da) Quarterly Manufacturing Index",
+      "status": "Verified"
+    },
+    "provenance_hash": "00ebd1f2162ef8b78959a3f6c1c88defb7e708a9058cfaec0c186087b9706ef1",
+    "osm_overlap_pct": 95.2,
+    "data_lineage": {
+      "satellite_source": "Mock VIIRS Monthly Composites",
+      "satellite_scene_ids": [
+        "VNP46A3_20240901_CZE"
+      ],
+      "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
+      "economic_vintage": "2024-09-01T00:00:00Z",
+      "processing_pipeline_version": "2.1.0",
+      "git_commit": "unknown",
+      "processed_at": "2026-06-28T21:31:01.838459Z",
+      "reproduced_at": null
+    },
+    "data_quality_flag": "WB_IMF_DISCREPANCY"
+  },
+  {
+    "id": "anomaly_ntl_21",
+    "type": "NTL Industrial Contraction",
+    "region": "Mlad\u00e1 Boleslav (Industrial Zone), CZ",
+    "coordinates": [
+      50.412,
+      14.903
+    ],
+    "confidence": 0.52,
+    "uncertainty": 0.038,
+    "confidence_interval": [
+      0.482,
+      0.558
+    ],
+    "date": "2024-10-01",
+    "spectral_profile": {
+      "ndvi": 0.35,
+      "ndwi": -0.15,
+      "bsi": 0.42
+    },
+    "details": "Significant temporal deviation in night-time light radiance (Z-score = -2.10). Correlates with shift changes and production rate shifts in the automotive manufacturing cluster.",
+    "verification": {
+      "method": "Statistical GDP Correlation",
+      "ground_truth": "Czech Statistical Office (\u010cS\u00da) Quarterly Manufacturing Index",
+      "status": "Verified"
+    },
+    "provenance_hash": "00ebd1f2162ef8b78959a3f6c1c88defb7e708a9058cfaec0c186087b9706ef1",
+    "osm_overlap_pct": 95.2,
+    "data_lineage": {
+      "satellite_source": "Mock VIIRS Monthly Composites",
+      "satellite_scene_ids": [
+        "VNP46A3_20241001_CZE"
+      ],
+      "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
+      "economic_vintage": "2024-10-01T00:00:00Z",
+      "processing_pipeline_version": "2.1.0",
+      "git_commit": "unknown",
+      "processed_at": "2026-06-28T21:31:01.842826Z",
+      "reproduced_at": null
+    },
+    "data_quality_flag": "WB_IMF_DISCREPANCY"
   }
 ]

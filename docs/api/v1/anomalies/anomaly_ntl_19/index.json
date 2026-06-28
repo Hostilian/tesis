@@ -6,24 +6,39 @@
     50.412,
     14.903
   ],
-  "confidence": 0.77,
-  "uncertainty": 0.018,
+  "confidence": 0.86,
+  "uncertainty": 0.011,
   "confidence_interval": [
-    0.752,
-    0.788
+    0.849,
+    0.871
   ],
-  "date": "2023-08-01",
+  "date": "2024-08-01",
   "spectral_profile": {
     "ndvi": 0.35,
     "ndwi": -0.15,
     "bsi": 0.42
   },
-  "details": "Significant temporal deviation in night-time light radiance (Z-score = -3.10). Correlates with shift changes and production rate shifts in the automotive manufacturing cluster.",
+  "details": "Significant temporal deviation in night-time light radiance (Z-score = -3.43). Correlates with shift changes and production rate shifts in the automotive manufacturing cluster.",
   "verification": {
     "method": "Statistical GDP Correlation",
     "ground_truth": "Czech Statistical Office (\u010cS\u00da) Quarterly Manufacturing Index",
     "status": "Verified"
   },
+  "provenance_hash": "00ebd1f2162ef8b78959a3f6c1c88defb7e708a9058cfaec0c186087b9706ef1",
+  "osm_overlap_pct": 95.2,
+  "data_lineage": {
+    "satellite_source": "Mock VIIRS Monthly Composites",
+    "satellite_scene_ids": [
+      "VNP46A3_20240801_CZE"
+    ],
+    "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
+    "economic_vintage": "2024-08-01T00:00:00Z",
+    "processing_pipeline_version": "2.1.0",
+    "git_commit": "unknown",
+    "processed_at": "2026-06-28T21:31:01.834881Z",
+    "reproduced_at": null
+  },
+  "data_quality_flag": "WB_IMF_DISCREPANCY",
   "z_score": -3.1,
   "economic_intelligence": {
     "what": "VIIRS DNB radiance 31% below 24-month mean. Z-score -3.10 places this at 99.9th percentile of deviations.",
