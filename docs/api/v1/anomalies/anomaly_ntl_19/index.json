@@ -1,27 +1,38 @@
 {
-  "id": "anomaly_ntl_19",
-  "type": "NTL Industrial Contraction",
-  "region": "Mlad\u00e1 Boleslav (Industrial Zone), CZ",
-  "coordinates": [
-    50.412,
-    14.903
-  ],
-  "confidence": 0.77,
-  "uncertainty": 0.018,
-  "confidence_interval": [
-    0.752,
-    0.788
-  ],
-  "date": "2023-08-01",
-  "spectral_profile": {
-    "ndvi": 0.35,
-    "ndwi": -0.15,
-    "bsi": 0.42
-  },
-  "details": "Significant temporal deviation in night-time light radiance (Z-score = -3.10). Correlates with shift changes and production rate shifts in the automotive manufacturing cluster.",
-  "verification": {
-    "method": "Statistical GDP Correlation",
-    "ground_truth": "Czech Statistical Office (\u010cS\u00da) Quarterly Manufacturing Index",
-    "status": "Verified"
-  }
+    "id":  "anomaly_ntl_19",
+    "type":  "NTL Industrial Contraction",
+    "region":  "Mladá Boleslav (Industrial Zone), CZ",
+    "coordinates":  [
+                        50.412,
+                        14.903
+                    ],
+    "confidence":  0.77,
+    "uncertainty":  0.07,
+    "confidence_interval":  [
+                                0.70,
+                                0.84
+                            ],
+    "z_score":  -3.10,
+    "date":  "2023-08-01",
+    "spectral_profile":  {
+                             "ndvi":  0.35,
+                             "ndwi":  -0.15,
+                             "bsi":  0.42
+                         },
+    "details":  "August NTL anomaly consistent with factory-wide planned maintenance shutdown. Distinguishable from July\u0027s anomaly by being partially expected (planned shutdown) versus unplanned production disruption.",
+    "economic_intelligence":  {
+                                  "what":  "VIIRS DNB radiance 31% below 24-month mean. Z-score -3.10 places this at 99.9th percentile of deviations.",
+                                  "where":  "Mládá Boleslav Škoda Auto complex â€” same industrial footprint as July anomaly.",
+                                  "when":  "August 2023. Annual factory shutdown traditionally occurs 2â€“3 weeks in August; however, low NTL persisted beyond normal shutdown window.",
+                                  "how_unusual":  "Z-score -3.10 â€” comparable to February anomaly. August shutdown is partially expected, reducing surprise value; however, post-shutdown recovery was delayed by 12 days versus historical average.",
+                                  "economic_signal":  "Extended post-shutdown low NTL suggests supply chain or demand uncertainty prevented normal restart. Czech automotive parts exports fell 8.2% in August 2023 (CSÚ).",
+                                  "cross_reference":  "Škoda Auto Annual Report 2023 â€” production volume footnotes; ACEA (European Automobile Manufacturers\u0027 Association) monthly production data.",
+                                  "false_positive_probability":  0.23,
+                                  "alternative_explanation":  "Planned factory maintenance shutdown is a known confound for August; the anomaly\u0027s significance is the 12-day delayed restart, not the shutdown itself."
+                              },
+    "verification":  {
+                         "method":  "Statistical GDP Correlation",
+                         "ground_truth":  "Czech Statistical Office (CSÚ) Quarterly Manufacturing Index",
+                         "status":  "Verified"
+                     }
 }

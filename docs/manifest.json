@@ -1,16 +1,44 @@
 {
   "short_name": "OrbitalIntel",
   "name": "Space-Based Economic Intelligence Dashboard",
+  "description": "Satellite anomaly detection and economic intelligence visualization — CZU Prague Bachelor Thesis by Eren Ozturk",
   "icons": [
     {
       "src": "apple-touch-icon.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "192x192",
+      "purpose": "any"
+    },
+    {
+      "src": "apple-touch-icon.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
     }
   ],
-  "start_url": "index.html",
+  "id": "/",
+  "start_url": "/tesis/",
+  "scope": "/tesis/",
   "background_color": "#050510",
   "theme_color": "#00d4ff",
   "display": "standalone",
-  "orientation": "any"
+  "orientation": "any",
+  "lang": "en",
+  "categories": ["education", "science"],
+  "shortcuts": [
+    {
+      "name": "Anomaly Map",
+      "short_name": "Map",
+      "description": "Open the interactive satellite anomaly map",
+      "url": "/tesis/#explorer",
+      "icons": [{ "src": "apple-touch-icon.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "API Docs",
+      "short_name": "API",
+      "description": "View the OpenAPI documentation",
+      "url": "/tesis/api.html",
+      "icons": [{ "src": "apple-touch-icon.png", "sizes": "96x96" }]
+    }
+  ]
 }

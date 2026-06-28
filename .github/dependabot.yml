@@ -1,0 +1,35 @@
+version: 2
+updates:
+  # Python pipeline dependencies
+  - package-ecosystem: "pip"
+    directory: "/pipeline"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    labels:
+      - "dependencies"
+      - "python"
+    open-pull-requests-limit: 5
+    groups:
+      geospatial-stack:
+        patterns:
+          - "earthengine-api"
+          - "rasterio"
+          - "geopandas"
+          - "rioxarray"
+          - "openeo"
+          - "earthaccess"
+          - "sentinelhub"
+
+  # GitHub Actions versions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    open-pull-requests-limit: 5

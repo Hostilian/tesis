@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline — Orbital Intelligence</title>
+    <style>
+        :root {
+            --space-void: #050510;
+            --space-mid: #0f0f2d;
+            --neon-primary: #00d4ff;
+            --text-primary: #e8f4fd;
+            --text-secondary: #8899bb;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: var(--space-void);
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            overflow: hidden;
+        }
+        canvas#stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+        .container {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 600px;
+        }
+        .orbit-icon {
+            width: 120px;
+            height: 120px;
+            border: 2px solid var(--neon-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            position: relative;
+            animation: orbitSpin 8s linear infinite;
+        }
+        .orbit-icon::before {
+            content: '';
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            background: var(--neon-primary);
+            border-radius: 50%;
+            top: -7px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 12px var(--neon-primary), 0 0 24px var(--neon-primary);
+        }
+        .satellite-emoji { font-size: 2.5rem; animation: orbitSpin 8s linear infinite reverse; }
+        @keyframes orbitSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        h1 {
+            font-family: 'Orbitron', 'Courier New', monospace;
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            font-weight: 900;
+            color: var(--neon-primary);
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+        }
+        .status-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 2rem 0;
+            padding: 0.75rem 1.5rem;
+            background: rgba(0, 212, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 0.5rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            letter-spacing: 0.05em;
+        }
+        .pulse-dot {
+            width: 8px; height: 8px;
+            background: #ffa502;
+            border-radius: 50%;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        .retry-btn {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.75rem 2rem;
+            background: linear-gradient(90deg, var(--neon-primary), #4361ee);
+            color: var(--space-void);
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .retry-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3); }
+        .cached-note {
+            margin-top: 2rem;
+            padding: 1rem;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            border-radius: 0.5rem;
+            background: rgba(15, 15, 45, 0.5);
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+</head>
+<body>
+    <canvas id="stars"></canvas>
+    <div class="container">
+        <div class="orbit-icon">
+            <span class="satellite-emoji">🛰️</span>
+        </div>
+        <h1>Signal Lost</h1>
+        <p>The Orbital Intelligence dashboard cannot reach the satellite relay.</p>
+        <p>Your network connection appears to be offline.</p>
+        <div class="status-bar">
+            <div class="pulse-dot"></div>
+            <span>NETWORK STATUS: DISCONNECTED — AWAITING RECONNECT</span>
+        </div>
+        <a href="/" class="retry-btn" onclick="window.location.reload(); return false;">🔄 Retry Connection</a>
+        <div class="cached-note">
+            <strong style="color: var(--neon-primary)">📦 Cached Data Available</strong><br>
+            Previously loaded anomaly data and map tiles may still be accessible via the Service Worker cache.
+            Navigate back to the <a href="/" style="color: var(--neon-primary)">dashboard</a> to browse offline.
+        </div>
+    </div>
+    <script>
+        // Simple star field animation
+        const canvas = document.getElementById('stars');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        function init() {
+            resize();
+            stars = Array.from({ length: 150 }, () => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                r: Math.random() * 1.5 + 0.3,
+                a: Math.random()
+            }));
+        }
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            stars.forEach(s => {
+                s.a += 0.005;
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(200, 220, 255, ${Math.abs(Math.sin(s.a)) * 0.8 + 0.1})`;
+                ctx.fill();
+            });
+            requestAnimationFrame(draw);
+        }
+        window.addEventListener('resize', resize);
+        init();
+        draw();
+
+        // Auto-retry on connection restored
+        window.addEventListener('online', () => { window.location.reload(); });
+    </script>
+</body>
+</html>

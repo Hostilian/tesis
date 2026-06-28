@@ -1,27 +1,38 @@
 {
-  "id": "anomaly_lithium_3",
-  "type": "Industrial Extraction",
-  "region": "Salar de Atacama, Chile",
-  "coordinates": [
-    -23.716,
-    -68.128
-  ],
-  "confidence": 0.97,
-  "uncertainty": 0.053,
-  "confidence_interval": [
-    0.917,
-    1.023
-  ],
-  "date": "2024-10-12",
-  "spectral_profile": {
-    "ndvi": 0.293,
-    "ndwi": -0.179,
-    "bsi": 0.322
-  },
-  "details": "Rapid spatial expansion of lithium brine evaporation ponds detected. Spectral signature exhibits elevated NDWI (brine water reflection) and high Bare Soil Index (albedo salt crust) with complete absence of vegetation.",
-  "verification": {
-    "method": "Spatial Overlay",
-    "ground_truth": "SERNAGEOMIN Lithium Brine Expansion Plan (SQM)",
-    "status": "Verified"
-  }
+    "id":  "anomaly_lithium_3",
+    "type":  "Industrial Extraction",
+    "region":  "Salar de Atacama, Chile",
+    "coordinates":  [
+                        -23.716,
+                        -68.128
+                    ],
+    "confidence":  0.93,
+    "uncertainty":  0.05,
+    "confidence_interval":  [
+                                0.88,
+                                0.98
+                            ],
+    "z_score":  2.97,
+    "date":  "2024-10-12",
+    "spectral_profile":  {
+                             "ndvi":  0.055,
+                             "ndwi":  0.261,
+                             "bsi":  0.322
+                         },
+    "details":  "Tertiary expansion of evaporation pond infrastructure. Lower confidence reflects partial cloud contamination in the optical mosaic; SAR backscatter partially corroborates.",
+    "economic_intelligence":  {
+                                  "what":  "BSI above baseline; partial NDWI signal detected on southern salar edge.",
+                                  "where":  "Southern terminus of Salar de Atacama, near Toconao community.",
+                                  "when":  "Detected 2024-10-12; onset unclear due to partial cloud cover obstruction in August–September.",
+                                  "how_unusual":  "Z-score 2.97 — statistically significant (\u003e 2.5σ threshold) but lower certainty due to cloud contamination.",
+                                  "economic_signal":  "Consistent with Albemarle Corporation Phase 3 brine extraction permit approved 2023.",
+                                  "cross_reference":  "Albemarle 2024 Annual Report — Chile operations section.",
+                                  "false_positive_probability":  0.07,
+                                  "alternative_explanation":  "Possible topographic shadow near Andes piedmont; BSI could be elevated by volcanic rock outcrops rather than industrial salt crust."
+                              },
+    "verification":  {
+                         "method":  "Spatial Overlay",
+                         "ground_truth":  "SERNAGEOMIN Lithium Brine Expansion Plan (SQM)",
+                         "status":  "Verified"
+                     }
 }

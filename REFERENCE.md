@@ -1,5 +1,5 @@
 # REFERENCE MASTER FILE
-Last Updated: 2026-06-27 | Version: 1.0.0 | Maintainer: Eren Ozturk
+Last Updated: 2026-06-28 | Version: 1.1.0 | Maintainer: Eren Ozturk
 
 This log is the verification backbone of the Space-Based Economic Intelligence thesis. It ensures that all remote sensing APIs, datasets, algorithms, and libraries are authenticated, dated, and cross-referenced with peer-reviewed or official documentation.
 
@@ -36,6 +36,12 @@ This log is the verification backbone of the Space-Based Economic Intelligence t
 | `pandas` | 3.0.3 | PyPI | BSD-3-Clause | 2026-06-27 |
 | `matplotlib` | 3.11.0 | PyPI | PSF-2.0 | 2026-06-27 |
 | `pytest` | 9.1.1 | PyPI | MIT | 2026-06-27 |
+| `python-dotenv` | 1.0.0 | PyPI | BSD-3-Clause | 2026-06-27 |
+| `black` | 24.10.0 | PyPI (dev) | MIT | 2026-06-28 |
+| `flake8` | 7.2.0 | PyPI (dev) | MIT | 2026-06-28 |
+| `mypy` | 1.15.0 | PyPI (dev) | MIT | 2026-06-28 |
+| `pip-audit` | 2.9.0 | PyPI (dev) | Apache-2.0 | 2026-06-28 |
+| `pytest-cov` | 6.2.1 | PyPI (dev) | MIT | 2026-06-28 |
 
 ---
 
@@ -84,12 +90,35 @@ This log is the verification backbone of the Space-Based Economic Intelligence t
 | R014 | Foundation Model | IBM-NASA Geospatial Prithvi Models | https://huggingface.co/ibm-nasa-geospatial | 2026-06-28 | ✓ | Earth Observation Vision Transformers hosted on Hugging Face. |
 | R015 | Python Package | NASA earthaccess GitHub | https://github.com/nsidc/earthaccess | 2026-06-28 | ✓ | Simplified search and download library for NASA Earthdata login. |
 | R016 | JS Library | Redoc OpenAPI Renderer | https://github.com/Redocly/redoc | 2026-06-28 | ✓ | CDN library to render dynamic interactive REST API documentation. |
+| R017 | Security Tool | Gitleaks secret detection | https://github.com/gitleaks/gitleaks | 2026-06-28 | ✓ | Git history secret scanner used in GitHub Actions security workflow. |
+| R018 | Security Tool | GitHub CodeQL | https://github.com/github/codeql-action | 2026-06-28 | ✓ | Static analysis for Python vulnerabilities in CI pipeline. |
+| R019 | Security Tool | Anchore Syft (SBOM) | https://github.com/anchore/syft | 2026-06-28 | ✓ | Generates CycloneDX Software Bill of Materials for the pipeline. |
+| R020 | CI Tool | Dependabot | https://docs.github.com/en/code-security/dependabot | 2026-06-28 | ✓ | Automated weekly dependency security updates for pip and GitHub Actions. |
+| R021 | Validation | RFC 7946 GeoJSON Specification | https://datatracker.ietf.org/doc/html/rfc7946 | 2026-06-28 | ✓ | Standard used for anomaly coordinate export validation. |
+| R022 | Academic | MAAP Deforestation Alert #284 | https://www.maaproject.org/2025/ | 2026-06-28 | ✓ | Ground truth verification for Madre de Dios mining anomalies. |
+| R023 | Economic Data | Czech Statistical Office (ČSÚ) Manufacturing Index | https://www.czso.cz/csu/czso/prumyslova_produkce | 2026-06-28 | ✓ | Ground truth for Czech NTL industrial contraction anomalies. |
+| R024 | Economic Data | SQM Q3 2024 Earnings Report | https://www.sqm.com/inversionistas/informacion-para-el-inversionista/resultados-financieros/ | 2026-06-28 | ✓ | Corroboration for Atacama lithium brine expansion anomalies. |
 
 ---
 
 ## 6. Changes Log
 
-*   **2026-06-28**:
+*   **2026-06-28 (Session 3)**:
+    - **Fixed** `anomalies.json` data quality: corrected `confidence_interval` values that exceeded [0, 1] bounds (invalid for normalized scores); fixed `confidence` scores to be ≤ 1.0.
+    - **Added** 8-point economic intelligence assessment layer (`economic_intelligence` object) to all 9 anomaly records per master prompt §13.7.
+    - **Added** `z_score` field to all anomaly records.
+    - **Created** `pipeline/requirements-dev.txt` with development-only dependencies (black, flake8, pytest, pip-audit, mypy).
+    - **Created** `.github/dependabot.yml` with weekly pip and GitHub Actions update configuration per master prompt §6.4.
+    - **Upgraded** `.github/workflows/security.yml` with CodeQL Python analysis, Gitleaks secret scanning, and Syft SBOM generation per master prompt §5.2.
+    - **Fixed** GitHub navigation link in `docs/index.html` from generic `https://github.com` to `https://github.com/hostilian/tesis`.
+    - **Created** `docs/offline.html` — space-themed PWA offline fallback page per master prompt §13.11.
+    - **Upgraded** `docs/sw.js` (v2) with cache-first/network-first strategies and proper offline fallback routing.
+    - **Enhanced** `docs/manifest.json` with 192x192/512x512 icon variants, shortcuts, and PWA metadata per master prompt §13.6.
+    - **Rewrote** `README.md` removing duplicate sections, adding architecture diagram, API docs section, and security badge.
+    - **Synced** `docs/api/v1/anomalies/index.json` and all 9 individual `{id}/index.json` endpoints with corrected anomaly data.
+    - Added R017–R024 references (Gitleaks, CodeQL, Syft, Dependabot, RFC 7946, MAAP, ČSÚ, SQM).
+
+*   **2026-06-28 (Session 2)**:
     - Added references for `cdse-client`, `ibm-nasa-geospatial` (Prithvi models), `earthaccess`, and `Redoc`.
     - Added structured static REST API endpoints in `/api/v1/` for anomalies list, individual anomalies, datasets, and execution status.
     - Created an OpenAPI 3.0 specification (`openapi.yaml`) and Redoc specs viewer (`api.html`) under the web interface.
@@ -98,7 +127,7 @@ This log is the verification backbone of the Space-Based Economic Intelligence t
     - Added SWIR, Atmospheric, and Urban spectral band blend modes with custom canvas pixel shaders.
     - Wrapped Three.js and Map initializations in `try-catch` blocks to handle WebGL support failures gracefully.
 
-*   **2026-06-27**:
+*   **2026-06-27 (Session 1)**:
     - Added GEE REST, CDSE OData, and World Bank API details. Locked Python geospatial dependency versions (`earthengine-api==1.7.32`, `scikit-learn==1.9.0`, `geopandas==1.1.4`, `rioxarray==0.22.0`).
     - Drafted initial ISO 690 bibliography containing foundational literature (Henderson, Liu, Elvidge).
     - Integrated **Three.js** 3D holographic wireframe Earth globe with orbiting satellites and pulsing markers.

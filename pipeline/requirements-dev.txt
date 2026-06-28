@@ -1,0 +1,18 @@
+# Development-only dependencies
+# These are NOT required to run the pipeline itself
+# Install with: pip install -r pipeline/requirements-dev.txt
+
+# Testing
+pytest==9.1.1
+pytest-cov==6.2.1
+
+# Code Quality & Formatting
+black==24.10.0
+flake8==7.2.0
+mypy==1.15.0
+
+# Security Auditing
+pip-audit==2.9.0
+
+# Type stubs
+numpy>=2.0

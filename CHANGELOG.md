@@ -5,7 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-06-28 (Session 3)
+
+### Fixed
+- **`docs/data/anomalies.json`**: Corrected `confidence_interval` values that exceeded normalized [0,1] bounds (e.g., `[0.95, 1.05]` is mathematically invalid for a [0,1] score). All confidence scores now ≤ 1.0.
+- **`docs/index.html`**: Fixed GitHub navigation link from generic `https://github.com` to actual repository URL `https://github.com/hostilian/tesis`. Added `rel="noopener noreferrer"` and `aria-label`.
+- **`README.md`**: Removed duplicate "Live Dashboard" and "Architecture" sections that appeared after the BibTeX block.
+
+### Added
+- **`pipeline/requirements-dev.txt`**: Development-only dependencies (black 24.10.0, flake8 7.2.0, mypy 1.15.0, pip-audit 2.9.0, pytest-cov 6.2.1) per master prompt §5.1.
+- **`.github/dependabot.yml`**: Automated weekly security updates for pip and GitHub Actions ecosystems per master prompt §6.4.
+- **`docs/offline.html`**: Space-themed PWA offline fallback page with animated star field, orbit indicator, and auto-reconnect on network restore per master prompt §13.11.
+- **`docs/api/v1/anomalies/{id}/index.json`**: All 9 individual anomaly REST endpoints now populated with corrected full data.
+
+### Enhanced
+- **`docs/data/anomalies.json`**: Added 8-point economic intelligence assessment layer (`economic_intelligence` object) to all 9 anomaly records covering WHAT/WHERE/WHEN/HOW_UNUSUAL/ECONOMIC_SIGNAL/CROSS_REFERENCE/FALSE_POSITIVE_PROBABILITY/ALTERNATIVE_EXPLANATION per master prompt §13.7. Added `z_score` field.
+- **`.github/workflows/security.yml`**: Upgraded from single pip-audit step to full security suite: CodeQL Python static analysis, Gitleaks secret detection on full git history, and Syft CycloneDX SBOM generation per master prompt §5.2.
+- **`docs/sw.js`** (v2): Upgraded to cache-first/network-first dual strategy with proper offline fallback routing. Data endpoints use network-first; static shell uses cache-first.
+- **`docs/manifest.json`**: Enhanced with 192x192/512x512 icon entries, PWA shortcuts (Map, API Docs), scope, description, and category metadata per master prompt §13.6.
+- **`REFERENCE.md`** (v1.1.0): Added 8 new entries (R017–R024) for security tools and economic data sources. Added dev-dependency versions to package table.
+
 ## [1.1.0] - 2026-06-28
+
 
 ### Added
 - **`pipeline/src/anomaly_detector.py`**: Full orchestration module with cloud-cover gating (>80% skip), NaN masking, bootstrap confidence interval estimation (50 iterations, 95% CI), ISO-8601 date validation with leap-year safety, structured `skipped_result` output, and 8-point intelligence assessment integration.

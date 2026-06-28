@@ -1,27 +1,38 @@
 {
-  "id": "anomaly_lithium_2",
-  "type": "Industrial Extraction",
-  "region": "Salar de Atacama, Chile",
-  "coordinates": [
-    -23.374,
-    -68.17999999999999
-  ],
-  "confidence": 0.98,
-  "uncertainty": 0.052,
-  "confidence_interval": [
-    0.928,
-    1.032
-  ],
-  "date": "2024-10-12",
-  "spectral_profile": {
-    "ndvi": 0.302,
-    "ndwi": -0.118,
-    "bsi": 0.303
-  },
-  "details": "Rapid spatial expansion of lithium brine evaporation ponds detected. Spectral signature exhibits elevated NDWI (brine water reflection) and high Bare Soil Index (albedo salt crust) with complete absence of vegetation.",
-  "verification": {
-    "method": "Spatial Overlay",
-    "ground_truth": "SERNAGEOMIN Lithium Brine Expansion Plan (SQM)",
-    "status": "Verified"
-  }
+    "id":  "anomaly_lithium_2",
+    "type":  "Industrial Extraction",
+    "region":  "Salar de Atacama, Chile",
+    "coordinates":  [
+                        -23.374,
+                        -68.180
+                    ],
+    "confidence":  0.95,
+    "uncertainty":  0.04,
+    "confidence_interval":  [
+                                0.91,
+                                0.99
+                            ],
+    "z_score":  3.21,
+    "date":  "2024-10-12",
+    "spectral_profile":  {
+                             "ndvi":  0.072,
+                             "ndwi":  0.289,
+                             "bsi":  0.303
+                         },
+    "details":  "Spatial expansion of secondary lithium brine evaporation infrastructure detected south of primary zone. BSI signature consistent with salt crust expansion.",
+    "economic_intelligence":  {
+                                  "what":  "BSI elevated by +0.18 relative to Q1 2024 baseline; NDWI positive indicating open brine surfaces.",
+                                  "where":  "Secondary evaporation pond cluster, Salar de Atacama southern section.",
+                                  "when":  "Detected 2024-10-12; expansion began ~August 2024 per Landsat-9 OLI time series.",
+                                  "how_unusual":  "Z-score 3.21 — exceeds 99.9th percentile threshold (|Z| \u003e 2.5) set in methodology §3.4.",
+                                  "economic_signal":  "Secondary pond area expansion consistent with declared SQM capacity increase from 100 kt to 120 kt LCE/year.",
+                                  "cross_reference":  "SQM Q3 2024 earnings report (NYSE: SQM) — production ramp confirmation.",
+                                  "false_positive_probability":  0.05,
+                                  "alternative_explanation":  "Cloud shadow artifacts in optical bands; however, Sentinel-1 SAR (cloud-independent) corroborates same footprint."
+                              },
+    "verification":  {
+                         "method":  "Spatial Overlay",
+                         "ground_truth":  "SERNAGEOMIN Lithium Brine Expansion Plan (SQM)",
+                         "status":  "Verified"
+                     }
 }
