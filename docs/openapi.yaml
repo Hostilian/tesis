@@ -1,0 +1,135 @@
+openapi: 3.0.3
+info:
+  title: Space-Based Economic Intelligence REST API
+  description: Static JSON API exposing satellite-derived industrial and resource anomaly detections.
+  version: 1.0.0
+servers:
+  - url: ./api/v1
+    description: Relative API server path
+paths:
+  /anomalies:
+    get:
+      summary: Retrieve all anomalies
+      description: Returns a list of all detected anomalies across the three study zones.
+      responses:
+        '200':
+          description: A successful response with the list of anomalies.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Anomaly'
+  /anomalies/{id}:
+    get:
+      summary: Retrieve a single anomaly detail
+      description: Returns complete metadata and spectral signatures for a specific anomaly ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Unique identifier of the anomaly (e.g., anomaly_lithium_1).
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Detail of the requested anomaly.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Anomaly'
+  /datasets:
+    get:
+      summary: Retrieve datasets metadata
+      description: Returns information about the space constellations and datasets used in the pipeline.
+      responses:
+        '200':
+          description: A list of datasets used.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Dataset'
+  /status:
+    get:
+      summary: Retrieve pipeline status
+      description: Returns status indicators, anomaly counts, and last run timestamp.
+      responses:
+        '200':
+          description: Current pipeline execution status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+components:
+  schemas:
+    Anomaly:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        region:
+          type: string
+        coordinates:
+          type: array
+          items:
+            type: number
+          minItems: 2
+          maxItems: 2
+        confidence:
+          type: number
+        uncertainty:
+          type: number
+        confidence_interval:
+          type: array
+          items:
+            type: number
+          minItems: 2
+          maxItems: 2
+        date:
+          type: string
+        spectral_profile:
+          type: object
+          properties:
+            ndvi:
+              type: number
+            ndwi:
+              type: number
+            bsi:
+              type: number
+        details:
+          type: string
+        verification:
+          type: object
+          properties:
+            method:
+              type: string
+            ground_truth:
+              type: string
+            status:
+              type: string
+    Dataset:
+      type: object
+      properties:
+        name:
+          type: string
+        resolution:
+          type: string
+        revisit:
+          type: string
+        description:
+          type: string
+    Status:
+      type: object
+      properties:
+        status:
+          type: string
+        last_pipeline_run:
+          type: string
+        anomalies_count:
+          type: integer
+        environment:
+          type: string

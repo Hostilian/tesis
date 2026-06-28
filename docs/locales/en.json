@@ -1,0 +1,95 @@
+{
+  "ui": {
+    "heroBadge": "Bachelor Thesis Artifact",
+    "heroTitlePrefix": "Space-Based",
+    "heroSubtitle": "Detecting hidden resource extraction patterns, supply chain shifts, and regional economic anomalies by querying open ESA, NASA, and USGS satellite APIs coupled with unsupervised machine learning models.",
+    "flightTrackerLabel": "ORBITAL FLIGHT TRACKER:",
+    "flightTrackerSuffix": "active payloads registered",
+    "heroBtnExplore": "Launch Sat-Map Explorer",
+    "heroBtnThesis": "View Thesis Drafts",
+    "basemapHudLabel": "Basemap:",
+    "heatmapHudLabel": "Heatmap Overlay:",
+    "btnExportViewport": "Export Viewport",
+    "timelineTitleLabel": "Temporal Navigation Timeline",
+    "selectedHudLabel": "Anomaly Selected",
+    "confidenceLabel": "Detection Confidence",
+    "beforeAfterLabel": "Before / After Imagery Comparison",
+    "spectralBandModeLabel": "Spectral Band Rendering Mode",
+    "groundTruthHudLabel": "Verification Ground Truth",
+    "btnExportReport": "Export Report",
+    "constellationTitle": "APIs Constellation Network",
+    "constellationDesc": "Mapping relationships between orbital sensors, public finance overlays, and processed outputs.",
+    "layerAll": "All Areas",
+    "layerLithium": "Chile (Lithium)",
+    "layerMining": "Peru (Gold)",
+    "layerNtl": "Czechia (NTL)",
+    "statHeaderBadge": "Hypothesis Verification Engine",
+    "statHeaderTitle": "STATISTICAL EVIDENCE & ANALYSIS",
+    "statHeaderDesc": "Cross-analyzing space-based indicators against regional macroeconomics and ground-truth registries.",
+    "statChartTitle": "VIIRS Night-time Lights vs GDP Correlation",
+    "statChartDesc": "Red shaded region indicates the 2023 industrial energy crisis; blue shaded region indicates the 2025 automotive sector recovery.",
+    "statMetricsTitle": "Empirical Performance Metrics",
+    "statLabelN": "Sample Size",
+    "statLabelTiles": "Sensing Quota",
+    "bandDescriptions": {
+      "rgb": "RGB (Natural Color): True-to-life visualization as seen by the human eye (B4, B3, B2).",
+      "fc": "False Color Infrared: Highlights healthy vegetation in bright red, water in black, and urban areas in cyan (B8, B4, B3).",
+      "agri": "Agriculture: Accentuates crop growth stages, soil moisture, and dense canopy cover (B11, B8, B2).",
+      "geol": "Geology: Identifies geological formations, active faults, and mineral crusts (B12, B11, B2).",
+      "swir": "SWIR (Short-Wave Infrared): Highlights soil moisture, mineral albedo, and dry salt crusts (B12, B8A, B4).",
+      "atmos": "Atmospheric: Penetrates haze, atmospheric dust, and thin cloud aerosols (B12, B11, B4).",
+      "urban": "Urban: Emphasizes built-up artificial concrete, asphalt, and metal infrastructures (B12, B11, B8A)."
+    }
+  },
+  "chapters": {
+    "1": {
+      "title": "Chapter 1: Introduction",
+      "sections": [
+        { "name": "1.1 Background & Motivation", "text": "In the modern digital economy, information engineering has expanded beyond terrestrial borders. The rise of Earth Observation (EO) satellite constellations, coupled with cloud-based geospatial computing platforms, has birthed a new domain: Space-Based Economic Intelligence. Satellite remote sensing offers a continuous, independent, and spatially explicit alternative. Civilian constellations funded by the European Space Agency (ESA Copernicus) and the United States Geological Survey (USGS/NASA) capture high-resolution multi-spectral, radar, and atmospheric data daily." },
+        { "name": "1.2 Problem Statement", "text": "Despite the abundance of open satellite data, a critical gap remains: how to translate raw, multi-spectral raster feeds into structured, actionable economic intelligence anomalies. Raw satellite imagery is voluminous, noisy, and unstructured. Traditional geospatial analysis relies on localized human interpretation or manual crop-masking, which cannot scale to national or continental monitoring." },
+        { "name": "1.3 Research Questions", "text": "RQ1: How reliably can open satellite spectral APIs identify localized industrial and mining resource anomalies compared to ground truth records?<br>RQ2: What is the correlation between VIIRS night-time light fluctuations and macro/microeconomic indicators in the target regions?<br>RQ3: What pipeline latency and processing constraints limit the scalability of free satellite APIs for real-time economic monitoring?" }
+      ]
+    },
+    "2": {
+      "title": "Chapter 2: Theoretical Framework & Literature Review",
+      "sections": [
+        { "name": "2.1 Remote Sensing Principles", "text": "Remote sensing is the science of acquiring information about the Earth's surface without physical contact, primarily by measuring electromagnetic radiation reflected or emitted from sensors. Modalities include passive sensors (Sentinel-2, Landsat) which capture reflected solar bands, and active sensors (Sentinel-1 SAR) which emit radar beams and register backscatter reflections, penetrating cloud covers." },
+        { "name": "2.2 Economic Intelligence history", "text": "Mining footprints, shipping volume indexes, and urban night lights radiance (VIIRS DNB) act as leading economic proxies. Unsupervised anomaly models like Isolation Forest isolate outliers without requiring extensive labelled ground-truth grids." }
+      ]
+    },
+    "3": {
+      "title": "Chapter 3: Methodology",
+      "sections": [
+        { "name": "3.1 Multi-Spectral Index Formulations", "text": "To detect change, raw bands are combined mathematically:<br><strong>NDVI</strong> = (NIR - Red) / (NIR + Red) - measures forest density.<br><strong>NDWI</strong> = (Green - NIR) / (Green + NIR) - measures open water surface.<br><strong>BSI</strong> = ((SWIR1 + Red) - (NIR + Blue)) / ((SWIR1 + Red) + (NIR + Blue)) - isolates exposed mining soil." },
+        { "name": "3.2 Unsupervised AI Engine", "text": "A multi-spectral feature matrix is extracted. An Isolation Forest is fitted with contamination = 0.08, calculating path length distributions to isolate anomalous land cover deviations." }
+      ]
+    },
+    "4": {
+      "title": "Chapter 4: System Design & Implementation",
+      "sections": [
+        { "name": "4.1 Decoupled GIS Architecture", "text": "A high-performance Python data engineering back-end handles raster processing and model fitting. A lightweight flat JSON serialization layer acts as a cache. An interactive WebGL/HTML5 frontend renders maps, sliders, and radar charts." },
+        { "name": "4.2 Credential Protection", "text": "Google Earth Engine initialization relies on GCP Project ID isolation, securing credentials in backend environment variables and Colab UserData, keeping the production deployment serverless and secure." }
+      ]
+    },
+    "5": {
+      "title": "Chapter 5: Results & Analysis",
+      "sections": [
+        { "name": "5.1 Case Study Highlights", "text": "Salar de Atacama (Chile) showed lithium evaporation pond extensions (NDWI surge to 0.58). Madre de Dios (Peru) flagged illegal mining clearings (NDVI drop to -0.52). Czechia industrial nodes showed quarterly GDP correlation (r = 0.724)." },
+        { "name": "5.2 Hypothesis Validation", "text": "Hypothesis H1 (F1-score > 0.80) was validated with F1 = 0.907. Hypothesis H2 (NTL radiance correlation r >= 0.65) was validated with r = 0.724 (p = 0.0002)." }
+      ]
+    },
+    "6": {
+      "title": "Chapter 6: Discussion & Conclusion",
+      "sections": [
+        { "name": "6.1 Research Contributions", "text": "This thesis demonstrates that open-access satellite APIs, in conjunction with unsupervised Isolation Forests, can detect hidden mining and industrial anomalies with high accuracy, establishing a framework for real-time supply chain auditing." },
+        { "name": "6.2 Study Limitations", "text": "Primary constraints include cloud obstruction in optical channels and spatial resolutions (10m) missing micro-scale operations, which can be mitigated in future work via Sentinel-1 SAR and atmospheric sensor fusion." }
+      ]
+    },
+    "7": {
+      "title": "Chapter 7: Conclusion",
+      "sections": [
+        { "name": "7.1 Summary of Contributions", "text": "We have built an end-to-end reproducible economic pipeline joining GEE, CDSE, and World Bank indicators. Anomaly models are fully integrated and verified via unit tests and automated github page deployments." }
+      ]
+    }
+  }
+}

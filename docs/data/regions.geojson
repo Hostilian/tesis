@@ -1,0 +1,110 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Salar de Atacama Study Area",
+        "type": "Lithium Mining",
+        "description": "Optical multi-spectral analysis of lithium brine evaporation basins."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.5,
+              -23.8
+            ],
+            [
+              -68.1,
+              -23.8
+            ],
+            [
+              -68.1,
+              -23.2
+            ],
+            [
+              -68.5,
+              -23.2
+            ],
+            [
+              -68.5,
+              -23.8
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Madre de Dios Monitoring Corridor",
+        "type": "Deforestation",
+        "description": "SAR backscatter and optical index monitoring of gold mining clearings."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -70.2,
+              -13.1
+            ],
+            [
+              -69.6,
+              -13.1
+            ],
+            [
+              -69.6,
+              -12.6
+            ],
+            [
+              -70.2,
+              -12.6
+            ],
+            [
+              -70.2,
+              -13.1
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Bohemian Industrial Ring",
+        "type": "Night Lights",
+        "description": "VIIRS Day/Night band radiance time series and GDP correlation."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              14.0,
+              49.8
+            ],
+            [
+              15.2,
+              49.8
+            ],
+            [
+              15.2,
+              50.4
+            ],
+            [
+              14.0,
+              50.4
+            ],
+            [
+              14.0,
+              49.8
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

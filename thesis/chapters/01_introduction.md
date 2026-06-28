@@ -1,0 +1,69 @@
+# Chapter 1: Introduction
+
+## 1.1 Background & Motivation
+In the contemporary globalized economy, information engineering has transcended terrestrial limits, establishing a new frontier in geospatial data analytics. The convergence of orbital Earth Observation (EO) satellite constellations with high-performance cloud-based geospatial computing platforms has given rise to the emerging domain of **Space-Based Economic Intelligence**. Historically, the assessment of macroeconomic performance, industrial development, and resource extraction fell under the purview of national statistical agencies and international organizations. These traditional assessment frameworks relied heavily on survey-based data collection, tax registries, and administrative reports. 
+
+While these conventional methods have been standardized over decades, they exhibit three systemic vulnerabilities:
+1.  **Temporal Latency**: National accounting statistics, such as Gross Domestic Product (GDP), industrial production indices, and trade balances, are typically released on a quarterly or annual basis. This reporting delay creates a significant "information lag," preventing policymakers and investors from reacting to economic shocks in real time.
+2.  **Vulnerability to Reporting Bias**: Administrative data is susceptible to political manipulation, deliberate underreporting, or outright fabrication, particularly in authoritarian regimes or regions with weak institutional oversight.
+3.  **High Administrative Overhead**: Conducting comprehensive field surveys, especially in remote geographic sectors or conflict-ridden areas, requires massive financial, human, and logistics investments, rendering continuous monitoring infeasible.
+
+To bridge these gaps, satellite remote sensing offers an objective, continuous, and spatially explicit alternative. Modern civilian satellite constellations, such as those funded by the European Space Agency's (ESA) Copernicus Programme and the United States Geological Survey (USGS) in partnership with NASA, capture massive volumes of spectral, radar, and atmospheric measurements on a daily basis. 
+
+By querying these open-access data feeds via Application Programming Interfaces (APIs), modern informatics systems can monitor global economic activities directly at their geographic points of occurrence. Physical indicators—such as the spatial footprint of mining excavations, the thermal signatures of smelting plants, the volumetric changes of lithium evaporation ponds, and the nocturnal radiance of urban centers—serve as direct, unalterable proxies for real-world economic output. Integrating these space-based observations into a systematic information pipeline allows researchers, economists, and environmental auditors to cross-examine official statistical claims and discover unmapped market developments as they happen.
+
+## 1.2 Problem Statement
+Despite the proliferation of petabyte-scale orbital datasets, a critical bottleneck remains unresolved in both academic research and industrial applications: **how to translate raw, multi-spectral raster feeds into structured, actionable economic intelligence anomalies**. Raw satellite imagery is intrinsically voluminous, noisy, and unstructured. A single multi-spectral scene can exceed several gigabytes, containing hundreds of millions of pixels across multiple spectral bands. Extracting meaningful economic features from this stream is complicated by atmospheric interference, cloud cover, seasonal vegetation cycles, and variations in solar illumination angles. 
+
+Traditional geospatial analysis has relied on manual interpretation or semi-automated crop-masking. These approaches are highly localized, slow, and cannot scale to state-level or continental-scale surveillance. While machine learning (ML) models have been applied to classify land cover, they are typically deployed in isolated, domain-specific tasks (e.g., agricultural yield prediction or environmental conservation) without any structural connection to socioeconomic frameworks. 
+
+In resource-rich regions, hidden anomalies—such as illegal gold-mining excavations in ecological reserves, unrecorded expansions of lithium brine extraction ponds, or undeclared industrial facility shutdowns—frequently bypass detection. This oversight is primarily due to the lack of a unified, reproducible framework that fuses multi-spectral anomaly detection with ground-truth economic metrics. Furthermore, the deployment of satellite-based pipelines has historically been restricted to organizations with access to expensive commercial imagery and private high-performance computing clusters. 
+
+Consequently, there is an urgent academic and practical need for a public, decoupled information pipeline. Such a pipeline must ingest free civilian satellite feeds, apply unsupervised machine learning to isolate land-cover anomalies, and cross-reference these spatial anomalies with socioeconomic indicators.
+
+## 1.3 Research Objectives
+The primary objective of this bachelor thesis is to design, implement, and evaluate an automated, reproducible geospatial data pipeline that detects hidden economic and geological resource anomalies using open satellite APIs. 
+
+To achieve this primary goal, the investigation is structured around five critical sub-objectives:
+1.  **Modular Ingestion System**: Establish a robust, rate-limited, and decoupled data harvesting system capable of querying Google Earth Engine (GEE) and Copernicus Data Space Ecosystem (CDSE) APIs.
+2.  **Spectral Metric Extraction**: Develop and test algorithms to compute and process time-series spectral indices—including the Normalized Difference Vegetation Index (NDVI), the Normalized Difference Water Index (NDWI), and the Bare Soil Index (BSI)—alongside Suomi-NPP VIIRS Day/Night Band (DNB) night-time lights radiance.
+3.  **Unsupervised Machine Learning Integration**: Implement and evaluate unsupervised ML algorithms, specifically Isolation Forests and temporal Z-score models, to isolate land-cover anomalies without relying on labeled training data.
+4.  **Macroeconomic Correlation and Overlay**: Fuse detected spatial anomalies with public socioeconomic datasets from the World Bank and regional statistical registries to quantify the relationship between satellite indicators and industrial GDP growth.
+5.  **Interactive Decision Support System**: Construct a premium, WebGL-enabled, and highly responsive frontend dashboard to visualize anomalies, baseline deviations, and economic indicators.
+
+## 1.4 Research Questions
+To guide the empirical research and system design, this thesis addresses three core Research Questions:
+*   **RQ1**: *How reliably can open satellite spectral APIs identify localized industrial and mining resource anomalies compared to ground truth records?*
+    This question evaluates the spatial and thematic accuracy of Sentinel-2 and Landsat-8/9 datasets in identifying specific land-use transitions (e.g., forest-to-dirt transitions in illegal mining or soil-to-brine transitions in lithium ponds).
+*   **RQ2**: *What is the correlation between VIIRS night-time light fluctuations and macro/microeconomic indicators in the target regions?*
+    This question explores whether nocturnal radiance measurements can serve as a statistically sound proxy for regional GDP fluctuations, specifically within Czech industrial clusters.
+*   **RQ3**: *What pipeline latency and processing constraints limit the scalability of free satellite APIs for real-time economic monitoring?*
+    This question analyzes the execution performance, memory limits, and API throttling behaviors encountered when running the pipeline under free-tier execution quotas.
+
+## 1.5 Hypotheses
+In alignment with the Research Questions, the following hypotheses are formulated and statistically tested:
+*   **Hypothesis 1 ($H_1$)**: *The integration of multi-spectral indices (BSI and NDVI) with unsupervised Isolation Forests can detect unauthorized mining activity with an F1-score exceeding 0.80.*
+    This hypothesis tests whether unsupervised clustering on simple spectral indices can match the performance of complex supervised deep learning models while using a fraction of the computational resources.
+*   **Hypothesis 2 ($H_2$)**: *Temporal radiance anomalies computed from VIIRS DNB night-time lights exhibit a statistically significant positive correlation ($r \ge 0.65$, $p < 0.05$) with quarterly regional GDP changes.*
+    This hypothesis evaluates the validity of night-time lights as a high-frequency macro proxy for industrial productivity in European manufacturing centers.
+
+## 1.6 Scope & Limitations
+This thesis focuses on three distinct economic case studies using free, public-domain civilian satellite datasets:
+1.  **Lithium Brine Extraction**: Monitoring evaporation pond expansions in the Salar de Atacama, Chile, using Landsat-8/9 OLI and Sentinel-2 MSI datasets.
+2.  **Gold Mining Deforestation**: Mapping illegal gold dredging corridors in Madre de Dios, Peru, utilizing Sentinel-1 Synthetic Aperture Radar (SAR) backscatter and Sentinel-2 optical bands.
+3.  **Night-time Lights Economic Pulse**: Analyzing urban and industrial radiance dynamics in the Central Bohemian Region and Prague, Czech Republic, using Suomi-NPP VIIRS Day/Night Band (DNB) monthly composites.
+
+**System Limitations**:
+*   **Spatial Resolution Constraints**: The pipeline is limited to public data (10m for Sentinel-2, 30m for Landsat, 500m for VIIRS). Consequently, it may miss micro-scale activities (under 10 meters) that are only visible through expensive commercial imagery.
+*   **Atmospheric and Cloud Obstruction**: Optical sensors cannot penetrate cloud cover, which limits the temporal density of observations in tropical areas (e.g., Peru). This constraint is partially mitigated by integrating Sentinel-1 SAR radar backscatter.
+*   **API Quota and Memory Restrictions**: Computations executed in Google Earth Engine are subject to free-tier memory allocations and maximum execution timeout limits, necessitating efficient spatial averaging and chunking routines.
+
+## 1.7 Thesis Structure Overview
+This thesis is organized into seven chapters, structured in accordance with the standards of the Faculty of Economics and Management (PEF) at the Czech University of Life Sciences Prague (CZU):
+*   **Chapter 2: Theoretical Framework & Literature Review** explores the physics of remote sensing, the history of satellite economics, and the legal frameworks governing dual-use space technologies (ITAR, EAR, and EU regulations).
+*   **Chapter 3: Methodology** outlines the dataset characteristics, mathematical index formulations (NDVI, NDWI, BSI), and the mathematical framework of the Isolation Forest anomaly detector.
+*   **Chapter 4: System Design & Implementation** describes the decoupled architecture, Python ingestion modules, JSON caching layer, and the interactive frontend dashboard.
+*   **Chapter 5: Results & Analysis** presents the empirical findings of the three case studies, along with statistical hypothesis testing results ($F1$-score and Pearson $r$ calculations).
+*   **Chapter 6: Discussion** addresses threats to validity, limitations of the current pipeline, and academic ethics.
+*   **Chapter 7: Conclusion** summarizes the core research contributions and proposes future research directions, including the integration of geospatial foundation models.
+*   **Appendices A to F** provide source code maps, API endpoint references, sensor specifications, glossary definitions, and acronym tables.

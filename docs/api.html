@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REST API Documentation | Space-Based Economic Intelligence</title>
+    
+    <!-- Meta and Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval';
+        script-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://cdn.tailwindcss.com 'unsafe-inline';
+        style-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com https://cdnjs.cloudflare.com 'unsafe-inline';
+        font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+        img-src 'self' data: https:;
+        connect-src 'self' https:;
+    ">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="index.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        void: '#050510',
+                        spacedark: '#0a0a1a',
+                        spacemid: '#0f0f2d',
+                        neoncyan: '#00d4ff',
+                        neonblue: '#4361ee'
+                    },
+                    fontFamily: {
+                        display: ['Orbitron', 'sans-serif'],
+                        body: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #050510 !important;
+            font-family: 'Inter', sans-serif;
+            color: #cbd5e1;
+        }
+        /* Redoc custom dark mode theme styling overrides */
+        .redoc-wrap {
+            background-color: #050510 !important;
+        }
+        .menu-content {
+            background-color: #0a0a1a !important;
+            border-right: 1px solid rgba(0, 212, 255, 0.1) !important;
+        }
+        .menu-content h1, .menu-content h2, .menu-content label {
+            color: #00d4ff !important;
+            font-family: 'Orbitron', sans-serif !important;
+        }
+        .api-content {
+            background-color: #050510 !important;
+        }
+        .redoc-json-code-block {
+            background-color: #0f0f2d !important;
+            border: 1px solid rgba(0, 212, 255, 0.15) !important;
+        }
+    </style>
+</head>
+<body class="bg-void min-h-screen text-slate-200">
+    
+    <!-- TOP GLASS NAVIGATION BAR -->
+    <nav class="sticky top-0 z-50 backdrop-blur-md bg-void/60 border-b border-neoncyan/10 px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 rounded-full border border-neoncyan flex items-center justify-center text-neoncyan animate-pulse">
+                <i class="fa-solid fa-satellite"></i>
+            </div>
+            <div>
+                <h1 class="font-display font-bold tracking-wider text-neoncyan text-sm sm:text-base">ORBITAL-API SPEC</h1>
+                <p class="text-[10px] text-slate-400 font-code tracking-widest uppercase">Version 1.0.0 (Static)</p>
+            </div>
+        </div>
+        <div class="flex items-center space-x-4">
+            <a href="index.html" class="border border-neoncyan/20 hover:border-neoncyan text-neoncyan hover:bg-neoncyan/10 font-display text-[10px] uppercase tracking-wider px-4 py-2 rounded transition-all">
+                <i class="fa-solid fa-chevron-left mr-1.5"></i> Back to Dashboard
+            </a>
+        </div>
+    </nav>
+
+    <!-- Redoc Interactive Documentation Container -->
+    <div class="relative z-10">
+        <div id="redoc-container"></div>
+    </div>
+
+    <!-- Load Redoc Standalone script from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/redoc@2.0.0-rc.77/bundles/redoc.standalone.js"></script>
+    <script>
+        Redoc.init('openapi.yaml', {
+            theme: {
+                colors: {
+                    primary: {
+                        main: '#00d4ff'
+                    },
+                    text: {
+                        primary: '#f1f5f9',
+                        secondary: '#94a3b8'
+                    },
+                    responses: {
+                        success: {
+                            color: '#2ed573',
+                            backgroundColor: 'rgba(46, 213, 115, 0.1)'
+                        },
+                        error: {
+                            color: '#ff4757',
+                            backgroundColor: 'rgba(255, 71, 87, 0.1)'
+                        }
+                    }
+                },
+                typography: {
+                    fontSize: '14px',
+                    fontFamily: 'Inter, sans-serif',
+                    headings: {
+                        fontFamily: 'Orbitron, sans-serif'
+                    }
+                },
+                rightPanel: {
+                    backgroundColor: '#0a0a1a'
+                }
+            }
+        }, document.getElementById('redoc-container'));
+    </script>
+</body>
+</html>

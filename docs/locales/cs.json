@@ -1,0 +1,95 @@
+{
+  "ui": {
+    "heroBadge": "Bakalářská práce - Artefakt",
+    "heroTitlePrefix": "Vesmírná",
+    "heroSubtitle": "Detekce skrytých vzorců těžby surovin, změn dodavatelských řetězců a regionálních ekonomických anomálií dotazováním otevřených satelitních API (ESA, NASA, USGS) ve spojení s unsupervised modely strojového učení.",
+    "flightTrackerLabel": "TRAKTOR LETU NA ORBITĚ:",
+    "flightTrackerSuffix": "aktivních družic registrováno",
+    "heroBtnExplore": "Spustit Satelitní Mapu",
+    "heroBtnThesis": "Prohlédnout Práci",
+    "basemapHudLabel": "Podklad:",
+    "heatmapHudLabel": "Teplotní mapa:",
+    "btnExportViewport": "Exportovat výřez",
+    "timelineTitleLabel": "Časová osa navigace",
+    "selectedHudLabel": "Vybraná anomálie",
+    "confidenceLabel": "Důvěryhodnost detekce",
+    "beforeAfterLabel": "Srovnání snímků Před / Po",
+    "spectralBandModeLabel": "Režim spektrálních pásem",
+    "groundTruthHudLabel": "Ověření - Ground Truth",
+    "btnExportReport": "Exportovat zprávu",
+    "constellationTitle": "Konstelace satelitních API",
+    "constellationDesc": "Mapování vztahů mezi orbitálními senzory, veřejnými rozpočty a výstupními daty.",
+    "layerAll": "Všechny",
+    "layerLithium": "Chile (Lithium)",
+    "layerMining": "Peru (Zlato)",
+    "layerNtl": "Česko (Autopark)",
+    "statHeaderBadge": "Engine pro ověřování hypotéz",
+    "statHeaderTitle": "STATISTICKÉ DŮKAZY A ANALÝZA",
+    "statHeaderDesc": "Křížová analýza vesmírných indikátorů proti regionální makroekonomice a registrům ground-truth.",
+    "statChartTitle": "Korelace nočního osvětlení VIIRS a HDP",
+    "statChartDesc": "Červená oblast označuje průmyslovou energetickou krizi v roce 2023; modrá oblast značí oživení automobilového sektoru v roce 2025.",
+    "statMetricsTitle": "Empirické Výkonnostní Metriky",
+    "statLabelN": "Velikost Vzorku",
+    "statLabelTiles": "Objem Snímání",
+    "bandDescriptions": {
+      "rgb": "RGB (Přirozené barvy): Pohled přirozeným lidským okem (B4, B3, B2).",
+      "fc": "Infračervené falešné barvy: Zvýrazňuje zdravou vegetaci jasně červeně, vodu černě a urbanizované oblasti azurově (B8, B4, B3).",
+      "agri": "Zemědělství: Zvýrazňuje fáze růstu plodin, půdní vlhkost a hustotu vegetačního krytu (B11, B8, B2).",
+      "geol": "Geologie: Identifikuje geologické formace, aktivní zlomy a minerální kůry (B12, B11, B2).",
+      "swir": "SWIR (Krátkovlnná infračervená): Zvýrazňuje půdní vlhkost, minerální albedo a suché solné kůry (B12, B8A, B4).",
+      "atmos": "Atmosférická: Proniká oparem, atmosférickým prachem a tenkými mraky (B12, B11, B4).",
+      "urban": "Urban: Zdůrazňuje umělé betonové, asfaltové a kovové infrastruktury (B12, B11, B8A)."
+    }
+  },
+  "chapters": {
+    "1": {
+      "title": "Kapitola 1: Úvod",
+      "sections": [
+        { "name": "1.1 Kontext a motivace", "text": "V moderní digitální ekonomice se informační inženýrství rozšířilo za terestriální hranice. Vznik satelitních konstelací pro pozorování Země (EO) ve spojení s cloudovými platformami dal vzniknout novému oboru: Vesmírné ekonomické inteligenci." },
+        { "name": "1.2 Formulace problému", "text": "Navzdory dostatku otevřených satelitních dat přetrvává kritická mezera: jak převést surové multi-spektrální rastrové snímky do strukturovaných ekonomických anomálií." },
+        { "name": "1.3 Výzkumné otázky", "text": "RQ1: Jak spolehlivě dokážou otevřená satelitní API identifikovat lokalizované anomálie těžby surovin ve srovnání s úředními registry?<br>RQ2: Jaká je korelace mezi kolísáním nočního osvětlení VIIRS a makro/mikroekonomickými ukazateli?<br>RQ3: Jaká výkonnostní omezení limitují škálovatelnost bezplatných satelitních API?" }
+      ]
+    },
+    "2": {
+      "title": "Kapitola 2: Teoretický rámec",
+      "sections": [
+        { "name": "2.1 Principy dálkového průzkumu Země", "text": "Dálkový průzkum je věda o získávání informací o zemském povrchu bez fyzického kontaktu, a to měřením elektromagnetického záření. Mezi hlavní platformy patří optické (Sentinel-2, Landsat) a radarové (Sentinel-1 SAR) senzory." },
+        { "name": "2.2 Historie ekonomického zpravodajství", "text": "Těžební stopy, indexy objemu lodní dopravy a radiance nočních městských světel (VIIRS DNB) fungují jako přední ekonomické indikátory. Unsupervised modely anomálií, jako je Isolation Forest, izolují odlehlé hodnoty bez nutnosti rozsáhlých označených referenčních dat." }
+      ]
+    },
+    "3": {
+      "title": "Kapitola 3: Metodika",
+      "sections": [
+        { "name": "3.1 Formulace multi-spektrálních indexů", "text": "K detekci změn jsou využívány matematické kombinace pásem:<br><strong>NDVI</strong> = (NIR - Red) / (NIR + Red) - měří hustotu vegetace.<br><strong>NDWI</strong> = (Green - NIR) / (Green + NIR) - měří otevřenou vodní plochu.<br><strong>BSI</strong> = ((SWIR1 + Red) - (NIR + Blue)) / ((SWIR1 + Red) + (NIR + Blue)) - izoluje odhalenou těženou půdu." },
+        { "name": "3.2 Bezdozorový AI Engine", "text": "Je extrahována multi-spektrální matice příznaků. Isolation Forest je natrénován s parametrem contamination = 0.08, přičemž se počítá distribuce délek cest k izolaci anomálních odchylek zemského krytu." }
+      ]
+    },
+    "4": {
+      "title": "Kapitola 4: Návrh systému",
+      "sections": [
+        { "name": "4.1 Decoupled GIS Architektura", "text": "Vysokovýkonný back-end v jazyce Python zpracovává rastry a trénuje modely. Lehká serializační vrstva ve formátu JSON funguje jako mezipaměť. Interaktivní WebGL/HTML5 frontend vykresluje mapy, posuvníky a radarové grafy." },
+        { "name": "4.2 Ochrana přihlašovacích údajů", "text": "Inicializace Google Earth Engine se opírá o izolaci ID projektu GCP, což zabezpečuje přihlašovací údaje v backendových proměnných prostředí a Colab UserData, čímž udržuje produkční nasazení bez serveru a bezpečné." }
+      ]
+    },
+    "5": {
+      "title": "Kapitola 5: Výsledky",
+      "sections": [
+        { "name": "5.1 Případové studie", "text": "Salar de Atacama (Chile) vykázala expanzi odpařovacích nádrží na lithium (nárůst NDWI na 0.58). Madre de Dios (Peru) detekovala nelegální těžbu zlata (pokles NDVI na -0.52). Mladá Boleslav (ČR) prokázala korelaci nočního osvětlení s HDP (r = 0.724)." },
+        { "name": "5.2 Validace hypotéz", "text": "Hypotéza H1 (F1-score > 0.80) byla validována s F1 = 0.907. Hypotéza H2 (korelace noční radiance r >= 0.65) byla validována s r = 0.724 (p = 0.0002)." }
+      ]
+    },
+    "6": {
+      "title": "Kapitola 6: Diskuze",
+      "sections": [
+        { "name": "6.1 Přínosy a limity", "text": "Tato práce ukazuje, že otevřená satelitní API ve spojení s bezdozorovými algoritmy Isolation Forest mohou s vysokou přesností detekovat skryté anomálie v těžbě a průmyslu, a vytvořit tak rámec pro audit dodavatelských řetězců v reálném čase." },
+        { "name": "6.2 Limity studie", "text": "Hlavními omezeními jsou oblačnost v optických kanálech a prostorové rozlišení (10m) postrádající detekci mikro-aktivit, což lze v budoucnu vyřešit integrací Sentinel-1 SAR a atmosférických senzorů." }
+      ]
+    },
+    "7": {
+      "title": "Kapitola 7: Závěr",
+      "sections": [
+        { "name": "7.1 Souhrn přínosů", "text": "Byl vytvořen plně reprodukovatelný model pro detekci ekonomických anomálií ze satelitních dat s interaktivním dashboardem nasazeným na GitHub Pages spojující GEE, CDSE a indikátory Světové banky." }
+      ]
+    }
+  }
+}

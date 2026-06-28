@@ -1,0 +1,27 @@
+{
+  "id": "anomaly_ntl_19",
+  "type": "NTL Industrial Contraction",
+  "region": "Mlad\u00e1 Boleslav (Industrial Zone), CZ",
+  "coordinates": [
+    50.412,
+    14.903
+  ],
+  "confidence": 0.77,
+  "uncertainty": 0.018,
+  "confidence_interval": [
+    0.752,
+    0.788
+  ],
+  "date": "2023-08-01",
+  "spectral_profile": {
+    "ndvi": 0.35,
+    "ndwi": -0.15,
+    "bsi": 0.42
+  },
+  "details": "Significant temporal deviation in night-time light radiance (Z-score = -3.10). Correlates with shift changes and production rate shifts in the automotive manufacturing cluster.",
+  "verification": {
+    "method": "Statistical GDP Correlation",
+    "ground_truth": "Czech Statistical Office (\u010cS\u00da) Quarterly Manufacturing Index",
+    "status": "Verified"
+  }
+}

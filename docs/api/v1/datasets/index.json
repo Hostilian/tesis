@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Sentinel-2 MSI",
+    "resolution": "10m - 20m",
+    "revisit": "5 days",
+    "description": "Multi-spectral optical data containing visible, RedEdge, NIR, and SWIR bands."
+  },
+  {
+    "name": "Sentinel-1 SAR",
+    "resolution": "10m",
+    "revisit": "6 - 12 days",
+    "description": "Synthetic Aperture Radar backscatter (VV and VH polarizations) penetrating cloud cover."
+  },
+  {
+    "name": "Suomi-NPP VIIRS DNB",
+    "resolution": "500m",
+    "revisit": "Daily / Monthly Composites",
+    "description": "Day/Night Band sensor capturing low-light night-time emissions, GDP proxy."
+  }
+]

@@ -1,0 +1,27 @@
+{
+  "id": "anomaly_mining_3",
+  "type": "Gold Mining / Deforestation",
+  "region": "Madre de Dios, Peru",
+  "coordinates": [
+    -13.03,
+    -69.642
+  ],
+  "confidence": 0.97,
+  "uncertainty": 0.062,
+  "confidence_interval": [
+    0.908,
+    1.032
+  ],
+  "date": "2025-03-22",
+  "spectral_profile": {
+    "ndvi": 0.293,
+    "ndwi": -0.179,
+    "bsi": 0.322
+  },
+  "details": "Severe canopy forest degradation and raw soil exposure. The spectral footprint displays a sudden NDVI drop (loss of biomass volume) and elevated BSI (exposed mud/silt ponds associated with alluvial gold mining).",
+  "verification": {
+    "method": "Temporal Radar backscatter (Sentinel-1 SAR)",
+    "ground_truth": "MAAP Deforestation Alert #284",
+    "status": "Verified (Critical)"
+  }
+}

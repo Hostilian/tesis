@@ -1,0 +1,12 @@
+# Space-Based Economic Intelligence Dashboard
+# robots.txt — https://hostilian.github.io/tesis/
+
+User-agent: *
+Allow: /
+
+# Data feeds (allow indexing for academic transparency)
+Allow: /data/anomalies.json
+Allow: /data/regions.geojson
+
+# Sitemap location
+Sitemap: https://hostilian.github.io/tesis/sitemap.xml

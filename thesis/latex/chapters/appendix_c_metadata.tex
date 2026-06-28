@@ -1,0 +1,47 @@
+
+This appendix lists the sensor specifications, band wavelengths, and spatial resolutions of the primary satellite datasets utilized in this thesis.
+
+\section{C.1 Sentinel-2 MSI Spectral Bands}
+The Multi-Spectral Instrument (MSI) aboard Sentinel-2 provides 13 spectral bands at varying resolutions:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lllll}
+\toprule
+Band Number & Band Name & Central Wavelength (nm) & Spatial Resolution (m) & Use in Pipeline \\
+\midrule
+\textbf{B02} & Blue & 490 & 10 & Bare Soil Index (BSI) calculation \\
+\textbf{B03} & Green & 560 & 10 & NDWI calculation \\
+\textbf{B04} & Red & 665 & 10 & NDVI and BSI calculation \\
+\textbf{B08} & NIR (Near-Infrared) & 842 & 10 & NDVI, NDWI, and BSI calculation \\
+\textbf{B11} & SWIR 1 (Shortwave-Infrared) & 1610 & 20 & BSI calculation \\
+\textbf{QA60} & Quality Assessment & N/A & 60 & Cloud and cirrus bitmasking \\
+\bottomrule
+\end{tabular}
+\end{table}
+\section{C.2 Landsat-8/9 OLI Spectral Bands}
+The Operational Land Imager (OLI) on Landsat 8/9 aligns closely with Sentinel-2 bands:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lllll}
+\toprule
+Band Number & Band Name & Central Wavelength (nm) & Spatial Resolution (m) & Use in Pipeline \\
+\midrule
+\textbf{B2} & Blue & 482 & 30 & Bare Soil Index (BSI) \\
+\textbf{B3} & Green & 561 & 30 & NDWI water index \\
+\textbf{B4} & Red & 655 & 30 & NDVI and BSI \\
+\textbf{B5} & NIR & 865 & 30 & NDVI, NDWI, and BSI \\
+\textbf{B6} & SWIR 1 & 1609 & 30 & BSI bare soil indicator \\
+\textbf{QA\_PIXEL} & Pixel Quality & N/A & 30 & Cloud and shadow masking \\
+\bottomrule
+\end{tabular}
+\end{table}
+\section{C.3 Suomi-NPP VIIRS Day/Night Band (DNB)}
+\begin{itemize}
+  \item \textbf{Sensor Type}: Visible Infrared Imaging Radiometer Suite (VIIRS).
+  \item \textbf{Spatial Resolution}: 15 arc-seconds (approximately 500 meters at the equator).
+  \item \textbf{Spectral Range}: 500–900 nm (panchromatic visible/near-infrared band sensitive to low-light).
+  \item \textbf{Radiometric Calibration}: Absolute radiance in units of $\text{nW}\cdot\text{cm}^{-2}\cdot\text{sr}^{-1}$.
+
+\end{itemize}

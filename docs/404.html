@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 — Orbital Signal Lost | Space-Based Economic Intelligence</title>
+    <meta name="description" content="Page not found — return to the Space-Based Economic Intelligence dashboard.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-cyan: #00d4ff;
+            --neon-blue: #4361ee;
+            --neon-red: #ff4757;
+            --bg-deep: #03040a;
+            --bg-mid: #070d1a;
+            --text-primary: #e8f4fd;
+            --text-muted: #6a8ba8;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body {
+            height: 100%;
+            background: var(--bg-deep);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        /* Starfield */
+        #stars-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Content */
+        .container {
+            position: relative;
+            z-index: 1;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            gap: 1.5rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: rgba(255, 71, 87, 0.12);
+            border: 1px solid rgba(255, 71, 87, 0.4);
+            color: var(--neon-red);
+            font-family: 'Orbitron', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            padding: 0.3rem 1rem;
+            border-radius: 2px;
+            text-transform: uppercase;
+            animation: pulse-border 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-border {
+            0%, 100% { box-shadow: 0 0 8px rgba(255, 71, 87, 0.3); }
+            50%       { box-shadow: 0 0 20px rgba(255, 71, 87, 0.7); }
+        }
+
+        .error-code {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(5rem, 15vw, 10rem);
+            font-weight: 900;
+            line-height: 1;
+            background: linear-gradient(135deg, var(--neon-red) 0%, #ff6b7a 50%, var(--neon-cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: none;
+            animation: flicker 4s ease-in-out infinite;
+        }
+
+        @keyframes flicker {
+            0%, 90%, 100% { opacity: 1; }
+            91%            { opacity: 0.4; }
+            93%            { opacity: 1; }
+            95%            { opacity: 0.2; }
+            97%            { opacity: 1; }
+        }
+
+        .tagline {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(0.75rem, 2vw, 1.1rem);
+            color: var(--text-muted);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .description {
+            max-width: 480px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        /* Animated satellite icon */
+        .orbit-wrapper {
+            position: relative;
+            width: 120px;
+            height: 120px;
+        }
+
+        .orbit-ring {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 1px dashed rgba(0, 212, 255, 0.3);
+            animation: spin 6s linear infinite;
+        }
+
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .orbit-dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--neon-cyan);
+            border-radius: 50%;
+            top: -4px;
+            left: calc(50% - 4px);
+            box-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        .center-icon {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: rgba(0, 212, 255, 0.3);
+            animation: pulse-scale 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse-scale {
+            0%, 100% { transform: scale(1); }
+            50%       { transform: scale(1.1); }
+        }
+
+        /* CTA button */
+        .btn-return {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.75rem 2rem;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.15) 0%, rgba(67, 97, 238, 0.15) 100%);
+            border: 1px solid rgba(0, 212, 255, 0.4);
+            border-radius: 4px;
+            color: var(--neon-cyan);
+            font-family: 'Orbitron', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-return:hover {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.25) 0%, rgba(67, 97, 238, 0.25) 100%);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Scan line overlay */
+        .scanlines {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, 0.03) 2px,
+                rgba(0, 0, 0, 0.03) 4px
+            );
+        }
+
+        /* Countdown auto-redirect */
+        .countdown {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .countdown span {
+            color: var(--neon-cyan);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="stars-canvas"></canvas>
+    <div class="scanlines"></div>
+
+    <div class="container">
+        <div class="status-badge">⚠ Signal Lost — HTTP 404</div>
+
+        <div class="orbit-wrapper">
+            <div class="orbit-ring">
+                <div class="orbit-dot"></div>
+            </div>
+            <div class="center-icon">🛰</div>
+        </div>
+
+        <div class="error-code">404</div>
+        <div class="tagline">Orbital Telemetry Not Found</div>
+
+        <p class="description">
+            The satellite feed you requested has drifted out of range — or was never in orbit.
+            The requested page could not be located in this constellation.
+        </p>
+
+        <a href="index.html" class="btn-return" id="btn-return">
+            ↩ Return to Mission Control
+        </a>
+
+        <p class="countdown">
+            Auto-redirect in <span id="countdown-val">10</span>s
+        </p>
+    </div>
+
+    <script>
+        // Starfield
+        (function() {
+            const canvas = document.getElementById('stars-canvas');
+            const ctx = canvas.getContext('2d');
+            let stars = [];
+
+            function resize() {
+                canvas.width  = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            for (let i = 0; i < 80; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 1.2 + 0.3,
+                    speed: Math.random() * 0.04 + 0.01,
+                    opacity: Math.random() * 0.6 + 0.2
+                });
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                stars.forEach(s => {
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(0, 212, 255, ${s.opacity})`;
+                    ctx.fill();
+                    s.y -= s.speed;
+                    if (s.y < 0) { s.y = canvas.height; s.x = Math.random() * canvas.width; }
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+        })();
+
+        // Countdown + auto-redirect
+        (function() {
+            let count = 10;
+            const el = document.getElementById('countdown-val');
+            const interval = setInterval(() => {
+                count--;
+                el.textContent = count;
+                if (count <= 0) {
+                    clearInterval(interval);
+                    window.location.href = 'index.html';
+                }
+            }, 1000);
+
+            // Cancel redirect if user clicks the button
+            document.getElementById('btn-return').addEventListener('click', () => {
+                clearInterval(interval);
+            });
+        })();
+    </script>
+</body>
+</html>

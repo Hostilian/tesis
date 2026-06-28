@@ -1,18 +1,42 @@
-# Build and Release Folders
-bin-debug/
-bin-release/
-[Oo]bj/
-[Bb]in/
+# Python Virtual Environments
+.venv/
+venv/
+ENV/
+env/
 
-# Other files and folders
-.settings/
+# Python Cache
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
 
-# Executables
-*.swf
-*.air
-*.ipa
-*.apk
+# Local Environment Variables
+.env
+.env.*
+secrets.json
+client_secret.json
 
-# Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
-# should NOT be excluded as they contain compiler settings and other important
-# information for Eclipse / Flash Builder.
+# Geospatial Data Cache (large raw GeoTIFFs, shapefiles, etc.)
+pipeline/data/raw/
+pipeline/data/temp/
+*.tif
+*.tiff
+*.shp
+*.shx
+*.dbf
+*.prj
+
+# Node.js Dependencies & Builds
+node_modules/
+dist/
+.npm/
+
+# IDE settings
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp

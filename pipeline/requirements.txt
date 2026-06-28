@@ -1,0 +1,13 @@
+earthengine-api==1.7.32
+sentinelhub==3.11.5
+openeo==0.39.1
+earthaccess==0.18.0
+rasterio==1.5.0
+geopandas==1.1.4
+scikit-learn==1.9.0
+rioxarray==0.22.0
+numpy==2.5.0
+pandas==3.0.3
+matplotlib==3.11.0
+pytest==9.1.1
+python-dotenv==1.0.0

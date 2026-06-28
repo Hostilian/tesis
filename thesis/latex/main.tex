@@ -1,0 +1,97 @@
+\documentclass[12pt,a4paper,oneside]{book}
+\usepackage[utf8]{inputenc}
+\usepackage[czech,english]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{geometry}
+\geometry{left=3.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{Space-Based Economic Intelligence: Detecting Hidden Resource Anomalies Using Open Satellite APIs}
+\author{Eren Ozturk}
+\date{June 2026}
+
+\begin{document}
+
+\selectlanguage{english}
+
+% TITLE PAGE PLACEHOLDERS
+\begin{titlepage}
+\begin{center}
+    \large
+    \textbf{Czech University of Life Sciences Prague}\\
+    Faculty of Economics and Management\\
+    Department of Informatics (KII)\\
+    \vspace{4cm}
+    \Large
+    \textbf{BACHELOR THESIS}\\
+    \vspace{1.5cm}
+    \huge
+    \textbf{Space-Based Economic Intelligence: Detecting Hidden Resource Anomalies Using Open Satellite APIs}\\
+    \vspace{4cm}
+    \large
+    \textbf{Author:} Eren Ozturk\\
+    \textbf{Supervisor:} Dr. J\v{r}\'{i} Bro\v{z}ek\\
+    \vspace{2cm}
+    Prague, 2026
+\end{center}
+\end{titlepage}
+
+\frontmatter
+
+\chapter*{Abstract}
+This thesis investigates the implementation of space-based economic intelligence systems using civilian satellite APIs. By constructing an automated pipeline querying GEE and CDSE collections, spectral anomalies are extracted and analyzed via unsupervised Isolation Forests and temporal Z-scores.
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+\mainmatter
+
+\chapter{Introduction}
+\input{chapters/01_introduction}
+
+\chapter{Theoretical Framework}
+\input{chapters/02_literature_review}
+
+\chapter{Methodology}
+\input{chapters/03_methodology}
+
+\chapter{System Design}
+\input{chapters/04_system_design}
+
+\chapter{Results \& Analysis}
+\input{chapters/05_results}
+
+\chapter{Discussion}
+\input{chapters/06_discussion}
+
+\chapter{Conclusion}
+\input{chapters/07_conclusion}
+
+\appendix
+\chapter{Full Code Repository Structure}
+\input{chapters/appendix_a_repo}
+
+\chapter{API Documentation References}
+\input{chapters/appendix_b_apis}
+
+\chapter{Dataset Metadata}
+\input{chapters/appendix_c_metadata}
+
+\chapter{Supplementary Visualizations}
+\input{chapters/appendix_d_vis}
+
+\chapter{Glossary of Terms}
+\input{chapters/appendix_e_glossary}
+
+\chapter{List of Acronyms}
+\input{chapters/appendix_f_acronyms}
+
+\backmatter
+\bibliographystyle{iso690}
+\bibliography{references}
+
+\end{document}

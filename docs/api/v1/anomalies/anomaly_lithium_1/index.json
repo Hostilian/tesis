@@ -1,0 +1,27 @@
+{
+  "id": "anomaly_lithium_1",
+  "type": "Industrial Extraction",
+  "region": "Salar de Atacama, Chile",
+  "coordinates": [
+    -23.266,
+    -68.15599999999999
+  ],
+  "confidence": 1.0,
+  "uncertainty": 0.05,
+  "confidence_interval": [
+    0.95,
+    1.05
+  ],
+  "date": "2024-10-12",
+  "spectral_profile": {
+    "ndvi": 0.254,
+    "ndwi": -0.122,
+    "bsi": 0.321
+  },
+  "details": "Rapid spatial expansion of lithium brine evaporation ponds detected. Spectral signature exhibits elevated NDWI (brine water reflection) and high Bare Soil Index (albedo salt crust) with complete absence of vegetation.",
+  "verification": {
+    "method": "Spatial Overlay",
+    "ground_truth": "SERNAGEOMIN Lithium Brine Expansion Plan (SQM)",
+    "status": "Verified"
+  }
+}

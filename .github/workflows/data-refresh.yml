@@ -1,0 +1,40 @@
+name: Refresh Satellite Data
+
+on:
+  schedule:
+    - cron: '0 6 * * 1' # Every Monday at 6:00 AM UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r pipeline/requirements.txt
+
+      - name: Run Satellite Data Pipeline
+        env:
+          GCP_PROJECT: "tesis-500804"
+          # GEE_SA_KEY: ${{ secrets.GEE_SA_KEY }} # Optional Service Account credentials
+        run: python pipeline/run_pipeline.py
+
+      - name: Commit & Push Processed Cache
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add docs/data/anomalies.json docs/data/regions.geojson
+          git diff-index --quiet HEAD || (git commit -m "Auto-refresh satellite anomaly datasets [skip ci]" && git push)

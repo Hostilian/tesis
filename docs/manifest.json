@@ -1,0 +1,16 @@
+{
+  "short_name": "OrbitalIntel",
+  "name": "Space-Based Economic Intelligence Dashboard",
+  "icons": [
+    {
+      "src": "apple-touch-icon.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "index.html",
+  "background_color": "#050510",
+  "theme_color": "#00d4ff",
+  "display": "standalone",
+  "orientation": "any"
+}
