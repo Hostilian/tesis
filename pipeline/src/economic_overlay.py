@@ -20,11 +20,12 @@ Author: Eren Ozturk — CZU Prague PEF KII Bachelor Thesis 2026
 import json
 import logging
 import math
-import time
 from typing import Optional
 from datetime import datetime, timezone
 
 import numpy as np
+
+from pipeline.src.http_resilience import ResilientHTTPClient
 
 logger = logging.getLogger(__name__)
 
@@ -47,6 +48,7 @@ class EconomicOverlay:
     def __init__(self, use_cache: bool = True) -> None:
         self._cache: dict = {}
         self.use_cache = use_cache
+        self.http = ResilientHTTPClient()
 
     # ─────────────────────────────────────────────────────────────────────────
     # PUBLIC: World Bank GDP Fetch
@@ -80,10 +82,18 @@ class EconomicOverlay:
             f"?format=json&mrv={API_MAX_ROWS}&date={start_year}:{end_year}"
         )
 
+        def _fallback() -> list:
+            logger.warning("World Bank API unreachable. Using mock GDP data.")
+            return self._mock_gdp_growth(country_code, start_year, end_year)
+
         try:
-            import urllib.request
-            with urllib.request.urlopen(url, timeout=REQUEST_TIMEOUT) as resp:
-                raw = json.loads(resp.read().decode())
+            raw = self.http.request_json(
+                "GET",
+                url,
+                timeout=REQUEST_TIMEOUT,
+                service_name="World Bank GDP API",
+                fallback=_fallback,
+            )
 
             # World Bank response: [metadata_dict, [data_records]]
             records = raw[1] if (isinstance(raw, list) and len(raw) > 1) else []

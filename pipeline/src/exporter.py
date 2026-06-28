@@ -2,6 +2,8 @@ import os
 import json
 import logging
 
+from pipeline.src.provenance import build_dataset_provenance
+
 class GeospatialExporter:
     def __init__(self, output_dir: str = None):
         self.output_dir = output_dir or os.path.abspath(
@@ -9,7 +11,12 @@ class GeospatialExporter:
         )
         os.makedirs(self.output_dir, exist_ok=True)
         
-    def export_anomalies_json(self, anomalies: list, filename: str = "anomalies.json") -> str:
+    def export_anomalies_json(
+        self,
+        anomalies: list,
+        filename: str = "anomalies.json",
+        provenance_records: list | None = None,
+    ) -> str:
         """
         Serialize list of anomaly dictionaries into a single JSON dataset.
         """
@@ -20,6 +27,17 @@ class GeospatialExporter:
             with open(filepath, "w") as f:
                 json.dump(anomalies, f, indent=2)
             logging.info("Anomalies JSON successfully written.")
+
+            if provenance_records is not None:
+                provenance_path = os.path.join(
+                    self.output_dir,
+                    filename.replace(".json", ".provenance.json"),
+                )
+                provenance_manifest = build_dataset_provenance(provenance_records)
+                with open(provenance_path, "w", encoding="utf-8") as f:
+                    json.dump(provenance_manifest, f, indent=2)
+                logging.info("Provenance manifest successfully written to %s.", provenance_path)
+
             return filepath
         except Exception as e:
             logging.error(f"Failed to write anomalies JSON: {e}")
@@ -72,7 +90,7 @@ class GeospatialExporter:
             logging.error(f"Failed to write GeoJSON: {e}")
             raise e
 
-    def export_api_endpoints(self, anomalies: list, datasets_meta: list = None) -> None:
+    def export_api_endpoints(self, anomalies: list, datasets_meta: list = None, provenance_records: list | None = None) -> None:
         """
         Generate static REST API endpoints mirroring a real API in docs/api/v1/
         """
@@ -137,6 +155,8 @@ class GeospatialExporter:
             "anomalies_count": len(anomalies),
             "environment": "GitHub Actions CI/CD" if os.getenv("GITHUB_ACTIONS") else "development"
         }
+        if provenance_records:
+            status_data["provenance_hash"] = build_dataset_provenance(provenance_records)["dataset_hash"]
         status_dir = os.path.join(api_dir, "status")
         os.makedirs(status_dir, exist_ok=True)
         status_path = os.path.join(status_dir, "index.json")

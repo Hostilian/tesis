@@ -16,9 +16,11 @@ import json
 import logging
 import os
 import time
-import urllib.request
 
 import numpy as np
+import requests
+
+from pipeline.src.http_resilience import ResilientHTTPClient
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
@@ -33,6 +35,7 @@ class SatelliteDataIngester:
     def __init__(self, project_id: str = None):
         self.project_id = project_id or os.getenv("GCP_PROJECT", "tesis-500804")
         self.authenticated = False
+        self.http = ResilientHTTPClient()
         
     def authenticate_gee(self) -> bool:
         """
@@ -240,40 +243,119 @@ class SatelliteDataIngester:
             f"&date={start_year}:{end_year}&mrv=100"
         )
 
-        for attempt in range(max_retries):
-            try:
-                with urllib.request.urlopen(url, timeout=10) as resp:
-                    raw = json.loads(resp.read().decode())
-                records = raw[1] if (isinstance(raw, list) and len(raw) > 1) else []
-                result = [
-                    {"year": int(r["date"]), "gdp_growth_pct": float(r["value"])}
-                    for r in records if r.get("value") is not None
-                ]
-                result.sort(key=lambda x: x["year"])
-                logging.info(
-                    "World Bank: fetched %d GDP records for %s (%d-%d).",
-                    len(result), country_code, start_year, end_year,
-                )
-                return result
-            except Exception as exc:
-                wait = (2 ** attempt) + np.random.uniform(0, 0.5)
-                logging.warning(
-                    "World Bank API attempt %d/%d failed: %s. Retrying in %.1fs.",
-                    attempt + 1, max_retries, exc, wait,
-                )
-                if attempt < max_retries - 1:
-                    time.sleep(wait)
+        def _fallback() -> list:
+            logging.warning(
+                "World Bank API unreachable after %d retries. Using mock data.",
+                max_retries,
+            )
+            mock_rates = {
+                "CZE": {2021: -2.4, 2022: 2.5, 2023: -0.4, 2024: 1.3, 2025: 2.8},
+                "CHL": {2021: 11.7, 2022: 2.4, 2023: 0.2,  2024: 2.6, 2025: 2.9},
+                "PER": {2021: 13.5, 2022: 2.7, 2023: -0.6, 2024: 3.0, 2025: 3.3},
+            }
+            country_data = mock_rates.get(country_code, {})
+            return [
+                {"year": y, "gdp_growth_pct": v}
+                for y, v in country_data.items()
+                if start_year <= y <= end_year
+            ]
 
-        # Fallback mock data for offline mode
-        logging.warning("World Bank API unreachable after %d retries. Using mock data.", max_retries)
-        mock_rates = {
-            "CZE": {2021: -2.4, 2022: 2.5, 2023: -0.4, 2024: 1.3, 2025: 2.8},
-            "CHL": {2021: 11.7, 2022: 2.4, 2023: 0.2,  2024: 2.6, 2025: 2.9},
-            "PER": {2021: 13.5, 2022: 2.7, 2023: -0.6, 2024: 3.0, 2025: 3.3},
-        }
-        country_data = mock_rates.get(country_code, {})
-        return [
-            {"year": y, "gdp_growth_pct": v}
-            for y, v in country_data.items()
-            if start_year <= y <= end_year
+        raw = self.http.request_json(
+            "GET",
+            url,
+            timeout=10,
+            service_name="World Bank GDP API",
+            fallback=_fallback,
+        )
+        records = raw[1] if (isinstance(raw, list) and len(raw) > 1) else []
+        result = [
+            {"year": int(r["date"]), "gdp_growth_pct": float(r["value"])}
+            for r in records if r.get("value") is not None
         ]
+        result.sort(key=lambda x: x["year"])
+        logging.info(
+            "World Bank: fetched %d GDP records for %s (%d-%d).",
+            len(result), country_code, start_year, end_year,
+        )
+        return result
+
+    def fetch_copernicus_catalog(self, bbox: list, start_date: str, end_date: str) -> dict:
+        """
+        Query the Copernicus Data Space Ecosystem catalogue.
+
+        Returns a metadata manifest when the service is reachable, otherwise a
+        deterministic mock payload so downstream processing can continue.
+        """
+        url = (
+            "https://catalogue.dataspace.copernicus.eu/odata/v1/Products"
+            f"?$top=5&$filter=ContentDate/Start ge {start_date}T00:00:00Z"
+        )
+        token = os.getenv("CDSE_ACCESS_TOKEN")
+        headers = {"Authorization": f"Bearer {token}"} if token else None
+
+        def _fallback() -> dict:
+            return {
+                "source": "Mock Copernicus Catalogue",
+                "bbox": bbox,
+                "start_date": start_date,
+                "end_date": end_date,
+                "products": [],
+            }
+
+        try:
+            response = self.http.request_json(
+                "GET",
+                url,
+                timeout=15,
+                headers=headers,
+                service_name="Copernicus CDSE Catalogue",
+                fallback=_fallback,
+            )
+            if isinstance(response, dict) and response.get("value") is not None:
+                return {
+                    "source": "CDSE OData",
+                    "bbox": bbox,
+                    "start_date": start_date,
+                    "end_date": end_date,
+                    "products": response.get("value", []),
+                }
+            return response
+        except Exception as exc:
+            logging.warning("Copernicus catalogue unavailable: %s", exc)
+            return _fallback()
+
+    def fetch_nasa_viirs_manifest(self, bbox: list, start_date: str, end_date: str) -> dict:
+        """
+        Query NASA Earthdata/VIIRS metadata.
+
+        Uses the available Earthdata tooling when credentials are present and
+        degrades to a deterministic mock manifest otherwise.
+        """
+        try:
+            import earthaccess  # type: ignore
+
+            if not os.getenv("EARTHDATA_TOKEN"):
+                raise RuntimeError("EARTHDATA_TOKEN is not configured")
+
+            results = earthaccess.search_data(
+                short_name="VNP46A3",
+                temporal=(start_date, end_date),
+                bounding_box=bbox,
+            )
+            return {
+                "source": "NASA Earthdata (earthaccess)",
+                "bbox": bbox,
+                "start_date": start_date,
+                "end_date": end_date,
+                "results": [str(item) for item in results[:5]],
+            }
+        except Exception as exc:
+            logging.warning("NASA VIIRS manifest unavailable: %s", exc)
+            return {
+                "source": "Mock NASA VIIRS Manifest",
+                "bbox": bbox,
+                "start_date": start_date,
+                "end_date": end_date,
+                "results": [],
+                "fallback_reason": str(exc),
+            }
