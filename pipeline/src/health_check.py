@@ -25,7 +25,7 @@ import time
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Optional
+from typing import Callable, Optional
 
 import requests
 
@@ -197,7 +197,7 @@ def check_fred() -> HealthResult:
         return _result("fred", "unavailable", latency_ms, None, str(exc), endpoint)
 
 
-def _providers() -> dict[str, callable]:
+def _providers() -> dict[str, Callable[[], HealthResult]]:
     return {
         "gee": check_gee,
         "cdse": check_cdse,
