@@ -6,7 +6,7 @@
 # ── Satellite & Geospatial APIs ───────────────────────────────────────────────
 earthengine-api==1.7.32
 sentinelhub==3.11.5
-openeo==0.39.1
+openeo==0.50.0
 earthaccess==0.18.0
 planetary-computer==1.0.0
 pystac-client==0.8.6
