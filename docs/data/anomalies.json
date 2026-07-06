@@ -25,7 +25,7 @@
       "ground_truth": "SERNAGEOMIN Lithium Brine Expansion Plan (SQM)",
       "status": "Verified"
     },
-    "provenance_hash": "aab414e1fd04db4e21641dafeafd37928b7e4ca08729796c4373d6b7b2562e10",
+    "provenance_hash": "9de626324a15fe2ce8bec9c0980592c7d2be317b2a9dfdbdf34e99fd03efc1df",
     "osm_overlap_pct": 88.4,
     "cross_reference_validated": true,
     "data_lineage": {
@@ -36,8 +36,8 @@
       "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
       "economic_vintage": "2024-10-12T00:00:00Z",
       "processing_pipeline_version": "2.1.0",
-      "git_commit": "unknown",
-      "processed_at": "2026-06-28T21:30:48.750005Z",
+      "git_commit": "f29d881",
+      "processed_at": "2026-07-06T10:20:49.093881Z",
       "reproduced_at": null
     },
     "z_score": 3.84,
@@ -78,7 +78,7 @@
       "ground_truth": "SERNAGEOMIN Lithium Brine Expansion Plan (SQM)",
       "status": "Verified"
     },
-    "provenance_hash": "aab414e1fd04db4e21641dafeafd37928b7e4ca08729796c4373d6b7b2562e10",
+    "provenance_hash": "9de626324a15fe2ce8bec9c0980592c7d2be317b2a9dfdbdf34e99fd03efc1df",
     "osm_overlap_pct": 88.4,
     "cross_reference_validated": true,
     "data_lineage": {
@@ -89,8 +89,8 @@
       "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
       "economic_vintage": "2024-10-12T00:00:00Z",
       "processing_pipeline_version": "2.1.0",
-      "git_commit": "unknown",
-      "processed_at": "2026-06-28T21:30:48.754427Z",
+      "git_commit": "f29d881",
+      "processed_at": "2026-07-06T10:20:49.096018Z",
       "reproduced_at": null
     },
     "z_score": 3.21,
@@ -131,7 +131,7 @@
       "ground_truth": "SERNAGEOMIN Lithium Brine Expansion Plan (SQM)",
       "status": "Verified"
     },
-    "provenance_hash": "aab414e1fd04db4e21641dafeafd37928b7e4ca08729796c4373d6b7b2562e10",
+    "provenance_hash": "9de626324a15fe2ce8bec9c0980592c7d2be317b2a9dfdbdf34e99fd03efc1df",
     "osm_overlap_pct": 88.4,
     "cross_reference_validated": true,
     "data_lineage": {
@@ -142,8 +142,8 @@
       "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
       "economic_vintage": "2024-10-12T00:00:00Z",
       "processing_pipeline_version": "2.1.0",
-      "git_commit": "unknown",
-      "processed_at": "2026-06-28T21:30:48.759249Z",
+      "git_commit": "f29d881",
+      "processed_at": "2026-07-06T10:20:49.098068Z",
       "reproduced_at": null
     },
     "z_score": 2.97,
@@ -184,8 +184,8 @@
       "ground_truth": "MAAP Deforestation Alert #284",
       "status": "Verified (Critical)"
     },
-    "provenance_hash": "93af463d96408b63b491bc7c6ddd506d8bade392adddc2380a338b486a759511",
-    "osm_overlap_pct": 0.0,
+    "provenance_hash": "92fba5268bd219bd8282f7e2a3addfde22eb231a1087f7f6ffdb3f106a9ff279",
+    "osm_overlap_pct": 91.6,
     "data_lineage": {
       "satellite_source": "Mock Sentinel-2 L2A Surface Reflectance",
       "satellite_scene_ids": [
@@ -194,8 +194,8 @@
       "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
       "economic_vintage": "2025-03-22T00:00:00Z",
       "processing_pipeline_version": "2.1.0",
-      "git_commit": "unknown",
-      "processed_at": "2026-06-28T21:30:49.752277Z",
+      "git_commit": "f29d881",
+      "processed_at": "2026-07-06T10:20:56.619340Z",
       "reproduced_at": null
     },
     "z_score": 4.12,
@@ -236,8 +236,8 @@
       "ground_truth": "MAAP Deforestation Alert #284",
       "status": "Verified (Critical)"
     },
-    "provenance_hash": "93af463d96408b63b491bc7c6ddd506d8bade392adddc2380a338b486a759511",
-    "osm_overlap_pct": 0.0,
+    "provenance_hash": "92fba5268bd219bd8282f7e2a3addfde22eb231a1087f7f6ffdb3f106a9ff279",
+    "osm_overlap_pct": 91.6,
     "data_lineage": {
       "satellite_source": "Mock Sentinel-2 L2A Surface Reflectance",
       "satellite_scene_ids": [
@@ -246,8 +246,8 @@
       "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
       "economic_vintage": "2025-03-22T00:00:00Z",
       "processing_pipeline_version": "2.1.0",
-      "git_commit": "unknown",
-      "processed_at": "2026-06-28T21:30:49.756856Z",
+      "git_commit": "f29d881",
+      "processed_at": "2026-07-06T10:20:56.621413Z",
       "reproduced_at": null
     },
     "z_score": 3.78,
@@ -288,8 +288,8 @@
       "ground_truth": "MAAP Deforestation Alert #284",
       "status": "Verified (Critical)"
     },
-    "provenance_hash": "93af463d96408b63b491bc7c6ddd506d8bade392adddc2380a338b486a759511",
-    "osm_overlap_pct": 0.0,
+    "provenance_hash": "92fba5268bd219bd8282f7e2a3addfde22eb231a1087f7f6ffdb3f106a9ff279",
+    "osm_overlap_pct": 91.6,
     "data_lineage": {
       "satellite_source": "Mock Sentinel-2 L2A Surface Reflectance",
       "satellite_scene_ids": [
@@ -298,8 +298,8 @@
       "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
       "economic_vintage": "2025-03-22T00:00:00Z",
       "processing_pipeline_version": "2.1.0",
-      "git_commit": "unknown",
-      "processed_at": "2026-06-28T21:30:49.760668Z",
+      "git_commit": "f29d881",
+      "processed_at": "2026-07-06T10:20:56.623423Z",
       "reproduced_at": null
     },
     "z_score": 3.44,
@@ -350,8 +350,8 @@
       "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
       "economic_vintage": "2024-07-01T00:00:00Z",
       "processing_pipeline_version": "2.1.0",
-      "git_commit": "unknown",
-      "processed_at": "2026-06-28T21:31:01.828897Z",
+      "git_commit": "f29d881",
+      "processed_at": "2026-07-06T10:21:05.501419Z",
       "reproduced_at": null
     },
     "data_quality_flag": "WB_IMF_DISCREPANCY",
@@ -403,8 +403,8 @@
       "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
       "economic_vintage": "2024-08-01T00:00:00Z",
       "processing_pipeline_version": "2.1.0",
-      "git_commit": "unknown",
-      "processed_at": "2026-06-28T21:31:01.834881Z",
+      "git_commit": "f29d881",
+      "processed_at": "2026-07-06T10:21:05.503011Z",
       "reproduced_at": null
     },
     "data_quality_flag": "WB_IMF_DISCREPANCY",
@@ -456,8 +456,8 @@
       "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
       "economic_vintage": "2024-09-01T00:00:00Z",
       "processing_pipeline_version": "2.1.0",
-      "git_commit": "unknown",
-      "processed_at": "2026-06-28T21:31:01.838459Z",
+      "git_commit": "f29d881",
+      "processed_at": "2026-07-06T10:21:05.504591Z",
       "reproduced_at": null
     },
     "data_quality_flag": "WB_IMF_DISCREPANCY"
@@ -498,8 +498,8 @@
       "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
       "economic_vintage": "2024-10-01T00:00:00Z",
       "processing_pipeline_version": "2.1.0",
-      "git_commit": "unknown",
-      "processed_at": "2026-06-28T21:31:01.842826Z",
+      "git_commit": "f29d881",
+      "processed_at": "2026-07-06T10:21:05.506110Z",
       "reproduced_at": null
     },
     "data_quality_flag": "WB_IMF_DISCREPANCY"
