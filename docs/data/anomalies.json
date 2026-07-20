@@ -36,8 +36,8 @@
       "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
       "economic_vintage": "2024-10-12T00:00:00Z",
       "processing_pipeline_version": "2.1.0",
-      "git_commit": "b18fe87",
-      "processed_at": "2026-07-13T09:27:00.692943Z",
+      "git_commit": "8d2ce37",
+      "processed_at": "2026-07-20T08:58:15.851582Z",
       "reproduced_at": null
     },
     "z_score": 3.84,
@@ -89,8 +89,8 @@
       "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
       "economic_vintage": "2024-10-12T00:00:00Z",
       "processing_pipeline_version": "2.1.0",
-      "git_commit": "b18fe87",
-      "processed_at": "2026-07-13T09:27:00.695145Z",
+      "git_commit": "8d2ce37",
+      "processed_at": "2026-07-20T08:58:15.853882Z",
       "reproduced_at": null
     },
     "z_score": 3.21,
@@ -142,8 +142,8 @@
       "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
       "economic_vintage": "2024-10-12T00:00:00Z",
       "processing_pipeline_version": "2.1.0",
-      "git_commit": "b18fe87",
-      "processed_at": "2026-07-13T09:27:00.697167Z",
+      "git_commit": "8d2ce37",
+      "processed_at": "2026-07-20T08:58:15.856109Z",
       "reproduced_at": null
     },
     "z_score": 2.97,
@@ -194,8 +194,8 @@
       "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
       "economic_vintage": "2025-03-22T00:00:00Z",
       "processing_pipeline_version": "2.1.0",
-      "git_commit": "b18fe87",
-      "processed_at": "2026-07-13T09:27:02.320188Z",
+      "git_commit": "8d2ce37",
+      "processed_at": "2026-07-20T08:58:16.895318Z",
       "reproduced_at": null
     },
     "z_score": 4.12,
@@ -246,8 +246,8 @@
       "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
       "economic_vintage": "2025-03-22T00:00:00Z",
       "processing_pipeline_version": "2.1.0",
-      "git_commit": "b18fe87",
-      "processed_at": "2026-07-13T09:27:02.322314Z",
+      "git_commit": "8d2ce37",
+      "processed_at": "2026-07-20T08:58:16.897539Z",
       "reproduced_at": null
     },
     "z_score": 3.78,
@@ -298,8 +298,8 @@
       "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
       "economic_vintage": "2025-03-22T00:00:00Z",
       "processing_pipeline_version": "2.1.0",
-      "git_commit": "b18fe87",
-      "processed_at": "2026-07-13T09:27:02.324426Z",
+      "git_commit": "8d2ce37",
+      "processed_at": "2026-07-20T08:58:16.899737Z",
       "reproduced_at": null
     },
     "z_score": 3.44,
@@ -350,8 +350,8 @@
       "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
       "economic_vintage": "2024-07-01T00:00:00Z",
       "processing_pipeline_version": "2.1.0",
-      "git_commit": "b18fe87",
-      "processed_at": "2026-07-13T09:27:12.863131Z",
+      "git_commit": "8d2ce37",
+      "processed_at": "2026-07-20T08:58:28.629115Z",
       "reproduced_at": null
     },
     "data_quality_flag": "WB_IMF_DISCREPANCY",
@@ -403,8 +403,8 @@
       "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
       "economic_vintage": "2024-08-01T00:00:00Z",
       "processing_pipeline_version": "2.1.0",
-      "git_commit": "b18fe87",
-      "processed_at": "2026-07-13T09:27:12.864689Z",
+      "git_commit": "8d2ce37",
+      "processed_at": "2026-07-20T08:58:28.630779Z",
       "reproduced_at": null
     },
     "data_quality_flag": "WB_IMF_DISCREPANCY",
@@ -456,8 +456,8 @@
       "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
       "economic_vintage": "2024-09-01T00:00:00Z",
       "processing_pipeline_version": "2.1.0",
-      "git_commit": "b18fe87",
-      "processed_at": "2026-07-13T09:27:12.866204Z",
+      "git_commit": "8d2ce37",
+      "processed_at": "2026-07-20T08:58:28.632413Z",
       "reproduced_at": null
     },
     "data_quality_flag": "WB_IMF_DISCREPANCY"
@@ -498,8 +498,8 @@
       "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
       "economic_vintage": "2024-10-01T00:00:00Z",
       "processing_pipeline_version": "2.1.0",
-      "git_commit": "b18fe87",
-      "processed_at": "2026-07-13T09:27:12.867769Z",
+      "git_commit": "8d2ce37",
+      "processed_at": "2026-07-20T08:58:28.634000Z",
       "reproduced_at": null
     },
     "data_quality_flag": "WB_IMF_DISCREPANCY"
