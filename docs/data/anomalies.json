@@ -36,8 +36,8 @@
       "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
       "economic_vintage": "2024-10-12T00:00:00Z",
       "processing_pipeline_version": "2.1.0",
-      "git_commit": "2b90bb0",
-      "processed_at": "2026-09-28T13:01:34.982870Z",
+      "git_commit": "52a76d7",
+      "processed_at": "2026-10-05T13:42:53.438994Z",
       "reproduced_at": null
     },
     "z_score": 3.84,
@@ -89,8 +89,8 @@
       "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
       "economic_vintage": "2024-10-12T00:00:00Z",
       "processing_pipeline_version": "2.1.0",
-      "git_commit": "2b90bb0",
-      "processed_at": "2026-09-28T13:01:34.985182Z",
+      "git_commit": "52a76d7",
+      "processed_at": "2026-10-05T13:42:53.441231Z",
       "reproduced_at": null
     },
     "z_score": 3.21,
@@ -142,8 +142,8 @@
       "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
       "economic_vintage": "2024-10-12T00:00:00Z",
       "processing_pipeline_version": "2.1.0",
-      "git_commit": "2b90bb0",
-      "processed_at": "2026-09-28T13:01:34.987444Z",
+      "git_commit": "52a76d7",
+      "processed_at": "2026-10-05T13:42:53.443441Z",
       "reproduced_at": null
     },
     "z_score": 2.97,
@@ -185,7 +185,7 @@
       "status": "Verified (Critical)"
     },
     "provenance_hash": "92fba5268bd219bd8282f7e2a3addfde22eb231a1087f7f6ffdb3f106a9ff279",
-    "osm_overlap_pct": 91.6,
+    "osm_overlap_pct": 0.0,
     "data_lineage": {
       "satellite_source": "Mock Sentinel-2 L2A Surface Reflectance",
       "satellite_scene_ids": [
@@ -194,8 +194,8 @@
       "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
       "economic_vintage": "2025-03-22T00:00:00Z",
       "processing_pipeline_version": "2.1.0",
-      "git_commit": "2b90bb0",
-      "processed_at": "2026-09-28T13:01:42.464210Z",
+      "git_commit": "52a76d7",
+      "processed_at": "2026-10-05T13:42:54.218999Z",
       "reproduced_at": null
     },
     "z_score": 4.12,
@@ -237,7 +237,7 @@
       "status": "Verified (Critical)"
     },
     "provenance_hash": "92fba5268bd219bd8282f7e2a3addfde22eb231a1087f7f6ffdb3f106a9ff279",
-    "osm_overlap_pct": 91.6,
+    "osm_overlap_pct": 0.0,
     "data_lineage": {
       "satellite_source": "Mock Sentinel-2 L2A Surface Reflectance",
       "satellite_scene_ids": [
@@ -246,8 +246,8 @@
       "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
       "economic_vintage": "2025-03-22T00:00:00Z",
       "processing_pipeline_version": "2.1.0",
-      "git_commit": "2b90bb0",
-      "processed_at": "2026-09-28T13:01:42.466447Z",
+      "git_commit": "52a76d7",
+      "processed_at": "2026-10-05T13:42:54.221222Z",
       "reproduced_at": null
     },
     "z_score": 3.78,
@@ -289,7 +289,7 @@
       "status": "Verified (Critical)"
     },
     "provenance_hash": "92fba5268bd219bd8282f7e2a3addfde22eb231a1087f7f6ffdb3f106a9ff279",
-    "osm_overlap_pct": 91.6,
+    "osm_overlap_pct": 0.0,
     "data_lineage": {
       "satellite_source": "Mock Sentinel-2 L2A Surface Reflectance",
       "satellite_scene_ids": [
@@ -298,8 +298,8 @@
       "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
       "economic_vintage": "2025-03-22T00:00:00Z",
       "processing_pipeline_version": "2.1.0",
-      "git_commit": "2b90bb0",
-      "processed_at": "2026-09-28T13:01:42.468656Z",
+      "git_commit": "52a76d7",
+      "processed_at": "2026-10-05T13:42:54.223417Z",
       "reproduced_at": null
     },
     "z_score": 3.44,
@@ -350,8 +350,8 @@
       "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
       "economic_vintage": "2024-07-01T00:00:00Z",
       "processing_pipeline_version": "2.1.0",
-      "git_commit": "2b90bb0",
-      "processed_at": "2026-09-28T13:02:31.187005Z",
+      "git_commit": "52a76d7",
+      "processed_at": "2026-10-05T13:43:15.421969Z",
       "reproduced_at": null
     },
     "data_quality_flag": "WB_IMF_DISCREPANCY",
@@ -403,8 +403,8 @@
       "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
       "economic_vintage": "2024-08-01T00:00:00Z",
       "processing_pipeline_version": "2.1.0",
-      "git_commit": "2b90bb0",
-      "processed_at": "2026-09-28T13:02:31.188652Z",
+      "git_commit": "52a76d7",
+      "processed_at": "2026-10-05T13:43:15.423637Z",
       "reproduced_at": null
     },
     "data_quality_flag": "WB_IMF_DISCREPANCY",
@@ -456,8 +456,8 @@
       "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
       "economic_vintage": "2024-09-01T00:00:00Z",
       "processing_pipeline_version": "2.1.0",
-      "git_commit": "2b90bb0",
-      "processed_at": "2026-09-28T13:02:31.190304Z",
+      "git_commit": "52a76d7",
+      "processed_at": "2026-10-05T13:43:15.425282Z",
       "reproduced_at": null
     },
     "data_quality_flag": "WB_IMF_DISCREPANCY"
@@ -498,8 +498,8 @@
       "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
       "economic_vintage": "2024-10-01T00:00:00Z",
       "processing_pipeline_version": "2.1.0",
-      "git_commit": "2b90bb0",
-      "processed_at": "2026-09-28T13:02:31.191917Z",
+      "git_commit": "52a76d7",
+      "processed_at": "2026-10-05T13:43:15.426909Z",
       "reproduced_at": null
     },
     "data_quality_flag": "WB_IMF_DISCREPANCY"
