@@ -51,5 +51,7 @@
       "operator": "local-dev"
     }
   ],
-  "provenance_hash": "f7016845097edcc5d96aaeca44e640368f0091b038230619d1c5485081060cbf"
+  "provenance_hash": "f7016845097edcc5d96aaeca44e640368f0091b038230619d1c5485081060cbf",
+  "scientific_verification_status": "demonstration",
+  "scientific_notice": "System availability is not evidence of scientific validity. Public anomalies currently use mock satellite data."
 }
