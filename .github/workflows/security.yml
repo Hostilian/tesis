@@ -30,10 +30,11 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install pip-audit
-          pip-audit -r pipeline/requirements.txt --output-format json --output pip-audit-report.json || true
-          cat pip-audit-report.json
+          # Keep the actual vulnerability exit status; always publish the JSON report.
+          pip-audit -r pipeline/requirements.txt -f json -o pip-audit-report.json
 
       - name: Upload pip-audit report
+        if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # verified v4 tag 2026-11-04
         if: always()
         with:
@@ -222,4 +223,4 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install schemathesis
-          schemathesis run docs/openapi.yaml --base-url http://127.0.0.1:8081 --checks all --max-examples 25
+          schemathesis run docs/openapi.yaml --url http://127.0.0.1:8081 --checks all --max-examples 25
