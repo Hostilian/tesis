@@ -36,7 +36,6 @@ jobs:
       - name: Upload pip-audit report
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # verified v4 tag 2026-11-04
-        if: always()
         with:
           name: pip-audit-report
           path: pip-audit-report.json
