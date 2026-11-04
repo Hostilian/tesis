@@ -1,14 +1,22 @@
-# Minimum viable thesis roadmap — provisional
+# Minimum viable thesis roadmap — updated 4 November 2026
 
-These are **planning milestones**, not official university deadlines. The user's ČZU 2027 bachelor credits, thesis registration, FSE calendar and Erasmus credit recognition must be confirmed by university correspondence.
+**CRITICAL: Earlier April–May manuscript-completion planning is unsafe.** Official ČZU PEF guidance for students who had more than 10 credits missing in September 2026 and were continuing to May/June 2027 FSE states that the thesis is due **in March 2027** (exact individual deadline not yet confirmed). The separate **30 November 2026** submission date is associated with the **February 2027** FSE route. Verify the student's actual UIS category, exact deadline, official registered assignment and thesis-credit status immediately; do not infer eligibility from this policy alone.
+
+Primary sources: 
+- https://www.pef.czu.cz/en/r-9396-study/r-10426-study-news/instructions-for-the-study-conclusion-of-students-of-the-las.html 
+- https://www.pef.czu.cz/en/r-9398-international-relations/r-12518-international-relations-news/important-dates-of-the-winter-semester.html
+- https://www.pef.czu.cz/en/r-9396-study/r-10426-study-news/instructions-for-final-year-students-fse-may-and-june.html (2026 procedure only; 2027 exact dates must be rechecked).
 
 | Month | Graduation-first completion gate |
 | --- | --- |
-| Nov 2026 | Provenance guard and mock claims corrected on PR; written scope request; choose one public pilot polygon; verify STAC transition and obtain first genuine acquisition metadata |
-| Dec 2026 | Run authenticated public EO extraction locally, preserve scene/assets metadata, cloud masks and block-level features; conditional company permission gate |
-| Jan 2027 | Freeze dataset, establish independently reviewed validation labels or state explicit inability; build minimal dashboard case-study mode |
-| Feb–Mar 2027 | Recompute baseline and optional Isolation Forest from authentic holdout; coverage and uncertainty; integrate actual results in Markdown/LaTeX |
-| Apr–May 2027 | Complete evidence-backed manuscript, reconcile references, receive supervisor corrections, compile PDF, prepare defense; obey official ČZU dates |
-| 2027 FSE window | **Not yet independently verified; do not invent date.** Confirm course recognition and thesis credit prerequisites with ČZU |
+| **Nov 2026** | Confirm UIS thesis/FSE route and requirements. Fix provenance, get supervisor topic approval, one safe public polygon, real satellite access/discovery, permission-gated company pilot |
+| **Dec 2026** | Process authentic public EO with acquisition manifest and cloud mask, freeze minimal features and independent validation design; company extension only if authorized |
+| **Jan 2027** | Complete baseline experiment and independent labels if possible; freeze scope, prepare figures, dashboard and full draft |
+| **Feb 2027** | Finish statistical evaluation, reproducibility, references and manuscript; supervisor feedback and final revisions; ready to submit ahead of March deadline |
+| **March 2027** | **Provisional thesis-submission window**, exact date and method to be confirmed in UIS/2027 PEF notice; submit PDF and permitted appendices following official instructions |
+| **Apr–May 2027** | Exams/remaining credits, defense rehearsal, source-code demonstration and administrative verification **after manuscript submission**, subject to official dates |
+| **May–June 2027** | Expected FSE route for eligible continuing-year students, dates and eligibility individually to verify |
 
-**Minimum viable:** approved research question + real reproducible dataset + clear provenance + one defensible baseline + independent evaluation or honest limitation + working demonstration + finished manuscript. Drop aerial/sensor/ERP expansion before endangering exams and mandatory courses.
+**Minimum viable:** approved scope, authentic public observation dataset with reproducible acquisition records, one clear baseline and honest independent validation (or explicitly exploratory limits), functioning demo, complete manuscript and required credits. Drop the optional aerial/sensor fusion long before deadlines if it delays the academic core.
+
+**Academic dependency:** any Erasmus mobility/credit transfer or unfinished ČZU course preventing required credits can block the FSE despite a finished thesis. Ask programme coordinator and supervisor about exact remaining credits, summer mobility impact, and recognised classes. 

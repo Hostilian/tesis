@@ -36,3 +36,7 @@ Proceed with company materials only when all are documented: (1) one authoritati
 
 ## Storage and cost
 Start with versioned CSV + GeoJSON for small research tables; local SQLite/Parquet if needed. GeoTIFF/COG for approved raster, kept outside public repository. DuckDB is an optional analysis convenience; PostGIS and paid hosting are not required. Budget target: €0 subscriptions, compute on existing laptop and GitHub Actions free quota subject to applicable limits.
+
+## University timing correction (4 November 2026)
+
+PEF's published continuing-student guidance states a **March 2027** thesis deadline for the described May/June 2027 FSE repeat-year route, exact date and individual category unverified. Thus research-and-writing milestones that extend into April/May are unsafe: core experimental work must be frozen by January and manuscript ready in February. Sources: https://www.pef.czu.cz/en/r-9396-study/r-10426-study-news/instructions-for-the-study-conclusion-of-students-of-the-las.html .
