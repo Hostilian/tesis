@@ -1,7 +1,7 @@
 {
   "id": "anomaly_ntl_13",
   "type": "NTL Industrial Contraction",
-  "region": "Mlad\u00e1 Boleslav (Industrial Zone), CZ",
+  "region": "Mladá Boleslav (Industrial Zone), CZ",
   "coordinates": [
     50.412,
     14.903
@@ -21,18 +21,24 @@
   "details": "Significant temporal deviation in night-time light radiance (Z-score = -3.08). Correlates with shift changes and production rate shifts in the automotive manufacturing cluster.",
   "verification": {
     "method": "Statistical GDP Correlation",
-    "ground_truth": "Czech Statistical Office (\u010cS\u00da) Quarterly Manufacturing Index",
-    "status": "Verified"
+    "ground_truth": "Czech Statistical Office (ČSÚ) Quarterly Manufacturing Index",
+    "status": "Demonstration — not scientifically verified",
+    "historical_status_claim": "Verified",
+    "independent_ground_truth_checked": false
   },
   "z_score": -3.08,
   "economic_intelligence": {
     "what": "VIIRS DNB radiance dropped 28% below 24-month rolling mean. Temporal Z-score -3.08 confirms statistically significant industrial light reduction.",
-    "where": "Mlad\u00e1 Boleslav industrial zone \u2014 home to \u0160koda Auto headquarters (Volkswagen Group subsidiary), Czech Republic's largest employer.",
-    "when": "February 2023. Sustained below-baseline NTL for 6 consecutive months (Feb\u2013Jul 2023).",
-    "how_unusual": "Z-score -3.08 \u2014 below 99.9th percentile. Comparable in magnitude to NTL drops during COVID-19 lockdowns (March\u2013April 2020).",
-    "economic_signal": "Czech automotive sector output fell 11.3% YoY (Q1 2023) due to semiconductor supply chain disruptions. \u0160koda reduced production shifts.",
-    "cross_reference": "Czech Statistical Office (\u010cS\u00da) Industrial Production Index Q1 2023; \u0160koda Auto press releases Q1 2023 production adjustment.",
+    "where": "Mladá Boleslav industrial zone — home to Škoda Auto headquarters (Volkswagen Group subsidiary), Czech Republic's largest employer.",
+    "when": "February 2023. Sustained below-baseline NTL for 6 consecutive months (Feb–Jul 2023).",
+    "how_unusual": "Z-score -3.08 — below 99.9th percentile. Comparable in magnitude to NTL drops during COVID-19 lockdowns (March–April 2020).",
+    "economic_signal": "Czech automotive sector output fell 11.3% YoY (Q1 2023) due to semiconductor supply chain disruptions. Škoda reduced production shifts.",
+    "cross_reference": "Czech Statistical Office (ČSÚ) Industrial Production Index Q1 2023; Škoda Auto press releases Q1 2023 production adjustment.",
     "false_positive_probability": 0.23,
-    "alternative_explanation": "Extreme winter weather (temperatures < -15\u00b0C) can reduce NTL via reduced outdoor lighting in February; however, adjacent residential zones show stable NTL, isolating the anomaly to the industrial cluster."
-  }
+    "alternative_explanation": "Extreme winter weather (temperatures < -15°C) can reduce NTL via reduced outdoor lighting in February; however, adjacent residential zones show stable NTL, isolating the anomaly to the industrial cluster."
+  },
+  "source_mode": "synthetic",
+  "verification_status": "demonstration",
+  "scientific_use_notice": "Legacy static API detail endpoint uses mock data. This orphan record is not part of the current anomaly list and has no independently validated observation.",
+  "confidence_interpretation": "illustrative_model_score_not_calibrated_probability"
 }
