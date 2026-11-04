@@ -54,6 +54,9 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@692973e3d93d1264569f2d19d11d9a151250d182 # v4.1.7
 
+      - name: Enforce public scientific-evidence status
+        run: python -m pipeline.src.research_integrity docs/data/anomalies.json
+
       - name: Validate anomalies.json schema
         run: |
           python -c "
