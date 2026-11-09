@@ -10,7 +10,7 @@
   "uncertainty": 0.061,
   "confidence_interval": [
     0.929,
-    1.0
+    1
   ],
   "date": "2025-03-22",
   "spectral_profile": {
@@ -22,10 +22,12 @@
   "verification": {
     "method": "Temporal Radar backscatter (Sentinel-1 SAR)",
     "ground_truth": "MAAP Deforestation Alert #284",
-    "status": "Verified (Critical)"
+    "status": "Demonstration — not scientifically verified",
+    "historical_status_claim": "Verified (Critical)",
+    "independent_ground_truth_checked": false
   },
-  "provenance_hash": "93af463d96408b63b491bc7c6ddd506d8bade392adddc2380a338b486a759511",
-  "osm_overlap_pct": 0.0,
+  "provenance_hash": "92fba5268bd219bd8282f7e2a3addfde22eb231a1087f7f6ffdb3f106a9ff279",
+  "osm_overlap_pct": 91.6,
   "data_lineage": {
     "satellite_source": "Mock Sentinel-2 L2A Surface Reflectance",
     "satellite_scene_ids": [
@@ -34,19 +36,23 @@
     "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
     "economic_vintage": "2025-03-22T00:00:00Z",
     "processing_pipeline_version": "2.1.0",
-    "git_commit": "unknown",
-    "processed_at": "2026-06-28T21:30:49.760668Z",
+    "git_commit": "9834c28",
+    "processed_at": "2026-11-02T14:51:46.742408Z",
     "reproduced_at": null
   },
   "z_score": 3.44,
   "economic_intelligence": {
-    "what": "NDWI -0.179 indicates turbid, sediment-laden water \u2014 hallmark of hydraulic sluicing. BSI 0.322 confirms exposed spoil material.",
+    "what": "NDWI -0.179 indicates turbid, sediment-laden water — hallmark of hydraulic sluicing. BSI 0.322 confirms exposed spoil material.",
     "where": "Southern buffer zone adjacent to Bahuaja-Sonene National Park boundary.",
     "when": "Detected 2025-03-22; encroachment into protected buffer began approximately Q3 2024.",
-    "how_unusual": "Z-score 3.44 \u2014 99.97th percentile. Particularly notable given protected area proximity.",
+    "how_unusual": "Z-score 3.44 — 99.97th percentile. Particularly notable given protected area proximity.",
     "economic_signal": "Buffer zone encroachment accelerates during gold price spikes. Correlates with +18% artisanal gold export value (SUNAT Peru, 2024).",
     "cross_reference": "SERNANP (Peru Protected Area Agency) quarterly monitoring reports Q4 2024.",
     "false_positive_probability": 0.09,
     "alternative_explanation": "Flooding from Madre de Dios river could produce similar NDWI signal; however, SAR shows stationary soil disturbance inconsistent with fluvial transport."
-  }
+  },
+  "source_mode": "synthetic",
+  "verification_status": "demonstration",
+  "scientific_use_notice": "Mock/synthetic input; illustrative model output, not an observed or independently validated event.",
+  "confidence_interpretation": "illustrative_model_score_not_calibrated_probability"
 }

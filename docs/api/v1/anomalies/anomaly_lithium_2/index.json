@@ -6,11 +6,11 @@
     -23.512,
     -68.46
   ],
-  "confidence": 1.0,
+  "confidence": 1,
   "uncertainty": 0.05,
   "confidence_interval": [
     0.95,
-    1.0
+    1
   ],
   "date": "2024-10-12",
   "spectral_profile": {
@@ -22,11 +22,13 @@
   "verification": {
     "method": "Spatial Overlay",
     "ground_truth": "SERNAGEOMIN Lithium Brine Expansion Plan (SQM)",
-    "status": "Verified"
+    "status": "Demonstration — not scientifically verified",
+    "historical_status_claim": "Verified",
+    "independent_ground_truth_checked": false
   },
-  "provenance_hash": "aab414e1fd04db4e21641dafeafd37928b7e4ca08729796c4373d6b7b2562e10",
+  "provenance_hash": "9de626324a15fe2ce8bec9c0980592c7d2be317b2a9dfdbdf34e99fd03efc1df",
   "osm_overlap_pct": 88.4,
-  "cross_reference_validated": true,
+  "cross_reference_validated": false,
   "data_lineage": {
     "satellite_source": "Mock Sentinel-2 L2A Surface Reflectance",
     "satellite_scene_ids": [
@@ -35,8 +37,8 @@
     "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
     "economic_vintage": "2024-10-12T00:00:00Z",
     "processing_pipeline_version": "2.1.0",
-    "git_commit": "unknown",
-    "processed_at": "2026-06-28T21:30:48.754427Z",
+    "git_commit": "9834c28",
+    "processed_at": "2026-11-02T14:51:46.331212Z",
     "reproduced_at": null
   },
   "z_score": 3.21,
@@ -44,10 +46,15 @@
     "what": "BSI elevated by +0.18 relative to Q1 2024 baseline; NDWI positive indicating open brine surfaces.",
     "where": "Secondary evaporation pond cluster, Salar de Atacama southern section.",
     "when": "Detected 2024-10-12; expansion began ~August 2024 per Landsat-9 OLI time series.",
-    "how_unusual": "Z-score 3.21 \u2014 exceeds 99.9th percentile threshold (|Z| > 2.5) set in methodology \u00a73.4.",
+    "how_unusual": "Z-score 3.21 — exceeds 99.9th percentile threshold (|Z| > 2.5) set in methodology §3.4.",
     "economic_signal": "Secondary pond area expansion consistent with declared SQM capacity increase from 100 kt to 120 kt LCE/year.",
-    "cross_reference": "SQM Q3 2024 earnings report (NYSE: SQM) \u2014 production ramp confirmation.",
+    "cross_reference": "SQM Q3 2024 earnings report (NYSE: SQM) — production ramp confirmation.",
     "false_positive_probability": 0.05,
     "alternative_explanation": "Cloud shadow artifacts in optical bands; however, Sentinel-1 SAR (cloud-independent) corroborates same footprint."
-  }
+  },
+  "source_mode": "synthetic",
+  "verification_status": "demonstration",
+  "scientific_use_notice": "Mock/synthetic input; illustrative model output, not an observed or independently validated event.",
+  "historical_cross_reference_claim": true,
+  "confidence_interpretation": "illustrative_model_score_not_calibrated_probability"
 }

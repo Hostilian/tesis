@@ -6,11 +6,11 @@
     -12.86,
     -70.14
   ],
-  "confidence": 1.0,
+  "confidence": 1,
   "uncertainty": 0.06,
   "confidence_interval": [
     0.94,
-    1.0
+    1
   ],
   "date": "2025-03-22",
   "spectral_profile": {
@@ -22,10 +22,12 @@
   "verification": {
     "method": "Temporal Radar backscatter (Sentinel-1 SAR)",
     "ground_truth": "MAAP Deforestation Alert #284",
-    "status": "Verified (Critical)"
+    "status": "Demonstration — not scientifically verified",
+    "historical_status_claim": "Verified (Critical)",
+    "independent_ground_truth_checked": false
   },
-  "provenance_hash": "93af463d96408b63b491bc7c6ddd506d8bade392adddc2380a338b486a759511",
-  "osm_overlap_pct": 0.0,
+  "provenance_hash": "92fba5268bd219bd8282f7e2a3addfde22eb231a1087f7f6ffdb3f106a9ff279",
+  "osm_overlap_pct": 91.6,
   "data_lineage": {
     "satellite_source": "Mock Sentinel-2 L2A Surface Reflectance",
     "satellite_scene_ids": [
@@ -34,8 +36,8 @@
     "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
     "economic_vintage": "2025-03-22T00:00:00Z",
     "processing_pipeline_version": "2.1.0",
-    "git_commit": "unknown",
-    "processed_at": "2026-06-28T21:30:49.756856Z",
+    "git_commit": "9834c28",
+    "processed_at": "2026-11-02T14:51:46.740341Z",
     "reproduced_at": null
   },
   "z_score": 3.78,
@@ -43,10 +45,14 @@
     "what": "NDVI drop from baseline 0.68 to 0.302; BSI 0.303 consistent with exposed laterite soil and mercury amalgam processing areas.",
     "where": "Eastern extension of La Pampa mining corridor, Madre de Dios.",
     "when": "Detected 2025-03-22; progressive 8-month expansion visible in Landsat-9 monthly composites.",
-    "how_unusual": "Z-score 3.78 \u2014 99.98th percentile anomaly within the regional 5-year NDVI distribution.",
-    "economic_signal": "Mercury import data (COMEX Peru, 2024) shows 34% increase \u2014 a leading indicator of artisanal gold mining expansion.",
+    "how_unusual": "Z-score 3.78 — 99.98th percentile anomaly within the regional 5-year NDVI distribution.",
+    "economic_signal": "Mercury import data (COMEX Peru, 2024) shows 34% increase — a leading indicator of artisanal gold mining expansion.",
     "cross_reference": "MAAP Alert #284; UN Environment Programme (UNEP) Minamata Convention mercury monitoring reports.",
     "false_positive_probability": 0.07,
     "alternative_explanation": "Road construction could produce similar spectral signature; however, road patterns show linear geometry versus the irregular mining footprint detected here."
-  }
+  },
+  "source_mode": "synthetic",
+  "verification_status": "demonstration",
+  "scientific_use_notice": "Mock/synthetic input; illustrative model output, not an observed or independently validated event.",
+  "confidence_interpretation": "illustrative_model_score_not_calibrated_probability"
 }
