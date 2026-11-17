@@ -1,5 +1,8 @@
 # Chapter 5: Results & Analysis
 
+> **Scientific-integrity status (4 November 2026; historical draft retained for audit):** Numerical values and verification interpretations below are **provisional manuscript claims**, not independently reproduced scientific results. The public anomaly exports use mock satellite inputs; F1 = 0.907, r = 0.724, scene counts, dates and ground-truth assertions need authentic manifests and independent validation before submission. Do not cite these tables as measured real-world results. See `docs/SCIENTIFIC-INTEGRITY-AUDIT.md`.
+
+
 ## 5.1 Dataset Description & Spatial Projections
 The geospatial data engineering pipeline ingested and processed satellite observations acquired between January 2021 and May 2026. A total of 184 spatial tiles (granules) were processed across three distinct Regions of Interest (ROIs), covering a total monitoring area of over $13,000\text{ km}^2$. 
 

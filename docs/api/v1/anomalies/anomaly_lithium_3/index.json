@@ -10,7 +10,7 @@
   "uncertainty": 0.051,
   "confidence_interval": [
     0.939,
-    1.0
+    1
   ],
   "date": "2024-10-12",
   "spectral_profile": {
@@ -22,11 +22,13 @@
   "verification": {
     "method": "Spatial Overlay",
     "ground_truth": "SERNAGEOMIN Lithium Brine Expansion Plan (SQM)",
-    "status": "Verified"
+    "status": "Demonstration — not scientifically verified",
+    "historical_status_claim": "Verified",
+    "independent_ground_truth_checked": false
   },
-  "provenance_hash": "aab414e1fd04db4e21641dafeafd37928b7e4ca08729796c4373d6b7b2562e10",
+  "provenance_hash": "9de626324a15fe2ce8bec9c0980592c7d2be317b2a9dfdbdf34e99fd03efc1df",
   "osm_overlap_pct": 88.4,
-  "cross_reference_validated": true,
+  "cross_reference_validated": false,
   "data_lineage": {
     "satellite_source": "Mock Sentinel-2 L2A Surface Reflectance",
     "satellite_scene_ids": [
@@ -35,19 +37,24 @@
     "economic_source": "World Bank Open Data API (NY.GDP.MKTP.CD)",
     "economic_vintage": "2024-10-12T00:00:00Z",
     "processing_pipeline_version": "2.1.0",
-    "git_commit": "unknown",
-    "processed_at": "2026-06-28T21:30:48.759249Z",
+    "git_commit": "9834c28",
+    "processed_at": "2026-11-02T14:51:46.333285Z",
     "reproduced_at": null
   },
   "z_score": 2.97,
   "economic_intelligence": {
     "what": "BSI above baseline; partial NDWI signal detected on southern salar edge.",
     "where": "Southern terminus of Salar de Atacama, near Toconao community.",
-    "when": "Detected 2024-10-12; onset unclear due to partial cloud cover obstruction in August\u2013September.",
-    "how_unusual": "Z-score 2.97 \u2014 statistically significant (> 2.5\u03c3 threshold) but lower certainty due to cloud contamination.",
+    "when": "Detected 2024-10-12; onset unclear due to partial cloud cover obstruction in August–September.",
+    "how_unusual": "Z-score 2.97 — statistically significant (> 2.5σ threshold) but lower certainty due to cloud contamination.",
     "economic_signal": "Consistent with Albemarle Corporation Phase 3 brine extraction permit approved 2023.",
-    "cross_reference": "Albemarle 2024 Annual Report \u2014 Chile operations section.",
+    "cross_reference": "Albemarle 2024 Annual Report — Chile operations section.",
     "false_positive_probability": 0.07,
     "alternative_explanation": "Possible topographic shadow near Andes piedmont; BSI could be elevated by volcanic rock outcrops rather than industrial salt crust."
-  }
+  },
+  "source_mode": "synthetic",
+  "verification_status": "demonstration",
+  "scientific_use_notice": "Mock/synthetic input; illustrative model output, not an observed or independently validated event.",
+  "historical_cross_reference_claim": true,
+  "confidence_interpretation": "illustrative_model_score_not_calibrated_probability"
 }

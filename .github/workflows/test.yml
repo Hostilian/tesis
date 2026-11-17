@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.11', '3.12', '3.13']
+        python-version: ['3.12', '3.13'] # earthaccess==0.18.0 requires Python 3.12+
     services:
       redis:
         image: redis:latest
@@ -28,10 +28,10 @@ jobs:
           --health-retries 5
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@692973e3d93d1264569f2d19d11d9a151250d182 # v4.1.7
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # verified v4 tag 2026-11-04
 
       - name: Set up Python
-        uses: actions/setup-python@82c7e631bb3eae9cfba2d2d03984cdc55c82996b # v5.1.0
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # verified v5 tag 2026-11-04
         with:
           python-version: ${{ matrix.python-version }}
           cache: 'pip'
@@ -52,7 +52,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@692973e3d93d1264569f2d19d11d9a151250d182 # v4.1.7
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # verified v4 tag 2026-11-04
+
+      - name: Enforce public scientific-evidence status
+        run: python -m pipeline.src.research_integrity docs/data/anomalies.json
 
       - name: Validate anomalies.json schema
         run: |

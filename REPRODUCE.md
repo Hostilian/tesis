@@ -73,3 +73,19 @@ pdflatex main.tex
 ```
 This generates the final compiled bachelor thesis paper `main.pdf`.
 
+
+---
+
+## November 2026 scientific-reproducibility qualification
+
+**Public output status:** Current published anomaly scores and historical headline metrics are not authenticated/independently verified scientific observations. Run the public-evidence gate:
+
+```bash
+python -m pipeline.src.research_integrity docs/data/anomalies.json
+python -m unittest discover -s pipeline/tests -p 'test_research_guard.py' -v
+python -m pipeline.run_agriculture_pilot
+```
+
+The last command generates **synthetic**, offline vegetation-index values and a STAC **query description only**; it performs no download. It does not establish orchard stress, disease, yield or forecast accuracy. Authentic satellite processing requires actual scene assets, valid masks, access rights, acquisition IDs, dates, and independent evidence.
+
+The Copernicus STAC discovery endpoint announced 16 October 2026 is `https://stac.opensearch.dataspace.copernicus.eu/v1/`. Catalogue search is **not** reflectance extraction. The existing ingestion module still needs a verified migration test. Licensed company records must not enter this public repository. Full CLI verification needs an environment with the repository dependencies installed; source and tests in this PR do not imply live providers were authenticated.

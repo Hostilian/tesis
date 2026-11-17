@@ -5,6 +5,7 @@ import logging
 from typing import Any, List, Optional
 
 from pipeline.src.provenance import build_dataset_provenance
+from pipeline.src.research_integrity import prepare_public_records, assert_public_records_safe
 
 class GeospatialExporter:
     def __init__(self, output_dir: str | None = None):
@@ -22,6 +23,8 @@ class GeospatialExporter:
         """
         Serialize list of anomaly dictionaries into a single JSON dataset.
         """
+        anomalies = prepare_public_records(anomalies)
+        assert_public_records_safe(anomalies)
         filepath = os.path.join(self.output_dir, filename)
         logging.info(f"Saving serialized anomalies to {filepath}...")
         
@@ -96,6 +99,8 @@ class GeospatialExporter:
         """
         Generate static REST API endpoints mirroring a real API in docs/api/v1/
         """
+        anomalies = prepare_public_records(anomalies)
+        assert_public_records_safe(anomalies)
         import shutil
         api_dir = os.path.abspath(os.path.join(self.output_dir, "../api/v1"))
         os.makedirs(api_dir, exist_ok=True)

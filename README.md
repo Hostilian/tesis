@@ -5,8 +5,6 @@
 [![Security Scan](https://github.com/hostilian/tesis/actions/workflows/security.yml/badge.svg)](https://github.com/hostilian/tesis/actions/workflows/security.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python Version](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/)
-[![F1-Score](https://img.shields.io/badge/F1--Score-0.907-brightgreen.svg)](#-key-results)
-[![Pearson r](https://img.shields.io/badge/Pearson%20r-0.724-cyan.svg)](#-key-results)
 
 **Bachelor Thesis Artifact: "Space-Based Economic Intelligence: Detecting Hidden Resource Anomalies Using Open Satellite APIs"**
 
@@ -23,23 +21,15 @@
 
 👉 **[View the Live Satellite Anomaly Explorer](https://hostilian.github.io/tesis/)**
 
-A futuristic, dark-space GIS monitoring console acting as the Decision Support System (DSS) and thesis presentation artifact, showcasing localized lithium, deforestation, and industrial night-light anomalies across 9 verified anomaly events in 3 study regions.
+A futuristic, dark-space GIS monitoring console acting as the Decision Support System (DSS) and thesis presentation artifact, displaying illustrative lithium, deforestation and industrial night-light scenarios. Current example records use **mock satellite inputs**, not independently verified observations.
 
 ---
 
-## 📊 Key Results
+## Scientific status — 4 November 2026
 
-| Metric | Value | Threshold | Status |
-|---|---|---|---|
-| F1-Score (Isolation Forest, Madre de Dios) | **0.907** | > 0.80 | ✅ H₁ Supported |
-| Precision | 0.936 | — | ✅ |
-| Recall | 0.880 | — | ✅ |
-| Pearson r (VIIRS NTL vs Czech GDP) | **0.724** | ≥ 0.65 | ✅ H₂ Supported |
-| p-value (t = 4.58, df = 19) | **0.0002** | < 0.05 | ✅ Significant |
-| Moran's I (Spatial Clustering) | **+0.648** | > 0 | ✅ Clustered |
-| Pipeline ETL Runtime | 9.0 ± 1.2 s | — | ✅ |
-| Satellite Tiles Ingested | **184** | — | — |
-| Test Suite | **47 / 47 PASSING** | All | ✅ |
+**Published anomaly examples are demonstrations, not independently verified scientific findings.** The 10 current records explicitly identify mock satellite lineage. Previous "Verified" labels are superseded by provenance and status warnings. Existing F1 = 0.907, precision = 0.936, recall = 0.880, Pearson r = 0.724, Moran's I = 0.648, reported ingestion counts and runtimes are **historical claims awaiting authentic source records and independent recomputation**. Passing unit tests does not validate these statistics.
+
+The original thesis topic remains unchanged; the optional agricultural pilot is **proposed, not university-approved**. See [audit](docs/SCIENTIFIC-INTEGRITY-AUDIT.md), [research direction](docs/RESEARCH-DIRECTION-2027.md), [reproducibility](REPRODUCE.md), and [pilot demo](docs/research.html).
 
 ---
 

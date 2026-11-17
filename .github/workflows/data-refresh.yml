@@ -32,6 +32,9 @@ jobs:
           # GEE_SA_KEY: ${{ secrets.GEE_SA_KEY }} # Optional Service Account credentials
         run: python pipeline/run_pipeline.py
 
+      - name: Enforce public scientific-evidence status
+        run: python -m pipeline.src.research_integrity docs/data/anomalies.json
+
       - name: Commit & Push Processed Cache
         run: |
           git config --global user.name 'github-actions[bot]'
