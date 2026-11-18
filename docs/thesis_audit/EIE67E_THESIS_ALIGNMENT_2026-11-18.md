@@ -56,3 +56,19 @@ This work history may justify checking component and distributed-architecture co
 - [CZU EIE67E syllabus, WS 2023/24](https://is.czu.cz/katalog/syllabus.pl?predmet=229754)
 - [Jiří Brožek’s CZU teaching profile](https://home.czu.cz/brozekj/pedagogika?editmode=0)
 - [Theses.cz related-work search for distributed architecture](https://theses.cz/th_search/prace_na_stejne_tema?ks=distribuovana+architektura)
+
+
+## New supervisor-work evidence (18 November 2026)
+
+Additional searching found a useful research and teaching bridge:
+
+- The CZU teaching profile confirms EIE67E guarantorship and related teaching in computer principles, computer architecture and object modelling.
+- A CZU PEF publications record and Springer catalogue list Jiří Brožek as coauthor of the 2015 chapter “Multidimensional Modelling from Open Data for Precision Agriculture.” This is relevant to open-data modelling and agricultural decision-support context; it does not approve an orchard study or private employer data.
+- The 2025 publisher record for “Effects of Normalised SSIM Loss on Super-Resolution Tasks” lists Brožek as coauthor and credits visualization and review/editing. It does not show that this thesis should use deep learning or super-resolution.
+- An official CZU staff search result lists a 2023 AIDIGI software item and a 2021 VR questionnaire prototype, but direct technical details were not retrieved.
+- Theses.cz indexes a 2012 CZU PEF dissertation, “Distribuované objektové architektury” (“Distributed Object Architectures”), by Jiří Brožek. Indexed metadata confirms title, year, institution and dissertation type; the full record and PDF were inaccessible, so its content remains unknown.
+- A 2011 South Bohemian University master's thesis by a same-named author also surfaced. Identity is unverified, so it is not attributed to the supervisor.
+
+**Implication:** EIE67E remains the primary course alignment, while the agriculture/open-data work offers a grounded discussion lead. Neither establishes approval of a thesis topic change or a formal computing limit.
+
+Sources: [CZU teaching profile](https://home.czu.cz/brozekj/pedagogika?editmode=0); [CZU PEF publications record](https://www.pef.czu.cz/dl/96866); [Springer volume](https://link.springer.com/book/10.1007/978-3-319-24626-0); [2025 publisher paper](https://www.techscience.com/CMES/v143n3/62840/html); [Theses.cz related-work index](https://theses.cz/th_search/prace_na_stejne_tema?ks=distribuovana+architektura).
