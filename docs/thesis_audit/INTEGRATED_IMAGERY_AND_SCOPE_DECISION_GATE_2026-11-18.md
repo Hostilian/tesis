@@ -4,21 +4,21 @@
 
 ## One integrated software/data pipeline
 
-A bounded geospatial thesis can connect software and data-analysis learning outcomes through one system:
+A single coherent thesis can preserve the full breadth of its registered aims while connecting relevant software and data-analysis learning outcomes through one system:
 
-**catalogue/provider adapters → metadata and provenance → quality checks → preprocessing → one justified baseline → evaluation → API/service → map/dashboard**
+**source/modality adapters → metadata and provenance → modality-specific quality checks → preprocessing and alignment → analyses appropriate to the approved aims → evidence-based evaluation → optional API/service or map/dashboard**
 
-The research question, study area, and period must come from the approved assignment. Course alignment supports the engineering explanation; it does not approve the subject or validate results. See the public [course-outcome crosswalk](COURSE_OUTCOMES_TO_GEOSPATIAL_PIPELINE_2026-11-18.md) for the six-unit matrix.
+Preserve every connected aim and question in the approved assignment; do not collapse them to one site, period, sensor, phenomenon, or statistic by default. Course outcomes bound concrete work packages inside that thesis. They do not add research aims, approve the topic, or validate results. See the public [course-outcome crosswalk](COURSE_OUTCOMES_TO_GEOSPATIAL_PIPELINE_2026-11-18.md) for direct-fit and conditional units.
 
 ## Scope options
 
 | Option | Scope | Decision gate |
 |---|---|---|
-| A — retain current approved topic | Keep the registered satellite/API research question and narrow it to one defensible use case | Read the current formal assignment; preserve its scope |
-| B — request a bounded agricultural case | One study unit and time window, one primary satellite collection, and at most one existing aerial reference product | Supervisor approval, any formal amendment, data rights, exact metadata, coverage, and a suitable validation plan |
-| C — combine all modalities | Satellite, drone, crewed aircraft, private supplier layers, sensors, and prediction in one study | Defer unless the formal assignment requires it and rights, data, validation, time, and resources are all established |
+| A — preserve the registered aims | Retain the formal title, connected objectives/questions, and intended breadth; map each aim to relevant methods, evidence, and course work packages | Retrieve the current UIS assignment and keep its breadth as the baseline |
+| B — preferred agricultural application | Assess whether the registered aims can be implemented in an agricultural Earth-observation workflow across satellite, existing authorized drone/orthomosaic, and crewed-aircraft imagery where each source is relevant and supportable | Supervisor/UIS approval, rights, coverage, metadata, comparability, and suitable evidence for each claim |
+| C — optional operational inputs | Add supplier APIs, sensors, telemetry, weather/soil data, new flights, or prediction only when directly relevant to an approved aim | Include each input only after its relevance, permission, data quality, time, and evaluation needs are clear |
 
-Option A is the low-scope-risk default until an academic decision is recorded. Option B is a focused proposal. Option C multiplies owners, licenses, calibration and alignment work, data frequencies, validation needs, and computational load.
+The user's preferred working direction is B while preserving A's full scope; it is a proposal, not an approval. Keep the intended modalities visible when a source is temporarily unavailable and document that evidence gap. If an element conflicts with the formal assignment, ask the supervisor for the smallest necessary formal adjustment instead of narrowing silently. Course work packages should support the same thesis. Omit any course or source with no direct fit.
 
 ## Candidate imagery and open-source workflow
 
@@ -47,16 +47,13 @@ Copernicus Data Space STAC is a discovery interface; its documentation does not 
 
 ## Course integration
 
-The same pipeline can evidence:
+Possible teacher-bounded work packages within that same pipeline are:
 
-- HCI: identified users/tasks and an actual interface-evaluation method.
-- Software methods: requirements, models, component interfaces, version control, testing, and validation.
-- Web technologies: API contract, client/server behavior, error handling, and documented deployment.
-- Data transformation: input-quality checks, missing/NoData handling, outlier and imbalance choices, and transformation records.
-- Probability/statistics: sampling, assumptions, uncertainty, and justified tests.
-- Component-based software development: reusable adapters, clear boundaries, refactoring, profiling, and tests.
+- Component-based software development, software methods, data transformation, and probability/statistics are direct-fit candidates when their outcomes map to a real artifact and evidence task.
+- Web technologies is conditional on the API/web deliverable remaining relevant to the approved thesis.
+- HCI is conditional on a genuine, permitted user/task and interface evaluation; otherwise omit it from the thesis crosswalk.
 
-Current course descriptions establish learning outcomes only. Confirm current requirements before claiming any particular implementation or assessment satisfies a course.
+These are candidate mappings, not a requirement to include all six units. Ask each teacher whether the proposed artifact demonstrates a current learning outcome; remove any mapping they judge irrelevant. The formal assignment still controls thesis aims. Course contributions bound work packages within the thesis and do not create additional research projects.
 
 ## Evidence and academic-integrity boundary
 
