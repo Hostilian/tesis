@@ -17,10 +17,10 @@ Keep the current approved UIS assignment as the scope authority. The working his
 
 ## Chapter 1 - Introduction
 
-- Narrow the subject to one approved research question, one observable phenomenon, one study unit and one period.
+- Preserve all approved aims and connected questions. Map each to relevant cases, modalities, methods and evidence. Do not reduce to one phenomenon, study unit, period or sensor by default; if a formal constraint requires a change, ask the supervisor and record the minimum necessary adjustment.
 - Replace language that treats satellite measures as direct or unalterable economic truth with carefully scoped observational proxies.
 - Verify or remove "real-time," "economic intelligence," "hidden," and other promises the data cadence cannot support.
-- Resolve whether Atacama lithium, Peru mining and Czech night lights are truly one coherent study. Do not retain unrelated case studies merely because they appear in the current draft.
+- Assess each existing case against the approved aims and evidence. Retain cases that directly support those aims; omit only cases that are irrelevant, unsupported or unauthorized, and state the reason. If the preferred agricultural application is approved, connect it to the existing aims rather than using it to silently replace them.
 - State why the selected problem is suitable for a component-based Informatics thesis.
 - Connect to EIE67E through concrete engineering outcomes: reusable interfaces, adapters, modular components, profiling, testing, refactoring and a defensible UI/API/database design.
 - Do not state the course requires or approves the scientific topic.
