@@ -16,7 +16,7 @@ The repository is primarily Python, while the historical syllabus specifies a C#
 | Historical syllabus theme | Potential project evidence | Evidence needed |
 |---|---|---|
 | Reusable code and component libraries | Provider/catalogue adapters with shared interfaces | Source paths, interface contracts and tests |
-| Application design | Small end-to-end public-data pipeline | Approved scope, architecture and reproducible run |
+| Application design | Reproducible pipeline architecture that represents the modalities and aims relevant to the approved thesis | Scope, architecture and run evidence mapped to those aims |
 | UI creation | Map or results viewer, if retained | Working interaction, empty/error states and usability evidence |
 | Databases and external data | Metadata/results persistence or clear file-based design | Schema or storage design and tested reads/writes |
 | Design patterns and refactoring | Documented modular boundaries and justified patterns | Code review and before/after evidence where relevant |
@@ -30,7 +30,7 @@ This is an engineering proposal, not a claim that every component currently exis
 
 1. Provider adapter for a bounded, approved public observation.
 2. Preprocessing for quality masks, required bands and compact features.
-3. One transparent low-resource baseline chosen for the approved question.
+3. Analysis method or methods selected to address the full approved aims, with resource costs measured where relevant.
 4. Evaluation using an independently justified design.
 5. Provenance for source IDs, dates, parameters, code revision and data mode.
 6. Optional service/API and visualization with clear errors and mock/demo status.
@@ -39,7 +39,7 @@ A low-compute design can support the course connection through bounded processin
 
 ## Verification items
 
-- Obtain the formal assignment and confirm its approved question, objective, method and scope.
+- Obtain the formal assignment and confirm its title, connected aims/questions, method, and intended breadth.
 - Check current EIE67E materials for current learning outcomes, language and assessment.
 - Identify what components are implemented, tested and live in the reviewed code.
 - Separate software-quality evaluation from satellite-science validation.
