@@ -76,7 +76,7 @@ Specific draft claims to verify or remove pending evidence:
 - F1 0.907 and its TP/FP/FN/TN table.
 - Pearson r 0.724 and p 0.0002 with stated quarterly/regional GDP sample.
 - Moran's I 0.648 and z 8.92.
-- Runtime 9.0 � 1.2 seconds and 310 MB RAM.
+- Runtime 9.0 plus/minus 1.2 seconds and 310 MB RAM.
 - Any claim that public anomaly events are real or independently verified.
 
 A test-suite pass does not validate scientific findings. Mock data can test software behavior but not real-world accuracy.
