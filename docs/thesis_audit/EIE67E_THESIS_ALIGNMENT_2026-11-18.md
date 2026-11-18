@@ -1,10 +1,10 @@
-# EIE67E thesis alignment - evidence-based working note
+# EIE67E thesis alignment — evidence-based working note
 **Review date:** 18 November 2026  
 **Status:** Course connection is evidenced; thesis-topic approval is not established by the course record.
 
 ## Finding
 
-The strongest class connection found in the user's prior thesis context is EIE67E Component-based SW Development. CZU Moodle lists EIE67E for WS 2026/27 and identifies Jir� Brozek as guarantor. The retrievable formal syllabus is from WS 2023/24, so its detailed outcomes and assessment must be checked against the current course space.
+The strongest class connection found in the user’s prior thesis context is EIE67E Component-based SW Development. CZU Moodle lists EIE67E for WS 2026/27 and identifies Jiří Brožek as guarantor. The retrievable formal syllabus is from WS 2023/24, so its detailed outcomes and assessment must be checked against the current course space.
 
 The historical syllabus describes application design, reusable code, component libraries, UI/database work, design patterns, profiling, refactoring and unit testing, and includes network/distributed-object topics. Those software-engineering outcomes can be demonstrated by a modular satellite-data pipeline. They do not themselves approve a satellite-research topic, establish a computational-power rule or validate scientific findings.
 
@@ -33,11 +33,11 @@ The following is an engineering proposal to compare with actual code, not a clai
 5. Provenance: persist source IDs, dates, parameters, code revision and data mode.
 6. Service/API and visualization: expose clearly labeled outputs, errors and mock/demo status.
 
-A low-compute design can support the class connection through bounded processing, caching, chunked reads and profiling. No source reviewed establishes a formal compute cap or identifies the "first guy" who may have mentioned it.
+A low-compute design can support the class connection through bounded processing, caching, chunked reads and profiling. No source reviewed establishes a formal compute cap or identifies the “first guy” who may have mentioned it.
 
 ## Supervisor work check
 
-The official CZU teaching profile lists Jir� Brozek as guarantor of EIE67E and lists teaching in computer principles, computer architecture and object modelling. A public Theses.cz search result indexes a 2012 CZU PEF dissertation by the same name titled "Distribuovan� objektov� architektury" ("Distributed Object Architectures"). Its direct record and contents were not accessible in this check. Treat it as a lead until the institutional record is verified; no verified master's thesis record was located.
+The official CZU teaching profile lists Jiří Brožek as guarantor of EIE67E and lists teaching in computer principles, computer architecture and object modelling. A public Theses.cz search result indexes a 2012 CZU PEF dissertation by the same name titled “Distribuované objektové architektury” (“Distributed Object Architectures”). Its direct record and contents were not accessible in this check. Treat it as a lead until the institutional record is verified; no verified master’s thesis record was located.
 
 This work history may justify checking component and distributed-architecture concepts for technical fit. It does not show that the supervisor expects a satellite-API thesis or has approved a particular method.
 
@@ -45,7 +45,7 @@ This work history may justify checking component and distributed-architecture co
 
 - Obtain the exact current UIS thesis assignment and confirm the approved title, objective, method and scope.
 - Open the current EIE67E 2026/27 syllabus or Moodle materials and confirm learning outcomes and assessment.
-- Locate the source that names "the first guy" and states a computational limit; do not infer identity from unrelated old course records.
+- Locate the source that names “the first guy” and states a computational limit; do not infer identity from unrelated old course records.
 - Verify the direct Theses.cz/CZU record and contents for the 2012 dissertation before citing it.
 - Identify what components are actually implemented and tested in the current reviewed branch.
 - Separate software-quality evaluation from satellite-science validation.
@@ -54,6 +54,5 @@ This work history may justify checking component and distributed-architecture co
 
 - [CZU Moodle course listing for WS 2026/27](https://moodle.czu.cz/course/search.php?perpage=all&search=se)
 - [CZU EIE67E syllabus, WS 2023/24](https://is.czu.cz/katalog/syllabus.pl?predmet=229754)
-- [Jir� Brozek's CZU teaching profile](https://home.czu.cz/brozekj/pedagogika?editmode=0)
+- [Jiří Brožek’s CZU teaching profile](https://home.czu.cz/brozekj/pedagogika?editmode=0)
 - [Theses.cz related-work search for distributed architecture](https://theses.cz/th_search/prace_na_stejne_tema?ks=distribuovana+architektura)
-
