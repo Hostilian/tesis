@@ -8,6 +8,8 @@ The strongest class connection found in the user’s prior thesis context is EIE
 
 The historical syllabus describes application design, reusable code, component libraries, UI/database work, design patterns, profiling, refactoring and unit testing, and includes network/distributed-object topics. Those software-engineering outcomes can be demonstrated by a modular satellite-data pipeline. They do not themselves approve a satellite-research topic, establish a computational-power rule or validate scientific findings.
 
+The current repository is primarily Python, while the retrievable 2023/24 syllabus specifies C#/.NET. Confirm whether Python is acceptable for the 2026/27 project or whether one C#/.NET component is expected; do not port the system or claim compliance from the historical syllabus alone.
+
 ## Course-to-project mapping
 
 | EIE67E theme in the retrieved syllabus | Potential project evidence | Evidence needed before making a thesis claim |
