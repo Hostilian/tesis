@@ -6,11 +6,11 @@
 
 ## Finding
 
-The repository contains thesis chapters, software, dashboard outputs, Markdown and LaTeX sources, and a generated PDF. Parts of the narrative and public data describe mock inputs alongside scientific verification labels and historical metrics. Before presenting thesis findings, the author needs one assignment-aligned question, traceable authentic data, reproducible runs and a suitable independent evaluation reference.
+The repository contains thesis chapters, software, dashboard outputs, Markdown and LaTeX sources, and a generated PDF. Parts of the narrative and public data describe mock inputs alongside scientific verification labels and historical metrics. Before presenting findings, map the full approved aims and connected questions to traceable authentic data, reproducible runs, and suitable independent evaluation references. Preserve the intended breadth; remove only elements that are demonstrably irrelevant, unsupported, unauthorized, or outside the formal assignment.
 
 ## Course fit and scope
 
-The public course record lists EIE67E for WS 2026/27, but the detailed syllabus available in this review is historical. It describes reusable components, application design, UI/database work, patterns, profiling, refactoring and unit testing; it lists a C#/.NET project. Current requirements must be checked before claiming alignment. A modular pipeline can demonstrate software outcomes, but course fit does not approve a thesis topic.
+The public course record lists EIE67E for WS 2026/27, but the detailed syllabus available in this review is historical. It describes reusable components, application design, UI/database work, patterns, profiling, refactoring and unit testing; it lists a C#/.NET project. Current requirements must be checked before claiming alignment. Treat EIE67E and the directly fitting data/software/statistics units as work-package candidates; Web Technologies depends on retaining a web artifact, and HCI depends on a genuine permitted evaluation. Course fit does not approve a thesis topic.
 
 ## Evidence integrity
 
@@ -23,7 +23,7 @@ An empirical claim needs the exact input IDs and dates, provider/product, qualit
 | Area | Main issue to resolve |
 |---|---|
 | Front matter | Reconcile department, year, date and extent with the current official template and assignment. |
-| 1. Introduction | Narrow the question; avoid treating Earth-observation proxies as economic truth without evidence. |
+| 1. Introduction | Preserve all approved aims and connected questions; map them to relevant cases and evidence, and qualify Earth-observation proxies instead of presenting them as direct economic truth. |
 | 2. Literature review | Verify reference identity and claim support. R235 and R236 have DOI/title mismatches in the inspected bibliography; R241 needs direct verification; R258 appears duplicated. |
 | 3. Methodology | Reconcile data sources, spatial/temporal units, API records, validation reference and indicator frequency. |
 | 4. System design | Mark each feature implemented, tested, mock, planned or unsupported; a module does not prove a live service. |
