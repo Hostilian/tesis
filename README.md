@@ -16,7 +16,7 @@ The registered thesis scope remains subject to its formal academic assignment an
 - Version 2 uses an approval block, bounded route decision, course-to-pipeline map and evidence gates.
 - Unsupported figures and conclusions are withheld until they can be reproduced from authentic inputs and documented runs.
 - Public demo outputs are identified as mock or synthetic and are not treated as ground truth.
-- The public landing page is being replaced with a status-first page that omits student and supervisor contact details.
+- The live GitHub Pages landing page now uses a status-first design and omits student and supervisor contact details.
 
 ## Demo and review documents
 
