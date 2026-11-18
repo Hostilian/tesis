@@ -8,15 +8,16 @@ This repository contains a software prototype for working with Earth-observation
 
 The published examples include mock or synthetic inputs. Historical performance and economic statistics previously displayed in project materials do not have a complete, independently reviewable evidence chain in the current public record. They are not presented here as validated thesis findings. Software tests do not validate scientific results.
 
-The registered thesis scope remains subject to its formal academic assignment and supervisor approval. No new topic or study area is represented by this page as approved.
+The registered thesis scope remains subject to its formal academic assignment and supervisor approval. The proposed applied direction seeks to preserve the approved aims while assessing an agricultural multi-modal workflow; no new topic, study area or imagery source is represented as formally approved.
 
 ## What changed in this revision
 
 - The original thesis source remains separate; a provisional Version 2 working draft is maintained privately and is not published in this repository.
-- Version 2 uses an approval block, bounded route decision, course-to-pipeline map and evidence gates.
+- Version 2 preserves the registered aims, sets out a preferred multimodal proposal, and maps only directly relevant course outcomes to thesis work packages.
+- Web Technologies is conditional on retaining a web deliverable; HCI is conditional on a genuine, permitted interface evaluation and is omitted if no direct fit exists.
 - Unsupported figures and conclusions are withheld until they can be reproduced from authentic inputs and documented runs.
 - Public demo outputs are identified as mock or synthetic and are not treated as ground truth.
-- The live GitHub Pages landing page now uses a status-first design and omits student and supervisor contact details.
+- The live GitHub Pages landing page uses a status-first design and omits student and supervisor contact details.
 
 ## Demo and review documents
 
