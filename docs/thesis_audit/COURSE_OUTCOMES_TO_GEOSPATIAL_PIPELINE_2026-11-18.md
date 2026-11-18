@@ -5,16 +5,16 @@
 
 ## One integrated pipeline, multiple course outcomes
 
-The curriculum connections can be represented by one source-to-result software pipeline. Each course contributes a different competency; the thesis still needs one approved research question and a bounded study design.
+The course connections can be represented by one coherent source-to-result software system that supports the full approved thesis aims. The registered assignment may contain several connected objectives or questions; do not replace them with one smaller question by default. Course outcomes bound relevant work packages, and weak or irrelevant course mappings should be omitted.
 
-| Course unit | Public catalogue learning outcome | Concrete thesis artefact | Current project evidence and gap |
+| Course unit | Proposed relevance | Possible thesis artefact | Include in the thesis map only when |
 |---|---|---|---|
-| INF13186L — Interação Pessoa-Máquina (Human-Computer Interaction) | Identify users and tasks, design interfaces, and evaluate interfaces throughout development. | A map/dashboard with task flows, accessible controls, and a small usability evaluation protocol. | The repository includes a dashboard in docs/app.js; no user/task or usability-evaluation evidence is established. |
-| INF13204L — Metodologias e Desenvolvimento de Software (Methods and Software Development) | Requirements, modeling, design/implementation, software patterns, configuration management, testing and validation. | A requirements-to-component trace with explicit interfaces, configuration, offline fixtures, and verification records. | Python modules for ingestion, preprocessing, anomaly analysis, provenance, API and tests are present. Presence does not establish live-provider behavior. |
-| INF13207L — Tecnologias Web (Web Technologies) | Web foundations, client/server protocols, frameworks, application servers, MVC and usability. | A documented API contract, client/server flow, map view, error behavior and deployment description. | FastAPI source and browser UI exist; some background processing is simulated, so production claims need separate evidence. |
-| INF14387L — Transformação e Análise de Dados (Data Transformation and Analysis) | Data-quality assessment; handling missing values, outliers and class imbalance before analysis or machine learning. | A raster quality gate for date, CRS, bands, resolution, clouds, NoData, and reproducible transformations. | Existing Sentinel preprocessing computes spectral indices and masks clouds. Cross-sensor checks and authenticated imagery integration remain unverified. |
-| MAT02354L — Probabilidade e Estatística (Probability and Statistics) | Probability and statistical inference, hypothesis formulation, and data analysis under uncertainty. | A sampling plan, uncertainty reporting, appropriate evaluation design, and limits on interpretation. | Detector code mentions bootstrap uncertainty. The empirical thesis metrics have not been independently reproduced by this document. |
-| EIE67E — Component-based SW Development | The retrieved 2023/24 syllabus describes reusable code/components, application design, UI/database work, design patterns, profiling, refactoring and testing. | Reusable source adapters, preprocessing, evaluation, provenance, API/UI and a measured resource profile. | The repository is primarily Python, while that historical syllabus lists C#/.NET. Current 2026/27 course requirements must be checked. |
+| INF13186L — Interação Pessoa-Máquina (Human-Computer Interaction) | Conditional | User/task definition, interface design, and a permitted evaluation protocol | A genuine, relevant interface-evaluation contribution is feasible; otherwise omit |
+| INF13204L — Metodologias e Desenvolvimento de Software (Methods and Software Development) | Direct-fit candidate | Requirements-to-component trace, design decisions, configuration, and verification records | Current learning outcomes match the documented software work |
+| INF13207L — Tecnologias Web (Web Technologies) | Conditional | API contract, client/server flow, error handling, or web-map behaviour | The API/web deliverable remains a relevant part of the approved thesis |
+| INF14387L — Transformação e Análise de Dados (Data Transformation and Analysis) | Direct-fit candidate | Per-modality quality gates and reproducible transformations across relevant imagery | Real metadata/examples and the assignment's methods support the task |
+| MAT02354L — Probabilidade e Estatística (Probability and Statistics) | Direct-fit candidate | Sampling, assumptions, uncertainty, and a justified evaluation design | The approved aims and independent reference support statistical inference |
+| EIE67E — Component-based SW Development | Direct-fit candidate; current requirements unresolved | Reusable source/modality adapters, shared provenance/quality services, and measured software quality | Current 2026/27 outcomes/language are confirmed and the artefacts fit them |
 
 ## Course catalogue sources
 
@@ -25,7 +25,7 @@ The curriculum connections can be represented by one source-to-result software p
 - [MAT02354L — Probabilidade e Estatística](https://www.uevora.pt/estudar/estudantes-ue/optativas-livres?curso=2614&uc=MAT02354L)
 - [CZU EIE67E current listing](https://moodle.czu.cz/course/search.php?perpage=all&search=se); [detailed 2023/24 syllabus](https://is.czu.cz/katalog/syllabus.pl?predmet=229754)
 
-Catalogue records establish publicly stated course content only. They do not establish a particular student's enrolment, grade, completion, transfer, or recognition.
+Catalogue records establish public course content only; they do not establish an individual's enrolment, grade, completion, transfer, or recognition. The unit mappings above are suggestions for teacher review, not a requirement to include every course. Keep only direct fits and omit any weak mapping.
 
 ## Evidence and academic-integrity limits
 
