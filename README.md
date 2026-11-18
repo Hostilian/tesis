@@ -1,278 +1,36 @@
-# 🛰️ Space-Based Economic Intelligence
+# Geospatial Research Software Demonstrator
 
-[![Deploy to GitHub Pages](https://github.com/hostilian/tesis/actions/workflows/deploy.yml/badge.svg)](https://github.com/hostilian/tesis/actions/workflows/deploy.yml)
-[![Run Test Suite](https://github.com/hostilian/tesis/actions/workflows/test.yml/badge.svg)](https://github.com/hostilian/tesis/actions/workflows/test.yml)
-[![Security Scan](https://github.com/hostilian/tesis/actions/workflows/security.yml/badge.svg)](https://github.com/hostilian/tesis/actions/workflows/security.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python Version](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/)
-[![F1-Score](https://img.shields.io/badge/F1--Score-0.907-brightgreen.svg)](#-key-results)
-[![Pearson r](https://img.shields.io/badge/Pearson%20r-0.724-cyan.svg)](#-key-results)
+**Public status:** engineering prototype; scientific claims are under evidence review.
 
-**Bachelor Thesis Artifact: "Space-Based Economic Intelligence: Detecting Hidden Resource Anomalies Using Open Satellite APIs"**
+This repository contains a software prototype for working with Earth-observation data, provenance, processing and visualization. It is not a validated operational monitoring service, and its example anomaly records must not be interpreted as observed real-world events.
 
-| Field | Value |
-|---|---|
-| **Student** | Eren Ozturk (XOZTE001@studenti.czu.cz) |
-| **Institution** | Czech University of Life Sciences Prague (CZU), PEF — Department of Informatics (KII) |
-| **Supervisor** | Dr. Jiří Brožek (brozekj@pef.czu.cz) |
-| **Academic Year** | 2025–2026 |
+## Evidence status
 
----
+The published examples include mock or synthetic inputs. Historical performance and economic statistics previously displayed in project materials do not have a complete, independently reviewable evidence chain in the current public record. They are not presented here as validated thesis findings. Software tests do not validate scientific results.
 
-## 🔗 Live Interactive Dashboard
+The registered thesis scope remains subject to its formal academic assignment and supervisor approval. The proposed applied direction seeks to preserve the approved aims while assessing an agricultural multi-modal workflow; no new topic, study area or imagery source is represented as formally approved.
 
-👉 **[View the Live Satellite Anomaly Explorer](https://hostilian.github.io/tesis/)**
+## What changed in this revision
 
-A futuristic, dark-space GIS monitoring console acting as the Decision Support System (DSS) and thesis presentation artifact, showcasing localized lithium, deforestation, and industrial night-light anomalies across 9 verified anomaly events in 3 study regions.
+- The original thesis source remains separate; a provisional Version 2 working draft is maintained privately and is not published in this repository.
+- Version 2 preserves the registered aims, sets out a preferred multimodal proposal, and maps only directly relevant course outcomes to thesis work packages.
+- Web Technologies is conditional on retaining a web deliverable; HCI is conditional on a genuine, permitted interface evaluation and is omitted if no direct fit exists.
+- Unsupported figures and conclusions are withheld until they can be reproduced from authentic inputs and documented runs.
+- Public demo outputs are identified as mock or synthetic and are not treated as ground truth.
+- The live GitHub Pages landing page uses a status-first design and omits student and supervisor contact details.
 
----
+## Demo and review documents
 
-## 📊 Key Results
+- [Current project status](https://hostilian.github.io/tesis/)
+- [Public evidence review](docs/thesis_audit/THESIS_PUBLIC_EVIDENCE_REVIEW_2026-11-18.md)
+- [Chapter revision map](docs/thesis_audit/THESIS_CHAPTER_REVISION_MAP_2026-11-18.md)
+- [Integrated imagery and scope gate](docs/thesis_audit/INTEGRATED_IMAGERY_AND_SCOPE_DECISION_GATE_2026-11-18.md)
+- [Reproducible low-compute run template](docs/thesis_audit/REPRODUCIBLE_LOW_COMPUTE_RUN_TEMPLATE_2026-11-18.md)
 
-| Metric | Value | Threshold | Status |
-|---|---|---|---|
-| F1-Score (Isolation Forest, Madre de Dios) | **0.907** | > 0.80 | ✅ H₁ Supported |
-| Precision | 0.936 | — | ✅ |
-| Recall | 0.880 | — | ✅ |
-| Pearson r (VIIRS NTL vs Czech GDP) | **0.724** | ≥ 0.65 | ✅ H₂ Supported |
-| p-value (t = 4.58, df = 19) | **0.0002** | < 0.05 | ✅ Significant |
-| Moran's I (Spatial Clustering) | **+0.648** | > 0 | ✅ Clustered |
-| Pipeline ETL Runtime | 9.0 ± 1.2 s | — | ✅ |
-| Satellite Tiles Ingested | **184** | — | — |
-| Test Suite | **47 / 47 PASSING** | All | ✅ |
+## Privacy and data handling
 
----
+The public landing page intentionally omits student identifiers and personal contact details. Do not add credentials, private imagery, private boundaries, partner records, or confidential correspondence to this repository. Use only data whose source, license and publication terms are known.
 
-## 🏛️ Architecture Overview
+## Development
 
-```
-[Satellite APIs]        [Economic APIs]
-  GEE, CDSE, NASA         World Bank, IMF
-       │                       │
-[Ingestion Layer]         [Enrichment Layer]
-  Rate-limiting,            Temporal alignment,
-  retry logic,              GDP cross-reference
-  mock-fallback                   │
-       └────────────┬─────────────┘
-               [AI/ML Engine]
-                Isolation Forest (spatial)
-                Z-score (temporal NTL)
-                Bootstrap CI estimation
-                       │
-              [Export/Cache Layer]
-               docs/data/anomalies.json
-               docs/api/v1/ (REST endpoints)
-                       │
-          [Web Visualization Dashboard]
-            Three.js Globe + Leaflet Map
-            Spectral Radar + NTL Charts
-            Before/After Image Slider
-                       │
-            [GitHub Pages Deployment]
-              CI/CD: GitHub Actions
-```
-
-### Repository Structure
-
-```
-tesis/
-├── .github/
-│   ├── workflows/
-│   │   ├── deploy.yml          # GitHub Pages CI/CD
-│   │   ├── test.yml            # Pytest (47 tests)
-│   │   ├── security.yml        # CodeQL + pip-audit + Gitleaks + SBOM
-│   │   ├── lint.yml            # Black + Flake8
-│   │   └── data-refresh.yml    # Weekly satellite data update
-│   ├── ISSUE_TEMPLATE/
-│   ├── dependabot.yml          # Automated dependency updates
-│   └── pull_request_template.md
-│
-├── docs/                       # GitHub Pages — Live Dashboard
-│   ├── index.html              # Main SPA (V2: Glassmorphism)
-│   ├── index3.html             # V3: Sci-Fi HUD Edition
-│   ├── app.js / app3.js        # Dashboard controllers
-│   ├── index.css               # Space design system
-│   ├── sw.js                   # Service Worker (PWA)
-│   ├── manifest.json           # PWA manifest
-│   ├── api.html                # Redoc API documentation viewer
-│   ├── openapi.yaml            # OpenAPI 3.0 specification
-│   ├── robots.txt / sitemap.xml / 404.html
-│   ├── locales/en.json         # English i18n strings
-│   ├── locales/cs.json         # Czech i18n strings
-│   ├── data/
-│   │   ├── anomalies.json      # 9 verified anomaly events
-│   │   └── regions.geojson     # Study area polygons
-│   └── api/v1/                 # Static REST API endpoints
-│       ├── anomalies/index.json
-│       ├── anomalies/{id}/index.json (×9)
-│       ├── datasets/index.json
-│       └── status/index.json
-│
-├── pipeline/                   # Python Data Pipeline
-│   ├── notebooks/              # 00_setup → 07_export
-│   ├── src/
-│   │   ├── ingestion.py        # GEE + CDSE + World Bank fetchers
-│   │   ├── preprocessing.py    # Cloud masking, band normalization
-│   │   ├── utils.py            # NDVI, NDWI, BSI, Z-score formulas
-│   │   ├── models.py           # Isolation Forest wrapper
-│   │   ├── anomaly_detector.py # End-to-end orchestrator + bootstrap CI
-│   │   ├── economic_overlay.py # Pearson r, 8-point assessment
-│   │   └── exporter.py         # GeoJSON / JSON export
-│   ├── tests/
-│   │   └── test_pipeline.py    # 47 tests across 12 test classes
-│   ├── requirements.txt        # Production dependencies (pinned)
-│   ├── requirements-dev.txt    # Development-only (pytest, black, flake8)
-│   ├── Dockerfile              # Full pipeline reproducibility
-│   └── run_pipeline.py         # Pipeline CLI orchestrator
-│
-├── thesis/
-│   ├── chapters/               # Markdown source (Ch. 1–7 + Appendices A–F)
-│   └── latex/                  # Compiled LaTeX (main.tex + chapters/*.tex)
-│       ├── main.tex
-│       ├── references.bib      # 40+ ISO 690 / BibTeX entries
-│       └── chapters/*.tex
-│
-├── README.md                   # This file
-├── REPRODUCE.md                # Step-by-step reproducibility guide
-├── SECURITY.md                 # Security policy
-├── CONTRIBUTING.md             # Contribution guidelines
-├── CHANGELOG.md                # Keep-a-Changelog format
-└── LICENSE                     # MIT License
-```
-
----
-
-## ⚡ Quick Start
-
-### Prerequisites
-- Python 3.12+
-- Git
-
-### Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/hostilian/tesis.git
-cd tesis
-
-# Create and activate virtual environment
-python -m venv .venv
-.venv\Scripts\activate      # Windows
-source .venv/bin/activate    # Linux/macOS
-
-# Install pipeline dependencies
-pip install -r pipeline/requirements.txt
-
-# (Optional) Install development tools
-pip install -r pipeline/requirements-dev.txt
-```
-
-### Configure Environment (for real API access)
-
-```bash
-# Authenticate Google Earth Engine
-earthengine authenticate
-
-# Create .env file (already in .gitignore)
-echo "GCP_PROJECT=your-google-cloud-project-id" > .env
-```
-
-For CI/CD and live provider access, configure these GitHub Actions secrets:
-
-| Secret | Purpose |
-|---|---|
-| `GEE_SERVICE_ACCOUNT_KEY` | Base64-encoded Google Earth Engine service account JSON |
-| `GCP_PROJECT_ID` | Google Cloud project ID used by Earth Engine |
-| `CDSE_CLIENT_ID` | Copernicus Data Space OAuth2 client ID |
-| `CDSE_CLIENT_SECRET` | Copernicus Data Space OAuth2 client secret |
-| `NASA_EARTHDATA_TOKEN` | NASA EarthData bearer token for CMR/VIIRS access |
-| `SENTINELHUB_CLIENT_ID` | Sentinel Hub OAuth2 client ID for evalscript rendering |
-| `SENTINELHUB_CLIENT_SECRET` | Sentinel Hub OAuth2 client secret |
-| `COMTRADE_API_KEY` | UN COMTRADE key for mineral export cross-validation |
-| `FRED_API_KEY` | FRED key for commodity price context |
-
-### Run the Pipeline
-
-```bash
-python pipeline/run_pipeline.py
-```
-
-> **Demo Mode**: If Earth Engine credentials are absent, the pipeline auto-switches to reproducible mock mode, producing valid JSON/GeoJSON outputs for verification.
-
-### Run Tests
-
-```bash
-pytest pipeline/tests/ -v
-# Expected: 47 passed in ~25s
-```
-
-### Docker (Full Reproducibility)
-
-```bash
-docker build -t space-econ-intelligence ./pipeline
-docker run --rm space-econ-intelligence pytest pipeline/tests/ -v
-```
-
----
-
-## 📖 API Documentation
-
-The dashboard exposes a static REST API at `/api/v1/`:
-
-| Endpoint | Description |
-|---|---|
-| `GET /api/v1/anomalies/index.json` | List all anomaly events |
-| `GET /api/v1/anomalies/{id}/index.json` | Full anomaly detail + economic context |
-| `GET /api/v1/datasets/index.json` | Satellite datasets used |
-| `GET /api/v1/status/index.json` | Pipeline execution status |
-
-Interactive API documentation: **[View API Docs](https://hostilian.github.io/tesis/api.html)**
-
----
-
-## 📚 Academic Citation (BibTeX)
-
-```bibtex
-@thesis{ozturk2026space,
-  author  = {Ozturk, Eren},
-  title   = {Space-Based Economic Intelligence: Detecting Hidden Resource
-             Anomalies Using Open Satellite APIs},
-  school  = {Czech University of Life Sciences Prague (CZU PEF),
-             Department of Informatics (KII)},
-  year    = {2026},
-  type    = {Bachelor Thesis},
-  advisor = {Bro{\v{z}}ek, Ji{\v{r}}{\'\i}}
-}
-```
-
----
-
-## 🔒 Security
-
-This project implements a full security pipeline:
-- **Dependency auditing**: `pip-audit` on every push
-- **Static analysis**: GitHub CodeQL (Python)
-- **Secrets scanning**: Gitleaks on full git history
-- **SBOM**: CycloneDX Software Bill of Materials generated per release
-- **DAST and API fuzzing**: OWASP ZAP baseline plus OpenAPI fuzz tests in CI
-- **Dependabot**: Automated weekly dependency updates
-
-See [SECURITY.md](SECURITY.md) for the responsible disclosure policy.
-
----
-
-## 📜 License
-
-Code: [MIT License](LICENSE)  
-Satellite data: Used under respective open licenses (Copernicus Open Licence, NASA/USGS Public Domain)  
-Thesis text: © Eren Ozturk 2026 — All rights reserved pending submission
-
----
-
-## 🙏 Acknowledgments
-
-- **Dr. Jiří Brožek** — thesis supervisor, KII PEF CZU
-- **ESA Copernicus Programme** — Sentinel-1/2 open data
-- **NASA / USGS** — Landsat and VIIRS public domain datasets
-- **Google Earth Engine** — Planetary-scale geospatial computing platform
-- **IBM + NASA** — Prithvi foundation model for Earth observation
+See the repository workflow files and pipeline documentation for setup and software checks. Scientific claims require data provenance, an appropriate independent reference and a student-authored interpretation.
