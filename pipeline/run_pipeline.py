@@ -17,6 +17,7 @@ from pipeline.src.preprocessing import GeospatialPreprocessor
 from pipeline.src.models import AnomalyDetector
 from pipeline.src.exporter import GeospatialExporter
 from pipeline.src.provenance import build_provenance_record
+from pipeline.src.evidence import disclose_demonstration
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
@@ -245,7 +246,7 @@ def run_lithium_case_study(ingester, preprocessor, detector):
 
             prov = build_provenance_record(
                 anomaly_id=anom_id,
-                source_system="Sentinel-2 GEE MSI / Mock",
+                source_system="Synthetic Sentinel-2 demo pixels",
                 raw_tile_inputs=bands,
                 processing_parameters={
                     "contamination": detector.contamination,
@@ -275,7 +276,7 @@ def run_lithium_case_study(ingester, preprocessor, detector):
                 "verification": {
                     "method": "Spatial Overlay",
                     "ground_truth": "SERNAGEOMIN Lithium Brine Expansion Plan (SQM)",
-                    "status": "Verified",
+                    "status": "Demo - unverified",
                 },
                 "provenance_hash": prov["combined_hash"],
                 "osm_overlap_pct": osm_overlap_pct,
@@ -356,7 +357,7 @@ def run_deforestation_case_study(ingester, preprocessor, detector):
 
             prov = build_provenance_record(
                 anomaly_id=anom_id,
-                source_system="Sentinel-2 GEE MSI / Mock",
+                source_system="Synthetic Sentinel-2 demo pixels",
                 raw_tile_inputs=bands,
                 processing_parameters={
                     "contamination": detector.contamination,
@@ -386,7 +387,7 @@ def run_deforestation_case_study(ingester, preprocessor, detector):
                 "verification": {
                     "method": "Temporal Radar backscatter (Sentinel-1 SAR)",
                     "ground_truth": "MAAP Deforestation Alert #284",
-                    "status": "Verified (Critical)",
+                    "status": "Demo - unverified",
                 },
                 "provenance_hash": prov["combined_hash"],
                 "osm_overlap_pct": osm_overlap_pct,
@@ -455,7 +456,7 @@ def run_ntl_case_study(ingester, detector):
 
             prov = build_provenance_record(
                 anomaly_id=anom_id,
-                source_system="NOAA VIIRS DNB / Mock",
+                source_system="Synthetic VIIRS night-light demo series",
                 raw_tile_inputs=ntl_data,
                 processing_parameters={"rolling_window": 12, "threshold": 2.5},
             )
@@ -480,7 +481,7 @@ def run_ntl_case_study(ingester, detector):
                 "verification": {
                     "method": "Statistical GDP Correlation",
                     "ground_truth": "Czech Statistical Office (ČSÚ) Quarterly Manufacturing Index",
-                    "status": "Verified",
+                    "status": "Demo - unverified",
                 },
                 "provenance_hash": prov["combined_hash"],
                 "osm_overlap_pct": osm_overlap_pct,
@@ -571,6 +572,10 @@ def main():
     all_anomalies.extend(anoms_ntl)
     all_provenance.extend(provs_ntl)
 
+    # All current detection features come from mock pixel/time-series arrays.
+    # Authentication or metadata-only GEE queries are not scene validation.
+    disclose_demonstration(all_anomalies)
+
     # 4. Define Study Regions
     study_regions = [
         {
@@ -649,10 +654,12 @@ def main():
         mock_mode=mock_mode,
         operator=operator,
     )
-    secret_key = os.environ.get(
-        "SBEI_SIGNING_SECRET", "sbei_secure_audit_secret_key_2026"
-    )
-    record.sign_record(secret_key)
+    # A public hard-coded default key cannot authenticate provenance.
+    secret_key = os.environ.get("SBEI_SIGNING_SECRET")
+    if secret_key:
+        record.sign_record(secret_key)
+    else:
+        logging.warning("Run record is unsigned: SBEI_SIGNING_SECRET not configured")
 
     output_dir = Path(__file__).parent.parent / "docs" / "data" / "pipeline_runs"
     output_dir.mkdir(parents=True, exist_ok=True)
