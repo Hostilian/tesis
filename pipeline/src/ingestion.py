@@ -43,11 +43,11 @@ from pipeline.src.http_resilience import (
 logger = logging.getLogger(__name__)
 
 try:  # pragma: no cover - optional dependency in CI/local mock mode
-    import ee  # type: ignore
+    import ee
 
     EE_AVAILABLE = True
 except Exception:  # pragma: no cover - optional dependency
-    ee = None  # type: ignore[assignment]
+    ee = None
     EE_AVAILABLE = False
 
 
@@ -304,13 +304,13 @@ class GoogleEarthEngineClient:
                 and credential_file.exists()
                 and self.config.gee_service_account
             ):
-                credentials = ee.ServiceAccountCredentials(  # type: ignore[union-attr]
+                credentials = ee.ServiceAccountCredentials(
                     self.config.gee_service_account,
                     str(credential_file),
                 )
-                ee.Initialize(credentials=credentials, project=project)  # type: ignore[union-attr]
+                ee.Initialize(credentials=credentials, project=project)
             else:
-                ee.Initialize(project=project)  # type: ignore[union-attr]
+                ee.Initialize(project=project)
             self.authenticated = True
             return True
         except Exception as first_exc:
@@ -318,8 +318,8 @@ class GoogleEarthEngineClient:
                 "GEE ADC/service-account initialization failed: %s", first_exc
             )
             try:
-                ee.Authenticate(auth_mode="gcloud")  # type: ignore[union-attr]
-                ee.Initialize(project=project)  # type: ignore[union-attr]
+                ee.Authenticate(auth_mode="gcloud")
+                ee.Initialize(project=project)
                 self.authenticated = True
                 return True
             except Exception as second_exc:
@@ -369,10 +369,10 @@ class GoogleEarthEngineClient:
             return image.updateMask(mask).divide(10000)
 
         collection = (
-            ee.ImageCollection("COPERNICUS/S2_SR_HARMONIZED")  # type: ignore[union-attr]
+            ee.ImageCollection("COPERNICUS/S2_SR_HARMONIZED")
             .filterBounds(region_ee_geometry)
             .filterDate(start_date, end_date)
-            .filter(ee.Filter.lt("CLOUDY_PIXEL_PERCENTAGE", cloud_max))  # type: ignore[union-attr]
+            .filter(ee.Filter.lt("CLOUDY_PIXEL_PERCENTAGE", cloud_max))
             .map(mask_clouds)
         )
         mosaic = collection.select(["B2", "B3", "B4", "B8", "B11", "B12"]).median()
@@ -417,12 +417,12 @@ class GoogleEarthEngineClient:
         if not self.authenticated:
             raise RuntimeError("GEE is not authenticated.")
         collection = (
-            ee.ImageCollection("COPERNICUS/S1_GRD")  # type: ignore[union-attr]
+            ee.ImageCollection("COPERNICUS/S1_GRD")
             .filterBounds(region_ee_geometry)
             .filterDate(start_date, end_date)
-            .filter(ee.Filter.listContains("transmitterReceiverPolarisation", "VV"))  # type: ignore[union-attr]
-            .filter(ee.Filter.listContains("transmitterReceiverPolarisation", "VH"))  # type: ignore[union-attr]
-            .filter(ee.Filter.eq("instrumentMode", "IW"))  # type: ignore[union-attr]
+            .filter(ee.Filter.listContains("transmitterReceiverPolarisation", "VV"))
+            .filter(ee.Filter.listContains("transmitterReceiverPolarisation", "VH"))
+            .filter(ee.Filter.eq("instrumentMode", "IW"))
         )
         image = collection.select(["VV", "VH"]).median()
         stats = execute_resilient_call(
@@ -449,7 +449,7 @@ class GoogleEarthEngineClient:
         values: list[float] = []
         for year in range(year_start, year_end + 1):
             collection = (
-                ee.ImageCollection("NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG")  # type: ignore[union-attr]
+                ee.ImageCollection("NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG")
                 .filterBounds(region_ee_geometry)
                 .filterDate(f"{year}-01-01", f"{year}-12-31")
                 .select("avg_rad")
@@ -867,8 +867,8 @@ def fetch_from_planetary_computer(
     """Query the Microsoft Planetary Computer STAC catalog as an anonymous fallback."""
     bbox = _validate_bbox(bbox)
     try:
-        import planetary_computer  # type: ignore
-        import pystac_client  # type: ignore
+        import planetary_computer
+        import pystac_client
     except Exception as exc:
         logger.warning("Planetary Computer dependencies unavailable: %s", exc)
         return []
@@ -927,7 +927,7 @@ class SatelliteDataIngester:
         if not self.authenticated:
             return self.mock.sentinel2_bands(bbox, start_date, end_date)
         try:
-            geometry = ee.Geometry.BBox(*bbox)  # type: ignore[union-attr]
+            geometry = ee.Geometry.BBox(*bbox)
             summary = self.gee.fetch_sentinel2_l2a(
                 geometry, start_date, end_date, self.config.cloud_cover_max_pct
             )
