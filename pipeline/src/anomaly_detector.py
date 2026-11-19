@@ -16,7 +16,7 @@ Author: Eren Ozturk — CZU Prague PEF KII Bachelor Thesis 2026
 import logging
 import numpy as np
 from datetime import datetime, timezone
-from typing import Optional
+from typing import Any, Optional
 
 from pipeline.src.utils import (
     calculate_ndvi,
@@ -72,10 +72,10 @@ class SatelliteAnomalyOrchestrator:
 
     def run_spatial_detection(
         self,
-        bands: dict,
+        bands: dict[str, np.ndarray],
         region_id: str,
         date_acquired: Optional[str] = None,
-    ) -> dict:
+    ) -> dict[str, Any]:
         """
         Full spatial anomaly detection pipeline on a single satellite scene.
 
@@ -204,11 +204,11 @@ class SatelliteAnomalyOrchestrator:
 
     def run_temporal_detection(
         self,
-        radiance_series: list,
-        dates: list,
+        radiance_series: list[float],
+        dates: list[str],
         region_id: str,
         rolling_window: int = 12,
-    ) -> dict:
+    ) -> dict[str, Any]:
         """
         Detect economic shocks in VIIRS night-time lights time series.
 
@@ -274,7 +274,7 @@ class SatelliteAnomalyOrchestrator:
 
     def _bootstrap_confidence_interval(
         self, feature_matrix: np.ndarray, alpha: float = 0.05
-    ) -> tuple:
+    ) -> tuple[float, float]:
         """
         Estimate confidence interval for anomaly detection via bootstrap resampling.
 
@@ -322,7 +322,7 @@ class SatelliteAnomalyOrchestrator:
             ) from exc
 
     @staticmethod
-    def _skipped_result(region_id: str, date: str, reason: str) -> dict:
+    def _skipped_result(region_id: str, date: str, reason: str) -> dict[str, Any]:
         """Return a standardized skipped-tile result record."""
         return {
             "region_id": region_id,
