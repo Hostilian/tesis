@@ -9,10 +9,10 @@ from pipeline.src.utils import (
 
 
 class GeospatialPreprocessor:
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
-    def process_raw_bands(self, band_dict: dict) -> dict:
+    def process_raw_bands(self, band_dict: dict[str, np.ndarray]) -> dict[str, np.ndarray]:
         """
         Takes raw multi-spectral bands, applies cloud masks,
         and calculates NDVI, NDWI, and BSI.
@@ -54,7 +54,9 @@ class GeospatialPreprocessor:
             "clear_mask": clear_mask,
         }
 
-    def prepare_ml_features(self, processed_dict: dict) -> tuple:
+    def prepare_ml_features(
+        self, processed_dict: dict[str, np.ndarray]
+    ) -> tuple[np.ndarray, tuple[np.ndarray, np.ndarray]]:
         """
         Flattens multi-spectral bands and indices, filtering out NaN values,
         to create a 2D feature matrix (N_pixels, D_features) for training ML models.
