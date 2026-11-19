@@ -41,6 +41,8 @@ A futuristic, dark-space GIS monitoring console acting as the Decision Support S
 
 See the **[Evidence and Validation Status](docs/evidence.html)** for the provenance distinction, missing proof, and the criteria for moving an anomaly into a validated research dataset.
 
+**Submission safeguard:** The current thesis draft (especially Chapters 5–7 and the precompiled PDF) contains historical benchmark claims that have not been substantiated by the current public pipeline. See **[THESIS_VALIDATION_GAPS.md](THESIS_VALIDATION_GAPS.md)** before reusing these sections in any formal submission.
+
 ---
 
 ## 🏛️ Architecture Overview
