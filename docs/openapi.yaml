@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Space-Based Economic Intelligence REST API
-  description: Static JSON API exposing satellite-derived industrial and resource anomaly detections.
+  description: Static research demonstrator API. Published anomaly events currently use synthetic pixels and unverified scenarios; real raster previews are separate from these records.
   version: 1.0.0
 servers:
   - url: ./api/v1
@@ -10,7 +10,7 @@ paths:
   /anomalies:
     get:
       summary: Retrieve all anomalies
-      description: Returns a list of all detected anomalies across the three study zones.
+      description: Returns synthetic demonstration anomaly records with explicit evidence provenance, not verified satellite detections.
       responses:
         '200':
           description: A successful response with the list of anomalies.
@@ -23,7 +23,7 @@ paths:
   /anomalies/{id}:
     get:
       summary: Retrieve a single anomaly detail
-      description: Returns complete metadata and spectral signatures for a specific anomaly ID.
+      description: Returns a scenario record, including demo status and limitations, not an independently verified environmental event.
       parameters:
         - name: id
           in: path
@@ -51,7 +51,7 @@ paths:
   /datasets:
     get:
       summary: Retrieve datasets metadata
-      description: Returns information about the space constellations and datasets used in the pipeline.
+      description: Returns dataset/sensor descriptions. These metadata entries do not prove real raster scenes were used in the published demo anomalies.
       responses:
         '200':
           description: A list of datasets used.
@@ -64,7 +64,7 @@ paths:
   /status:
     get:
       summary: Retrieve pipeline status
-      description: Returns status indicators, anomaly counts, and last run timestamp.
+      description: Returns a static pipeline snapshot with synthetic-demo mode. Online means the JSON resource is accessible, not continuous live satellite monitoring.
       responses:
         '200':
           description: Current pipeline execution status.
@@ -76,8 +76,20 @@ components:
   schemas:
     Anomaly:
       type: object
+      required: [id, type, region, confidence, data_origin, verification_status, verification]
+      description: An anomaly-shaped research demonstration record; confidence is an illustrative score, not a calibrated probability.
       properties:
         id:
+          type: string
+        data_origin:
+          type: string
+          enum: [synthetic_demo, observed_unvalidated, validated_observation]
+        verification_status:
+          type: string
+          enum: [unverified, in_review, validated]
+        evidence_notice:
+          type: string
+        confidence_interpretation:
           type: string
         type:
           type: string
@@ -91,6 +103,9 @@ components:
           maxItems: 2
         confidence:
           type: number
+          minimum: 0
+          maximum: 1
+          description: A normalized model/demo score, not a calibrated event probability.
         uncertainty:
           type: number
         confidence_interval:
@@ -114,7 +129,15 @@ components:
           type: string
         verification:
           type: object
+          required: [status, validation_state]
           properties:
+            validation_state:
+              type: string
+              description: Validation workflow state; current records are not independently validated.
+            evidence_note:
+              type: string
+            ground_truth_note:
+              type: string
             method:
               type: string
             ground_truth:
@@ -134,7 +157,18 @@ components:
           type: string
     Status:
       type: object
+      required: [status, data_mode, anomalies_count, verified_satellite_observations]
       properties:
+        data_mode:
+          type: string
+          enum: [synthetic_demo, observed_unvalidated, validated_observation]
+        verified_satellite_observations:
+          type: integer
+          minimum: 0
+        status_note:
+          type: string
+        publication_policy:
+          type: string
         status:
           type: string
         last_pipeline_run:
