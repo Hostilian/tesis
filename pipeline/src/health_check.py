@@ -238,9 +238,7 @@ def check_imf() -> HealthResult:
         if response.ok:
             raw = response.json()
             series = raw.get("dataSets", [{}])[0].get("series", {})
-            if series and any(
-                value.get("observations") for value in series.values()
-            ):
+            if series and any(value.get("observations") for value in series.values()):
                 return _result(
                     "imf", "ok", latency_ms, response.status_code, None, endpoint
                 )
