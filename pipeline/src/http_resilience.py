@@ -55,7 +55,10 @@ class CircuitBreaker:
             return True
 
         if self.state == CircuitState.OPEN:
-            if self.opened_at is not None and (now - self.opened_at) >= self.recovery_timeout:
+            if (
+                self.opened_at is not None
+                and (now - self.opened_at) >= self.recovery_timeout
+            ):
                 self.state = CircuitState.HALF_OPEN
                 self.trial_successes = 0
                 return True
@@ -79,7 +82,10 @@ class CircuitBreaker:
         self.failure_count += 1
         self.last_failure = reason
 
-        if self.state == CircuitState.HALF_OPEN or self.failure_count >= self.failure_threshold:
+        if (
+            self.state == CircuitState.HALF_OPEN
+            or self.failure_count >= self.failure_threshold
+        ):
             self.state = CircuitState.OPEN
             self.opened_at = now
             self.trial_successes = 0
@@ -120,7 +126,9 @@ class ResilientHTTPClient:
     session: requests.Session = field(default_factory=requests.Session)
     retry_policy: RetryPolicy = field(default_factory=RetryPolicy)
     circuit_breaker: CircuitBreaker = field(default_factory=CircuitBreaker)
-    rate_limiter: RateLimiter = field(default_factory=lambda: RateLimiter(max_tokens=10.0, refill_rate=2.0))
+    rate_limiter: RateLimiter = field(
+        default_factory=lambda: RateLimiter(max_tokens=10.0, refill_rate=2.0)
+    )
 
     def request_json(
         self,
@@ -137,7 +145,9 @@ class ResilientHTTPClient:
     ) -> Any:
         # Enforce rate-limiting before proceeding
         if not self.rate_limiter.wait_and_acquire(1.0, timeout=timeout):
-            logger.warning("Rate limit timeout exceeded for %s; using fallback.", service_name)
+            logger.warning(
+                "Rate limit timeout exceeded for %s; using fallback.", service_name
+            )
             if fallback is not None:
                 return fallback()
             raise TimeoutError(f"Rate limiting timeout exceeded for {service_name}")
@@ -199,7 +209,9 @@ class ResilientHTTPClient:
         if last_error is not None:
             raise last_error
 
-        raise RuntimeError(f"{service_name} request failed without a captured exception")
+        raise RuntimeError(
+            f"{service_name} request failed without a captured exception"
+        )
 
     def _compute_delay(self, attempt: int) -> float:
         backoff = self.retry_policy.base_delay * (2 ** (attempt - 1))
@@ -261,7 +273,9 @@ def execute_resilient_call(
 
 
 def stable_json_hash(payload: Any) -> str:
-    encoded = json.dumps(payload, sort_keys=True, separators=(",", ":"), default=_json_default).encode("utf-8")
+    encoded = json.dumps(
+        payload, sort_keys=True, separators=(",", ":"), default=_json_default
+    ).encode("utf-8")
     return hashlib.sha256(encoded).hexdigest()
 
 

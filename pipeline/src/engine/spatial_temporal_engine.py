@@ -41,7 +41,9 @@ class SpatialTemporalEconomicEngine:
         self.random_state = random_state
         self.spatial_model: IsolationForest | None = None
 
-    def fit_predict_spatial(self, features: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    def fit_predict_spatial(
+        self, features: np.ndarray
+    ) -> tuple[np.ndarray, np.ndarray]:
         """
         Fits an Isolation Forest to multivariate spatial spectral features
         (typically NDVI, NDWI, and BSI) and computes outlier labels and scores.
@@ -55,7 +57,7 @@ class SpatialTemporalEconomicEngine:
         """
         logger.info(
             "Proprietary Engine: Fitting Isolation Forest ensemble (n_estimators=100) on %d samples",
-            features.shape[0]
+            features.shape[0],
         )
         self.spatial_model = IsolationForest(
             contamination=self.contamination,
@@ -74,10 +76,14 @@ class SpatialTemporalEconomicEngine:
         else:
             scores = 1.0 - ((raw_scores - min_raw) / (max_raw - min_raw))
 
-        logger.info("Proprietary Engine: Spatial Isolation Forest fitting completed successfully.")
+        logger.info(
+            "Proprietary Engine: Spatial Isolation Forest fitting completed successfully."
+        )
         return predictions, scores
 
-    def detect_temporal_ntl(self, radiance_series: list[float], rolling_window: int = 12) -> list[float]:
+    def detect_temporal_ntl(
+        self, radiance_series: list[float], rolling_window: int = 12
+    ) -> list[float]:
         """
         Computes rolling Z-score anomalies over a night-time lights time series
         to detect sudden, atypical changes in local economic output.
@@ -91,7 +97,8 @@ class SpatialTemporalEconomicEngine:
         """
         logger.info(
             "Proprietary Engine: Computing rolling Z-score anomalies for time-series (n=%d, window=%d)",
-            len(radiance_series), rolling_window
+            len(radiance_series),
+            rolling_window,
         )
         values = np.array(radiance_series, dtype=float)
         z_scores = calculate_temporal_zscores(values, rolling_window)

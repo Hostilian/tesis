@@ -43,7 +43,7 @@ def calculate_bsi(
     swir1_band: np.ndarray,
     red_band: np.ndarray,
     nir_band: np.ndarray,
-    blue_band: np.ndarray
+    blue_band: np.ndarray,
 ) -> np.ndarray:
     """
     Calculate the Bare Soil Index (BSI) for exposed soil and mining footprint extraction.
@@ -87,7 +87,9 @@ def apply_sentinel_cloud_mask(qa_band: np.ndarray) -> np.ndarray:
     return ~(is_cloud | is_cirrus)
 
 
-def calculate_temporal_zscores(values: np.ndarray, rolling_window: int = 12) -> np.ndarray:
+def calculate_temporal_zscores(
+    values: np.ndarray, rolling_window: int = 12
+) -> np.ndarray:
     """
     Calculate the temporal Z-score anomalies on a 1D time series.
     Z = (value - rolling_mean) / rolling_std
@@ -105,7 +107,7 @@ def calculate_temporal_zscores(values: np.ndarray, rolling_window: int = 12) -> 
         if i < rolling_window:
             z_scores[i] = 0.0
             continue
-        history = values[max(0, i - rolling_window):i]
+        history = values[max(0, i - rolling_window) : i]
         mean = np.mean(history)
         std = np.std(history)
         if std == 0.0:

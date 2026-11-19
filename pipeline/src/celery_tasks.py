@@ -16,7 +16,9 @@ from pipeline.src.preprocessing import GeospatialPreprocessor
 from pipeline.src.anomaly_detector import SatelliteAnomalyOrchestrator
 from pipeline.src.exporter import GeospatialExporter
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 logger = logging.getLogger(__name__)
 
 # Initialize Celery application
@@ -37,37 +39,47 @@ celery_app.conf.update(
     timezone="UTC",
     enable_utc=True,
     task_track_started=True,
-    task_time_limit=300, # 5 minutes maximum runtime per tile
+    task_time_limit=300,  # 5 minutes maximum runtime per tile
 )
 
 
-@celery_app.task(name="pipeline.src.celery_tasks.process_satellite_tile_task", bind=True, max_retries=3)
-def process_satellite_tile_task(self, bbox: list[float], start_date: str, end_date: str, region_id: str) -> dict:
+@celery_app.task(
+    name="pipeline.src.celery_tasks.process_satellite_tile_task",
+    bind=True,
+    max_retries=3,
+)
+def process_satellite_tile_task(
+    self, bbox: list[float], start_date: str, end_date: str, region_id: str
+) -> dict:
     """
     Asynchronously run the spatial anomaly detection pipeline for a bounding box.
     Retries automatically on transient resource failures.
     """
     logger.info(f"Worker processing tile: {region_id} (BBox: {bbox})")
-    
+
     try:
         # Initialize pipeline components inside the worker context
         ingester = SatelliteDataIngester()
         preprocessor = GeospatialPreprocessor()
         orchestrator = SatelliteAnomalyOrchestrator()
         exporter = GeospatialExporter()
-        
+
         # Authenticate GEE or fall back to mock
         ingester.authenticate_gee()
-        
+
         # Fetch bands
         bands = ingester.fetch_sentinel2_data(bbox, start_date, end_date)
         processed = preprocessor.process_raw_bands(bands)
-        
+
         # Run detection
         features, coords = preprocessor.prepare_ml_features(processed)
-        result = orchestrator.run_spatial_detection(bands, region_id, date_acquired=end_date)
-        
-        logger.info(f"Worker complete. Status: {result.get('skipped_reason') or 'ANOMALIES_PROCESSED'}")
+        result = orchestrator.run_spatial_detection(
+            bands, region_id, date_acquired=end_date
+        )
+
+        logger.info(
+            f"Worker complete. Status: {result.get('skipped_reason') or 'ANOMALIES_PROCESSED'}"
+        )
         return {
             "region_id": region_id,
             "status": "success",
@@ -75,9 +87,9 @@ def process_satellite_tile_task(self, bbox: list[float], start_date: str, end_da
             "valid_pixel_count": result.get("valid_pixel_count", 0),
             "confidence_mean": result.get("confidence_mean", 0.0),
         }
-        
+
     except Exception as exc:
         logger.error(f"Task failed on tile {region_id}: {str(exc)}")
         # Exponential backoff retry logic for celery tasks
-        retry_delay = 2 ** self.request.retries
+        retry_delay = 2**self.request.retries
         raise self.retry(exc=exc, countdown=retry_delay)

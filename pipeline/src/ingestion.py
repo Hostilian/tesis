@@ -34,7 +34,11 @@ from typing import Any, Literal, TypedDict, cast
 import numpy as np
 
 from pipeline.src.config import PipelineConfig
-from pipeline.src.http_resilience import ResilientHTTPClient, RetryPolicy, execute_resilient_call
+from pipeline.src.http_resilience import (
+    ResilientHTTPClient,
+    RetryPolicy,
+    execute_resilient_call,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -94,7 +98,9 @@ def _utc_now_iso() -> str:
     return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
 
-def _health(provider: str, status: ProviderStatus, start: float, error: str | None = None) -> HealthPayload:
+def _health(
+    provider: str, status: ProviderStatus, start: float, error: str | None = None
+) -> HealthPayload:
     return {
         "provider": provider,
         "status": status,
@@ -103,7 +109,9 @@ def _health(provider: str, status: ProviderStatus, start: float, error: str | No
     }
 
 
-def _validate_bbox(bbox: list[float] | tuple[float, float, float, float]) -> list[float]:
+def _validate_bbox(
+    bbox: list[float] | tuple[float, float, float, float]
+) -> list[float]:
     if len(bbox) != 4:
         raise ValueError("bbox must contain [lon_min, lat_min, lon_max, lat_max].")
     lon_min, lat_min, lon_max, lat_max = [float(value) for value in bbox]
@@ -137,7 +145,9 @@ class MockDataClient:
         start = time.perf_counter()
         return _health("mock", "ok", start, None)
 
-    def sentinel2_bands(self, bbox: list[float], start_date: str, end_date: str) -> dict[str, Any]:
+    def sentinel2_bands(
+        self, bbox: list[float], start_date: str, end_date: str
+    ) -> dict[str, Any]:
         _validate_bbox(bbox)
         rng = np.random.default_rng(self.seed)
         size = (100, 100)
@@ -154,7 +164,9 @@ class MockDataClient:
             "QA60": np.zeros(size, dtype=int),
         }
 
-    def landsat_bands(self, bbox: list[float], start_date: str, end_date: str) -> dict[str, Any]:
+    def landsat_bands(
+        self, bbox: list[float], start_date: str, end_date: str
+    ) -> dict[str, Any]:
         _validate_bbox(bbox)
         rng = np.random.default_rng(self.seed)
         size = (100, 100)
@@ -171,15 +183,21 @@ class MockDataClient:
             "QA_PIXEL": np.zeros(size, dtype=int),
         }
 
-    def spectral_summary(self, bbox: list[float], start_date: str, end_date: str, sensor: str) -> SpectralSummary:
+    def spectral_summary(
+        self, bbox: list[float], start_date: str, end_date: str, sensor: str
+    ) -> SpectralSummary:
         bands = self.sentinel2_bands(bbox, start_date, end_date)
         blue = np.asarray(bands["B2"], dtype=float)
         green = np.asarray(bands["B3"], dtype=float)
         red = np.asarray(bands["B4"], dtype=float)
         nir = np.asarray(bands["B8"], dtype=float)
         swir = np.asarray(bands["B11"], dtype=float)
-        ndvi = np.divide(nir - red, nir + red, out=np.zeros_like(nir), where=(nir + red) != 0)
-        ndwi = np.divide(green - nir, green + nir, out=np.zeros_like(nir), where=(green + nir) != 0)
+        ndvi = np.divide(
+            nir - red, nir + red, out=np.zeros_like(nir), where=(nir + red) != 0
+        )
+        ndwi = np.divide(
+            green - nir, green + nir, out=np.zeros_like(nir), where=(green + nir) != 0
+        )
         bsi = np.divide(
             (swir + red) - (nir + blue),
             (swir + red) + (nir + blue),
@@ -196,7 +214,9 @@ class MockDataClient:
             "sensor": sensor,
         }
 
-    def sar_summary(self, bbox: list[float], start_date: str, end_date: str) -> SARRadarSummary:
+    def sar_summary(
+        self, bbox: list[float], start_date: str, end_date: str
+    ) -> SARRadarSummary:
         _validate_bbox(bbox)
         rng = np.random.default_rng(self.seed)
         vv_mean = float(round(rng.normal(-8.5, 0.35), 4))
@@ -208,13 +228,18 @@ class MockDataClient:
             "sensor": "Sentinel-1 IW",
         }
 
-    def viirs_monthly(self, bbox: list[float], start_date: str, end_date: str) -> dict[str, Any]:
+    def viirs_monthly(
+        self, bbox: list[float], start_date: str, end_date: str
+    ) -> dict[str, Any]:
         _validate_bbox(bbox)
         rng = np.random.default_rng(self.seed)
         months = 36
         radiance = rng.normal(15.0, 1.2, months)
         radiance[18:22] -= 4.5
-        dates = [f"{2023 + (index // 12)}-{(index % 12) + 1:02d}-01" for index in range(months)]
+        dates = [
+            f"{2023 + (index // 12)}-{(index % 12) + 1:02d}-01"
+            for index in range(months)
+        ]
         return {
             "source": "Mock VIIRS Monthly Composites",
             "bbox": bbox,
@@ -223,18 +248,24 @@ class MockDataClient:
             "radiance": radiance.tolist(),
         }
 
-    def viirs_annual(self, bbox: list[float], year_start: int, year_end: int) -> list[NTLRecord]:
+    def viirs_annual(
+        self, bbox: list[float], year_start: int, year_end: int
+    ) -> list[NTLRecord]:
         _validate_bbox(bbox)
         rng = np.random.default_rng(self.seed)
         years = list(range(year_start, year_end + 1))
-        values = [float(rng.normal(14.5 + 0.15 * (year - year_start), 0.9)) for year in years]
+        values = [
+            float(rng.normal(14.5 + 0.15 * (year - year_start), 0.9)) for year in years
+        ]
         z = _z_scores(values)
         return [
             {"year": year, "ntl_radiance_mean": round(value, 4), "ntl_z_score": score}
             for year, value, score in zip(years, values, z)
         ]
 
-    def stac_items(self, provider: str, bbox: list[float], date_from: str, date_to: str) -> list[dict[str, Any]]:
+    def stac_items(
+        self, provider: str, bbox: list[float], date_from: str, date_to: str
+    ) -> list[dict[str, Any]]:
         _validate_bbox(bbox)
         return [
             {
@@ -268,7 +299,11 @@ class GoogleEarthEngineClient:
         project = self.config.gcp_project or None
         credential_file = self.config.gee_credentials_file()
         try:
-            if credential_file and credential_file.exists() and self.config.gee_service_account:
+            if (
+                credential_file
+                and credential_file.exists()
+                and self.config.gee_service_account
+            ):
                 credentials = ee.ServiceAccountCredentials(  # type: ignore[union-attr]
                     self.config.gee_service_account,
                     str(credential_file),
@@ -279,7 +314,9 @@ class GoogleEarthEngineClient:
             self.authenticated = True
             return True
         except Exception as first_exc:
-            logger.warning("GEE ADC/service-account initialization failed: %s", first_exc)
+            logger.warning(
+                "GEE ADC/service-account initialization failed: %s", first_exc
+            )
             try:
                 ee.Authenticate(auth_mode="gcloud")  # type: ignore[union-attr]
                 ee.Initialize(project=project)  # type: ignore[union-attr]
@@ -293,10 +330,15 @@ class GoogleEarthEngineClient:
     def health_check(self) -> HealthPayload:
         start = time.perf_counter()
         if not self.authenticated and not self.authenticate():
-            return _health("gee", "auth_failed", start, "Earth Engine credentials unavailable.")
+            return _health(
+                "gee", "auth_failed", start, "Earth Engine credentials unavailable."
+            )
         try:
             execute_resilient_call(
-                ee.ImageCollection("COPERNICUS/S2_SR_HARMONIZED").limit(1).size().getInfo,
+                ee.ImageCollection("COPERNICUS/S2_SR_HARMONIZED")
+                .limit(1)
+                .size()
+                .getInfo,
                 service_name="GEE Health Check",
             )
             return _health("gee", "ok", start, None)
@@ -319,7 +361,11 @@ class GoogleEarthEngineClient:
 
         def mask_clouds(image: Any) -> Any:
             qa = image.select("QA60")
-            mask = qa.bitwiseAnd(qa_cloud_bit).eq(0).And(qa.bitwiseAnd(qa_cirrus_bit).eq(0))
+            mask = (
+                qa.bitwiseAnd(qa_cloud_bit)
+                .eq(0)
+                .And(qa.bitwiseAnd(qa_cirrus_bit).eq(0))
+            )
             return image.updateMask(mask).divide(10000)
 
         collection = (
@@ -344,11 +390,17 @@ class GoogleEarthEngineClient:
         stats = execute_resilient_call(
             mosaic.addBands([ndvi, ndwi, bsi])
             .select(["ndvi", "ndwi", "bsi"])
-            .reduceRegion(ee.Reducer.mean(), region_ee_geometry, 10, maxPixels=1_000_000_000)
+            .reduceRegion(
+                ee.Reducer.mean(), region_ee_geometry, 10, maxPixels=1_000_000_000
+            )
             .getInfo,
             service_name="GEE Sentinel-2 stats reduceRegion",
         )
-        tile_count = int(execute_resilient_call(collection.size().getInfo, service_name="GEE Sentinel-2 size"))
+        tile_count = int(
+            execute_resilient_call(
+                collection.size().getInfo, service_name="GEE Sentinel-2 size"
+            )
+        )
         return {
             "ndvi": float(stats.get("ndvi") or 0.0),
             "ndwi": float(stats.get("ndwi") or 0.0),
@@ -359,7 +411,9 @@ class GoogleEarthEngineClient:
             "sensor": "Sentinel-2 L2A",
         }
 
-    def fetch_sentinel1_sar(self, region_ee_geometry: Any, start_date: str, end_date: str) -> SARRadarSummary:
+    def fetch_sentinel1_sar(
+        self, region_ee_geometry: Any, start_date: str, end_date: str
+    ) -> SARRadarSummary:
         if not self.authenticated:
             raise RuntimeError("GEE is not authenticated.")
         collection = (
@@ -386,7 +440,9 @@ class GoogleEarthEngineClient:
             "sensor": "Sentinel-1 IW",
         }
 
-    def fetch_viirs_ntl(self, region_ee_geometry: Any, year_start: int, year_end: int) -> list[NTLRecord]:
+    def fetch_viirs_ntl(
+        self, region_ee_geometry: Any, year_start: int, year_end: int
+    ) -> list[NTLRecord]:
         if not self.authenticated:
             raise RuntimeError("GEE is not authenticated.")
         records: list[NTLRecord] = []
@@ -406,8 +462,16 @@ class GoogleEarthEngineClient:
                 service_name=f"GEE VIIRS NTL annual stats reduceRegion ({year})",
             )
             values.append(float(stats.get("avg_rad") or 0.0))
-        for year, value, score in zip(range(year_start, year_end + 1), values, _z_scores(values)):
-            records.append({"year": year, "ntl_radiance_mean": round(value, 4), "ntl_z_score": score})
+        for year, value, score in zip(
+            range(year_start, year_end + 1), values, _z_scores(values)
+        ):
+            records.append(
+                {
+                    "year": year,
+                    "ntl_radiance_mean": round(value, 4),
+                    "ntl_z_score": score,
+                }
+            )
         return records
 
     def fetch_landsat_composite(
@@ -425,7 +489,9 @@ class GoogleEarthEngineClient:
             shadow_mask = qa.bitwiseAnd(1 << 3).eq(0)
             cloud_mask = qa.bitwiseAnd(1 << 5).eq(0)
             scaled = image.select("SR_B.*").multiply(0.0000275).add(-0.2)
-            return image.addBands(scaled, overwrite=True).updateMask(shadow_mask.And(cloud_mask))
+            return image.addBands(scaled, overwrite=True).updateMask(
+                shadow_mask.And(cloud_mask)
+            )
 
         selected_missions = missions or [8, 9]
         collections = []
@@ -448,10 +514,12 @@ class GoogleEarthEngineClient:
             .map(mask_landsat_clouds)
         )
 
-        mosaic = filtered.select(["SR_B2", "SR_B3", "SR_B4", "SR_B5", "SR_B6", "SR_B7"]).median()
+        mosaic = filtered.select(
+            ["SR_B2", "SR_B3", "SR_B4", "SR_B5", "SR_B6", "SR_B7"]
+        ).median()
         renamed = mosaic.select(
             ["SR_B2", "SR_B3", "SR_B4", "SR_B5", "SR_B6", "SR_B7"],
-            ["B2", "B3", "B4", "B8", "B11", "B12"]
+            ["B2", "B3", "B4", "B8", "B11", "B12"],
         )
 
         ndvi = renamed.normalizedDifference(["B8", "B4"]).rename("ndvi")
@@ -469,11 +537,17 @@ class GoogleEarthEngineClient:
         stats = execute_resilient_call(
             renamed.addBands([ndvi, ndwi, bsi])
             .select(["ndvi", "ndwi", "bsi"])
-            .reduceRegion(ee.Reducer.mean(), region_ee_geometry, 30, maxPixels=1_000_000_000)
+            .reduceRegion(
+                ee.Reducer.mean(), region_ee_geometry, 30, maxPixels=1_000_000_000
+            )
             .getInfo,
             service_name="GEE Landsat stats reduceRegion",
         )
-        tile_count = int(execute_resilient_call(filtered.size().getInfo, service_name="GEE Landsat size"))
+        tile_count = int(
+            execute_resilient_call(
+                filtered.size().getInfo, service_name="GEE Landsat size"
+            )
+        )
         return {
             "ndvi": float(stats.get("ndvi") or 0.0),
             "ndwi": float(stats.get("ndwi") or 0.0),
@@ -483,7 +557,6 @@ class GoogleEarthEngineClient:
             "date_range": f"{start_date}/{end_date}",
             "sensor": "Landsat-8/9 OLI",
         }
-
 
 
 @dataclass
@@ -503,7 +576,11 @@ class CopernicusSTACClient:
 
     def _refresh_token_if_expired(self) -> str:
         now = datetime.now(timezone.utc)
-        if self._access_token and self._token_expiry and now < self._token_expiry - timedelta(minutes=5):
+        if (
+            self._access_token
+            and self._token_expiry
+            and now < self._token_expiry - timedelta(minutes=5)
+        ):
             return self._access_token
         if not self.config.cdse_client_id or not self.config.cdse_client_secret:
             raise RuntimeError("CDSE_CLIENT_ID and CDSE_CLIENT_SECRET are required.")
@@ -558,11 +635,16 @@ class CopernicusSTACClient:
             raw = self.http.request_json(
                 "POST",
                 f"{self.base_url}/search",
-                headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
+                headers={
+                    "Authorization": f"Bearer {token}",
+                    "Content-Type": "application/json",
+                },
                 json_body=payload,
                 timeout=30,
                 service_name="CDSE STAC search",
-                fallback=lambda: {"features": self.mock.stac_items("cdse", bbox, date_from, date_to)},
+                fallback=lambda: {
+                    "features": self.mock.stac_items("cdse", bbox, date_from, date_to)
+                },
             )
             return list(raw.get("features", []))
         except Exception as exc:
@@ -579,7 +661,9 @@ class CopernicusSTACClient:
             "https://catalogue.dataspace.copernicus.eu/odata/v1/"
             f"Products('{scene_id}')/Nodes('thumbnail.jpg')/$value"
         )
-        response = self.http.session.get(url, headers={"Authorization": f"Bearer {token}"}, timeout=30)
+        response = self.http.session.get(
+            url, headers={"Authorization": f"Bearer {token}"}, timeout=30
+        )
         response.raise_for_status()
         output_path.write_bytes(response.content)
         return output_path
@@ -595,10 +679,17 @@ class NASAEarthDataClient:
     provider: str = "nasa"
 
     def _auth_headers(self) -> dict[str, str]:
-        return {"Authorization": f"Bearer {self.config.nasa_earthdata_token}"} if self.config.nasa_earthdata_token else {}
+        return (
+            {"Authorization": f"Bearer {self.config.nasa_earthdata_token}"}
+            if self.config.nasa_earthdata_token
+            else {}
+        )
 
     def create_netrc(self, path: Path | None = None) -> Path | None:
-        if not self.config.nasa_earthdata_username or not self.config.nasa_earthdata_password:
+        if (
+            not self.config.nasa_earthdata_username
+            or not self.config.nasa_earthdata_password
+        ):
             return None
         target = path or Path.home() / ".netrc"
         target.write_text(
@@ -619,9 +710,13 @@ class NASAEarthDataClient:
         if not self.config.nasa_earthdata_token and not (
             self.config.nasa_earthdata_username and self.config.nasa_earthdata_password
         ):
-            return _health("nasa", "auth_failed", start, "NASA EarthData credentials unavailable.")
+            return _health(
+                "nasa", "auth_failed", start, "NASA EarthData credentials unavailable."
+            )
         try:
-            self.search_viirs_ntl_granules("-70,-14,-69,-12", "2024-01-01T00:00:00Z,2024-02-01T00:00:00Z")
+            self.search_viirs_ntl_granules(
+                "-70,-14,-69,-12", "2024-01-01T00:00:00Z,2024-02-01T00:00:00Z"
+            )
             return _health("nasa", "ok", start, None)
         except Exception as exc:
             return _health("nasa", "unavailable", start, str(exc))
@@ -633,7 +728,12 @@ class NASAEarthDataClient:
         product: str = "VNP46A3",
     ) -> list[dict[str, Any]]:
         if self.config.mock_mode:
-            return self.mock.stac_items("nasa", [0.0, 0.0, 1.0, 1.0], temporal.split(",")[0], temporal.split(",")[-1])
+            return self.mock.stac_items(
+                "nasa",
+                [0.0, 0.0, 1.0, 1.0],
+                temporal.split(",")[0],
+                temporal.split(",")[-1],
+            )
         params = {
             "short_name": product,
             "bounding_box": bounding_box,
@@ -656,7 +756,9 @@ class NASAEarthDataClient:
 class SentinelHubEvalscriptClient:
     config: PipelineConfig
     http: ResilientHTTPClient
-    token_url: str = "https://services.sentinel-hub.com/auth/realms/main/protocol/openid-connect/token"
+    token_url: str = (
+        "https://services.sentinel-hub.com/auth/realms/main/protocol/openid-connect/token"
+    )
     process_url: str = "https://services.sentinel-hub.com/api/v1/process"
     _access_token: str | None = None
     _token_expiry: datetime | None = None
@@ -665,9 +767,16 @@ class SentinelHubEvalscriptClient:
 
     def _refresh_token_if_expired(self) -> str:
         now = datetime.now(timezone.utc)
-        if self._access_token and self._token_expiry and now < self._token_expiry - timedelta(minutes=5):
+        if (
+            self._access_token
+            and self._token_expiry
+            and now < self._token_expiry - timedelta(minutes=5)
+        ):
             return self._access_token
-        if not self.config.sentinelhub_client_id or not self.config.sentinelhub_client_secret:
+        if (
+            not self.config.sentinelhub_client_id
+            or not self.config.sentinelhub_client_secret
+        ):
             raise RuntimeError("Sentinel Hub OAuth credentials are required.")
         raw = self.http.request_json(
             "POST",
@@ -718,15 +827,29 @@ function evaluatePixel(s) {
         payload = {
             "input": {
                 "bounds": {"bbox": bbox},
-                "data": [{"type": "sentinel-2-l2a", "dataFilter": {"timeRange": {"from": date_from, "to": date_to}}}],
+                "data": [
+                    {
+                        "type": "sentinel-2-l2a",
+                        "dataFilter": {"timeRange": {"from": date_from, "to": date_to}},
+                    }
+                ],
             },
-            "output": {"width": width, "height": height, "responses": [{"identifier": "default", "format": {"type": "image/png"}}]},
+            "output": {
+                "width": width,
+                "height": height,
+                "responses": [
+                    {"identifier": "default", "format": {"type": "image/png"}}
+                ],
+            },
             "evalscript": evalscript,
         }
         token = self._refresh_token_if_expired()
         response = self.http.session.post(
             self.process_url,
-            headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
+            headers={
+                "Authorization": f"Bearer {token}",
+                "Content-Type": "application/json",
+            },
             json=payload,
             timeout=60,
         )
@@ -765,12 +888,16 @@ def fetch_from_planetary_computer(
 class SatelliteDataIngester:
     """Compatibility facade for pipeline notebooks and production ingestion."""
 
-    def __init__(self, project_id: str | None = None, config: PipelineConfig | None = None) -> None:
+    def __init__(
+        self, project_id: str | None = None, config: PipelineConfig | None = None
+    ) -> None:
         base_config = config or PipelineConfig()
         if project_id:
             base_config = PipelineConfig(gcp_project=project_id)
         self.config = base_config
-        self.http = ResilientHTTPClient(retry_policy=RetryPolicy(max_attempts=5, base_delay=1.5, max_delay=30.0))
+        self.http = ResilientHTTPClient(
+            retry_policy=RetryPolicy(max_attempts=5, base_delay=1.5, max_delay=30.0)
+        )
         self.mock = MockDataClient(seed=42)
         self.gee = GoogleEarthEngineClient(self.config, self.http, self.mock)
         self.cdse = CopernicusSTACClient(self.config, self.http, self.mock)
@@ -792,14 +919,18 @@ class SatelliteDataIngester:
             self.mock.health_check(),
         ]
 
-    def fetch_sentinel2_data(self, bbox: list[float], start_date: str, end_date: str) -> dict[str, Any]:
+    def fetch_sentinel2_data(
+        self, bbox: list[float], start_date: str, end_date: str
+    ) -> dict[str, Any]:
         """Return Sentinel-2 bands as arrays for the existing preprocessing pipeline."""
         bbox = _validate_bbox(bbox)
         if not self.authenticated:
             return self.mock.sentinel2_bands(bbox, start_date, end_date)
         try:
             geometry = ee.Geometry.BBox(*bbox)  # type: ignore[union-attr]
-            summary = self.gee.fetch_sentinel2_l2a(geometry, start_date, end_date, self.config.cloud_cover_max_pct)
+            summary = self.gee.fetch_sentinel2_l2a(
+                geometry, start_date, end_date, self.config.cloud_cover_max_pct
+            )
             return {
                 **self.mock.sentinel2_bands(bbox, start_date, end_date),
                 "source": "GEE Sentinel-2 L2A Surface Reflectance",
@@ -819,33 +950,56 @@ class SatelliteDataIngester:
     ) -> SpectralSummary:
         if self.authenticated:
             try:
-                return self.gee.fetch_sentinel2_l2a(region_ee_geometry, start_date, end_date, cloud_max)
+                return self.gee.fetch_sentinel2_l2a(
+                    region_ee_geometry, start_date, end_date, cloud_max
+                )
             except Exception as exc:
-                logger.warning("GEE Sentinel-2 summary failed; using deterministic summary: %s", exc)
-        return self.mock.spectral_summary([0.0, 0.0, 1.0, 1.0], start_date, end_date, "Sentinel-2 L2A")
+                logger.warning(
+                    "GEE Sentinel-2 summary failed; using deterministic summary: %s",
+                    exc,
+                )
+        return self.mock.spectral_summary(
+            [0.0, 0.0, 1.0, 1.0], start_date, end_date, "Sentinel-2 L2A"
+        )
 
-    def fetch_sentinel1_sar(self, region_ee_geometry: Any, start_date: str, end_date: str) -> SARRadarSummary:
+    def fetch_sentinel1_sar(
+        self, region_ee_geometry: Any, start_date: str, end_date: str
+    ) -> SARRadarSummary:
         if self.authenticated:
             try:
-                return self.gee.fetch_sentinel1_sar(region_ee_geometry, start_date, end_date)
+                return self.gee.fetch_sentinel1_sar(
+                    region_ee_geometry, start_date, end_date
+                )
             except Exception as exc:
-                logger.warning("GEE Sentinel-1 SAR failed; using mock SAR summary: %s", exc)
+                logger.warning(
+                    "GEE Sentinel-1 SAR failed; using mock SAR summary: %s", exc
+                )
         return self.mock.sar_summary([0.0, 0.0, 1.0, 1.0], start_date, end_date)
 
-    def fetch_viirs_ntl(self, bbox: list[float], start_date: str, end_date: str) -> dict[str, Any]:
+    def fetch_viirs_ntl(
+        self, bbox: list[float], start_date: str, end_date: str
+    ) -> dict[str, Any]:
         """Return monthly VIIRS DNB radiance values for temporal anomaly detection."""
         bbox = _validate_bbox(bbox)
         return self.mock.viirs_monthly(bbox, start_date, end_date)
 
-    def fetch_viirs_ntl_annual(self, region_ee_geometry: Any, year_start: int, year_end: int) -> list[NTLRecord]:
+    def fetch_viirs_ntl_annual(
+        self, region_ee_geometry: Any, year_start: int, year_end: int
+    ) -> list[NTLRecord]:
         if self.authenticated:
             try:
-                return self.gee.fetch_viirs_ntl(region_ee_geometry, year_start, year_end)
+                return self.gee.fetch_viirs_ntl(
+                    region_ee_geometry, year_start, year_end
+                )
             except Exception as exc:
-                logger.warning("GEE VIIRS annual fetch failed; using mock annual NTL: %s", exc)
+                logger.warning(
+                    "GEE VIIRS annual fetch failed; using mock annual NTL: %s", exc
+                )
         return self.mock.viirs_annual([0.0, 0.0, 1.0, 1.0], year_start, year_end)
 
-    def fetch_landsat_data(self, bbox: list[float], start_date: str, end_date: str) -> dict[str, Any]:
+    def fetch_landsat_data(
+        self, bbox: list[float], start_date: str, end_date: str
+    ) -> dict[str, Any]:
         return self.mock.landsat_bands(_validate_bbox(bbox), start_date, end_date)
 
     def fetch_landsat_composite(
@@ -857,13 +1011,20 @@ class SatelliteDataIngester:
     ) -> SpectralSummary:
         if self.authenticated:
             try:
-                return self.gee.fetch_landsat_composite(region_ee_geometry, start_date, end_date, missions)
+                return self.gee.fetch_landsat_composite(
+                    region_ee_geometry, start_date, end_date, missions
+                )
             except Exception as exc:
-                logger.warning("GEE Landsat composite failed; using mock landsat summary: %s", exc)
-        return self.mock.spectral_summary([0.0, 0.0, 1.0, 1.0], start_date, end_date, "Landsat-8/9 OLI")
+                logger.warning(
+                    "GEE Landsat composite failed; using mock landsat summary: %s", exc
+                )
+        return self.mock.spectral_summary(
+            [0.0, 0.0, 1.0, 1.0], start_date, end_date, "Landsat-8/9 OLI"
+        )
 
-
-    def fetch_copernicus_catalog(self, bbox: list[float], start_date: str, end_date: str) -> dict[str, Any]:
+    def fetch_copernicus_catalog(
+        self, bbox: list[float], start_date: str, end_date: str
+    ) -> dict[str, Any]:
         items = self.cdse.search_sentinel2_scenes(
             _validate_bbox(bbox),
             f"{start_date}T00:00:00Z" if "T" not in start_date else start_date,
@@ -871,14 +1032,20 @@ class SatelliteDataIngester:
             cloud_cover_max=self.config.cloud_cover_max_pct,
         )
         return {
-            "source": "CDSE STAC" if items and not items[0].get("properties", {}).get("sbei:mock") else "Mock Copernicus Catalogue",
+            "source": (
+                "CDSE STAC"
+                if items and not items[0].get("properties", {}).get("sbei:mock")
+                else "Mock Copernicus Catalogue"
+            ),
             "bbox": bbox,
             "start_date": start_date,
             "end_date": end_date,
             "products": items,
         }
 
-    def fetch_nasa_viirs_manifest(self, bbox: list[float], start_date: str, end_date: str) -> dict[str, Any]:
+    def fetch_nasa_viirs_manifest(
+        self, bbox: list[float], start_date: str, end_date: str
+    ) -> dict[str, Any]:
         bbox = _validate_bbox(bbox)
         granules = self.nasa.search_viirs_ntl_granules(
             ",".join(str(value) for value in bbox),
@@ -902,11 +1069,16 @@ class SatelliteDataIngester:
         indicator_code = WORLD_BANK_INDICATORS.get(indicator, indicator)
         cache_dir = self.config.output_dir / "economic"
         cache_dir.mkdir(parents=True, exist_ok=True)
-        cache_path = cache_dir / f"wb_{indicator_code}_{country_iso3}_{year_from}_{year_to}.json"
+        cache_path = (
+            cache_dir / f"wb_{indicator_code}_{country_iso3}_{year_from}_{year_to}.json"
+        )
         if cache_path.exists():
             age_hours = (time.time() - cache_path.stat().st_mtime) / 3600
             if age_hours <= self.config.worldbank_cache_ttl_hours:
-                return cast(list[dict[str, Any]], json.loads(cache_path.read_text(encoding="utf-8")))
+                return cast(
+                    list[dict[str, Any]],
+                    json.loads(cache_path.read_text(encoding="utf-8")),
+                )
 
         url = (
             f"https://api.worldbank.org/v2/country/{country_iso3}/indicator/{indicator_code}"
@@ -914,10 +1086,18 @@ class SatelliteDataIngester:
         )
 
         def fallback() -> list[dict[str, Any]]:
-            values = self._mock_worldbank_values(country_iso3, indicator_code, year_from, year_to)
+            values = self._mock_worldbank_values(
+                country_iso3, indicator_code, year_from, year_to
+            )
             return values
 
-        raw = self.http.request_json("GET", url, timeout=15, service_name="World Bank API", fallback=lambda: [None, fallback()])
+        raw = self.http.request_json(
+            "GET",
+            url,
+            timeout=15,
+            service_name="World Bank API",
+            fallback=lambda: [None, fallback()],
+        )
         records = raw[1] if isinstance(raw, list) and len(raw) > 1 else raw
         result: list[dict[str, Any]] = [
             {
@@ -950,14 +1130,20 @@ class SatelliteDataIngester:
                 "country": country_code,
                 "indicator": item["indicator"],
             }
-            for item in self.fetch_worldbank_indicator(country_code, "gdp_growth_pct", start_year, end_year)
+            for item in self.fetch_worldbank_indicator(
+                country_code, "gdp_growth_pct", start_year, end_year
+            )
         ]
 
     def fetch_mineral_dependency_index(self, country_iso3: str) -> dict[str, Any]:
         current_year = datetime.now(timezone.utc).year
         year_from = current_year - 5
-        mineral_exports = self.fetch_worldbank_indicator(country_iso3, "mineral_exports_pct", year_from, current_year)
-        mineral_rents = self.fetch_worldbank_indicator(country_iso3, "mineral_rents_pct", year_from, current_year)
+        mineral_exports = self.fetch_worldbank_indicator(
+            country_iso3, "mineral_exports_pct", year_from, current_year
+        )
+        mineral_rents = self.fetch_worldbank_indicator(
+            country_iso3, "mineral_rents_pct", year_from, current_year
+        )
         export_value = _latest_value(mineral_exports)
         rent_value = _latest_value(mineral_rents)
         employment_proxy = min(100.0, (export_value + rent_value) * 0.35)
@@ -984,9 +1170,14 @@ class SatelliteDataIngester:
         url = f"https://www.imf.org/external/datamapper/api/v1/{indicator}/{country_expr}/{year_start}/{year_end}"
 
         def fallback() -> dict[str, list[float]]:
-            return {country: [0.0 for _ in range(year_start, year_end + 1)] for country in countries}
+            return {
+                country: [0.0 for _ in range(year_start, year_end + 1)]
+                for country in countries
+            }
 
-        raw = self.http.request_json("GET", url, timeout=20, service_name="IMF WEO API", fallback=fallback)
+        raw = self.http.request_json(
+            "GET", url, timeout=20, service_name="IMF WEO API", fallback=fallback
+        )
         if not isinstance(raw, dict) or "values" not in raw:
             return fallback()
         values = raw.get("values", {}).get(indicator, {})
@@ -1006,7 +1197,9 @@ class SatelliteDataIngester:
         year_end: int,
     ) -> list[dict[str, Any]]:
         wb = self.fetch_worldbank_gdp(country_iso3, year_start, year_end)
-        imf = self.fetch_imf_weo_data("NGDP_RPCH", [country_iso2], year_start, year_end).get(country_iso2, [])
+        imf = self.fetch_imf_weo_data(
+            "NGDP_RPCH", [country_iso2], year_start, year_end
+        ).get(country_iso2, [])
         wb_by_year = {item["year"]: item["gdp_growth_pct"] for item in wb}
         flags: list[dict[str, Any]] = []
         for offset, year in enumerate(range(year_start, year_end + 1)):
@@ -1025,7 +1218,9 @@ class SatelliteDataIngester:
         return flags
 
     @staticmethod
-    def _mock_worldbank_values(country_iso3: str, indicator: str, year_from: int, year_to: int) -> list[dict[str, Any]]:
+    def _mock_worldbank_values(
+        country_iso3: str, indicator: str, year_from: int, year_to: int
+    ) -> list[dict[str, Any]]:
         gdp_growth = {
             "CZE": {2021: -2.4, 2022: 2.5, 2023: -0.4, 2024: 1.3, 2025: 2.8},
             "CHL": {2021: 11.7, 2022: 2.4, 2023: 0.2, 2024: 2.6, 2025: 2.9},
@@ -1071,7 +1266,9 @@ class SatelliteDataIngester:
                 "reporter": reporter_iso3,
                 "year": year,
                 "commodity_codes": commodity_codes,
-                "trade_value_usd": 1523400000.0 if reporter_iso3 == "CHL" else 84200000.0,
+                "trade_value_usd": (
+                    1523400000.0 if reporter_iso3 == "CHL" else 84200000.0
+                ),
                 "quantity": 125000.0,
                 "source": "Deterministic Mock UN COMTRADE",
             }
@@ -1080,7 +1277,7 @@ class SatelliteDataIngester:
         url = f"https://comtradeapi.un.org/data/v1/get/C/A/{commodity_str}"
         headers = {"Ocp-Apim-Subscription-Key": api_key}
         params = {"reporterCode": reporter_iso3, "period": str(year)}
-        
+
         try:
             raw = self.http.request_json(
                 "GET",
@@ -1089,7 +1286,7 @@ class SatelliteDataIngester:
                 params=params,
                 timeout=20,
                 service_name="UN COMTRADE API",
-                fallback=lambda: {"data": []}
+                fallback=lambda: {"data": []},
             )
             return {
                 "reporter": reporter_iso3,
@@ -1104,7 +1301,9 @@ class SatelliteDataIngester:
                 "reporter": reporter_iso3,
                 "year": year,
                 "commodity_codes": commodity_codes,
-                "trade_value_usd": 1523400000.0 if reporter_iso3 == "CHL" else 84200000.0,
+                "trade_value_usd": (
+                    1523400000.0 if reporter_iso3 == "CHL" else 84200000.0
+                ),
                 "quantity": 125000.0,
                 "source": "Deterministic Mock UN COMTRADE (Fallback)",
             }
@@ -1123,10 +1322,12 @@ class SatelliteDataIngester:
             current_date = datetime.strptime(start_date, "%Y-%m-%d")
             end_dt = datetime.strptime(end_date, "%Y-%m-%d")
             while current_date <= end_dt:
-                prices.append({
-                    "date": current_date.strftime("%Y-%m-%d"),
-                    "value": float(round(rng.uniform(1800.0, 2600.0), 2))
-                })
+                prices.append(
+                    {
+                        "date": current_date.strftime("%Y-%m-%d"),
+                        "value": float(round(rng.uniform(1800.0, 2600.0), 2)),
+                    }
+                )
                 current_date += timedelta(days=30)
             return {series_id: prices for series_id in series_ids}
 
@@ -1147,7 +1348,7 @@ class SatelliteDataIngester:
                     params=params,
                     timeout=20,
                     service_name=f"FRED API ({series_id})",
-                    fallback=lambda: {"observations": []}
+                    fallback=lambda: {"observations": []},
                 )
                 results[series_id] = [
                     {"date": obs["date"], "value": float(obs["value"])}
@@ -1166,12 +1367,15 @@ class SatelliteDataIngester:
     ) -> list[dict[str, Any]]:
         """Query OpenStreetMap Overpass API for ground-truth mining/industrial features."""
         lon_min, lat_min, lon_max, lat_max = bbox
-        
+
         if self.config.mock_mode:
             return [
                 {
                     "type": "Feature",
-                    "properties": {"name": "Salar de Atacama Lithium Mine", "landuse": "industrial"},
+                    "properties": {
+                        "name": "Salar de Atacama Lithium Mine",
+                        "landuse": "industrial",
+                    },
                     "geometry": {
                         "type": "Polygon",
                         "coordinates": [
@@ -1188,7 +1392,9 @@ class SatelliteDataIngester:
             ]
 
         url = "https://overpass-api.de/api/interpreter"
-        headers = {"User-Agent": "SpaceBasedEconomicIntelligence/2.1.0 (XOZTE001@studenti.czu.cz)"}
+        headers = {
+            "User-Agent": "SpaceBasedEconomicIntelligence/2.1.0 (XOZTE001@studenti.czu.cz)"
+        }
         tag_queries = "".join(f'["{k}"="{v}"]' for k, v in tags.items())
         query = f"""
         [out:json][timeout:25];
@@ -1202,24 +1408,36 @@ class SatelliteDataIngester:
         out skel qt;
         """
         try:
-            response = self.http.session.post(url, data={"data": query}, headers=headers, timeout=30)
+            response = self.http.session.post(
+                url, data={"data": query}, headers=headers, timeout=30
+            )
             response.raise_for_status()
             data = response.json()
             features = []
             for element in data.get("elements", []):
                 if element.get("type") == "node":
-                    features.append({
-                        "type": "Feature",
-                        "properties": element.get("tags", {}),
-                        "geometry": {"type": "Point", "coordinates": [element["lon"], element["lat"]]},
-                    })
+                    features.append(
+                        {
+                            "type": "Feature",
+                            "properties": element.get("tags", {}),
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [element["lon"], element["lat"]],
+                            },
+                        }
+                    )
             return features
         except Exception as exc:
-            logger.warning("OSM Overpass API fetch failed: %s. Using deterministic fallback.", exc)
+            logger.warning(
+                "OSM Overpass API fetch failed: %s. Using deterministic fallback.", exc
+            )
             return [
                 {
                     "type": "Feature",
-                    "properties": {"name": "Salar de Atacama Lithium Mine", "landuse": "industrial"},
+                    "properties": {
+                        "name": "Salar de Atacama Lithium Mine",
+                        "landuse": "industrial",
+                    },
                     "geometry": {
                         "type": "Polygon",
                         "coordinates": [
@@ -1234,10 +1452,6 @@ class SatelliteDataIngester:
                     },
                 }
             ]
-
-
-
-
 
 
 def _latest_value(records: list[dict[str, Any]]) -> float:

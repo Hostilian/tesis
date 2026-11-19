@@ -15,6 +15,7 @@ logger = logging.getLogger(__name__)
 try:
     import torch
     from transformers import AutoImageProcessor, AutoModelForSemanticSegmentation
+
     TORCH_AVAILABLE = True
 except Exception:
     torch = None  # type: ignore[assignment]
@@ -25,7 +26,9 @@ except Exception:
 
 class AnomalyDetector:
     def __init__(self, contamination: float = 0.08, random_state: int = 42):
-        self.engine = SpatialTemporalEconomicEngine(contamination=contamination, random_state=random_state)
+        self.engine = SpatialTemporalEconomicEngine(
+            contamination=contamination, random_state=random_state
+        )
         self.spatial_model: IsolationForest | None = None
 
     @property
@@ -44,7 +47,9 @@ class AnomalyDetector:
     def random_state(self, value: int) -> None:
         self.engine.random_state = value
 
-    def fit_predict_spatial(self, features: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    def fit_predict_spatial(
+        self, features: np.ndarray
+    ) -> tuple[np.ndarray, np.ndarray]:
         """
         Train Isolation Forest on spatial spectral features and predict outlier masks.
         """
@@ -52,7 +57,9 @@ class AnomalyDetector:
         self.spatial_model = self.engine.spatial_model
         return predictions, scores
 
-    def detect_temporal_ntl(self, radiance_series: list[float], rolling_window: int = 12) -> list[float]:
+    def detect_temporal_ntl(
+        self, radiance_series: list[float], rolling_window: int = 12
+    ) -> list[float]:
         """
         Detect temporal anomalies in night-time lights using rolling Z-scores.
         """
@@ -78,15 +85,23 @@ class PrithviInferenceClient:
         self.model = None
 
         if not TORCH_AVAILABLE:
-            logger.warning("Prithvi dependencies unavailable; using deterministic fallback only.")
+            logger.warning(
+                "Prithvi dependencies unavailable; using deterministic fallback only."
+            )
             return
 
         if torch is not None and torch.cuda.is_available():
             self.device = "cuda"
-        elif torch is not None and getattr(torch.backends, "mps", None) and torch.backends.mps.is_available():
+        elif (
+            torch is not None
+            and getattr(torch.backends, "mps", None)
+            and torch.backends.mps.is_available()
+        ):
             self.device = "mps"
         else:
-            logger.warning("No GPU or MPS accelerator detected; using deterministic fallback only.")
+            logger.warning(
+                "No GPU or MPS accelerator detected; using deterministic fallback only."
+            )
             return
 
         try:
@@ -110,12 +125,22 @@ class PrithviInferenceClient:
             raise ValueError("sentinel2_cube must have shape (height, width, 6)")
 
         height, width, _ = sentinel2_cube.shape
-        if not self.available or self.processor is None or self.model is None or torch is None:
+        if (
+            not self.available
+            or self.processor is None
+            or self.model is None
+            or torch is None
+        ):
             zeros = np.zeros((height, width), dtype=np.float32)
             return PrithviInferenceResult(zeros, zeros, zeros, zeros)
 
         try:
-            input_tensor = torch.from_numpy(sentinel2_cube.astype(np.float32)).permute(2, 0, 1).unsqueeze(0).to(self.device)
+            input_tensor = (
+                torch.from_numpy(sentinel2_cube.astype(np.float32))
+                .permute(2, 0, 1)
+                .unsqueeze(0)
+                .to(self.device)
+            )
             with torch.no_grad():
                 outputs = self.model(pixel_values=input_tensor)
                 logits = outputs.logits.squeeze(0)
@@ -140,8 +165,12 @@ class PrithviInferenceClient:
             return PrithviInferenceResult(zeros, zeros, zeros, zeros)
 
     @staticmethod
-    def ensemble_score(isoforest_score: np.ndarray, mining_probability: np.ndarray) -> np.ndarray:
+    def ensemble_score(
+        isoforest_score: np.ndarray, mining_probability: np.ndarray
+    ) -> np.ndarray:
         """Blend anomaly score and mining probability into a single ensemble score."""
         if isoforest_score.shape != mining_probability.shape:
-            raise ValueError("isoforest_score and mining_probability must have the same shape")
+            raise ValueError(
+                "isoforest_score and mining_probability must have the same shape"
+            )
         return np.clip(0.6 * isoforest_score + 0.4 * mining_probability, 0.0, 1.0)
