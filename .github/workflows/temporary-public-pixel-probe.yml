@@ -1,0 +1,41 @@
+name: Temporary real Sentinel-2 pixel COG probe
+on:
+  push:
+    paths: ['.github/workflows/temporary-public-pixel-probe.yml']
+permissions:
+  contents: read
+jobs:
+  probe:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        with:
+          python-version: '3.12'
+      - name: Install minimal observation dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy==2.2.2 planetary-computer==1.0.0 pystac-client==0.8.6 rasterio==1.5.0
+      - name: Read public real Sentinel-2 COG preview
+        env:
+          AWS_NO_SIGN_REQUEST: "YES"
+          GDAL_DISABLE_READDIR_ON_OPEN: "EMPTY_DIR"
+        run: |
+          python -m pipeline.planetary_observation \
+            --bbox -68.250 -23.480 -68.238 -23.468 \
+            --start 2024-10-01 --end 2024-10-15 \
+            --output-dir research_private/observations
+          python - <<'PY'
+          import json, pathlib, numpy as np
+          root=pathlib.Path("research_private/observations")
+          manifests=list(root.glob("planetary_observed_*.json"))
+          assert len(manifests)==1
+          record=json.loads(manifests[0].read_text())
+          pixels=next(root.glob("planetary_observed_*.npz"))
+          with np.load(pixels) as content:
+            useful=int(np.isfinite(content["ndvi"]).sum())
+            print(json.dumps({"source_item":record["scene_id"],"acquired":record["acquired"],"bands":record["asset_keys"],"pixel_grid":record["grid_shape"],"useful_pixels":useful,"checksum_sha256":record["checksum_sha256"],"scientific_validation":record["scientific_validation"]}))
+            assert useful>=20
+          PY
