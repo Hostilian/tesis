@@ -18,9 +18,9 @@ try:
 
     TORCH_AVAILABLE = True
 except Exception:
-    torch = None  # type: ignore[assignment]
-    AutoImageProcessor = None  # type: ignore[assignment]
-    AutoModelForSemanticSegmentation = None  # type: ignore[assignment]
+    torch = None
+    AutoImageProcessor = None
+    AutoModelForSemanticSegmentation = None
     TORCH_AVAILABLE = False
 
 
