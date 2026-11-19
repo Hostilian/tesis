@@ -224,19 +224,26 @@ def check_nasa_earthdata() -> HealthResult:
 
 
 def check_imf() -> HealthResult:
+    # Verified live on a GitHub runner: 2026-11-19, HTTP 200 with observations.
     endpoint = (
-        "https://www.imf.org/external/datamapper/api/v1/NGDP_RPCH/CZE?periods=2024"
+        "https://api.imf.org/external/sdmx/2.1/data/"
+        "IMF.RES,WEO,9.0.0/CZE.NGDP_RPCH?startPeriod=2023&endPeriod=2024"
     )
     start = time.perf_counter()
     try:
-        response = requests.get(endpoint, timeout=20)
+        response = requests.get(
+            endpoint, headers={"Accept": "application/json"}, timeout=20
+        )
         latency_ms = (time.perf_counter() - start) * 1000
-        if response.ok and response.json().get("values", {}).get("NGDP_RPCH", {}).get(
-            "CZE"
-        ):
-            return _result(
-                "imf", "ok", latency_ms, response.status_code, None, endpoint
-            )
+        if response.ok:
+            raw = response.json()
+            series = raw.get("dataSets", [{}])[0].get("series", {})
+            if series and any(
+                value.get("observations") for value in series.values()
+            ):
+                return _result(
+                    "imf", "ok", latency_ms, response.status_code, None, endpoint
+                )
         return _result(
             "imf",
             "unavailable",

@@ -1166,43 +1166,47 @@ class SatelliteDataIngester:
         year_start: int,
         year_end: int,
     ) -> dict[str, list[float | None]]:
-        """Retrieve IMF DataMapper values; missing observations remain missing.
+        """Read observed annual WEO values via IMF's verified SDMX 2.1 API.
 
-        The documented API uses an indicator/country path with a `periods`
-        query parameter. A network or schema failure never becomes GDP=0.
+        Request each country separately to preserve exact observation mapping.
+        Never substitute zero GDP growth when observations are unavailable.
         """
-        years = range(year_start, year_end + 1)
-
-        def missing() -> dict[str, list[float | None]]:
-            return {country: [None for _ in years] for country in countries}
-
+        years = list(range(year_start, year_end + 1))
+        missing = [None for _ in years]
         if self.config.mock_mode:
-            return missing()
-
-        country_expr = ",".join(countries)
-        periods = ",".join(str(year) for year in years)
-        url = (
-            f"https://www.imf.org/external/datamapper/api/v1/"
-            f"{indicator}/{country_expr}?periods={periods}"
-        )
-        raw = self.http.request_json(
-            "GET", url, timeout=20, service_name="IMF WEO API", fallback=missing
-        )
-        if not isinstance(raw, dict) or "values" not in raw:
-            return missing()
-        indicator_values = raw.get("values", {}).get(indicator, {})
-        if not isinstance(indicator_values, dict):
-            return missing()
+            return {country: missing.copy() for country in countries}
 
         result: dict[str, list[float | None]] = {}
         for country in countries:
-            values = indicator_values.get(country, {})
-            if not isinstance(values, dict):
-                values = {}
-            result[country] = [
-                float(values[str(year)]) if values.get(str(year)) is not None else None
-                for year in years
-            ]
+            url = (
+                "https://api.imf.org/external/sdmx/2.1/data/"
+                f"IMF.RES,WEO,9.0.0/{country}.{indicator}"
+            )
+            try:
+                raw = self.http.request_json(
+                    "GET",
+                    url,
+                    params={
+                        "startPeriod": str(year_start),
+                        "endPeriod": str(year_end),
+                    },
+                    headers={"Accept": "application/json"},
+                    timeout=20,
+                    service_name="IMF WEO SDMX 2.1 API",
+                    fallback=lambda: {},
+                )
+                periods = raw["structure"]["dimensions"]["observation"][0]["values"]
+                series = raw["dataSets"][0]["series"]
+                observations = next(iter(series.values()))["observations"]
+                by_year: dict[int, float] = {}
+                for position, period in enumerate(periods):
+                    cell = observations.get(str(position), [])
+                    if cell and cell[0] is not None:
+                        by_year[int(period["id"])] = float(cell[0])
+                result[country] = [by_year.get(year) for year in years]
+            except (KeyError, IndexError, TypeError, ValueError, StopIteration) as exc:
+                logger.warning("IMF SDMX data missing for %s: %s", country, exc)
+                result[country] = missing.copy()
         return result
 
     def flag_wb_imf_discrepancies(

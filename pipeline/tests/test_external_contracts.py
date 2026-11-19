@@ -31,17 +31,35 @@ def test_missing_imf_does_not_generate_false_gdp_discrepancy(monkeypatch: Any) -
 
 def test_imf_period_query_preserves_missing_years(monkeypatch: Any) -> None:
     client = SatelliteDataIngester(config=PipelineConfig(mock_mode=False))
-    calls: list[str] = []
+    calls: list[tuple[str, dict[str, str]]] = []
 
     def fake_request(method: str, url: str, **kwargs: Any) -> dict[str, Any]:
         assert method == "GET"
-        calls.append(url)
-        return {"values": {"NGDP_RPCH": {"CZE": {"2024": 1.8}}}}
+        calls.append((url, kwargs["params"]))
+        return {
+            "structure": {
+                "dimensions": {
+                    "observation": [
+                        {"values": [{"id": "2023"}, {"id": "2024"}]}
+                    ]
+                }
+            },
+            "dataSets": [
+                {
+                    "series": {
+                        "0:0:0": {"observations": {"1": ["1.8"]}}
+                    }
+                }
+            ],
+        }
 
     monkeypatch.setattr(client.http, "request_json", fake_request)
     data = client.fetch_imf_weo_data("NGDP_RPCH", ["CZE"], 2023, 2024)
     assert data == {"CZE": [None, 1.8]}
     assert calls == [
-        "https://www.imf.org/external/datamapper/api/v1/"
-        "NGDP_RPCH/CZE?periods=2023,2024"
+        (
+            "https://api.imf.org/external/sdmx/2.1/data/"
+            "IMF.RES,WEO,9.0.0/CZE.NGDP_RPCH",
+            {"startPeriod": "2023", "endPeriod": "2024"},
+        )
     ]
