@@ -1200,9 +1200,7 @@ class SatelliteDataIngester:
             if not isinstance(values, dict):
                 values = {}
             result[country] = [
-                float(values[str(year)])
-                if values.get(str(year)) is not None
-                else None
+                float(values[str(year)]) if values.get(str(year)) is not None else None
                 for year in years
             ]
         return result

@@ -224,7 +224,9 @@ def check_nasa_earthdata() -> HealthResult:
 
 
 def check_imf() -> HealthResult:
-    endpoint = "https://www.imf.org/external/datamapper/api/v1/NGDP_RPCH/CZE?periods=2024"
+    endpoint = (
+        "https://www.imf.org/external/datamapper/api/v1/NGDP_RPCH/CZE?periods=2024"
+    )
     start = time.perf_counter()
     try:
         response = requests.get(endpoint, timeout=20)
