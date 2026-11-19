@@ -224,12 +224,14 @@ def check_nasa_earthdata() -> HealthResult:
 
 
 def check_imf() -> HealthResult:
-    endpoint = "https://www.imf.org/external/datamapper/api/v1/NGDP_RPCH/CZ/2024"
+    endpoint = "https://www.imf.org/external/datamapper/api/v1/NGDP_RPCH/CZE?periods=2024"
     start = time.perf_counter()
     try:
         response = requests.get(endpoint, timeout=20)
         latency_ms = (time.perf_counter() - start) * 1000
-        if response.ok:
+        if response.ok and response.json().get("values", {}).get("NGDP_RPCH", {}).get(
+            "CZE"
+        ):
             return _result(
                 "imf", "ok", latency_ms, response.status_code, None, endpoint
             )

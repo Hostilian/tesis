@@ -564,7 +564,7 @@ class CopernicusSTACClient:
     config: PipelineConfig
     http: ResilientHTTPClient
     mock: MockDataClient
-    base_url: str = "https://catalogue.dataspace.copernicus.eu/stac/v1"
+    base_url: str = "https://stac.dataspace.copernicus.eu/v1"
     token_url: str = (
         "https://identity.dataspace.copernicus.eu/auth/realms/CDSE/"
         "protocol/openid-connect/token"
@@ -622,7 +622,7 @@ class CopernicusSTACClient:
         bbox = _validate_bbox(bbox)
         if self.config.mock_mode:
             return self.mock.stac_items("cdse", bbox, date_from, date_to)
-        collections = collections or ["SENTINEL-2"]
+        collections = collections or ["sentinel-2-l2a"]
         try:
             token = self._refresh_token_if_expired()
             payload = {
@@ -1165,29 +1165,47 @@ class SatelliteDataIngester:
         countries: list[str],
         year_start: int,
         year_end: int,
-    ) -> dict[str, list[float]]:
+    ) -> dict[str, list[float | None]]:
+        """Retrieve IMF DataMapper values; missing observations remain missing.
+
+        The documented API uses an indicator/country path with a `periods`
+        query parameter. A network or schema failure never becomes GDP=0.
+        """
+        years = range(year_start, year_end + 1)
+
+        def missing() -> dict[str, list[float | None]]:
+            return {country: [None for _ in years] for country in countries}
+
+        if self.config.mock_mode:
+            return missing()
+
         country_expr = ",".join(countries)
-        url = f"https://www.imf.org/external/datamapper/api/v1/{indicator}/{country_expr}/{year_start}/{year_end}"
-
-        def fallback() -> dict[str, list[float]]:
-            return {
-                country: [0.0 for _ in range(year_start, year_end + 1)]
-                for country in countries
-            }
-
+        periods = ",".join(str(year) for year in years)
+        url = (
+            f"https://www.imf.org/external/datamapper/api/v1/"
+            f"{indicator}/{country_expr}?periods={periods}"
+        )
         raw = self.http.request_json(
-            "GET", url, timeout=20, service_name="IMF WEO API", fallback=fallback
+            "GET", url, timeout=20, service_name="IMF WEO API", fallback=missing
         )
         if not isinstance(raw, dict) or "values" not in raw:
-            return fallback()
-        values = raw.get("values", {}).get(indicator, {})
-        return {
-            country: [
-                float(values.get(country, {}).get(str(year), 0.0) or 0.0)
-                for year in range(year_start, year_end + 1)
+            return missing()
+        indicator_values = raw.get("values", {}).get(indicator, {})
+        if not isinstance(indicator_values, dict):
+            return missing()
+
+        result: dict[str, list[float | None]] = {}
+        for country in countries:
+            values = indicator_values.get(country, {})
+            if not isinstance(values, dict):
+                values = {}
+            result[country] = [
+                float(values[str(year)])
+                if values.get(str(year)) is not None
+                else None
+                for year in years
             ]
-            for country in countries
-        }
+        return result
 
     def flag_wb_imf_discrepancies(
         self,
@@ -1198,13 +1216,16 @@ class SatelliteDataIngester:
     ) -> list[dict[str, Any]]:
         wb = self.fetch_worldbank_gdp(country_iso3, year_start, year_end)
         imf = self.fetch_imf_weo_data(
-            "NGDP_RPCH", [country_iso2], year_start, year_end
-        ).get(country_iso2, [])
+            "NGDP_RPCH", [country_iso3], year_start, year_end
+        ).get(country_iso3, [])
         wb_by_year = {item["year"]: item["gdp_growth_pct"] for item in wb}
         flags: list[dict[str, Any]] = []
         for offset, year in enumerate(range(year_start, year_end + 1)):
-            wb_value = float(wb_by_year.get(year, 0.0))
-            imf_value = float(imf[offset]) if offset < len(imf) else 0.0
+            wb_raw = wb_by_year.get(year)
+            imf_value = imf[offset] if offset < len(imf) else None
+            if wb_raw is None or imf_value is None:
+                continue  # No observation is not equivalent to zero growth.
+            wb_value = float(wb_raw)
             if math.fabs(wb_value - imf_value) > 0.5:
                 flags.append(
                     {
