@@ -601,8 +601,10 @@ def main():
     completed_at = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
     # Write Run Record
-    mock_mode = not ingester.authenticated
-    providers_used = ["gee", "worldbank"] if ingester.authenticated else ["mock"]
+    # Metadata-only provider access is not source-pixel provenance. Both the
+    # Sentinel-2 features and monthly VIIRS measurements remain synthetic.
+    mock_mode = True
+    providers_used = ["mock"] + (["gee_metadata_only"] if ingester.authenticated else [])
 
     git_commit_sha = "unknown"
     git_branch = "unknown"

@@ -922,7 +922,7 @@ class SatelliteDataIngester:
     def fetch_sentinel2_data(
         self, bbox: list[float], start_date: str, end_date: str
     ) -> dict[str, Any]:
-        """Return Sentinel-2 bands as arrays for the existing preprocessing pipeline."""
+        """Return synthetic Sentinel-2 feature arrays; GEE is metadata-only here."""
         bbox = _validate_bbox(bbox)
         if not self.authenticated:
             return self.mock.sentinel2_bands(bbox, start_date, end_date)
@@ -933,7 +933,7 @@ class SatelliteDataIngester:
             )
             return {
                 **self.mock.sentinel2_bands(bbox, start_date, end_date),
-                "source": "GEE Sentinel-2 L2A Surface Reflectance",
+                "source": "Synthetic Sentinel-2 pixels (GEE metadata query only)",
                 "gee_summary": summary,
             }
         except Exception as exc:
@@ -979,7 +979,7 @@ class SatelliteDataIngester:
     def fetch_viirs_ntl(
         self, bbox: list[float], start_date: str, end_date: str
     ) -> dict[str, Any]:
-        """Return monthly VIIRS DNB radiance values for temporal anomaly detection."""
+        """Return deterministic mock VIIRS monthly radiance, never live sensor data."""
         bbox = _validate_bbox(bbox)
         return self.mock.viirs_monthly(bbox, start_date, end_date)
 
