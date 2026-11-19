@@ -54,7 +54,7 @@ class FinancialPayload(BaseModel):
     source: str = Field(..., json_schema_extra={"example": "LME"})
 
 
-def run_background_pipeline(bbox: List[float], start_date: str, end_date: str):
+def run_background_pipeline(bbox: List[float], start_date: str, end_date: str) -> None:
     logger.info(
         f"Triggering asynchronous processing for bbox {bbox} from {start_date} to {end_date}"
     )
@@ -65,7 +65,7 @@ def run_background_pipeline(bbox: List[float], start_date: str, end_date: str):
 
 
 @app.get("/api/v1/status")
-def get_status():
+def get_status() -> dict[str, Any]:
     """Retrieve the status and health check information of the API integration layer."""
     try:
         ingester = SatelliteDataIngester()
@@ -104,7 +104,7 @@ def get_status():
 
 
 @app.get("/api/v1/anomalies")
-def get_anomalies():
+def get_anomalies() -> list[dict[str, Any]]:
     """Retrieve the complete list of economic anomalies."""
     if not ANOMALIES_FILE.exists():
         return []
@@ -118,7 +118,7 @@ def get_anomalies():
 
 
 @app.get("/api/v1/anomalies/{anomaly_id}")
-def get_anomaly_by_id(anomaly_id: str):
+def get_anomaly_by_id(anomaly_id: str) -> dict[str, Any]:
     """Retrieve details for a single anomaly."""
     anomalies = get_anomalies()
     for anom in anomalies:
@@ -130,7 +130,7 @@ def get_anomaly_by_id(anomaly_id: str):
 
 
 @app.post("/api/v1/webhooks/financial")
-def receive_financial_webhook(payload: FinancialPayload = Body(...)):
+def receive_financial_webhook(payload: FinancialPayload = Body(...)) -> dict[str, str]:
     """
     Webhook endpoint to ingest real-time market data feeds (e.g. commodity prices).
     Returns an immutable transaction hash for data provenance.
@@ -170,7 +170,7 @@ def receive_financial_webhook(payload: FinancialPayload = Body(...)):
 @app.post("/api/v1/ingest/satellite")
 def trigger_satellite_ingestion(
     payload: BoundingBox, background_tasks: BackgroundTasks
-):
+) -> dict[str, str]:
     """
     RESTful endpoint to trigger geospatial pipeline runs for specific coordinates.
     """
