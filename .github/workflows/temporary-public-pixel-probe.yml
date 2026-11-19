@@ -18,6 +18,18 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install numpy==2.2.2 planetary-computer==1.0.0 pystac-client==0.8.6 rasterio==1.5.0
+      - name: Inspect STAC asset keys before pixel retrieval
+        run: |
+          python - <<'PY'
+          from pystac_client import Client
+          from planetary_computer import sign_inplace
+          url="https://planetarycomputer.microsoft.com/api/stac/v1"
+          catalog=Client.open(url,modifier=sign_inplace)
+          items=list(catalog.search(collections=["sentinel-2-l2a"],bbox=[-68.25,-23.48,-68.238,-23.468],datetime="2024-10-01/2024-10-15",query={"eo:cloud_cover":{"lt":60}},max_items=8).items())
+          print("item_count",len(items))
+          for item in items[:5]:
+              print("item",item.id,"cloud",item.properties.get("eo:cloud_cover"),"assets",sorted(item.assets.keys()))
+          PY
       - name: Read public real Sentinel-2 COG preview
         env:
           AWS_NO_SIGN_REQUEST: "YES"
