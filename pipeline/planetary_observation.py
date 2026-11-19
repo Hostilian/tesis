@@ -47,7 +47,7 @@ def select_scene_metadata(items: list[Any]) -> Any:
             fraction = float(cloud)
         except (ValueError, TypeError):
             continue
-        if not (0 <= fraction <= 60) or not getattr(item, "id", ""):
+        if not (0 <= fraction <= 100) or not getattr(item, "id", ""):
             continue
         eligible.append((fraction, str(item.id), item))
     if not eligible:
@@ -105,7 +105,7 @@ def read_planetary_sample(
         collections=["sentinel-2-l2a"],
         bbox=bbox,
         datetime=f"{start}/{end}",
-        query={"eo:cloud_cover": {"lt": 60}},
+        query={"eo:cloud_cover": {"lte": 100}},
         max_items=8,
     )
     scene = select_scene_metadata(list(search.items()))
