@@ -30,12 +30,12 @@ from typing import Callable, Optional
 import requests
 
 try:
-    import ee  # type: ignore
+    import ee
 
     EE_AVAILABLE = True
 except Exception:  # pragma: no cover - optional dependency
     EE_AVAILABLE = False
-    ee = None  # type: ignore[assignment]
+    ee = None
 
 
 @dataclass
