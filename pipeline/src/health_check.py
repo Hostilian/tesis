@@ -114,8 +114,7 @@ def check_gee() -> HealthResult:
     # On ephemeral GitHub runners there is no implicit browser-based ADC login.
     # Missing optional secrets make this check unconfigured, not a failed login.
     if os.getenv("GITHUB_ACTIONS") == "true" and not (
-        (key_file and Path(key_file).is_file())
-        or os.getenv("GEE_SERVICE_ACCOUNT_KEY")
+        (key_file and Path(key_file).is_file()) or os.getenv("GEE_SERVICE_ACCOUNT_KEY")
     ):
         return _result(
             "gee", "skipped", 0.0, None, "GEE credentials not configured", endpoint
