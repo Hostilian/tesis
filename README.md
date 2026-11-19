@@ -41,7 +41,7 @@ A futuristic, dark-space GIS monitoring console acting as the Decision Support S
 
 See the **[Evidence and Validation Status](docs/evidence.html)** for the provenance distinction, missing proof, and the criteria for moving an anomaly into a validated research dataset.
 
-**Submission safeguard:** The current thesis draft (especially Chapters 5–7 and the precompiled PDF) contains historical benchmark claims that have not been substantiated by the current public pipeline. See **[THESIS_VALIDATION_GAPS.md](THESIS_VALIDATION_GAPS.md)** before reusing these sections in any formal submission.
+**Submission safeguard:** Markdown Chapters 5–7 have now been revised to distinguish software results from unverified empirical claims, with the earlier drafts preserved at `shelf/manuscript-pre-validation-20261119`. The checked-in LaTeX and PDF have **not** yet been regenerated and may still contain superseded claims. See **[THESIS_VALIDATION_GAPS.md](THESIS_VALIDATION_GAPS.md)** before academic submission.
 
 ---
 
@@ -135,7 +135,9 @@ tesis/
 │       └── chapters/*.tex
 │
 ├── README.md                   # This file
-├── REPRODUCE.md                # Step-by-step reproducibility guide
+├── REPRODUCE.md                # Synthetic-demo reproduction and research limits
+├── REAL_OBSERVATION.md         # Bounded, private actual Sentinel-2 pixel preview
+├── THESIS_VALIDATION_GAPS.md   # Audit of unverified manuscript results
 ├── SECURITY.md                 # Security policy
 ├── CONTRIBUTING.md             # Contribution guidelines
 ├── CHANGELOG.md                # Keep-a-Changelog format
@@ -179,7 +181,7 @@ earthengine authenticate
 echo "GCP_PROJECT=your-google-cloud-project-id" > .env
 ```
 
-**Important:** Setting API credentials does not currently replace mock pixel arrays with scene-level satellite raster data. Real imagery ingestion, independent labels and scientific validation remain future work.
+**Important:** Setting API credentials does not turn the original demo pipeline into a real observation detector. The separate [real Sentinel-2 pixel preview](REAL_OBSERVATION.md) is fail-closed and private; independent labels and scientific validation remain future work.
 
 For credentialed provider checks, configure the appropriate GitHub Actions secrets (never commit private credentials):
 
