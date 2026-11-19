@@ -102,4 +102,4 @@ class SpatialTemporalEconomicEngine:
         )
         values = np.array(radiance_series, dtype=float)
         z_scores = calculate_temporal_zscores(values, rolling_window)
-        return z_scores.tolist()
+        return [float(value) for value in z_scores.tolist()]
