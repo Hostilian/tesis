@@ -82,3 +82,5 @@ jobs:
               valid=int(np.isfinite(d["ndvi"]).sum())
           print(json.dumps({"study":"Czechia","id":record["scene_id"],"acquired":record["acquired"],"valid_pixels":valid,"sha256":record["checksum_sha256"],"scientific_validation":record["scientific_validation"]}))
           PY
+
+# Rerun all 3 scenes; rely on pixel SCL mask instead of global cloud gate.
