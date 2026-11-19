@@ -48,7 +48,7 @@ def test_scl_masks_cloud_and_invalid_pixels() -> None:
     scl[0, 0] = 9.0
     bands = mask_real_pixels(source, scl)
     assert np.isnan(bands["B2"][0, 0])
-    assert bands["B02"] is None if "B02" in bands else True
+    assert "B02" not in bands
     assert bands["B2"][1, 1] == pytest.approx(0.1)
     assert bands["B8"][1, 1] == pytest.approx(0.3)
 
