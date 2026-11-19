@@ -52,6 +52,38 @@ Potential private inputs include authorised **Sentinel-1/2 imagery**, periodic *
 - Require field/sector/device crosswalk, timestamps, calibration status, sensor quality and source checksums before any comparison.
 - Treat cross-source validation (optical vs SAR vs drone/plane vs probes) as a hypothesis to evaluate, not a completed accomplishment.
 
+### Open-source integration choices and current implementation status
+
+This is a **candidate architecture**, not evidence that private integrations have been completed.
+
+| Source | Prefer reuse of | Current observable status |
+|---|---|---|
+| Public Sentinel-2 pixels | Microsoft Planetary Computer + PySTAC Client + rasterio; CDSE STAC for catalogue discovery | **Working** in a three-region public preview (21,253 usable pixels); no validated anomaly model |
+| Sentinel-1 radar | Established Sentinel-1 GRD sources and existing geospatial raster readers | Provider interface exists; no independently validated fused SAR raster observations in public evidence |
+| Drone and crewed-aircraft photographs | **OpenDroneMap / WebODM** for photogrammetry, orthomosaics, DSM/DTM and georeferencing; GDAL for reprojection | Not processed against Rota Única data; source access and permission required |
+| Weather sensors and irrigation/water probes | **OGC SensorThings API 2.0** observation/datastream model or read-only supplier adapters with clear timestamps, calibration and units | No private water-probe API has been proven end-to-end in this public thesis repository |
+| Soil/leaf laboratories and farm operations | Schema-normalized private tables with source CSV/JSON hashes and pseudonymous field keys | No authorised private rows exported or validated in the public research pipeline |
+
+**Separation of concerns:** Align sensors, flights and satellite scenes by dates, CRS and authorised pseudonymous field/sector identifiers **inside the private environment**. Public outputs should contain only approved, non-reidentifiable statistics and independently cleared samples. Do not copy Rota Única files to the public repo, or create synthetic "actual supplier" results for missing APIs.
+
+**Recommended data contracts:** adopt STAC Items for imagery asset metadata, OGC SensorThings Observation/Datastream concepts for probes, and GeoTIFF/COG for georeferenced orthomosaics. Test field-to-sensor identity, sensor QA, units, clock drift, scene-footprint overlaps, resolution and acquisition-window alignment before attempting supervised or unsupervised fusion.
+
+**Implementation blockers:** authorisation to use and publish any farm-level evidence; supplier API base URLs/credentials and subscription scopes; complete device-to-sector mappings; checked sensor-calibration records; approved drone/aircraft imagery and processing consent; independent agronomic ground truth.
+
+Official references: [STAC (OGC)](https://www.ogc.org/standards/stac/), [OGC SensorThings API 2.0](https://docs.ogc.org/is/23-019/23-019.html), [OpenDroneMap](https://github.com/OpenDroneMap/ODM), [WebODM](https://webodm.org/).
+
+### Course-to-thesis completion gates
+
+| Course | What is already usable in the thesis | What still needs completion before claiming its contribution validated |
+|---|---|---|
+| INF13207L — Tecnologias Web | Three hosted dashboards, static JSON API, PWA and security checks | Independent browser/accessibility and end-user functional verification |
+| INF13204L — Metodologias e Desenvolvimento de Software | Git branches, protected evidence contracts, reproducible tests and CI workflows | Formal requirements traceability and reviewable release criteria |
+| MAT02354L — Probabilidade e Estatística | Hypothesis definitions, model interfaces and proposed metrics | Real-label/real-series inferential analysis and uncertainty |
+| INF14387L — Transformação e Análise de Dados | Actual public raster sampling, quality masking, lineage/checksums and missing-data policy | Full multi-temporal ETL and observation-to-outcome joins |
+| INF13186L — Interação Humano-Computador | V2/V3/V4 map-oriented interfaces | Documented user evaluation, usability measures and accessible design revisions |
+
+These are thesis-level connections, **not evidence of passing or submitting the five course assignments**.
+
 ## 4. Five Évora course connections to the thesis
 
 | Course | Reusable thesis capability | Evidence to generate |
