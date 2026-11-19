@@ -1,0 +1,35 @@
+{
+  "type": "Feature",
+  "properties": {
+    "id": "PUBLIC_ATACAMA_CATALOGUE_SMOKE",
+    "data_rights": "public_study_region_only",
+    "note": "Broad published public-region test fixture, not a private farm boundary"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -68.35,
+          -23.55
+        ],
+        [
+          -68.33,
+          -23.55
+        ],
+        [
+          -68.33,
+          -23.53
+        ],
+        [
+          -68.35,
+          -23.53
+        ],
+        [
+          -68.35,
+          -23.55
+        ]
+      ]
+    ]
+  }
+}

@@ -1,0 +1,61 @@
+name: Public Sentinel-2 STAC Catalogue Smoke (metadata only)
+on:
+  workflow_dispatch:
+  push:
+    branches: [develop]
+    paths:
+      - '.github/workflows/public-stac-smoke.yml'
+      - 'pipeline/src/agriculture_pilot.py'
+      - 'pipeline/examples/public-atacama-catalogue.geojson'
+permissions:
+  contents: read
+jobs:
+  metadata-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        with:
+          python-version: '3.12'
+      - name: Install minimum metadata-client dependencies
+        run: python -m pip install requests==2.33.0
+      - name: Execute authorised public catalogue query
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from pipeline.src.agriculture_pilot import (
+              execute_stac_discovery,
+              stac_search_request,
+          )
+          path = Path("pipeline/examples/public-atacama-catalogue.geojson")
+          public = json.loads(path.read_text(encoding="utf-8"))
+          query = stac_search_request(public, "2025-09-01", "2025-09-30", 5)
+          entries = execute_stac_discovery(
+              query, approved_public_geometry=True
+          )
+          if not entries:
+              raise RuntimeError("Catalogue response valid but no scene metadata returned")
+          report = {
+              "source": "CDSE SFEOS STAC",
+              "evidence_state": "catalogue_metadata_only",
+              "real_satellite_pixels_processed": False,
+              "independently_validated": False,
+              "count": len(entries),
+              "items": entries,
+          }
+          Path("stac-public-metadata-proof.json").write_text(
+              json.dumps(report, indent=2), encoding="utf-8"
+          )
+          print(
+              f"Found {len(entries)} public Sentinel-2 catalogue entries; "
+              "no scene pixel was downloaded or analyzed"
+          )
+          PY
+      - name: Retain non-sensitive metadata evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: public-stac-metadata-${{ github.run_id }}
+          path: stac-public-metadata-proof.json
+          retention-days: 14
