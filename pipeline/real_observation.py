@@ -92,6 +92,11 @@ def _ensure_private_path(path: Path) -> Path:
     public = (project / "docs").resolve()
     if resolved == public or public in resolved.parents:
         raise ValueError("refusing to write private observations into docs/")
+    private = (project / "research_private").resolve()
+    if project in resolved.parents and not (
+        resolved == private or private in resolved.parents
+    ):
+        raise ValueError("inside this repository, output must be under research_private/")
     return resolved
 
 
