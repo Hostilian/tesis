@@ -1,12 +1,12 @@
 # Chapter 5: Results and Evidence Assessment
 
-> **Research status — 19 November 2026.** This chapter distinguishes implemented and reproducible software demonstrations from empirical findings requiring independent validation. Earlier numerical results and case-study interpretations are retained in the archived manuscript branch \`shelf/manuscript-pre-validation-20261119\`, not adopted here as validated satellite observations. The current \`docs/api/v1/status/index.json\` identifies the published run as \`mock_mode: true\`. The manuscript must be updated again after genuine observed inputs and independent reference labels are available.
+> **Research status — 19 November 2026.** This chapter distinguishes implemented and reproducible software demonstrations from empirical findings requiring independent validation. Earlier numerical results and case-study interpretations are retained in the archived manuscript branch `shelf/manuscript-pre-validation-20261119`, not adopted here as validated satellite observations. The current `docs/api/v1/status/index.json` identifies the published run as `mock_mode: true`. The manuscript must be updated again after genuine observed inputs and independent reference labels are available.
 
 ## 5.1 Evaluation Scope and Evidence Classification
 
 The implementation demonstrates a reproducible workflow for structured geospatial anomaly events: provider-client interfaces, deterministic synthetic raster/time-series inputs, spectral transformations, unsupervised anomaly detection, provenance hashes, JSON/GeoJSON exports and browser-based analysis. The deployed site consists of three dashboard variants (V2, V3, V4).
 
-For the current public demonstration, ten anomaly records are available in \`docs/data/anomalies.json\`, mirrored in \`docs/api/v1/anomalies/index.json\`. They span the following **illustrative, not empirically verified** study areas.
+For the current public demonstration, ten anomaly records are available in `docs/data/anomalies.json`, mirrored in `docs/api/v1/anomalies/index.json`. They span the following **illustrative, not empirically verified** study areas.
 
 | Demonstration area | Example analytic signal | What current public records establish | What is not established |
 |---|---|---|---|
@@ -14,23 +14,23 @@ For the current public demonstration, ten anomaly records are available in \`doc
 | Madre de Dios, Peru | Vegetation/soil differences potentially relevant to land clearing | Synthetic samples permit testing an Isolation Forest pipeline | Actual mining/deforestation detection, linked Sentinel-1 SAR evidence or independently labeled validation pixels |
 | Central Bohemia, Czechia | Night-time radiance changes potentially relevant to industrial activity | Deterministic monthly VIIRS-style series can exercise temporal detection and visualizations | Genuine observed VIIRS fluctuations or an independently reproduced correlation with regional GDP |
 
-The published \`docs/data/anomalies.provenance.json\` lists source descriptions and hashes for mock inputs. Hash consistency is a software reproducibility property; it **does not** establish acquisition of real Sentinel imagery or corroboration by field records. The public API now records \`data_origin: synthetic_demo\` and \`verification_status: unverified\` for every current anomaly.
+The published `docs/data/anomalies.provenance.json` lists source descriptions and hashes for mock inputs. Hash consistency is a software reproducibility property; it **does not** establish acquisition of real Sentinel imagery or corroboration by field records. The public API now records `data_origin: synthetic_demo` and `verification_status: unverified` for every current anomaly.
 
 ## 5.2 Demonstrator Functionality
 
 ### 5.2.1 Data Engineering
 
-The \`pipeline.src.ingestion.SatelliteDataIngester\` facade implements Earth-observation and socioeconomic provider interfaces. For the current detection run, the \`fetch_sentinel2_data\` method supplies deterministic synthetic reflectance arrays, including when a Google Earth Engine request returns a metadata-level summary. The \`fetch_viirs_ntl\` method supplies a synthetic monthly time series. This distinction prevents provider authentication or catalogue access from being mistaken for observation-level validation.
+The `pipeline.src.ingestion.SatelliteDataIngester` facade implements Earth-observation and socioeconomic provider interfaces. For the current detection run, the `fetch_sentinel2_data` method supplies deterministic synthetic reflectance arrays, including when a Google Earth Engine request returns a metadata-level summary. The `fetch_viirs_ntl` method supplies a synthetic monthly time series. This distinction prevents provider authentication or catalogue access from being mistaken for observation-level validation.
 
 The preprocessing stage computes NDVI, NDWI and BSI over array inputs and masks unusable pixels. An Isolation Forest and temporal deviation detector produce example anomaly scores. These scores illustrate algorithmic behavior; they are **not** calibrated probabilities of a real-world event. Map coordinates and numeric sample summaries are demonstration content, not independently confirmed geospatial events.
 
-An independent, experimental GEE acquisition script is available in \`pipeline/real_observation.py\`. It requests a bounded sample of actual Sentinel-2 pixels and records scene identifiers, grid parameters and a checksum. This research-only script **has not yet been demonstrated with a credentialed successful acquisition in the public evidence reviewed**. It does not automatically publish observations to the dashboard or claim anomaly validation.
+An independent, experimental GEE acquisition script is available in `pipeline/real_observation.py`. It requests a bounded sample of actual Sentinel-2 pixels and records scene identifiers, grid parameters and a checksum. This research-only script **has not yet been demonstrated with a credentialed successful acquisition in the public evidence reviewed**. It does not automatically publish observations to the dashboard or claim anomaly validation.
 
 ### 5.2.2 Interactive Dashboards and Static API
 
 The public artifact provides three distinct interfaces: V2 (main spatial dashboard), V3 (science-fiction heads-up display), and V4 (institutional concept console). Satellite imagery is the default basemap on each. Dashboard interactions, map rendering, static JSON request paths and offline/PWA behavior can be tested independently of whether the underlying anomaly sample is synthetic.
 
-The published API provides the anomaly list, individual records, dataset descriptions and a run-status snapshot. These are static JSON resources hosted by GitHub Pages; their accessibility does not mean a live sensor ingestion job is running. All three dashboards link to \`docs/evidence.html\`, which explains current scientific limitations.
+The published API provides the anomaly list, individual records, dataset descriptions and a run-status snapshot. These are static JSON resources hosted by GitHub Pages; their accessibility does not mean a live sensor ingestion job is running. All three dashboards link to `docs/evidence.html`, which explains current scientific limitations.
 
 ### 5.2.3 Software and API Verification
 
@@ -58,7 +58,7 @@ Until all steps are completed, there is **no defensible confirmed F1 value or su
 
 ### 5.3.2 H2 — Night-Time Lights and Economic Indicators
 
-**Research hypothesis:** Independently observed VIIRS DNB night-time light variations correlate with appropriately aligned macroeconomic growth observations (proposed threshold \`r >= 0.65\` and significance \`p < 0.05\`).
+**Research hypothesis:** Independently observed VIIRS DNB night-time light variations correlate with appropriately aligned macroeconomic growth observations (proposed threshold `r >= 0.65` and significance `p < 0.05`).
 
 **Current status:** **Not evaluated on a fully evidenced pairwise time series.** Earlier draft statistics such as Pearson r = 0.724, a p-value of 0.0002 and an analysis of 21 quarters are not independently reproducible from linked real monthly VIIRS measurements and regional GDP observations in the current public artifact.
 
@@ -86,6 +86,6 @@ A future reproducible benchmark must record hardware, Python/dependency versions
 
 The next evidence release requires an observed source-asset inventory, immutable raw-data checksums, real raster processing, independently approved reference labels, holdout evaluation, error analysis and a recorded reviewer decision. Public demonstration maps must remain separated from any restricted Rota Única drone, aircraft, farm boundary or sensor assets.
 
-For detailed implementation steps, see \`THESIS_VALIDATION_GAPS.md\`, \`REAL_OBSERVATION.md\` and \`docs/evidence.html\` in the repository.
+For detailed implementation steps, see `THESIS_VALIDATION_GAPS.md`, `REAL_OBSERVATION.md` and `docs/evidence.html` in the repository.
 
 **Chapter conclusion:** The primary reproducible results at this stage concern the demonstrator's software architecture, transformations, API structure and deployment, not validated geographical discoveries or confirmed hypotheses.

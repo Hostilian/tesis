@@ -1,6 +1,6 @@
 # Chapter 6: Discussion
 
-> **Research status — 19 November 2026.** This chapter discusses observed software capabilities, research limitations and open validation questions. Historical numerical benchmark claims are archived under \`shelf/manuscript-pre-validation-20261119\` pending verification; they are not adopted as confirmed empirical findings.
+> **Research status — 19 November 2026.** This chapter discusses observed software capabilities, research limitations and open validation questions. Historical numerical benchmark claims are archived under `shelf/manuscript-pre-validation-20261119` pending verification; they are not adopted as confirmed empirical findings.
 
 ## 6.1 Answers to the Research Questions
 

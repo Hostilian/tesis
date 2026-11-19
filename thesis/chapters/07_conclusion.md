@@ -50,8 +50,8 @@ The key unresolved requirement is empirical evidence: authenticated provider acc
 - V3 dashboard: https://hostilian.github.io/tesis/index3.html
 - V4 dashboard: https://hostilian.github.io/tesis/index4.html
 - Public evidence statement: https://hostilian.github.io/tesis/evidence.html
-- Real-observation acquisition guide: \`REAL_OBSERVATION.md\` (repository)
-- Thesis validation gap register: \`THESIS_VALIDATION_GAPS.md\` (repository)
+- Real-observation acquisition guide: `REAL_OBSERVATION.md` (repository)
+- Thesis validation gap register: `THESIS_VALIDATION_GAPS.md` (repository)
 
 **Submission note:** The compiled PDF and LaTeX sources must be regenerated from these revised and subsequently verified sections. Existing precompiled artifacts may still contain obsolete draft claims and are not declared submission-ready.
 
