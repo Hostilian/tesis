@@ -70,7 +70,7 @@ const academicChapters = {
         title: "Chapter 5: Results & Analysis",
         sections: [
             { name: "5.1 Case Study Highlights", text: "Salar de Atacama (Chile) showed lithium evaporation pond extensions (NDWI surge to 0.58). Madre de Dios (Peru) flagged illegal mining clearings (NDVI drop to -0.52). Czechia industrial nodes showed quarterly GDP correlation (r = 0.724)." },
-            { name: "5.2 Hypothesis Validation", text: "Hypothesis H1 (F1-score > 0.80) was validated with F1 = 0.907. Hypothesis H2 (NTL radiance correlation r >= 0.65) was validated with r = 0.724 (p = 0.0002)." }
+            { name: "5.2 Hypothesis Validation", text: "Earlier illustrative thesis drafts reported F1 = 0.907 and r = 0.724. These figures have not been independently validated against real scene-level satellite pixels and labeled ground truth." }
         ]
     },
     "6": {
@@ -83,7 +83,7 @@ const academicChapters = {
     "7": {
         title: "Chapter 7: Conclusion",
         sections: [
-            { name: "7.1 Summary of Contributions", text: "We have built an end-to-end reproducible economic pipeline joining GEE, CDSE, and World Bank indicators. Anomaly models are fully integrated and verified via unit tests and automated github page deployments." }
+            { name: "7.1 Summary of Contributions", text: "This research demonstrator combines provider-client scaffolding with synthetic satellite features and reproducible unit tests. Real scene-level raster ingestion and independent scientific validation remain future work." }
         ]
     }
 };
@@ -957,7 +957,7 @@ function loadSampleBackupAnomalies() {
             "verification": {
                 "method": "Spatial Index Overlay",
                 "ground_truth": "SERNAGEOMIN Lithium Brine Expansion Plan (SQM)",
-                "status": "Verified"
+                "status": "Demo - unverified"
             }
         },
         {
@@ -972,7 +972,7 @@ function loadSampleBackupAnomalies() {
             "verification": {
                 "method": "Temporal Radar backscatter (Sentinel-1 SAR)",
                 "ground_truth": "MAAP Deforestation Alert #284",
-                "status": "Verified (Critical)"
+                "status": "Demo - unverified"
             }
         },
         {
@@ -987,7 +987,7 @@ function loadSampleBackupAnomalies() {
             "verification": {
                 "method": "Statistical GDP Correlation",
                 "ground_truth": "Czech Statistical Office (ČSÚ) Quarterly Manufacturing Index",
-                "status": "Verified"
+                "status": "Demo - unverified"
             }
         }
     ];
@@ -1841,8 +1841,8 @@ function initNTLCorrelationChart() {
 // ============================================================
 
 const statisticalTargets = {
-    'stat-f1':      { value: 0.907, decimals: 3, prefix: '', suffix: '',  label: 'F1-Score' },
-    'stat-pearsonr': { value: 0.724, decimals: 3, prefix: 'r = ', suffix: '', label: 'Pearson r' },
+    'stat-f1':      { value: 0.907, decimals: 3, prefix: '', suffix: '',  label: 'F1-Score (demo)' },
+    'stat-pearsonr': { value: 0.724, decimals: 3, prefix: 'r = ', suffix: '', label: 'Pearson r (demo)' },
     'stat-pvalue':  { value: 0.0002, decimals: 4, prefix: 'p = ', suffix: '', label: 'p-value' },
     'stat-moransi': { value: 0.648, decimals: 3, prefix: 'I = ', suffix: '', label: "Moran's I" },
     'stat-n':       { value: 21, decimals: 0, prefix: 'n = ', suffix: ' quarters', label: 'Observations' },
