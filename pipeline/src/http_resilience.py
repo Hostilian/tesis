@@ -217,7 +217,7 @@ class ResilientHTTPClient:
         backoff = self.retry_policy.base_delay * (2 ** (attempt - 1))
         backoff = min(backoff, self.retry_policy.max_delay)
         jitter = random.uniform(0.0, self.retry_policy.jitter)
-        return backoff + jitter
+        return float(backoff + jitter)
 
 
 def execute_resilient_call(
