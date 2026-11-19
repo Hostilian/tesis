@@ -1,0 +1,59 @@
+name: Temporary formatting and npm lockfile repair builder
+
+# This workflow generates a reviewable patch on a separate branch.
+# Delete it after merging the verified output.
+on:
+  push:
+    paths:
+      - '.github/workflows/ci-repair-build.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        with:
+          python-version: '3.12'
+
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+
+      - name: Format Python exactly as lint expects
+        run: |
+          python -m pip install black==24.10.0
+          black pipeline/src/ pipeline/run_pipeline.py
+          black --check pipeline/src/ pipeline/run_pipeline.py
+
+      - name: Regenerate patched npm lockfile with registry integrity hashes
+        working-directory: docs
+        run: |
+          npm audit fix --package-lock-only
+          npm ci --ignore-scripts
+          npm audit --audit-level=high
+
+      - name: Verify patch and publish recovery branch
+        run: |
+          set -euo pipefail
+          git diff --check
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git switch -c fix/ci-generated-format-lock-20261119
+          git add pipeline/src pipeline/run_pipeline.py docs/package-lock.json
+          if git diff --cached --quiet; then
+            echo "No changes generated"
+            exit 1
+          fi
+          git commit -m "style(security): format Python and refresh audited npm lockfile"
+          git push origin HEAD

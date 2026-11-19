@@ -30,7 +30,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install pip-audit
-          pip-audit -r pipeline/requirements.txt --output-format json --output pip-audit-report.json || true
+          pip-audit -r pipeline/requirements.txt --format json --output pip-audit-report.json
           cat pip-audit-report.json
 
       - name: Upload pip-audit report
@@ -175,7 +175,7 @@ jobs:
           pip install -r pipeline/requirements-dev.txt
 
       - name: Run DAST Fuzzer
-        run: python pipeline/tests/fuzz_api.py
+        run: python -m pipeline.tests.fuzz_api
 
   dast-dashboard:
     name: OWASP ZAP Baseline DAST
@@ -222,4 +222,4 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install schemathesis
-          schemathesis run docs/openapi.yaml --base-url http://127.0.0.1:8081 --checks all --max-examples 25
+          schemathesis run docs/openapi.yaml --url http://127.0.0.1:8081/api/v1 --checks all --max-examples 25
