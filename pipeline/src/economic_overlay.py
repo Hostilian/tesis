@@ -320,7 +320,9 @@ class EconomicOverlay:
             return 0.5  # Safe fallback
 
     @staticmethod
-    def _mock_gdp_growth(country_code: str, start_year: int, end_year: int) -> list[dict[str, Any]]:
+    def _mock_gdp_growth(
+        country_code: str, start_year: int, end_year: int
+    ) -> list[dict[str, Any]]:
         """Mock GDP growth data for offline / demo mode."""
         mock_rates = {
             "CZE": {2021: -2.4, 2022: 2.5, 2023: -0.4, 2024: 1.3, 2025: 2.8},

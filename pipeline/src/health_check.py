@@ -12,7 +12,7 @@ Usage:
 Exit codes:
     0 - all checked providers healthy or intentionally skipped
     1 - one or more providers degraded or unavailable
-    2 - authentication failure (secret missing or expired)
+    2 - authentication failure (configured credentials rejected or expired)
 """
 
 from __future__ import annotations
@@ -111,6 +111,13 @@ def check_gee() -> HealthResult:
 
     project = os.getenv("GCP_PROJECT")
     key_file = os.getenv("GEE_KEY_FILE") or os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+    # On ephemeral GitHub runners there is no implicit browser-based ADC login.
+    # Missing optional secrets make this check unconfigured, not a failed login.
+    if os.getenv("GITHUB_ACTIONS") == "true" and not (
+        (key_file and Path(key_file).is_file())
+        or os.getenv("GEE_SERVICE_ACCOUNT_KEY")
+    ):
+        return _result("gee", "skipped", 0.0, None, "GEE credentials not configured", endpoint)
     try:
         if key_file and Path(key_file).exists():
             ee.Initialize(project=project)
@@ -144,10 +151,10 @@ def check_cdse() -> HealthResult:
         latency_ms = (time.perf_counter() - start) * 1000
         return _result(
             "cdse",
-            "auth_failed",
+            "skipped",
             latency_ms,
             None,
-            "CDSE_CLIENT_ID or CDSE_CLIENT_SECRET missing",
+            "CDSE credentials not configured",
             endpoint,
         )
 
@@ -188,10 +195,10 @@ def check_nasa_earthdata() -> HealthResult:
         latency_ms = (time.perf_counter() - start) * 1000
         return _result(
             "nasa",
-            "auth_failed",
+            "skipped",
             latency_ms,
             None,
-            "NASA_EARTHDATA_TOKEN or username/password missing",
+            "NASA EarthData credentials not configured",
             endpoint,
         )
 
@@ -246,10 +253,10 @@ def check_comtrade() -> HealthResult:
         latency_ms = (time.perf_counter() - start) * 1000
         return _result(
             "comtrade",
-            "auth_failed",
+            "skipped",
             latency_ms,
             None,
-            "COMTRADE_API_KEY missing",
+            "COMTRADE credentials not configured",
             endpoint,
         )
 

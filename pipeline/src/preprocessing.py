@@ -12,7 +12,9 @@ class GeospatialPreprocessor:
     def __init__(self) -> None:
         pass
 
-    def process_raw_bands(self, band_dict: dict[str, np.ndarray]) -> dict[str, np.ndarray]:
+    def process_raw_bands(
+        self, band_dict: dict[str, np.ndarray]
+    ) -> dict[str, np.ndarray]:
         """
         Takes raw multi-spectral bands, applies cloud masks,
         and calculates NDVI, NDWI, and BSI.
