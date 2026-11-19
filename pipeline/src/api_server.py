@@ -11,7 +11,7 @@ import json
 import logging
 import os
 from pathlib import Path
-from typing import Any, List
+from typing import Any, List, cast
 from fastapi import FastAPI, HTTPException, Body, BackgroundTasks
 from pydantic import BaseModel, Field
 
@@ -110,7 +110,7 @@ def get_anomalies() -> list[dict[str, Any]]:
         return []
     try:
         with open(ANOMALIES_FILE, "r", encoding="utf-8") as f:
-            return json.load(f)
+            return cast(list[dict[str, Any]], json.load(f))
     except Exception as exc:
         raise HTTPException(
             status_code=500, detail=f"Failed to read anomalies database: {str(exc)}"
