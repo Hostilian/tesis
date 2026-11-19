@@ -5,8 +5,7 @@
 [![Security Scan](https://github.com/hostilian/tesis/actions/workflows/security.yml/badge.svg)](https://github.com/hostilian/tesis/actions/workflows/security.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python Version](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/)
-[![F1-Score](https://img.shields.io/badge/F1--Score-0.907-brightgreen.svg)](#-key-results)
-[![Pearson r](https://img.shields.io/badge/Pearson%20r-0.724-cyan.svg)](#-key-results)
+[![Evidence](https://img.shields.io/badge/Evidence-Synthetic%20Demo%20%7C%20Unverified-orange.svg)](docs/evidence.html)
 
 **Bachelor Thesis Artifact: "Space-Based Economic Intelligence: Detecting Hidden Resource Anomalies Using Open Satellite APIs"**
 
@@ -23,23 +22,24 @@
 
 👉 **[View the Live Satellite Anomaly Explorer](https://hostilian.github.io/tesis/)**
 
-A futuristic, dark-space GIS monitoring console acting as the Decision Support System (DSS) and thesis presentation artifact, showcasing localized lithium, deforestation, and industrial night-light anomalies across 9 verified anomaly events in 3 study regions.
+A futuristic, dark-space GIS monitoring console acting as the Decision Support System (DSS) and thesis presentation artifact, visualizing 10 synthetic demonstration anomaly records across 3 study regions. These records are not independent satellite detections or field-verified findings.
 
 ---
 
-## 📊 Key Results
+## 📊 Evidence Status (19 November 2026)
 
-| Metric | Value | Threshold | Status |
-|---|---|---|---|
-| F1-Score (Isolation Forest, Madre de Dios) | **0.907** | > 0.80 | ✅ H₁ Supported |
-| Precision | 0.936 | — | ✅ |
-| Recall | 0.880 | — | ✅ |
-| Pearson r (VIIRS NTL vs Czech GDP) | **0.724** | ≥ 0.65 | ✅ H₂ Supported |
-| p-value (t = 4.58, df = 19) | **0.0002** | < 0.05 | ✅ Significant |
-| Moran's I (Spatial Clustering) | **+0.648** | > 0 | ✅ Clustered |
-| Pipeline ETL Runtime | 9.0 ± 1.2 s | — | ✅ |
-| Satellite Tiles Ingested | **184** | — | — |
-| Test Suite | **47 / 47 PASSING** | All | ✅ |
+**This is an exploratory thesis demonstrator, not a validated satellite detection product.** The published JSON and run record explicitly identify a `mock_mode: true` execution. Sentinel-2 feature arrays remain synthetic even when the Earth Engine metadata request authenticates; monthly VIIRS values are also mock-generated.
+
+| Evidence item | Current status |
+|---|---|
+| Published anomaly records | **10 synthetic scenarios**; 0 field-verified satellite observations |
+| Original F1 = 0.907 and precision/recall figures | **Prior draft claims only**; not accepted as empirical results without labeled evaluation data |
+| Original Pearson r = 0.724, p = 0.0002 | **Prior draft claims only**; not independently reproducible from linked real observation pairs |
+| Original spatial clustering and runtime figures | **Unverified**; require documented inputs and repeatable measurement |
+| Unit tests, lint, security and Pages | Software quality checks; **not** scientific validation |
+| Automated weekly pipeline | **Review-only rehearsal**; does not publish new anomaly claims |
+
+See the **[Evidence and Validation Status](docs/evidence.html)** for the provenance distinction, missing proof, and the criteria for moving an anomaly into a validated research dataset.
 
 ---
 
@@ -100,7 +100,7 @@ tesis/
 │   ├── locales/en.json         # English i18n strings
 │   ├── locales/cs.json         # Czech i18n strings
 │   ├── data/
-│   │   ├── anomalies.json      # 9 verified anomaly events
+│   │   ├── anomalies.json      # 10 synthetic demo records (unverified)
 │   │   └── regions.geojson     # Study area polygons
 │   └── api/v1/                 # Static REST API endpoints
 │       ├── anomalies/index.json
@@ -177,7 +177,9 @@ earthengine authenticate
 echo "GCP_PROJECT=your-google-cloud-project-id" > .env
 ```
 
-For CI/CD and live provider access, configure these GitHub Actions secrets:
+**Important:** Setting API credentials does not currently replace mock pixel arrays with scene-level satellite raster data. Real imagery ingestion, independent labels and scientific validation remain future work.
+
+For credentialed provider checks, configure the appropriate GitHub Actions secrets (never commit private credentials):
 
 | Secret | Purpose |
 |---|---|
@@ -203,7 +205,7 @@ python pipeline/run_pipeline.py
 
 ```bash
 pytest pipeline/tests/ -v
-# Expected: 47 passed in ~25s
+# Run the actual test suite; the test count may change as coverage expands.
 ```
 
 ### Docker (Full Reproducibility)
