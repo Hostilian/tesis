@@ -102,3 +102,34 @@ def test_scheduled_rehearsal_is_read_only() -> None:
     assert "MOCK_MODE: 'true'" in workflow
     assert "git push" not in workflow.replace("# No automatic git push.", "")
     assert "actions/upload-artifact@" in workflow
+
+
+def test_public_satellite_evidence_layers_remain_separate() -> None:
+    """Metadata, pixel sampling and independently validated events differ."""
+    catalogue = _read("docs/data/public_stac_scene_inventory.json")
+    sample = _read("docs/data/observed_three_region_proof_20261119.json")
+    demo = _read("docs/data/anomalies.json")
+
+    assert catalogue["evidence_state"] == "catalogue_metadata_only"
+    assert catalogue["product_count"] == 9
+    assert sample["status"] == "real_pixel_inputs_unvalidated"
+    assert sample["scientific_validation"] == "not_performed"
+    assert sample["independent_event_ground_truth"] is False
+    assert sample["model_accuracy_measured"] is False
+    assert len(sample["studies"]) == 3
+    assert sum(region["valid_pixels"] for region in sample["studies"]) == 21253
+    assert sample["raw_rasters_or_pixel_npzs_published"] is False
+    assert all(len(region["derived_pixel_npz_sha256"]) == 64 for region in sample["studies"])
+    assert all(anomaly["data_origin"] == "synthetic_demo" for anomaly in demo)
+
+
+def test_satellite_remains_default_map_layer_on_all_three_versions() -> None:
+    """Protect the previously restored V2/V3/V4 satellite-first UX."""
+    for filename in ("app.js", "app3.js", "app4.js"):
+        script = (ROOT / "docs" / filename).read_text(encoding="utf-8")
+        assert "server.arcgisonline.com/ArcGIS/rest/services/World_Imagery" in script
+        assert "satelliteBasemapLayer" in script
+        if filename != "app4.js":
+            assert "satelliteBasemapLayer.addTo(map)" in script
+        else:
+            assert "}).addTo(map)" in script
