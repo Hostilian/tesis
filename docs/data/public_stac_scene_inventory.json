@@ -1,0 +1,84 @@
+{
+  "schema": "sbei.public_stac_inventory.v1",
+  "recorded_utc": "2026-11-19T23:24:48Z",
+  "catalogue": "https://stac.dataspace.copernicus.eu/v1/collections/sentinel-2-l2a/items",
+  "evidence_state": "catalogue_metadata_only",
+  "raster_pixels_retrieved": false,
+  "independent_ground_truth_validated": false,
+  "product_count": 9,
+  "caveat": "Public Copernicus STAC catalogue search returned these real product IDs and asset names, but reflectance rasters were not downloaded and no scientific detection or field validation was performed.",
+  "studies": [
+    {
+      "study_area": "Salar de Atacama, Chile",
+      "bbox": [
+        -68.25,
+        -23.48,
+        -68.238,
+        -23.468
+      ],
+      "time_window": "2024-10-01T00:00:00Z/2024-10-15T23:59:59Z",
+      "products": [
+        {
+          "id": "S2B_MSIL2A_20241014T143739_N0511_R096_T19KEQ_20241014T185318",
+          "datetime": "2024-10-14T14:37:39.024000Z"
+        },
+        {
+          "id": "S2A_MSIL2A_20241009T143741_N0511_R096_T19KEQ_20241009T215851",
+          "datetime": "2024-10-09T14:37:41.024000Z"
+        },
+        {
+          "id": "S2B_MSIL2A_20241004T143749_N0511_R096_T19KEQ_20241004T183052",
+          "datetime": "2024-10-04T14:37:49.024000Z"
+        }
+      ]
+    },
+    {
+      "study_area": "Madre de Dios, Peru",
+      "bbox": [
+        -70.1,
+        -12.7,
+        -70.09,
+        -12.69
+      ],
+      "time_window": "2025-03-01T00:00:00Z/2025-03-31T23:59:59Z",
+      "products": [
+        {
+          "id": "S2B_MSIL2A_20250329T145729_N0511_R039_T19LCG_20250329T201652",
+          "datetime": "2025-03-29T14:57:29.024Z"
+        },
+        {
+          "id": "S2B_MSIL2A_20250329T145729_N0511_R039_T19LCF_20250329T201652",
+          "datetime": "2025-03-29T14:57:29.024Z"
+        },
+        {
+          "id": "S2A_MSIL2A_20250326T145931_N0511_R039_T19LCG_20250326T192756",
+          "datetime": "2025-03-26T14:59:31.024Z"
+        }
+      ]
+    },
+    {
+      "study_area": "Central Bohemia, Czechia",
+      "bbox": [
+        14.9,
+        50.4,
+        14.91,
+        50.41
+      ],
+      "time_window": "2025-07-01T00:00:00Z/2025-07-31T23:59:59Z",
+      "products": [
+        {
+          "id": "S2C_MSIL2A_20250731T101041_N0511_R022_T33UVR_20250731T154414",
+          "datetime": "2025-07-31T10:10:41.025Z"
+        },
+        {
+          "id": "S2A_MSIL2A_20250730T100051_N0511_R122_T33UVR_20250730T153414",
+          "datetime": "2025-07-30T10:00:51.024Z"
+        },
+        {
+          "id": "S2C_MSIL2A_20250728T100051_N0511_R122_T33UVR_20250728T153115",
+          "datetime": "2025-07-28T10:00:51.025Z"
+        }
+      ]
+    }
+  ]
+}
