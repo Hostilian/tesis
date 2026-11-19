@@ -5,12 +5,17 @@
 // Network-first for dynamic API/data endpoints.
 // ============================================================
 
-const CACHE_VERSION = 'orbital-intel-v3-satellite-default-20261119';
+const CACHE_VERSION = 'orbital-intel-v4-evidence-disclosure-20261119';
 const OFFLINE_URL = 'offline.html';
 
 const STATIC_ASSETS = [
   './',
   'index.html',
+  'index3.html',
+  'index4.html',
+  'evidence.html',
+  'app3.js',
+  'app4.js',
   'index.css',
   'app.js',
   'manifest.json',
