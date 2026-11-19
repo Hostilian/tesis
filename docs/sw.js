@@ -1,11 +1,11 @@
 // ============================================================
-// ORBITAL INTELLIGENCE — Service Worker v2
+// ORBITAL INTELLIGENCE — Service Worker v3
 // Provides offline capability (PWA) per master prompt §13.6
 // Cache-first strategy for static assets;
 // Network-first for dynamic API/data endpoints.
 // ============================================================
 
-const CACHE_VERSION = 'orbital-intel-v2';
+const CACHE_VERSION = 'orbital-intel-v3-satellite-default-20261119';
 const OFFLINE_URL = 'offline.html';
 
 const STATIC_ASSETS = [

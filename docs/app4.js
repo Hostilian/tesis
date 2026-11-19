@@ -1010,11 +1010,11 @@ function initMap() {
     
     darkBasemapLayer = L.tileLayer(darkMatterTilesUrl, {
         maxZoom: 18
-    }).addTo(map);
+    });
     
     satelliteBasemapLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
         maxZoom: 18
-    });
+    }).addTo(map);
 }
 
 function initMinimap() {
