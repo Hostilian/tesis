@@ -20,7 +20,7 @@ Author: Eren Ozturk — CZU Prague PEF KII Bachelor Thesis 2026
 import json
 import logging
 import math
-from typing import Optional
+from typing import Any, Optional
 from datetime import datetime, timezone
 
 import numpy as np
@@ -46,7 +46,7 @@ class EconomicOverlay:
     """
 
     def __init__(self, use_cache: bool = True) -> None:
-        self._cache: dict = {}
+        self._cache: dict[str, list[dict[str, Any]]] = {}
         self.use_cache = use_cache
         self.http = ResilientHTTPClient()
 
@@ -59,7 +59,7 @@ class EconomicOverlay:
         country_code: str,
         start_year: int,
         end_year: int,
-    ) -> list:
+    ) -> list[dict[str, Any]]:
         """
         Fetch annual GDP growth rate (%) from the World Bank API.
 
@@ -82,7 +82,7 @@ class EconomicOverlay:
             f"?format=json&mrv={API_MAX_ROWS}&date={start_year}:{end_year}"
         )
 
-        def _fallback() -> list:
+        def _fallback() -> list[dict[str, Any]]:
             logger.warning("World Bank API unreachable. Using mock GDP data.")
             return self._mock_gdp_growth(country_code, start_year, end_year)
 
@@ -131,9 +131,9 @@ class EconomicOverlay:
 
     def compute_ntl_gdp_correlation(
         self,
-        z_scores: list,
-        gdp_growth_rates: list,
-    ) -> dict:
+        z_scores: list[float],
+        gdp_growth_rates: list[float],
+    ) -> dict[str, Any]:
         """
         Compute Pearson correlation between NTL Z-score anomalies and GDP growth.
 
@@ -217,9 +217,9 @@ class EconomicOverlay:
 
     def build_intelligence_assessment(
         self,
-        anomaly: dict,
-        correlation_result: Optional[dict] = None,
-    ) -> dict:
+        anomaly: dict[str, Any],
+        correlation_result: Optional[dict[str, Any]] = None,
+    ) -> dict[str, Any]:
         """
         Build the 8-point 'So What?' intelligence assessment for a detected anomaly.
 
@@ -320,7 +320,7 @@ class EconomicOverlay:
             return 0.5  # Safe fallback
 
     @staticmethod
-    def _mock_gdp_growth(country_code: str, start_year: int, end_year: int) -> list:
+    def _mock_gdp_growth(country_code: str, start_year: int, end_year: int) -> list[dict[str, Any]]:
         """Mock GDP growth data for offline / demo mode."""
         mock_rates = {
             "CZE": {2021: -2.4, 2022: 2.5, 2023: -0.4, 2024: 1.3, 2025: 2.8},
