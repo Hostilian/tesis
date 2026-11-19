@@ -53,3 +53,32 @@ jobs:
           PY
 
 # Retest after aligning Planetary Computer asset key nomenclature (B02 vs B2).
+
+      - name: Read Peru public Sentinel-2 COG preview
+        run: |
+          python -m pipeline.planetary_observation \
+            --bbox -70.10 -12.70 -70.09 -12.69 \
+            --start 2025-03-01 --end 2025-03-31 \
+            --output-dir research_private/peru
+          python - <<'PY'
+          import json, pathlib, numpy as np
+          root=pathlib.Path("research_private/peru")
+          record=json.loads(next(root.glob("planetary_observed_*.json")).read_text())
+          with np.load(next(root.glob("planetary_observed_*.npz"))) as d:
+              valid=int(np.isfinite(d["ndvi"]).sum())
+          print(json.dumps({"study":"Peru","id":record["scene_id"],"acquired":record["acquired"],"valid_pixels":valid,"sha256":record["checksum_sha256"],"scientific_validation":record["scientific_validation"]}))
+          PY
+      - name: Read Czechia public Sentinel-2 COG preview
+        run: |
+          python -m pipeline.planetary_observation \
+            --bbox 14.90 50.40 14.91 50.41 \
+            --start 2025-07-01 --end 2025-07-31 \
+            --output-dir research_private/czechia
+          python - <<'PY'
+          import json, pathlib, numpy as np
+          root=pathlib.Path("research_private/czechia")
+          record=json.loads(next(root.glob("planetary_observed_*.json")).read_text())
+          with np.load(next(root.glob("planetary_observed_*.npz"))) as d:
+              valid=int(np.isfinite(d["ndvi"]).sum())
+          print(json.dumps({"study":"Czechia","id":record["scene_id"],"acquired":record["acquired"],"valid_pixels":valid,"sha256":record["checksum_sha256"],"scientific_validation":record["scientific_validation"]}))
+          PY
