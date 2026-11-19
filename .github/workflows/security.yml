@@ -213,10 +213,11 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Start static API server
+      - name: Start versioned static JSON contract server
         run: |
-          python -m http.server 8081 --directory docs &
-          sleep 5
+          python -m pipeline.tests.static_api_server --port 8081 &
+          sleep 2
+          python -c "import json, urllib.request; assert isinstance(json.load(urllib.request.urlopen('http://127.0.0.1:8081/api/v1/anomalies')), list)"
 
       - name: Run Schemathesis fuzzing
         run: |

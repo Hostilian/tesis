@@ -38,6 +38,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Anomaly'
+        '404':
+          description: No anomaly exists for the supplied identifier.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [detail]
+                properties:
+                  detail:
+                    type: string
   /datasets:
     get:
       summary: Retrieve datasets metadata
