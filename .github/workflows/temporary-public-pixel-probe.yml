@@ -51,3 +51,5 @@ jobs:
             print(json.dumps({"source_item":record["scene_id"],"acquired":record["acquired"],"bands":record["asset_keys"],"pixel_grid":record["grid_shape"],"useful_pixels":useful,"checksum_sha256":record["checksum_sha256"],"scientific_validation":record["scientific_validation"]}))
             assert useful>=20
           PY
+
+# Retest after aligning Planetary Computer asset key nomenclature (B02 vs B2).
