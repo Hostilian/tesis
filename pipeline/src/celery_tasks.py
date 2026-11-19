@@ -44,7 +44,7 @@ celery_app.conf.update(
 )
 
 
-@celery_app.task(  # type: ignore[misc] -- Celery decorator lacks a typed signature
+@celery_app.task(  # type: ignore[misc]
     name="pipeline.src.celery_tasks.process_satellite_tile_task",
     bind=True,
     max_retries=3,
