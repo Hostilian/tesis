@@ -117,7 +117,9 @@ def check_gee() -> HealthResult:
         (key_file and Path(key_file).is_file())
         or os.getenv("GEE_SERVICE_ACCOUNT_KEY")
     ):
-        return _result("gee", "skipped", 0.0, None, "GEE credentials not configured", endpoint)
+        return _result(
+            "gee", "skipped", 0.0, None, "GEE credentials not configured", endpoint
+        )
     try:
         if key_file and Path(key_file).exists():
             ee.Initialize(project=project)
