@@ -65,6 +65,12 @@ class StaticApiHandler(BaseHTTPRequestHandler):
     do_TRACE = _method_not_allowed
     do_CONNECT = _method_not_allowed
 
+    def __getattr__(self, name: str):
+        # Unknown HTTP verbs (for example QUERY) must return HTTP 405, not 501.
+        if name.startswith("do_"):
+            return self._method_not_allowed
+        raise AttributeError(name)
+
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Serve committed static JSON API for contract tests")
