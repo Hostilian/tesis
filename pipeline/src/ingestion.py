@@ -1172,7 +1172,7 @@ class SatelliteDataIngester:
         Never substitute zero GDP growth when observations are unavailable.
         """
         years = list(range(year_start, year_end + 1))
-        missing = [None for _ in years]
+        missing: list[float | None] = [None for _ in years]
         if self.config.mock_mode:
             return {country: missing.copy() for country in countries}
 
