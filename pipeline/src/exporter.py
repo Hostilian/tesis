@@ -49,7 +49,7 @@ class GeospatialExporter:
             raise e
 
     def export_geojson_regions(
-        self, regions: list, filename: str = "regions.geojson"
+        self, regions: list[dict[str, Any]], filename: str = "regions.geojson"
     ) -> str:
         """
         Convert bounding box limits into a standard GeoJSON FeatureCollection for map rendering.
