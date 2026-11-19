@@ -1,121 +1,80 @@
 # Chapter 6: Discussion
 
-## 6.1 Answers to Research Questions
-The empirical findings and statistical evaluations presented in Chapter 5 address the three Research Questions outlined in the introduction of this thesis:
+> **Research status — 19 November 2026.** This chapter discusses observed software capabilities, research limitations and open validation questions. Historical numerical benchmark claims are archived under \`shelf/manuscript-pre-validation-20261119\` pending verification; they are not adopted as confirmed empirical findings.
 
-### 6.1.1 Research Question 1 (RQ1)
-*How reliably can open satellite spectral APIs identify localized industrial and mining resource anomalies compared to ground truth records?*
+## 6.1 Answers to the Research Questions
 
-The combination of Sentinel-2 MSI and Landsat-8/9 multi-spectral indices (NDVI, NDWI, BSI) with an unsupervised Isolation Forest model detected localized resource anomalies with a verified F1-Score of $0.907$ in the Madre de Dios gold mining corridor. This high performance indicates that unsupervised outlier models can isolate land-cover changes (such as forest-to-dirt transitions and dry-crust-to-brine transitions) without requiring large labeled training datasets. 
+### 6.1.1 Research Question 1 — Spatial Anomaly Detection
 
-However, the reliability of this detection is heavily dependent on the spatial scale of the anomaly. Anomalies larger than 100 $\text{m}^2$ (equivalent to a $10 \times 10$ pixel cluster at 10m resolution) are detected with high confidence. Smaller artisanal mining sites or narrow exploration roads are subject to mixed-pixel effects. In these cases, the spectral signature of a single pixel blends undisturbed canopy with bare soil, resulting in borderline anomaly scores that may fall below the contamination threshold.
+**Question:** How reliably can satellite spectral APIs identify industrial and mining changes compared with independent ground-truth records?
 
-### 6.1.2 Research Question 2 (RQ2)
-*What is the correlation between VIIRS night-time light fluctuations and macro/microeconomic indicators in the target regions?*
+The current implementation demonstrates spectral feature computation over arrays, an Isolation Forest anomaly detector, and structured export of example event records. However, its published detection inputs are deterministic synthetic arrays and its public "ground truth" references were not independently matched to source image assets. It therefore **does not yet quantify real-world spatial detection reliability**. Evaluation of RQ1 requires genuine source pixels, independent annotated events and geographically/temporally held-out tests.
 
-Temporal analysis of VIIRS DNB night-time light radiance anomalies demonstrates a statistically significant positive Pearson correlation ($r = 0.724$, $p = 0.0002$) with quarterly regional GDP growth rates in Prague and Central Bohemia. This strong correlation confirms that nocturnal light emissions serve as a reliable proxy for regional economic performance.
+The software architecture shows where optical indices and future Sentinel-1 radar features may be combined. The current detection model does not, by itself, establish a verified optical/SAR fusion result.
 
-This correlation is driven by two main factors. First, manufacturing hubs and heavy industrial zones (e.g., Škoda Auto in Mladá Boleslav and Toyota in Kolín) emit high levels of light during night shifts. Changes in production volume, shift schedules, or energy consumption are reflected in light emissions. Second, commercial and logistics activities along key transport corridors (such as the D1 and D11 highways in the Czech Republic) fluctuate with regional trade volumes, impacting night-time light radiance.
+### 6.1.2 Research Question 2 — VIIRS Radiance and Economic Activity
 
-### 6.1.3 Research Question 3 (RQ3)
-*What pipeline latency and processing constraints limit the scalability of free satellite APIs for real-time economic monitoring?*
+**Question:** What relationship exists between independently observed VIIRS night-time light changes and official economic indicators?
 
-The primary bottleneck for scaling the pipeline is the latency associated with querying and retrieving raw satellite rasters from GEE and CDSE endpoints. Dynamic, on-the-fly requests for large spatial areas or long time series can take anywhere from 15 to 90 seconds, making them unsuitable for real-time web applications.
+The temporal-analysis interface can process a numeric radiance series and explain deviations, but the published monthly VIIRS sequence is synthetic. Public IMF and World Bank endpoint availability demonstrates connection capability, not the correct socioeconomic alignment or a validated Pearson correlation. RQ2 is **not yet empirically answered**. Future work must establish comparable time windows, region definitions, official data vintages, uncertainty, seasonal effects, trend and possible confounding.
 
-To build a scalable dashboard, the system must separate the data ingestion and machine learning pipeline from the user interface. The backend must run asynchronously, caching structured JSON and GeoJSON outputs. The web client then reads these pre-computed files, reducing dashboard load times to under 1.5 seconds. Additionally, free-tier GEE account limits require careful spatial clipping and coordinate averaging to prevent memory overflow errors during ingestion.
+### 6.1.3 Research Question 3 — System Performance and Constraints
 
----
+**Question:** Which API, compute and processing constraints affect reproducible geospatial data workflows?
 
-## 6.2 Comparison with Related Work
-The methodology and findings of this thesis align with and extend existing literature in remote sensing economics and machine learning. This study builds upon the foundational work of Henderson, Storeygard, and Weil (2012), who established the relationship between night-time lights and GDP growth. While their research focused on national-level trends using legacy DMSP-OLS data, this thesis utilizes VIIRS DNB monthly composites to analyze sub-national industrial districts. By applying a rolling Z-score temporal filter rather than absolute radiance values, our pipeline filters out persistent background light pollution. This approach allows the model to isolate contextual anomalies (such as energy-saving reductions in late 2022) that would otherwise be obscured by normal urban emissions.
+The public site and static API can be deployed at low infrastructure cost, and the code contains provider clients, retries and explicit missing-data handling. GitHub Actions can test and deploy the application. However, production-scale imagery ingestion latency, third-party API quota behavior, storage cost, geographic scalability and model quality **remain unmeasured under a documented real-observation workload**.
 
-Furthermore, traditional remote sensing pipelines for land-cover classification often rely on supervised deep learning models (such as U-Net or Convolutional Neural Networks). While these models achieve high classification accuracy, they require thousands of manually labeled training images. In contrast, our unsupervised Isolation Forest approach achieves comparable spatial detection performance ($F1 = 0.907$) with zero training labels. This makes our framework highly valuable for remote or restricted areas where official mining or construction records are unavailable or unreliable.
+A bounded experimental pixel acquisition module is now provided separately to help measure the first real-data step without changing published demo records.
 
----
+## 6.2 Relationship to Existing Research
 
-## 6.3 Theoretical & Practical Implications
-This thesis contributes to economic theory by providing a framework to reduce information asymmetry. According to Akerlof's (1970) market theories, information gaps between transaction parties can lead to market inefficiencies. In resource markets and sovereign debt markets, governments and companies often hold exclusive access to economic performance data, releasing reports with significant delays. Space-based economic intelligence offers an independent, objective, and timely source of verification, allowing external analysts to validate official production claims.
+Unsupervised outlier detection may help prioritize candidate areas for further inspection, but detecting an outlier in reflectance space is not the same as determining whether mining or industrial expansion occurred. Physical interpretation requires sensor-specific quality control, contextual data and independent verification.
 
-In practical terms, the pipeline can be used to improve supply chain transparency and ESG (Environmental, Social, and Governance) auditing. In mineral sourcing, companies purchasing raw minerals (e.g., lithium from Chile) can use the pipeline to verify if extraction ponds are expanding outside permitted concessions, helping prevent illegal extraction. Similarly, supply chain managers can monitor agricultural and mining concessions in tropical forests to ensure compliance with zero-deforestation commitments, flagging unpermitted clearing within 5 days of occurrence.
+VIIRS night-time radiance can be considered as a potential proxy for activity, but observed correlations may be affected by seasonal illumination, weather, economic geography, policies, outages and data revision. Any claim of predictive utility needs separate out-of-sample evaluation.
 
----
+The project should not report performance comparisons against published supervised models without matched benchmarks, equivalent labeling standards and clearly cited source results.
 
-## 6.4 Limitations & Threats to Validity
+## 6.3 Practical Contribution and Limitations
 
-### 6.4.1 Internal Validity
-Internal validity is threatened by seasonal vegetation changes (phenology) and atmospheric noise. Changes in vegetation canopy due to seasonal weather patterns (e.g., dry seasons in South America or winter snow cover in the Czech Republic) can cause fluctuations in NDVI and albedo (BSI), which can trigger false anomalies. While temporal smoothing filters mitigate this, unexpected weather events can still introduce noise. Furthermore, although Level-2A BOA datasets correct for aerosols, persistent cloud cover in equatorial regions (such as the Amazon) can lead to gaps in optical time series. While Sentinel-1 SAR radar backscatter provides cloud-penetrant observations, it has a lower signal-to-noise ratio than optical indices, which can affect classification accuracy.
+### Software contribution
 
-### 6.4.2 External Validity
-External validity is constrained by geographic generalizability. The model parameters (specifically the Isolation Forest contamination rate $\alpha = 0.08$) were optimized for the three target regions. Applying the pipeline to regions with different soil types (e.g., high-clay soils in West Africa) or different forest structures (e.g., boreal forests in Scandinavia) may require manual adjustments to the model parameters to maintain detection accuracy.
+The demonstrated contribution is an inspectable information-engineering pipeline and accessible web interface linking satellite provider clients, spectral transformations, anomaly-scoring logic, provenance metadata and a versioned static API. Three distinct dashboard experiences support map exploration, temporal displays and scenario presentation.
 
-### 6.4.3 Construct Validity
-Construct validity is affected by changes in lighting technology. Although night-time lights correlate with economic activity, this relationship is subject to changes in lighting technology. The global transition from high-pressure sodium lamps to LED lighting can alter measured radiance. Because the VIIRS DNB sensor has lower sensitivity to blue light (spectral response drops off below 500 nm), the adoption of blue-spectrum LEDs can cause a decline in measured radiance that does not reflect a drop in real economic activity.
+The evidence safeguards are also a contribution: explicit synthetic status, separate run records, unverified labels, read-only scheduled rehearsals, no automatic scientific publication, and a fail-closed experimental real-pixel path.
 
----
+### Scientific limitations
 
-## 6.5 Legal, Ethical, & Dual-Use Considerations
-The deployment of space-based economic intelligence pipelines presents several ethical and legal questions. The primary concern is dual-use risk: unsupervised anomaly detection models designed to monitor economic infrastructure can also identify military logistics, supply lines, or defense installations. Because the codebase is open-source, researchers must acknowledge these dual-use risks and ensure that analysis remains focused on civilian economic assets. 
+1. **Construct validity.** An unsupervised anomaly score is not a calibrated probability of an economic event. The study does not yet establish event-class correctness.
+2. **Source validity.** The published imagery-derived feature arrays and monthly radiance values are synthetic. Provider reachability does not verify source pixels.
+3. **Ground-truth validity.** The current repository does not provide a linked and independently audited label set for all public anomaly examples.
+4. **Statistical validity.** Spatial and temporal dependence, data leakage, denominator choices, missing data, multiple comparisons and geographic transferability remain to be addressed.
+5. **Reproducibility limits.** Unit tests and deterministic mock inputs are reproducible software evidence; empirical reproducibility requires the original observational assets and analysis notebooks.
+6. **Operational performance.** Production data volumes, latency, error handling, and integration costs have not been demonstrated at a representative workload.
 
-Regarding privacy concerns, while high-resolution commercial imagery (under 1 meter) raises privacy and surveillance concerns, this study is restricted to medium-resolution open datasets (10m to 500m). This resolution is sufficient to monitor industrial infrastructure and regional economic trends without compromising the privacy of individual citizens on the ground. Finally, in alignment with the CZU Academic Code of Ethics, all remote sensing observations, datasets, and statistical results are fully reproducible, with raw data links documented in the reference log.
+## 6.4 Privacy, Ethics and Rota Única Case-Study Potential
 
----
+A possible agritech case study could compare Sentinel optical/radar observations with authorized drone imagery, periodic manned-aircraft surveys, weather measurements, irrigation/water probes and soil/leaf assessments. This is a **planned validation design**, not a completed multisensor fusion experiment.
 
-## 6.6 Spatial Autocorrelation Threat Assessment
-A key threat to spatial statistical validity is Tobler's First Law of Geography: "Everything is related to everything else, but near things are more related than distant things." Isolation Forest models treat individual pixels as independent observations, which violates spatial independence assumptions if nearby pixels share similar characteristics due to their proximity rather than due to true land-cover changes.
+Farm boundaries, private imagery, device mappings, sensor streams and supplier credentials must remain in an authorized private environment. Public demonstrations should rely on open data, synthetic scenarios, and aggregated non-sensitive evidence that has undergone review. Written authorization, data minimization, traceability and source-licensing checks precede any use of operational records in a thesis.
 
-To quantify this threat, Moran's I was computed for the Madre de Dios anomaly score raster:
-*   **Moran's I**: $+0.648$ (range: $[-1, +1]$)
-*   **Expected random Moran's I**: $-0.005$
-*   **Standardized z-score**: $8.92$
-*   **p-value**: $< 0.0001$
+## 6.5 Integration With the Five Universidade de Évora Courses
 
-The positive Moran's I ($+0.648$) confirms significant spatial clustering — anomaly scores are geographically concentrated in the known mining corridors, not randomly distributed. This is a desirable outcome: it confirms that the model responds to real land-cover boundaries (forest edge, road, clearing) rather than random spectral noise. The spatial clustering pattern matches the linear geometry of informal mining access roads visible in high-resolution reference imagery. Because the clustering corresponds to physically meaningful features, the threat of spatial autocorrelation inflating false positives is assessed as low for this study. Future work employing Geographically Weighted Regression (GWR) could further model local parameter variation.
+The project offers cross-disciplinary opportunities without conflating separate coursework with thesis evidence:
 
----
+| Course | Connection | Demonstrable artifact |
+|---|---|---|
+| INF13207L — Tecnologias Web | API contracts, PWA behavior, accessibility and geospatial UI | Static endpoint checks, browser tests and secure deployment |
+| INF13204L — Metodologias e Desenvolvimento de Software | Requirements, CI, tests, architecture and version control | Test traceability and repeatable releases |
+| MAT02354L — Probabilidade e Estatística | Sampling, inference, correlation and uncertainty | Held-out evaluation and documented statistical assumptions |
+| INF14387L — Transformação e Análise de Dados | Real-data acquisition, missingness, quality and lineage | Source ID inventory, QA rules and reproducible transformations |
+| INF13186L — Interação Humano-Computador | Visual hierarchy, personas, accessible maps and evaluation | Usability study with recorded tasks and outcomes |
 
-## 6.7 Performance Benchmarking vs. Alternative Methods
-To contextualize the pipeline's detection performance, the F1-Score is compared against alternative approaches reported in comparable geospatial anomaly detection studies:
+Any reused source code or project material must comply with the requirements of each course and academic integrity policy.
 
-| Method | Dataset | F1-Score | Labeled Data Required | Cloud-Robustness |
-|---|---|---|---|---|
-| **This thesis (Isolation Forest)** | Sentinel-2 + Sentinel-1 SAR | **0.907** | **None** | **Partial (SAR)** |
-| Random Forest (supervised) | Sentinel-2 | 0.923 | 2,000+ labels | None (optical) |
-| U-Net CNN | Sentinel-2 | 0.951 | 10,000+ labels | None (optical) |
-| NDVI thresholding | Landsat-8 | 0.712 | None | None (optical) |
-| One-Class SVM | Sentinel-2 | 0.843 | None | None (optical) |
-| Local Outlier Factor (LOF) | Sentinel-2 | 0.798 | None | None (optical) |
+## 6.6 A Structured Validation Roadmap
 
-*Sources: Scholkopf et al. 2001 [R246], Breunig et al. 2000 [R244], Kennedy et al. 2010 [R242]*
+The most effective next sequence is: (1) authenticate and retrieve one bounded real Sentinel-2 scene collection, (2) store private source identifiers and checksums, (3) verify spectral and quality masks, (4) build an independent validation set, (5) evaluate the spatial hypothesis, (6) retrieve and align a real VIIRS/economic time series, and (7) test the temporal hypothesis with transparent uncertainty.
 
-This thesis achieves an F1-Score of $0.907$ — competitive with supervised Random Forests ($0.923$) while requiring zero training labels. Among unsupervised methods, Isolation Forest ($0.907$) significantly outperforms NDVI thresholding ($0.712$) and LOF ($0.798$). The gap relative to deep learning methods (U-Net: $0.951$) is the cost of label-free detection, which is an acceptable trade-off given the difficulty of obtaining labeled mining ground-truth data in remote regions.
+Only then can the manuscript make results-level conclusions about specific extraction sites, model accuracy or economic relationships.
 
----
-
-## 6.8 Reproducibility Audit Results
-To validate the reproducibility claim, the pipeline was run three times on a fresh environment (Docker container) and the results were compared:
-
-| Metric | Run 1 | Run 2 | Run 3 | Deviation |
-|---|---|---|---|---|
-| F1-Score | 0.907 | 0.907 | 0.907 | **0.000** |
-| Pearson r | 0.724 | 0.724 | 0.724 | **0.000** |
-| Anomalous pixel count (Madre de Dios) | 88 | 88 | 88 | **0** |
-| Processing time (s) | 8.9 | 9.1 | 9.0 | ±0.1 |
-
-Zero statistical deviation across all three runs confirms that the locked random seed (`random_state=42`) and deterministic NumPy operations produce fully reproducible results. Processing time variance ($\pm 0.1$ s) is attributable to operating system scheduling, not algorithmic variability.
-
----
-
-## 6.9 Portfolio Management & Venture Capital Applications (V4 Telemetry)
-The development of the Version 4 dashboard (Institutional Preview Console) demonstrates the immediate translational value of space-based economic intelligence in professional asset management and venture validation (e.g., Y Combinator pitch scenarios). Rather than treating geospatial anomalies in isolation, the V4 telemetry console bridges the gap between Earth observation data and capital allocation rules:
-
-### 6.9.1 Real-Time Alpha vs. Lagging Disclosures
-Traditional hedge funds and venture investors rely heavily on lagging financial statements, quarterly earnings reports (10-Q), and corporate ESG disclosures. By the time SQM or Albemarle publishes its quarterly capacity increases, the market has already priced in the growth. Coupling Copernicus Sentinel-2 NDWI reflectance metrics (brine evaporation rates) with Vanguard ETF overlays allows analysts to construct real-time production indicators. This objective verification reduces information asymmetry, providing institutional allocators with a 15-to-45 day lead time over public market disclosures.
-
-### 6.9.2 Systematic Risk Management and the CRO Exposure Cap
-Seeking alpha through geospatial anomalies must be balanced against portfolio concentration risks. The inclusion of the Chief Risk Officer (CRO) $50M single-holding limit simulator in the V4 console represents a critical risk control framework:
-$$\text{Holding Size} = \text{Total Portfolio Capital} \times \text{Asset Weight} \le \$50\text{M}$$
-If the simulated position size exceeds the $50M ceiling, the system automatically triggers a blinking exposure warning. This ensures that quantitative satellite signals do not create concentrated tail risks, illustrating how academic Earth observation pipelines can be integrated into high-compliance, institutional-grade risk monitoring platforms (e.g., Aladdin, Charles River).
-
-### 6.9.3 Compliance Standardization via JSON Serialization
-In institutional investment workflows, research and screening decisions must be auditable and machine-readable. The automated generation of the `<fund_analysis>` JSON schema within the V4 compliance terminal standardizes the attribution process. By wrapping cost indicators (flagging expense ratios $>0.20\%$), historical discipline (requiring $\ge 3$ years of track record), and risk-adjusted metrics (Sharpe, Sortino, Beta) in structured tags, the console ensures that qualitative PM decisions can be automatically ingested by portfolio compliance servers, providing a complete audit trail for SEC compliance.
-
+**Discussion conclusion:** Software engineering feasibility has been demonstrated. The scientific hypotheses and operational value remain open questions requiring observed data and independent evaluation.
