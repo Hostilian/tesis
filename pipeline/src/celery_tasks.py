@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import logging
 import os
+from typing import Any
 from celery import Celery
 
 from pipeline.src.ingestion import SatelliteDataIngester
@@ -49,8 +50,8 @@ celery_app.conf.update(
     max_retries=3,
 )
 def process_satellite_tile_task(
-    self, bbox: list[float], start_date: str, end_date: str, region_id: str
-) -> dict:
+    self: Any, bbox: list[float], start_date: str, end_date: str, region_id: str
+) -> dict[str, Any]:
     """
     Asynchronously run the spatial anomaly detection pipeline for a bounding box.
     Retries automatically on transient resource failures.
