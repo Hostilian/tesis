@@ -1,0 +1,35 @@
+{
+  "schema": "sbei.observed_pixel_preview.v1",
+  "status": "real_pixel_inputs_unvalidated",
+  "scientific_validation": "not_performed",
+  "source": "Microsoft Planetary Computer public Sentinel-2 Level-2A COG assets",
+  "scene_id": "S2B_MSIL2A_20241004T143749_R096_T19KEQ_20241004T183052",
+  "acquired": "2024-10-04T14:37:49.024000Z",
+  "bbox": [
+    -68.25,
+    -23.48,
+    -68.238,
+    -23.468
+  ],
+  "asset_keys": [
+    "B02",
+    "B03",
+    "B04",
+    "B08",
+    "B11",
+    "SCL"
+  ],
+  "pixel_grid": [
+    96,
+    96
+  ],
+  "valid_pixels": 9216,
+  "derived_npz_sha256": "ca214db5e2fc08b8cce00c2b8c6ec57ebe12896a8e9c20e42f7ff962a03b6056",
+  "completed_at": "2026-11-19T23:34:41Z",
+  "ci_run_url": "https://github.com/Hostilian/tesis/actions/runs/44638768694",
+  "source_code_commit": "9fa09591cb8d99390a35221d7ea0c3f3c818a0dc",
+  "raw_pixels_published": false,
+  "independent_event_ground_truth": false,
+  "anomaly_detection_evaluated": false,
+  "note": "Successful observed pixel acquisition on a public scene. Raw pixel samples were not retained in the repository; this derived-output checksum is not the raw provider asset checksum. No source-event or model accuracy claims are established."
+}

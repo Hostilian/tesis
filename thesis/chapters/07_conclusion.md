@@ -8,7 +8,7 @@ This project has implemented a working thesis demonstrator for space-based econo
 
 Automated GitHub workflows cover Python tests on multiple runtimes, strict type and style checks, security review, API-health checks and deployment. These results are useful software verification, but they do not establish the accuracy of any specific geographical or economic inference.
 
-The system also contains a separate, fail-closed experimental path for acquiring bounded real Sentinel-2 pixel samples and writing private source/checksum records. Its presence is **not** evidence that a successful credentialed acquisition or independent scientific evaluation has already occurred.
+The system also contains a separate, fail-closed experimental path for acquiring bounded real Sentinel-2 pixel samples and writing private source/checksum records. The separate Planetary Computer route has now **successfully acquired a small real Sentinel-2B source preview** (9,216 valid pixels on 19 November 2026), confirming a bounded real-imagery input path without GEE credentials. This is **not** proof of an independently verified mining anomaly, scientific model accuracy or a completed production dataset.
 
 ## 7.2 Research Questions and Hypotheses
 

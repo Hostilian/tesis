@@ -12,6 +12,8 @@
 4. `docs/data/anomalies.provenance.json` contains deterministic input hashes; those hashes help track a run but **do not** establish real-world provenance, ground-truth correctness, or model accuracy.
 5. Software CI verifies tests, code quality, dependency/security scanning and deployment. Software CI success **does not** constitute empirical research validation.
 
+**Observed-pixel milestone (19 Nov 2026):** An independent Planetary Computer test successfully read 9,216 valid Sentinel-2B L2A pixels on a 96×96 grid from a public Chilean scene. See `docs/data/observed_preview_proof_20261119.json` and the successful GitHub Actions run. This proves a bounded source-pixel ingestion path, **not** any specific economic/environmental anomaly or model accuracy. The ten dashboard cases remain synthetic.
+
 ## 2. Claims in the current thesis draft requiring evidence or revision
 
 | Draft location | Claim requiring verification | Evidence/decision needed |

@@ -24,7 +24,7 @@ The `pipeline.src.ingestion.SatelliteDataIngester` facade implements Earth-obser
 
 The preprocessing stage computes NDVI, NDWI and BSI over array inputs and masks unusable pixels. An Isolation Forest and temporal deviation detector produce example anomaly scores. These scores illustrate algorithmic behavior; they are **not** calibrated probabilities of a real-world event. Map coordinates and numeric sample summaries are demonstration content, not independently confirmed geospatial events.
 
-An independent, experimental GEE acquisition script is available in `pipeline/real_observation.py`. It requests a bounded sample of actual Sentinel-2 pixels and records scene identifiers, grid parameters and a checksum. This research-only script **has not yet been demonstrated with a credentialed successful acquisition in the public evidence reviewed**. It does not automatically publish observations to the dashboard or claim anomaly validation.
+The separate experimental GEE acquisition script, `pipeline/real_observation.py`, has not yet demonstrated credentialed access. However, `pipeline/planetary_observation.py` was successfully tested with a public Microsoft Planetary Computer Sentinel-2B scene on 19 November 2026: 9,216 usable real pixels from a 96×96 sample and five reflectance bands with SCL masking. The source ID, processing checksum and GitHub Actions proof are stored in `docs/data/observed_preview_proof_20261119.json`. **No independent labels, event classification or hypothesis performance were derived**, and the ten demonstration anomalies were not changed.
 
 ### 5.2.2 Interactive Dashboards and Static API
 
