@@ -1,5 +1,6 @@
 import numpy as np
 from datetime import datetime
+from typing import cast
 
 
 def calculate_ndvi(nir_band: np.ndarray, red_band: np.ndarray) -> np.ndarray:
@@ -18,7 +19,7 @@ def calculate_ndvi(nir_band: np.ndarray, red_band: np.ndarray) -> np.ndarray:
     # Avoid division by zero
     denominator[denominator == 0.0] = 1e-5
     ndvi = (nir_band - red_band) / denominator
-    return np.clip(ndvi, -1.0, 1.0)
+    return cast(np.ndarray, np.clip(ndvi, -1.0, 1.0))
 
 
 def calculate_ndwi(green_band: np.ndarray, nir_band: np.ndarray) -> np.ndarray:
@@ -36,7 +37,7 @@ def calculate_ndwi(green_band: np.ndarray, nir_band: np.ndarray) -> np.ndarray:
     denominator = green_band + nir_band
     denominator[denominator == 0.0] = 1e-5
     ndwi = (green_band - nir_band) / denominator
-    return np.clip(ndwi, -1.0, 1.0)
+    return cast(np.ndarray, np.clip(ndwi, -1.0, 1.0))
 
 
 def calculate_bsi(
@@ -62,7 +63,7 @@ def calculate_bsi(
     denominator = (swir1_band + red_band) + (nir_band + blue_band)
     denominator[denominator == 0.0] = 1e-5
     bsi = numerator / denominator
-    return np.clip(bsi, -1.0, 1.0)
+    return cast(np.ndarray, np.clip(bsi, -1.0, 1.0))
 
 
 def apply_sentinel_cloud_mask(qa_band: np.ndarray) -> np.ndarray:
@@ -84,7 +85,7 @@ def apply_sentinel_cloud_mask(qa_band: np.ndarray) -> np.ndarray:
     is_cirrus = (qa_band & cirrus_bit_mask) != 0
 
     # Return clear pixels mask (True for clear, False for clouds)
-    return ~(is_cloud | is_cirrus)
+    return cast(np.ndarray, ~(is_cloud | is_cirrus))
 
 
 def calculate_temporal_zscores(
