@@ -33,6 +33,9 @@ jobs:
           # Deploy the docs directory
           path: './docs'
 
+      - name: Allow Pages artifact index to become consistent
+        run: sleep 8
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128
