@@ -1,0 +1,73 @@
+{
+  "schema": "sbei.observed_three_region_preview.v1",
+  "status": "real_pixel_inputs_unvalidated",
+  "scientific_validation": "not_performed",
+  "source": "Microsoft Planetary Computer public Sentinel-2 Level-2A signed COG assets",
+  "ci_run": "https://github.com/Hostilian/tesis/actions/runs/44639562734",
+  "completed_utc": "2026-11-19T23:40:42Z",
+  "study_count": 3,
+  "asset_keys": [
+    "B02",
+    "B03",
+    "B04",
+    "B08",
+    "B11",
+    "SCL"
+  ],
+  "grid_shape": [
+    96,
+    96
+  ],
+  "total_valid_pixels": 21253,
+  "raw_rasters_or_pixel_npzs_published": false,
+  "independent_event_ground_truth": false,
+  "model_accuracy_measured": false,
+  "studies": [
+    {
+      "label": "Salar de Atacama, Chile",
+      "bbox": [
+        -68.25,
+        -23.48,
+        -68.238,
+        -23.468
+      ],
+      "scene_id": "S2B_MSIL2A_20241004T143749_R096_T19KEQ_20241004T183052",
+      "acquired": "2024-10-04T14:37:49.024000Z",
+      "valid_pixels": 9216,
+      "derived_pixel_npz_sha256": "ca214db5e2fc08b8cce00c2b8c6ec57ebe12896a8e9c20e42f7ff962a03b6056"
+    },
+    {
+      "label": "Madre de Dios, Peru",
+      "bbox": [
+        -70.1,
+        -12.7,
+        -70.09,
+        -12.69
+      ],
+      "scene_id": "S2B_MSIL2A_20250319T145729_R039_T19LCG_20250319T211400",
+      "acquired": "2025-03-19T14:57:29.024000Z",
+      "valid_pixels": 2821,
+      "derived_pixel_npz_sha256": "0bd14dfb597dbb302556bf9496ddcbca067c4ae845d90f91a1d6a069aa72b9b0"
+    },
+    {
+      "label": "Central Bohemia, Czechia",
+      "bbox": [
+        14.9,
+        50.4,
+        14.91,
+        50.41
+      ],
+      "scene_id": "S2A_MSIL2A_20250720T100051_R122_T33UVR_20250720T120314",
+      "acquired": "2025-07-20T10:00:51.024000Z",
+      "valid_pixels": 9216,
+      "derived_pixel_npz_sha256": "bcdc76e995eb547cc7d7ebe937eb7c0902f3b0fc3b46cfcaec74dbfaa91ba6ad"
+    }
+  ],
+  "caveats": [
+    "Observed source pixels are a small bounded preview, not ground-truth validated anomaly detections.",
+    "Three study-area samples are insufficient to establish temporal trends, classifier performance, model generalization or production throughput.",
+    "Derived pixel NPZ outputs were stored only in a transient GitHub worker and not published; SHA256 references the derived pixel archive, not immutable raw asset hashes.",
+    "Separate published synthetic anomaly records have not been replaced by these observed pixels.",
+    "No farm/supplier-private coordinates, drone or aircraft imagery or water-probe data were accessed."
+  ]
+}

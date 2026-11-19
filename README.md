@@ -33,14 +33,14 @@ A futuristic, dark-space GIS monitoring console acting as the Decision Support S
 | Evidence item | Current status |
 |---|---|
 | Published anomaly records | **10 synthetic scenarios**; 0 field-verified satellite detections |
-| Separate observed-pixel preview | **9,216 real Sentinel-2 pixels** read from one public scene; no event validation or model score |
+| Separate observed-pixel previews | **21,253 actual Sentinel-2 pixels** in Chile, Peru and Czechia from three public scenes; no event validation or model score |
 | Original F1 = 0.907 and precision/recall figures | **Prior draft claims only**; not accepted as empirical results without labeled evaluation data |
 | Original Pearson r = 0.724, p = 0.0002 | **Prior draft claims only**; not independently reproducible from linked real observation pairs |
 | Original spatial clustering and runtime figures | **Unverified**; require documented inputs and repeatable measurement |
 | Unit tests, lint, security and Pages | Software quality checks; **not** scientific validation |
 | Automated weekly pipeline | **Review-only rehearsal**; does not publish new anomaly claims |
 
-See the **[Evidence and Validation Status](docs/evidence.html)** and [real-pixel acquisition record](docs/data/observed_preview_proof_20261119.json) for the distinction between source imagery, synthetic dashboard records and scientific validation.
+See the **[Evidence and Validation Status](docs/evidence.html)** and [three-region real-pixel acquisition record](docs/data/observed_three_region_proof_20261119.json) for the distinction between source imagery, synthetic dashboard records and scientific validation.
 
 **Submission safeguard:** Markdown Chapters 5–7 have now been revised to distinguish software results from unverified empirical claims, with the earlier drafts preserved at `shelf/manuscript-pre-validation-20261119`. The checked-in LaTeX and PDF have **not** yet been regenerated and may still contain superseded claims. See **[THESIS_VALIDATION_GAPS.md](THESIS_VALIDATION_GAPS.md)** before academic submission.
 
@@ -182,7 +182,7 @@ earthengine authenticate
 echo "GCP_PROJECT=your-google-cloud-project-id" > .env
 ```
 
-**Important:** Setting API credentials does not turn the original demo pipeline into a real observation detector. The [GEE preview](REAL_OBSERVATION.md) is fail-closed and private; the separate [Planetary Computer preview](PLANETARY_PIXEL_PREVIEW.md) successfully sampled real public imagery without altering the mock anomaly feed. Independent labels and scientific validation remain future work.
+**Important:** Setting API credentials does not turn the original demo pipeline into a real observation detector. The [GEE preview](REAL_OBSERVATION.md) is fail-closed and private; the separate [Planetary Computer preview](PLANETARY_PIXEL_PREVIEW.md) successfully sampled real public imagery in all three study regions without altering the mock anomaly feed. Independent labels and scientific validation remain future work.
 
 For credentialed provider checks, configure the appropriate GitHub Actions secrets (never commit private credentials):
 

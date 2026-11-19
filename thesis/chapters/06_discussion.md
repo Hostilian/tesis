@@ -24,7 +24,7 @@ The temporal-analysis interface can process a numeric radiance series and explai
 
 The public site and static API can be deployed at low infrastructure cost, and the code contains provider clients, retries and explicit missing-data handling. GitHub Actions can test and deploy the application. However, production-scale imagery ingestion latency, third-party API quota behavior, storage cost, geographic scalability and model quality **remain unmeasured under a documented real-observation workload**.
 
-A bounded public Sentinel-2B raster preview was successfully acquired via Microsoft Planetary Computer on 19 November 2026 (9,216 valid pixels). This supports the narrow claim that real source pixels can be loaded and processed. It does not provide independently validated anomalies, a representative production benchmark or a completed fusion experiment. The synthetic dashboard records remain unchanged.
+Three bounded Sentinel-2 L2A raster previews were successfully acquired via Microsoft Planetary Computer on 19 November 2026 (21,253 valid masked pixels in Chile, Peru and Czechia combined). This supports the narrow claim that real source pixels can be loaded and processed. It does not provide independently validated anomalies, a representative production benchmark or a completed fusion experiment. The synthetic dashboard records remain unchanged.
 
 ## 6.2 Relationship to Existing Research
 
