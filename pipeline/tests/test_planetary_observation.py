@@ -15,13 +15,14 @@ import pytest
 from pipeline.planetary_observation import (
     mask_real_pixels,
     save_private_sample,
+    PC_ASSET_KEY,
     select_scene_metadata,
 )
 
 BANDS = ("B2", "B3", "B4", "B8", "B11")
 
 
-def _scene(id_: str, cloud: float, bands: tuple[str, ...] = BANDS) -> SimpleNamespace:
+def _scene(id_: str, cloud: float, bands: tuple[str, ...] = tuple(PC_ASSET_KEY.values())) -> SimpleNamespace:
     return SimpleNamespace(
         id=id_,
         assets={k: SimpleNamespace(href="not-requested-in-test") for k in (*bands, "SCL")},

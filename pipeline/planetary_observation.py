@@ -30,6 +30,7 @@ from pipeline.src.preprocessing import GeospatialPreprocessor
 
 PUBLIC_STAC_URL = "https://planetarycomputer.microsoft.com/api/stac/v1"
 RASTER_GRID_PIXELS = 96
+PC_ASSET_KEY = {"B2": "B02", "B3": "B03", "B4": "B04", "B8": "B08", "B11": "B11"}
 
 
 def select_scene_metadata(items: list[Any]) -> Any:
@@ -37,7 +38,7 @@ def select_scene_metadata(items: list[Any]) -> Any:
     eligible = []
     for item in items:
         assets = getattr(item, "assets", {})
-        missing = [key for key in (*BAND_NAMES, "SCL") if key not in assets]
+        missing = [key for key in (*PC_ASSET_KEY.values(), "SCL") if key not in assets]
         if missing:
             continue
         properties = getattr(item, "properties", {})
@@ -111,7 +112,7 @@ def read_planetary_sample(
     transform = from_bounds(*bbox, RASTER_GRID_PIXELS, RASTER_GRID_PIXELS)
     values: dict[str, np.ndarray] = {}
     for key in (*BAND_NAMES, "SCL"):
-        asset = scene.assets[key]
+        asset = scene.assets[PC_ASSET_KEY[key]] if key != "SCL" else scene.assets["SCL"]
         resampling = (
             Resampling.nearest if key == "SCL" else Resampling.bilinear
         )
@@ -139,7 +140,7 @@ def read_planetary_sample(
         "cloud_cover_catalog_pct": scene.properties.get("eo:cloud_cover"),
         "collection": "sentinel-2-l2a",
         "public_stac_url": PUBLIC_STAC_URL,
-        "asset_keys": list((*BAND_NAMES, "SCL")),
+        "asset_keys": list((*PC_ASSET_KEY.values(), "SCL")),
         "grid_shape": [RASTER_GRID_PIXELS, RASTER_GRID_PIXELS],
         "pixel_grid_crs": "EPSG:4326",
         "bounding_box": bbox,
