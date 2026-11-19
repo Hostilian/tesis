@@ -180,6 +180,15 @@ class GeospatialExporter:
             "status": "online",
             "last_pipeline_run": datetime.datetime.utcnow().isoformat() + "Z",
             "anomalies_count": len(anomalies),
+            "data_mode": "synthetic_demo",
+            "verified_satellite_observations": 0,
+            "publication_policy": (
+                "Reviewed release only; scheduled demo runs do not update the public dataset."
+            ),
+            "status_note": (
+                "Static GitHub Pages snapshot; online means the JSON file is "
+                "accessible, not live satellite data."
+            ),
             "environment": (
                 "GitHub Actions CI/CD" if os.getenv("GITHUB_ACTIONS") else "development"
             ),
