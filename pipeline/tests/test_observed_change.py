@@ -18,6 +18,8 @@ def example_scene(date: str, scene_id: str):
         "collection": "sentinel-2-l2a",
         "pixel_grid_crs": "EPSG:4326",
         "grid_shape": [16, 16],
+        "s2_processing_baseline": "05.11",
+        "boa_add_offset_dn": -1000,
         "bounding_box": BBOX,
     }
     bands = {
@@ -45,6 +47,8 @@ def test_real_pair_contract_with_fixture_arrays():
     assert report["features"][0]["properties"]["drop_fraction"] == 1.0
     assert report["features"][-1]["properties"]["drop_fraction"] == 0.0
     assert len(report["derived_arrays_sha256"]) == 64
+    assert report["boa_add_offset_dn"] == [-1000, -1000]
+    assert report["s2_processing_baselines"] == ["05.11", "05.11"]
 
 
 def test_missing_pixels_cannot_be_zeros_or_flags():
