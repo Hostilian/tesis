@@ -55,8 +55,28 @@ def select_scene_metadata(items: list[Any]) -> Any:
     return min(eligible, key=lambda choice: (choice[0], choice[1]))[2]
 
 
+def _boa_offset_dn(processing_baseline: str) -> int:
+    """Use Copernicus Sentinel-2 L2A processing-baseline radiometry.
+
+    ESA PB 04.00+ introduces BOA_ADD_OFFSET -1000 digital counts.
+    The Planetary Computer STAC/COG band scale metadata is not sufficient
+    to apply this automatically: inspect s2:processing_baseline instead.
+    Fail closed on unrecognized or unavailable metadata.
+    """
+    try:
+        baseline = float(processing_baseline)
+    except (ValueError, TypeError) as exc:
+        raise ValueError("Sentinel-2 processing baseline missing or invalid") from exc
+    if not (2.0 <= baseline < 100.0):
+        raise ValueError("Unsupported Sentinel-2 processing baseline")
+    return -1000 if baseline >= 4.0 else 0
+
+
 def mask_real_pixels(
-    spectral: dict[str, np.ndarray], scl: np.ndarray
+    spectral: dict[str, np.ndarray],
+    scl: np.ndarray,
+    *,
+    boa_add_offset_dn: int = 0,
 ) -> dict[str, np.ndarray]:
     """Apply Sentinel-2 scene classification to aligned observed reflectances."""
     shape = scl.shape
@@ -75,7 +95,7 @@ def mask_real_pixels(
     if int(np.count_nonzero(valid)) < 20:
         raise ValueError("Insufficient valid real Sentinel-2 pixels after masking")
     for key in BAND_NAMES:
-        output[key] = np.where(valid, output[key] / 10000.0, np.nan)
+        output[key] = np.where(valid, (output[key] + boa_add_offset_dn) / 10000.0, np.nan)
     # All invalid pixels have NaN reflectance; zero QA60 is not a claim that
     # clouds are absent (the stronger SCL mask was already applied above).
     output["QA60"] = np.zeros(shape, dtype=np.uint16)
@@ -131,14 +151,21 @@ def read_planetary_sample(
                     .astype(np.float64)
                     .filled(np.nan)
                 )
+    processing_baseline = scene.properties.get("s2:processing_baseline")
+    boa_add_offset_dn = _boa_offset_dn(processing_baseline)
     bands = mask_real_pixels(
-        {name: values[name] for name in BAND_NAMES}, values["SCL"]
+        {name: values[name] for name in BAND_NAMES},
+        values["SCL"],
+        boa_add_offset_dn=boa_add_offset_dn,
     )
     return bands, {
         "scene_id": str(scene.id),
         "acquired": scene.properties.get("datetime"),
         "cloud_cover_catalog_pct": scene.properties.get("eo:cloud_cover"),
         "collection": "sentinel-2-l2a",
+        "s2_processing_baseline": processing_baseline,
+        "boa_add_offset_dn": boa_add_offset_dn,
+        "boa_quantification_value": 10000,
         "public_stac_url": PUBLIC_STAC_URL,
         "asset_keys": list((*PC_ASSET_KEY.values(), "SCL")),
         "grid_shape": [RASTER_GRID_PIXELS, RASTER_GRID_PIXELS],
