@@ -44,10 +44,12 @@ def analyze_pair(
     west, south, east, north = bbox
     if west >= east or south >= north:
         raise ValueError("invalid geographic extent")
-    required_meta = ("scene_id", "acquired", "collection", "pixel_grid_crs", "grid_shape")
+    required_meta = ("scene_id", "acquired", "collection", "pixel_grid_crs", "grid_shape", "s2_processing_baseline")
     for label, meta in (("before", before_meta), ("after", after_meta)):
         if any(not meta.get(k) for k in required_meta):
             raise ValueError(f"{label} scene lineage is incomplete")
+        if meta.get("boa_add_offset_dn") not in (0, -1000):
+            raise ValueError(f"{label} radiometric correction metadata missing")
         if meta["collection"] != "sentinel-2-l2a" or meta["pixel_grid_crs"] != "EPSG:4326":
             raise ValueError("different source collection or grid CRS")
         if meta.get("bounding_box") != bbox:
@@ -116,6 +118,9 @@ def analyze_pair(
         "collection": "sentinel-2-l2a",
         "scenes": [before_meta["scene_id"], after_meta["scene_id"]],
         "acquisition_times": [before_meta["acquired"], after_meta["acquired"]],
+        "s2_processing_baselines": [before_meta["s2_processing_baseline"], after_meta["s2_processing_baseline"]],
+        "boa_add_offset_dn": [before_meta["boa_add_offset_dn"], after_meta["boa_add_offset_dn"]],
+        "quality_mask": "Sentinel-2 SCL excluded 0,1,3,8,9,10,11",
         "spatial_reference": "EPSG:4326",
         "bounding_box": bbox,
         "derived_arrays_sha256": arrays_digest,
