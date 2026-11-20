@@ -20,7 +20,7 @@ from typing import Any
 
 import numpy as np
 
-from pipeline.planetary_observation import read_planetary_sample
+from pipeline.planetary_observation import _boa_offset_dn, read_planetary_sample
 from pipeline.real_observation import _ensure_private_path, validate_request
 from pipeline.src.preprocessing import GeospatialPreprocessor
 
@@ -48,7 +48,7 @@ def analyze_pair(
     for label, meta in (("before", before_meta), ("after", after_meta)):
         if any(not meta.get(k) for k in required_meta):
             raise ValueError(f"{label} scene lineage is incomplete")
-        if meta.get("boa_add_offset_dn") not in (0, -1000):
+        if meta.get("boa_add_offset_dn") != _boa_offset_dn(meta["s2_processing_baseline"]):
             raise ValueError(f"{label} radiometric correction metadata missing")
         if meta["collection"] != "sentinel-2-l2a" or meta["pixel_grid_crs"] != "EPSG:4326":
             raise ValueError("different source collection or grid CRS")
