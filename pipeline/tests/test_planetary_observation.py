@@ -14,6 +14,7 @@ import pytest
 
 from pipeline.planetary_observation import (
     mask_real_pixels,
+    _boa_offset_dn,
     save_private_sample,
     PC_ASSET_KEY,
     select_scene_metadata,
@@ -75,3 +76,23 @@ def test_private_manifest_does_not_claim_validation(tmp_path: Path) -> None:
     assert info["model_performance"] == "not_evaluated"
     assert info["independent_ground_truth"] == "not_available"
     assert len(info["checksum_sha256"]) == 64
+
+
+def test_official_baseline_offset_for_post_2022_products() -> None:
+    """ESA PB 04.00+ BOA SR=(DN-1000)/10000; never DN/10000."""
+    source = {key: np.full((6, 6), 3000.0) for key in BANDS}
+    source["B4"][:] = 2000.0
+    source["B8"][:] = 4000.0
+    assert _boa_offset_dn("05.11") == -1000
+    adjusted = mask_real_pixels(
+        source, np.full((6, 6), 4.0), boa_add_offset_dn=_boa_offset_dn("05.11")
+    )
+    assert adjusted["B4"][1, 1] == pytest.approx(0.1)
+    assert adjusted["B8"][1, 1] == pytest.approx(0.3)
+    assert _boa_offset_dn("03.01") == 0
+
+
+@pytest.mark.parametrize("baseline", [None, "", "unknown", "0.00", "999"])
+def test_unknown_radiometry_fails_closed(baseline: str | None) -> None:
+    with pytest.raises(ValueError, match="baseline"):
+        _boa_offset_dn(baseline)
