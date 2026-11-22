@@ -43,4 +43,6 @@ dist/
 
 # Local observational acquisitions and raw sensor results: never publish
 research_private/
+# Derived live World Bank caches are runtime state, not verified thesis data.
+docs/data/economic/wb_live_v2_*.json
 *.npz

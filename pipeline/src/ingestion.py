@@ -1067,10 +1067,15 @@ class SatelliteDataIngester:
         year_to: int,
     ) -> list[dict[str, Any]]:
         indicator_code = WORLD_BANK_INDICATORS.get(indicator, indicator)
+        # Fixtures never call the network or read/write the live economic cache.
+        if self.config.mock_mode:
+            return self._mock_worldbank_values(
+                country_iso3, indicator_code, year_from, year_to
+            )
         cache_dir = self.config.output_dir / "economic"
         cache_dir.mkdir(parents=True, exist_ok=True)
         cache_path = (
-            cache_dir / f"wb_{indicator_code}_{country_iso3}_{year_from}_{year_to}.json"
+            cache_dir / f"wb_live_v2_{indicator_code}_{country_iso3}_{year_from}_{year_to}.json"
         )
         if cache_path.exists():
             age_hours = (time.time() - cache_path.stat().st_mtime) / 3600
@@ -1085,20 +1090,17 @@ class SatelliteDataIngester:
             f"?format=json&date={year_from}:{year_to}&per_page=100"
         )
 
-        def fallback() -> list[dict[str, Any]]:
-            values = self._mock_worldbank_values(
-                country_iso3, indicator_code, year_from, year_to
-            )
-            return values
-
+        # A failed live API request must not be replaced by invented values.
         raw = self.http.request_json(
             "GET",
             url,
             timeout=15,
             service_name="World Bank API",
-            fallback=lambda: [None, fallback()],
+            fallback=lambda: [None, []],
         )
         records = raw[1] if isinstance(raw, list) and len(raw) > 1 else raw
+        if not isinstance(records, list):
+            raise ValueError("Invalid World Bank response: expected observation list")
         result: list[dict[str, Any]] = [
             {
                 "year": int(record["date"]),
@@ -1112,7 +1114,8 @@ class SatelliteDataIngester:
             if record.get("value") is not None
         ]
         result.sort(key=lambda item: item["year"])
-        cache_path.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
+        if result:
+            cache_path.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
         return result
 
     def fetch_worldbank_gdp(
@@ -1129,6 +1132,8 @@ class SatelliteDataIngester:
                 "gdp_growth_pct": item["value"],
                 "country": country_code,
                 "indicator": item["indicator"],
+                "source": item.get("source", "unknown"),
+                "synthetic_data": bool(self.config.mock_mode),
             }
             for item in self.fetch_worldbank_indicator(
                 country_code, "gdp_growth_pct", start_year, end_year
@@ -1144,6 +1149,8 @@ class SatelliteDataIngester:
         mineral_rents = self.fetch_worldbank_indicator(
             country_iso3, "mineral_rents_pct", year_from, current_year
         )
+        if not mineral_exports or not mineral_rents:
+            raise ValueError("Missing observed World Bank mineral indicators; cannot calculate dependency")
         export_value = _latest_value(mineral_exports)
         rent_value = _latest_value(mineral_rents)
         employment_proxy = min(100.0, (export_value + rent_value) * 0.35)
@@ -1156,7 +1163,12 @@ class SatelliteDataIngester:
                 "mineral_rents_pct": rent_value,
                 "mining_employment_proxy": round(employment_proxy, 4),
             },
-            "source": "World Bank Open Data API with SBEI mineral dependency model",
+            "source": (
+                "Deterministic Mock World Bank / SBEI fixture model"
+                if self.config.mock_mode
+                else "World Bank Open Data API / SBEI mineral dependency model"
+            ),
+            "synthetic_data": bool(self.config.mock_mode),
         }
 
     def fetch_imf_weo_data(

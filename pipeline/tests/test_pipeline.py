@@ -410,11 +410,13 @@ class TestEconomicOverlay:
             overlay.compute_ntl_gdp_correlation([1.0, 2.0], [1.0])
 
     def test_mock_gdp_fallback_returns_data(self):
-        ingester = SatelliteDataIngester()
+        ingester = SatelliteDataIngester(config=PipelineConfig(mock_mode=True))
         result = ingester.fetch_worldbank_gdp("CZE", 2021, 2025)
         assert len(result) > 0
         for rec in result:
             assert "year" in rec and "gdp_growth_pct" in rec
+            assert rec["source"] == "Deterministic Mock World Bank"
+            assert rec["synthetic_data"] is True
 
 
 class TestEnterpriseIngestion:
@@ -455,11 +457,17 @@ class TestEnterpriseIngestion:
         assert isinstance(granules, list)
         assert granules[0]["id"] == "NASA_MOCK_SCENE_001"
 
-    def test_mineral_dependency_index_has_expected_components(self):
+    def test_mineral_dependency_index_has_expected_components(self, monkeypatch):
         ingester = SatelliteDataIngester(config=PipelineConfig(mock_mode=True))
+        monkeypatch.setattr(
+            ingester.http, "request_json",
+            lambda *_args, **_kwargs: pytest.fail("Mock mode contacted live World Bank API"),
+        )
         result = ingester.fetch_mineral_dependency_index("CHL")
         assert result["score"] > 0
         assert "mineral_exports_pct" in result["components"]
+        assert result["source"].startswith("Deterministic Mock")
+        assert result["synthetic_data"] is True
 
 
 # ── 9. Temporal Z-Score ───────────────────────────────────────────────────────
