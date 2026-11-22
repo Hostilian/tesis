@@ -1,0 +1,28 @@
+# Free deterministic checks: no model, API key, paid-media call or reviewer invocation.
+name: Toolchain adapter smoke
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.mcp.json'
+      - '.coderabbit.yaml'
+      - '.greptile/**'
+      - 'scripts/**'
+      - '.github/workflows/toolchain-smoke.yml'
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate MCP JSON and Node adapters
+        run: |
+          node -e "JSON.parse(require('fs').readFileSync('.mcp.json', 'utf8')); console.log('MCP JSON valid')"
+          node --check scripts/media-gateway.mjs
+          node --check scripts/free-review.mjs
+      - name: Confirm no-cost media dry-run
+        run: node scripts/media-gateway.mjs --provider fal --model fal-ai/flux/dev --prompt smoke
