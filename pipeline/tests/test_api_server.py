@@ -8,7 +8,8 @@ import json
 import pytest
 from fastapi.testclient import TestClient
 
-from pipeline.src.api_server import app, DATA_DIR, ANOMALIES_FILE, FINANCIAL_FEED_FILE
+from pipeline.src.api_server import app
+import pipeline.src.api_server as api_server
 
 
 @pytest.fixture
@@ -51,8 +52,10 @@ def test_api_anomalies_by_id_endpoint_not_found(client):
     assert "not found" in response.json()["detail"].lower()
 
 
-def test_api_financial_webhook(client):
-    """POST /api/v1/webhooks/financial must successfully ingest market data and return combined provenance hash."""
+def test_api_financial_webhook(client, tmp_path, monkeypatch):
+    """Webhook writes only into pytest's isolated temporary directory."""
+    feed_file = tmp_path / "financial_feed.json"
+    monkeypatch.setattr(api_server, "FINANCIAL_FEED_FILE", feed_file)
     payload = {
         "indicator": "lithium_carbonate_spot_price",
         "value": 14200.0,
@@ -65,6 +68,7 @@ def test_api_financial_webhook(client):
     assert data["status"] == "success"
     assert "transaction_hash" in data
     assert len(data["transaction_hash"]) == 64  # SHA-256 length
+    assert json.loads(feed_file.read_text(encoding="utf-8"))[0]["indicator"] == payload["indicator"]
 
 
 def test_api_satellite_ingest_endpoint(client):

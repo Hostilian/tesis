@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="Evidence-first satellite research workspace. Observed Sentinel-2 NDVI change; no validated anomaly claims.">
+<title>ATLAS / Observed Change — SBEI Research</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+:root{--bg:#080d14;--pane:#101c29;--edge:#2b4051;--txt:#eff7fa;--muted:#a6b9c8;--cyan:#70e1d4;--gold:#edc38f;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
+*{box-sizing:border-box}html,body{height:100%;margin:0;background:var(--bg);color:var(--txt)}
+body{min-height:100svh;display:grid;grid-template-rows:auto 1fr auto}
+a{color:var(--cyan);text-underline-offset:4px}button,select{font:inherit}button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+header{display:flex;gap:1rem;align-items:center;justify-content:space-between;padding:.85rem 1.5rem;border-bottom:1px solid var(--edge);background:#0c1521;flex-wrap:wrap}
+.wordmark{display:flex;align-items:center;gap:.85rem}.mark{width:2rem;height:2rem;border:1px solid var(--cyan);border-radius:50%;display:grid;place-items:center;color:var(--cyan);box-shadow:0 0 24px #70e1d433}.wordmark strong{font-size:1rem;letter-spacing:.19em}.wordmark small{display:block;color:var(--muted);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase}
+.version{display:flex;gap:.9rem;flex-wrap:wrap;font-size:.8rem}.version a{text-decoration:none;color:var(--muted)}.version a:hover{color:white}.version .current{color:var(--cyan)}
+main{display:grid;grid-template-columns:minmax(285px,355px) minmax(0,1fr);min-height:0}
+aside{border-right:1px solid var(--edge);padding:1.4rem;overflow:auto;background:radial-gradient(circle at 0 0,#1c3240 0%,#0d1926 48%,#0a111a 100%);display:flex;flex-direction:column;gap:1.15rem}
+.kicker{color:var(--cyan);letter-spacing:.18em;text-transform:uppercase;font-size:.68rem;font-weight:800;margin:0}
+h1{font-size:clamp(1.55rem,2.4vw,2.4rem);letter-spacing:-.05em;font-weight:650;line-height:1.12;margin:.1rem 0}.desc{color:var(--muted);font-size:.9rem;line-height:1.65;margin:0}
+.truth{border:1px solid #967652;border-radius:.55rem;padding:.7rem .8rem;background:#f1bc7310;color:#f5d4a7;font-size:.77rem;line-height:1.55}
+.overline{font-size:.64rem;text-transform:uppercase;letter-spacing:.14em;color:var(--muted)}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}.metric{border:1px solid var(--edge);background:#ffffff05;padding:.75rem;border-radius:.55rem;min-height:5rem}
+.metric strong{font-size:1.55rem;display:block;font-variant-numeric:tabular-nums;font-weight:600;letter-spacing:-.04em;margin:.35rem 0}.metric span{font-size:.7rem;color:var(--muted)}
+.control{display:flex;flex-direction:column;gap:.4rem}select{width:100%;border:1px solid #456074;border-radius:.4rem;background:#142330;color:white;padding:.65rem}.inline{display:flex;gap:.45rem;align-items:center}
+.pill{border-radius:100px;padding:.42rem .6rem;background:#14342f;color:#9ef2d9;font-size:.67rem;font-weight:700;letter-spacing:.05em}
+.legend{display:flex;align-items:center;gap:.65rem;color:var(--muted);font-size:.7rem}.legend-bar{width:100%;height:.65rem;border-radius:1rem;background:linear-gradient(to right,#e6a77e,#e4d8bf,#6fddd0);border:1px solid #ffffff22}
+details{border-top:1px solid var(--edge);padding-top:.8rem;font-size:.76rem;color:var(--muted);line-height:1.5}summary{cursor:pointer;color:var(--txt);font-weight:600;margin-bottom:.6rem}code{overflow-wrap:anywhere;color:#b9f5ec}.notice{font-size:.75rem;min-height:2rem;color:var(--muted)}
+.viewport{min-height:360px;position:relative;background:radial-gradient(ellipse at 65% 40%,#163448,#0a141e 65%);isolation:isolate}
+#map{position:absolute;inset:0;background:#0b1724}
+.map-head{pointer-events:none;z-index:600;position:absolute;top:1rem;left:1rem;right:1rem;display:flex;justify-content:space-between;gap:.5rem}
+.map-head span{display:inline-flex;align-items:center;gap:.45rem;background:#0a1826d9;border:1px solid #314c5b;border-radius:.4rem;padding:.5rem .65rem;font-size:.7rem;color:#d9edf3;backdrop-filter:blur(8px)}
+.dot{width:.43rem;height:.43rem;border-radius:100%;background:var(--cyan);box-shadow:0 0 10px #70e1d4}
+.empty{display:none;position:absolute;z-index:650;top:50%;left:50%;transform:translate(-50%,-50%);background:#0b1823ef;border:1px solid var(--edge);border-radius:.7rem;max-width:24rem;width:calc(100% - 2rem);padding:1.4rem;color:#f0f7fc;line-height:1.6;box-shadow:0 12px 60px #0009;text-align:center}
+.leaflet-container{font-family:inherit!important}.leaflet-control-attribution{font-size:10px!important}
+.leaflet-popup-content-wrapper{background:#0e1d2b;color:#e1f6f3;border:1px solid #4f7179;border-radius:.6rem}.leaflet-popup-tip{background:#0e1d2b}.leaflet-popup-content{line-height:1.7}.leaflet-popup-content strong{color:#8ef5de}
+footer{border-top:1px solid var(--edge);padding:.65rem 1.4rem;background:#0b141f;color:var(--muted);font-size:.7rem;line-height:1.6}
+@media(max-width:850px){body{display:block}main{display:flex;flex-direction:column}aside{overflow:visible;gap:.85rem;padding:1rem}.viewport{height:52vh;min-height:350px;order:0}header{padding:.7rem 1rem}.metrics{grid-template-columns:repeat(4,1fr)}.metric{padding:.55rem}.metric strong{font-size:1.18rem}.metric span{font-size:.62rem}.desc{font-size:.81rem}.map-head{top:.5rem;left:.5rem;right:.5rem}.map-head span{font-size:.6rem;padding:.35rem}}
+@media(max-width:520px){.metrics{grid-template-columns:1fr 1fr}.wordmark strong{font-size:.9rem}.version{gap:.6rem}.version a{font-size:.72rem}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wordmark"><div class="mark" aria-hidden="true">◎</div><div><strong>ATLAS</strong><small>Earth observation · research workspace</small></div></div>
+  <nav class="version" aria-label="Version selector">
+    <a href="../../index.html">Satellite default</a><a href="../../index3.html">V3</a><a href="../../index4.html">V4</a><a class="current" aria-current="page" href="./">Observed change · experimental</a>
+  </nav>
+</header>
+<main>
+<aside>
+  <p class="kicker">Scientific evidence / 01</p>
+  <h1>Observe change.<br>Question the signal.</h1>
+  <p class="desc">Two real Sentinel-2 Level-2A scenes, aligned and quality-masked. This workspace visualizes exploratory vegetation-index differences—not confirmed resource anomalies.</p>
+  <div class="truth" role="note"><strong>Unvalidated interpretation.</strong> Real pixels do not provide independent event labels. No detection accuracy, economic effect, causal explanation, or live monitoring is claimed.</div>
+  <div class="inline"><span class="pill" id="dataState">Checking evidence</span><span class="overline" id="dates">Two-scene comparison</span></div>
+  <div class="metrics" aria-live="polite">
+    <div class="metric"><span>Clear overlap pixels</span><strong id="usable">—</strong></div>
+    <div class="metric"><span>Median Δ NDVI</span><strong id="median">—</strong></div>
+    <div class="metric"><span>Heuristic drop flags</span><strong id="flags">—</strong></div>
+    <div class="metric"><span>Summary cells</span><strong id="cells">—</strong></div>
+  </div>
+  <div class="control"><label for="layer" class="overline">Display mode</label>
+    <select id="layer"><option value="change">NDVI change · median per cell</option><option value="decline">Cells passing heuristic decline threshold</option></select>
+  </div>
+  <div><div class="legend"><span>NDVI decrease</span><div class="legend-bar" aria-hidden="true"></div><span>increase</span></div><p class="notice" id="mapNote">Loading public research observation…</p></div>
+  <details open><summary>Evidence and acquisition details</summary>
+    <div class="overline">Source scenes</div><p id="sceneList">No observation file loaded.</p>
+    <div class="overline">Derived array SHA-256</div><p><code id="hash">—</code></p>
+    <p>Sentinel-2 L2A surface reflectance; SCL masking; 96×96 EPSG:4326 preview. Both scenes must have valid pixels. Grid blocks aggregate 8×8 pixels; no farm or commercial coordinates.</p>
+    <p><a href="https://planetarycomputer.microsoft.com/docs/" rel="noopener">Planetary Computer documentation</a> · <a href="https://dataspace.copernicus.eu/terms-and-conditions" rel="noopener">Copernicus data terms</a></p>
+  </details>
+</aside>
+<section class="viewport" aria-label="Exploratory spatial change map">
+  <div id="map" role="application" aria-label="Map of public Chile study area with observed NDVI differences"></div>
+  <div class="map-head"><span><i class="dot" aria-hidden="true"></i> OBSERVED S2 PIXELS / NOT EVENT-VALIDATED</span><span>EXPERIMENTAL 01</span></div>
+  <div class="empty" id="empty" role="status"></div>
+</section>
+</main>
+<footer>Data: contains modified Copernicus Sentinel-2 observations (2024, 2025), accessed via Microsoft Planetary Computer. Cartography © OpenStreetMap contributors. Leaflet (BSD-2-Clause) reused from existing thesis site. There are no private Rota Única records here. Development preview; original satellite default is preserved.</footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+const fmt = n => Number(n).toLocaleString("en-US");
+const signed = n => (n>0?"+":"") + Number(n).toFixed(4);
+const safe = s => String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const map = typeof L === "undefined" ? null : L.map("map",{scrollWheelZoom:false,zoomControl:true}).setView([-23.474,-68.244],15);
+if(map){
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18,attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
+}
+let observed=null,gridLayer=null;
+function color(v){
+  if(v<=-.12)return "#e69d79";
+  if(v<=-.04)return "#d8b395";
+  if(v<.04)return "#c7d5c8";
+  if(v<.12)return "#8dcebd";
+  return "#58c5ba";
+}
+function render(){
+  if(!map || !observed)return;
+  if(gridLayer)map.removeLayer(gridLayer);
+  const mode=$("layer").value;
+  const features=mode==="decline"?observed.features.filter(f=>f.properties.heuristic_drop_pixels>0):observed.features;
+  $("mapNote").textContent=mode==="decline"?"Only cells meeting the stated, unvalidated threshold are shown.":"Color shows median NDVI difference from the two valid scenes.";
+  $("empty").style.display=features.length?"none":"block";
+  if(!features.length){$("empty").textContent="No pixels crossed the selected exploratory NDVI-decline threshold. This is a valid negative finding, not missing data.";return;}
+  gridLayer=L.geoJSON({type:"FeatureCollection",features},{
+    style:f=>({color:"#1c2e36",weight:.45,opacity:1,fillColor:color(f.properties.median_ndvi_delta),fillOpacity:.75}),
+    onEachFeature:(f,layer)=>{
+      const p=f.properties;
+      layer.bindPopup("<strong>Observed index summary</strong><div>Median Δ NDVI: "+signed(p.median_ndvi_delta)+"</div><div>Valid overlap: "+fmt(p.valid_overlap_pixels)+" pixels</div><div>Heuristic declines: "+fmt(p.heuristic_drop_pixels)+"</div><div>Independent event validation: none</div>");
+    }
+  }).addTo(map);
+  map.fitBounds(gridLayer.getBounds(),{padding:[30,30],maxZoom:16});
+}
+$("layer").addEventListener("change",render);
+async function init(){
+  if(!map){$("dataState").textContent="Map library unavailable";$("empty").style.display="block";$("empty").textContent="Map dependency not loaded. No scientific results have been fabricated.";return;}
+  try{
+    const response=await fetch("./data/observed_ndvi_change_20261120.geojson",{cache:"no-cache"});
+    if(!response.ok)throw Error("Research file unavailable (HTTP "+response.status+")");
+    const v=await response.json();
+    if(v.type!=="FeatureCollection"||v.schema!=="sbei.observed_ndvi_change.v1"||v.synthetic_data!==false||v.verification_status!=="observed_pixels_unvalidated_change"||!Array.isArray(v.features)||!v.scenes?.length||!v.derived_arrays_sha256)throw Error("Source evidence schema invalid");
+    observed=v;
+    $("usable").textContent=fmt(v.overlap_valid_pixels);
+    $("median").textContent=signed(v.median_ndvi_delta);
+    $("flags").textContent=fmt(v.flagged_pixel_count);
+    $("cells").textContent=fmt(v.features.length);
+    $("dates").textContent=v.acquisition_times.map(s=>s.slice(0,10)).join(" → ");
+    $("sceneList").innerHTML=v.scenes.map((s,i)=>"<p><code>"+safe(v.acquisition_times[i].slice(0,10))+"</code> — <code>"+safe(s)+"</code></p>").join("");
+    $("hash").textContent=v.derived_arrays_sha256;
+    $("dataState").textContent="Real observations · unvalidated";
+    render();
+  }catch(err){
+    $("dataState").textContent="Evidence not loaded";
+    $("empty").style.display="block";
+    $("empty").textContent="Observed-data artifact unavailable or invalid. No synthetic fallback. "+err.message;
+    $("mapNote").textContent="Source unavailable; do not infer missing observations are zero.";
+  }
+}
+init();
+</script>
+</body>
+</html>

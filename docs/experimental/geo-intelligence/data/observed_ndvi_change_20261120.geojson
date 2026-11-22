@@ -1,0 +1,4344 @@
+{
+  "type": "FeatureCollection",
+  "schema": "sbei.observed_ndvi_change.v1",
+  "verification_status": "observed_pixels_unvalidated_change",
+  "synthetic_data": false,
+  "source_provider": "Microsoft Planetary Computer / ESA Sentinel-2",
+  "collection": "sentinel-2-l2a",
+  "scenes": [
+    "S2B_MSIL2A_20241004T143749_R096_T19KEQ_20241004T183052",
+    "S2C_MSIL2A_20251014T143751_R096_T19KEQ_20251014T181516"
+  ],
+  "acquisition_times": [
+    "2024-10-04T14:37:49.024000Z",
+    "2025-10-14T14:37:51.025000Z"
+  ],
+  "s2_processing_baselines": [
+    "05.11",
+    "05.11"
+  ],
+  "boa_add_offset_dn": [
+    -1000,
+    -1000
+  ],
+  "quality_mask": "Sentinel-2 SCL excluded 0,1,3,8,9,10,11",
+  "spatial_reference": "EPSG:4326",
+  "bounding_box": [
+    -68.25,
+    -23.48,
+    -68.238,
+    -23.468
+  ],
+  "derived_arrays_sha256": "df9a0b021e4c076f4ec6ba1a9181d726cc8a1f39cc898d913d1fd6e3665380b2",
+  "processing_version": "ndvi-change-baseline-v1",
+  "analysis_method": "NDVI(after)-NDVI(before); fixed decline threshold, aggregated 8x8 pixels",
+  "threshold_ndvi_delta": -0.15,
+  "overlap_valid_pixels": 6512,
+  "total_grid_pixels": 9216,
+  "flagged_pixel_count": 0,
+  "median_ndvi_delta": -0.010174574771930473,
+  "independent_ground_truth": "not_available",
+  "model_performance": "not_evaluated",
+  "limitations": [
+    "Two scenes do not establish a temporal trend, causal event or resource extraction.",
+    "A fixed NDVI threshold is an illustrative heuristic, not a validated detector.",
+    "Seasonality, atmospheric conditions, terrain and residual cloud contamination may explain change.",
+    "Geographic preview grid resampling is not a field-accurate measurement.",
+    "Input checksum covers DERIVED arrays, not original ESA COG archive."
+  ],
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.25,
+              -23.469
+            ],
+            [
+              -68.249,
+              -23.469
+            ],
+            [
+              -68.249,
+              -23.468
+            ],
+            [
+              -68.25,
+              -23.468
+            ],
+            [
+              -68.25,
+              -23.469
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01174,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.249,
+              -23.469
+            ],
+            [
+              -68.248,
+              -23.469
+            ],
+            [
+              -68.248,
+              -23.468
+            ],
+            [
+              -68.249,
+              -23.468
+            ],
+            [
+              -68.249,
+              -23.469
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01035,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.248,
+              -23.469
+            ],
+            [
+              -68.247,
+              -23.469
+            ],
+            [
+              -68.247,
+              -23.468
+            ],
+            [
+              -68.248,
+              -23.468
+            ],
+            [
+              -68.248,
+              -23.469
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01117,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.247,
+              -23.469
+            ],
+            [
+              -68.246,
+              -23.469
+            ],
+            [
+              -68.246,
+              -23.468
+            ],
+            [
+              -68.247,
+              -23.468
+            ],
+            [
+              -68.247,
+              -23.469
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01046,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.246,
+              -23.469
+            ],
+            [
+              -68.245,
+              -23.469
+            ],
+            [
+              -68.245,
+              -23.468
+            ],
+            [
+              -68.246,
+              -23.468
+            ],
+            [
+              -68.246,
+              -23.469
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.00912,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.245,
+              -23.469
+            ],
+            [
+              -68.244,
+              -23.469
+            ],
+            [
+              -68.244,
+              -23.468
+            ],
+            [
+              -68.245,
+              -23.468
+            ],
+            [
+              -68.245,
+              -23.469
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01077,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.244,
+              -23.469
+            ],
+            [
+              -68.243,
+              -23.469
+            ],
+            [
+              -68.243,
+              -23.468
+            ],
+            [
+              -68.244,
+              -23.468
+            ],
+            [
+              -68.244,
+              -23.469
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.00944,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.243,
+              -23.469
+            ],
+            [
+              -68.242,
+              -23.469
+            ],
+            [
+              -68.242,
+              -23.468
+            ],
+            [
+              -68.243,
+              -23.468
+            ],
+            [
+              -68.243,
+              -23.469
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01067,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.242,
+              -23.469
+            ],
+            [
+              -68.241,
+              -23.469
+            ],
+            [
+              -68.241,
+              -23.468
+            ],
+            [
+              -68.242,
+              -23.468
+            ],
+            [
+              -68.242,
+              -23.469
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.00972,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.241,
+              -23.469
+            ],
+            [
+              -68.24,
+              -23.469
+            ],
+            [
+              -68.24,
+              -23.468
+            ],
+            [
+              -68.241,
+              -23.468
+            ],
+            [
+              -68.241,
+              -23.469
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01043,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.24,
+              -23.469
+            ],
+            [
+              -68.239,
+              -23.469
+            ],
+            [
+              -68.239,
+              -23.468
+            ],
+            [
+              -68.24,
+              -23.468
+            ],
+            [
+              -68.24,
+              -23.469
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01064,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.239,
+              -23.469
+            ],
+            [
+              -68.238,
+              -23.469
+            ],
+            [
+              -68.238,
+              -23.468
+            ],
+            [
+              -68.239,
+              -23.468
+            ],
+            [
+              -68.239,
+              -23.469
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01042,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.25,
+              -23.47
+            ],
+            [
+              -68.249,
+              -23.47
+            ],
+            [
+              -68.249,
+              -23.469
+            ],
+            [
+              -68.25,
+              -23.469
+            ],
+            [
+              -68.25,
+              -23.47
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01134,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.249,
+              -23.47
+            ],
+            [
+              -68.248,
+              -23.47
+            ],
+            [
+              -68.248,
+              -23.469
+            ],
+            [
+              -68.249,
+              -23.469
+            ],
+            [
+              -68.249,
+              -23.47
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01117,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.248,
+              -23.47
+            ],
+            [
+              -68.247,
+              -23.47
+            ],
+            [
+              -68.247,
+              -23.469
+            ],
+            [
+              -68.248,
+              -23.469
+            ],
+            [
+              -68.248,
+              -23.47
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01063,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.247,
+              -23.47
+            ],
+            [
+              -68.246,
+              -23.47
+            ],
+            [
+              -68.246,
+              -23.469
+            ],
+            [
+              -68.247,
+              -23.469
+            ],
+            [
+              -68.247,
+              -23.47
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01163,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.246,
+              -23.47
+            ],
+            [
+              -68.245,
+              -23.47
+            ],
+            [
+              -68.245,
+              -23.469
+            ],
+            [
+              -68.246,
+              -23.469
+            ],
+            [
+              -68.246,
+              -23.47
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.0109,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.245,
+              -23.47
+            ],
+            [
+              -68.244,
+              -23.47
+            ],
+            [
+              -68.244,
+              -23.469
+            ],
+            [
+              -68.245,
+              -23.469
+            ],
+            [
+              -68.245,
+              -23.47
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.0114,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.244,
+              -23.47
+            ],
+            [
+              -68.243,
+              -23.47
+            ],
+            [
+              -68.243,
+              -23.469
+            ],
+            [
+              -68.244,
+              -23.469
+            ],
+            [
+              -68.244,
+              -23.47
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01043,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.243,
+              -23.47
+            ],
+            [
+              -68.242,
+              -23.47
+            ],
+            [
+              -68.242,
+              -23.469
+            ],
+            [
+              -68.243,
+              -23.469
+            ],
+            [
+              -68.243,
+              -23.47
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01051,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.242,
+              -23.47
+            ],
+            [
+              -68.241,
+              -23.47
+            ],
+            [
+              -68.241,
+              -23.469
+            ],
+            [
+              -68.242,
+              -23.469
+            ],
+            [
+              -68.242,
+              -23.47
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01005,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.241,
+              -23.47
+            ],
+            [
+              -68.24,
+              -23.47
+            ],
+            [
+              -68.24,
+              -23.469
+            ],
+            [
+              -68.241,
+              -23.469
+            ],
+            [
+              -68.241,
+              -23.47
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 49,
+        "median_ndvi_delta": -0.01114,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.24,
+              -23.47
+            ],
+            [
+              -68.239,
+              -23.47
+            ],
+            [
+              -68.239,
+              -23.469
+            ],
+            [
+              -68.24,
+              -23.469
+            ],
+            [
+              -68.24,
+              -23.47
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 42,
+        "median_ndvi_delta": -0.01142,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.239,
+              -23.47
+            ],
+            [
+              -68.238,
+              -23.47
+            ],
+            [
+              -68.238,
+              -23.469
+            ],
+            [
+              -68.239,
+              -23.469
+            ],
+            [
+              -68.239,
+              -23.47
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 62,
+        "median_ndvi_delta": -0.01139,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.25,
+              -23.471
+            ],
+            [
+              -68.249,
+              -23.471
+            ],
+            [
+              -68.249,
+              -23.47
+            ],
+            [
+              -68.25,
+              -23.47
+            ],
+            [
+              -68.25,
+              -23.471
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01093,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.249,
+              -23.471
+            ],
+            [
+              -68.248,
+              -23.471
+            ],
+            [
+              -68.248,
+              -23.47
+            ],
+            [
+              -68.249,
+              -23.47
+            ],
+            [
+              -68.249,
+              -23.471
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.0108,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.248,
+              -23.471
+            ],
+            [
+              -68.247,
+              -23.471
+            ],
+            [
+              -68.247,
+              -23.47
+            ],
+            [
+              -68.248,
+              -23.47
+            ],
+            [
+              -68.248,
+              -23.471
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.0093,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.247,
+              -23.471
+            ],
+            [
+              -68.246,
+              -23.471
+            ],
+            [
+              -68.246,
+              -23.47
+            ],
+            [
+              -68.247,
+              -23.47
+            ],
+            [
+              -68.247,
+              -23.471
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01051,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.246,
+              -23.471
+            ],
+            [
+              -68.245,
+              -23.471
+            ],
+            [
+              -68.245,
+              -23.47
+            ],
+            [
+              -68.246,
+              -23.47
+            ],
+            [
+              -68.246,
+              -23.471
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.00959,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.245,
+              -23.471
+            ],
+            [
+              -68.244,
+              -23.471
+            ],
+            [
+              -68.244,
+              -23.47
+            ],
+            [
+              -68.245,
+              -23.47
+            ],
+            [
+              -68.245,
+              -23.471
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01063,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.244,
+              -23.471
+            ],
+            [
+              -68.243,
+              -23.471
+            ],
+            [
+              -68.243,
+              -23.47
+            ],
+            [
+              -68.244,
+              -23.47
+            ],
+            [
+              -68.244,
+              -23.471
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.00953,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.243,
+              -23.471
+            ],
+            [
+              -68.242,
+              -23.471
+            ],
+            [
+              -68.242,
+              -23.47
+            ],
+            [
+              -68.243,
+              -23.47
+            ],
+            [
+              -68.243,
+              -23.471
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.0097,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.242,
+              -23.471
+            ],
+            [
+              -68.241,
+              -23.471
+            ],
+            [
+              -68.241,
+              -23.47
+            ],
+            [
+              -68.242,
+              -23.47
+            ],
+            [
+              -68.242,
+              -23.471
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 33,
+        "median_ndvi_delta": -0.01053,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.239,
+              -23.471
+            ],
+            [
+              -68.238,
+              -23.471
+            ],
+            [
+              -68.238,
+              -23.47
+            ],
+            [
+              -68.239,
+              -23.47
+            ],
+            [
+              -68.239,
+              -23.471
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 8,
+        "median_ndvi_delta": -0.00849,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.25,
+              -23.472
+            ],
+            [
+              -68.249,
+              -23.472
+            ],
+            [
+              -68.249,
+              -23.471
+            ],
+            [
+              -68.25,
+              -23.471
+            ],
+            [
+              -68.25,
+              -23.472
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01055,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.249,
+              -23.472
+            ],
+            [
+              -68.248,
+              -23.472
+            ],
+            [
+              -68.248,
+              -23.471
+            ],
+            [
+              -68.249,
+              -23.471
+            ],
+            [
+              -68.249,
+              -23.472
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.00993,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.248,
+              -23.472
+            ],
+            [
+              -68.247,
+              -23.472
+            ],
+            [
+              -68.247,
+              -23.471
+            ],
+            [
+              -68.248,
+              -23.471
+            ],
+            [
+              -68.248,
+              -23.472
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.00985,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.247,
+              -23.472
+            ],
+            [
+              -68.246,
+              -23.472
+            ],
+            [
+              -68.246,
+              -23.471
+            ],
+            [
+              -68.247,
+              -23.471
+            ],
+            [
+              -68.247,
+              -23.472
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.00898,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.246,
+              -23.472
+            ],
+            [
+              -68.245,
+              -23.472
+            ],
+            [
+              -68.245,
+              -23.471
+            ],
+            [
+              -68.246,
+              -23.471
+            ],
+            [
+              -68.246,
+              -23.472
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01019,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.245,
+              -23.472
+            ],
+            [
+              -68.244,
+              -23.472
+            ],
+            [
+              -68.244,
+              -23.471
+            ],
+            [
+              -68.245,
+              -23.471
+            ],
+            [
+              -68.245,
+              -23.472
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.00982,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.244,
+              -23.472
+            ],
+            [
+              -68.243,
+              -23.472
+            ],
+            [
+              -68.243,
+              -23.471
+            ],
+            [
+              -68.244,
+              -23.471
+            ],
+            [
+              -68.244,
+              -23.472
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.0096,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.243,
+              -23.472
+            ],
+            [
+              -68.242,
+              -23.472
+            ],
+            [
+              -68.242,
+              -23.471
+            ],
+            [
+              -68.243,
+              -23.471
+            ],
+            [
+              -68.243,
+              -23.472
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 54,
+        "median_ndvi_delta": -0.01012,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.242,
+              -23.472
+            ],
+            [
+              -68.241,
+              -23.472
+            ],
+            [
+              -68.241,
+              -23.471
+            ],
+            [
+              -68.242,
+              -23.471
+            ],
+            [
+              -68.242,
+              -23.472
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 3,
+        "median_ndvi_delta": -0.01,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.25,
+              -23.473
+            ],
+            [
+              -68.249,
+              -23.473
+            ],
+            [
+              -68.249,
+              -23.472
+            ],
+            [
+              -68.25,
+              -23.472
+            ],
+            [
+              -68.25,
+              -23.473
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01032,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.249,
+              -23.473
+            ],
+            [
+              -68.248,
+              -23.473
+            ],
+            [
+              -68.248,
+              -23.472
+            ],
+            [
+              -68.249,
+              -23.472
+            ],
+            [
+              -68.249,
+              -23.473
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01108,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.248,
+              -23.473
+            ],
+            [
+              -68.247,
+              -23.473
+            ],
+            [
+              -68.247,
+              -23.472
+            ],
+            [
+              -68.248,
+              -23.472
+            ],
+            [
+              -68.248,
+              -23.473
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.0104,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.247,
+              -23.473
+            ],
+            [
+              -68.246,
+              -23.473
+            ],
+            [
+              -68.246,
+              -23.472
+            ],
+            [
+              -68.247,
+              -23.472
+            ],
+            [
+              -68.247,
+              -23.473
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01057,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.246,
+              -23.473
+            ],
+            [
+              -68.245,
+              -23.473
+            ],
+            [
+              -68.245,
+              -23.472
+            ],
+            [
+              -68.246,
+              -23.472
+            ],
+            [
+              -68.246,
+              -23.473
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01062,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.245,
+              -23.473
+            ],
+            [
+              -68.244,
+              -23.473
+            ],
+            [
+              -68.244,
+              -23.472
+            ],
+            [
+              -68.245,
+              -23.472
+            ],
+            [
+              -68.245,
+              -23.473
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.0104,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.244,
+              -23.473
+            ],
+            [
+              -68.243,
+              -23.473
+            ],
+            [
+              -68.243,
+              -23.472
+            ],
+            [
+              -68.244,
+              -23.472
+            ],
+            [
+              -68.244,
+              -23.473
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.00929,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.243,
+              -23.473
+            ],
+            [
+              -68.242,
+              -23.473
+            ],
+            [
+              -68.242,
+              -23.472
+            ],
+            [
+              -68.243,
+              -23.472
+            ],
+            [
+              -68.243,
+              -23.473
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 27,
+        "median_ndvi_delta": -0.00818,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.239,
+              -23.473
+            ],
+            [
+              -68.238,
+              -23.473
+            ],
+            [
+              -68.238,
+              -23.472
+            ],
+            [
+              -68.239,
+              -23.472
+            ],
+            [
+              -68.239,
+              -23.473
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 2,
+        "median_ndvi_delta": -0.0073,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.25,
+              -23.474
+            ],
+            [
+              -68.249,
+              -23.474
+            ],
+            [
+              -68.249,
+              -23.473
+            ],
+            [
+              -68.25,
+              -23.473
+            ],
+            [
+              -68.25,
+              -23.474
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01104,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.249,
+              -23.474
+            ],
+            [
+              -68.248,
+              -23.474
+            ],
+            [
+              -68.248,
+              -23.473
+            ],
+            [
+              -68.249,
+              -23.473
+            ],
+            [
+              -68.249,
+              -23.474
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.00962,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.248,
+              -23.474
+            ],
+            [
+              -68.247,
+              -23.474
+            ],
+            [
+              -68.247,
+              -23.473
+            ],
+            [
+              -68.248,
+              -23.473
+            ],
+            [
+              -68.248,
+              -23.474
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.00954,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.247,
+              -23.474
+            ],
+            [
+              -68.246,
+              -23.474
+            ],
+            [
+              -68.246,
+              -23.473
+            ],
+            [
+              -68.247,
+              -23.473
+            ],
+            [
+              -68.247,
+              -23.474
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.00946,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.246,
+              -23.474
+            ],
+            [
+              -68.245,
+              -23.474
+            ],
+            [
+              -68.245,
+              -23.473
+            ],
+            [
+              -68.246,
+              -23.473
+            ],
+            [
+              -68.246,
+              -23.474
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.0101,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.245,
+              -23.474
+            ],
+            [
+              -68.244,
+              -23.474
+            ],
+            [
+              -68.244,
+              -23.473
+            ],
+            [
+              -68.245,
+              -23.473
+            ],
+            [
+              -68.245,
+              -23.474
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01035,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.244,
+              -23.474
+            ],
+            [
+              -68.243,
+              -23.474
+            ],
+            [
+              -68.243,
+              -23.473
+            ],
+            [
+              -68.244,
+              -23.473
+            ],
+            [
+              -68.244,
+              -23.474
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 58,
+        "median_ndvi_delta": -0.00951,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.243,
+              -23.474
+            ],
+            [
+              -68.242,
+              -23.474
+            ],
+            [
+              -68.242,
+              -23.473
+            ],
+            [
+              -68.243,
+              -23.473
+            ],
+            [
+              -68.243,
+              -23.474
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 4,
+        "median_ndvi_delta": -0.01078,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.239,
+              -23.474
+            ],
+            [
+              -68.238,
+              -23.474
+            ],
+            [
+              -68.238,
+              -23.473
+            ],
+            [
+              -68.239,
+              -23.473
+            ],
+            [
+              -68.239,
+              -23.474
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 2,
+        "median_ndvi_delta": -0.009,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.25,
+              -23.475
+            ],
+            [
+              -68.249,
+              -23.475
+            ],
+            [
+              -68.249,
+              -23.474
+            ],
+            [
+              -68.25,
+              -23.474
+            ],
+            [
+              -68.25,
+              -23.475
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.00852,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.249,
+              -23.475
+            ],
+            [
+              -68.248,
+              -23.475
+            ],
+            [
+              -68.248,
+              -23.474
+            ],
+            [
+              -68.249,
+              -23.474
+            ],
+            [
+              -68.249,
+              -23.475
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.00979,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.248,
+              -23.475
+            ],
+            [
+              -68.247,
+              -23.475
+            ],
+            [
+              -68.247,
+              -23.474
+            ],
+            [
+              -68.248,
+              -23.474
+            ],
+            [
+              -68.248,
+              -23.475
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.00888,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.247,
+              -23.475
+            ],
+            [
+              -68.246,
+              -23.475
+            ],
+            [
+              -68.246,
+              -23.474
+            ],
+            [
+              -68.247,
+              -23.474
+            ],
+            [
+              -68.247,
+              -23.475
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.00846,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.246,
+              -23.475
+            ],
+            [
+              -68.245,
+              -23.475
+            ],
+            [
+              -68.245,
+              -23.474
+            ],
+            [
+              -68.246,
+              -23.474
+            ],
+            [
+              -68.246,
+              -23.475
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01004,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.245,
+              -23.475
+            ],
+            [
+              -68.244,
+              -23.475
+            ],
+            [
+              -68.244,
+              -23.474
+            ],
+            [
+              -68.245,
+              -23.474
+            ],
+            [
+              -68.245,
+              -23.475
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01031,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.244,
+              -23.475
+            ],
+            [
+              -68.243,
+              -23.475
+            ],
+            [
+              -68.243,
+              -23.474
+            ],
+            [
+              -68.244,
+              -23.474
+            ],
+            [
+              -68.244,
+              -23.475
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 59,
+        "median_ndvi_delta": -0.00924,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.243,
+              -23.475
+            ],
+            [
+              -68.242,
+              -23.475
+            ],
+            [
+              -68.242,
+              -23.474
+            ],
+            [
+              -68.243,
+              -23.474
+            ],
+            [
+              -68.243,
+              -23.475
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 63,
+        "median_ndvi_delta": -0.00951,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.242,
+              -23.475
+            ],
+            [
+              -68.241,
+              -23.475
+            ],
+            [
+              -68.241,
+              -23.474
+            ],
+            [
+              -68.242,
+              -23.474
+            ],
+            [
+              -68.242,
+              -23.475
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 50,
+        "median_ndvi_delta": -0.00988,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.241,
+              -23.475
+            ],
+            [
+              -68.24,
+              -23.475
+            ],
+            [
+              -68.24,
+              -23.474
+            ],
+            [
+              -68.241,
+              -23.474
+            ],
+            [
+              -68.241,
+              -23.475
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 41,
+        "median_ndvi_delta": -0.01042,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.24,
+              -23.475
+            ],
+            [
+              -68.239,
+              -23.475
+            ],
+            [
+              -68.239,
+              -23.474
+            ],
+            [
+              -68.24,
+              -23.474
+            ],
+            [
+              -68.24,
+              -23.475
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 33,
+        "median_ndvi_delta": -0.00967,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.239,
+              -23.475
+            ],
+            [
+              -68.238,
+              -23.475
+            ],
+            [
+              -68.238,
+              -23.474
+            ],
+            [
+              -68.239,
+              -23.474
+            ],
+            [
+              -68.239,
+              -23.475
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 39,
+        "median_ndvi_delta": -0.0091,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.25,
+              -23.476
+            ],
+            [
+              -68.249,
+              -23.476
+            ],
+            [
+              -68.249,
+              -23.475
+            ],
+            [
+              -68.25,
+              -23.475
+            ],
+            [
+              -68.25,
+              -23.476
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 62,
+        "median_ndvi_delta": -0.00961,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.249,
+              -23.476
+            ],
+            [
+              -68.248,
+              -23.476
+            ],
+            [
+              -68.248,
+              -23.475
+            ],
+            [
+              -68.249,
+              -23.475
+            ],
+            [
+              -68.249,
+              -23.476
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01013,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.248,
+              -23.476
+            ],
+            [
+              -68.247,
+              -23.476
+            ],
+            [
+              -68.247,
+              -23.475
+            ],
+            [
+              -68.248,
+              -23.475
+            ],
+            [
+              -68.248,
+              -23.476
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.00971,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.247,
+              -23.476
+            ],
+            [
+              -68.246,
+              -23.476
+            ],
+            [
+              -68.246,
+              -23.475
+            ],
+            [
+              -68.247,
+              -23.475
+            ],
+            [
+              -68.247,
+              -23.476
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01008,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.246,
+              -23.476
+            ],
+            [
+              -68.245,
+              -23.476
+            ],
+            [
+              -68.245,
+              -23.475
+            ],
+            [
+              -68.246,
+              -23.475
+            ],
+            [
+              -68.246,
+              -23.476
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01063,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.245,
+              -23.476
+            ],
+            [
+              -68.244,
+              -23.476
+            ],
+            [
+              -68.244,
+              -23.475
+            ],
+            [
+              -68.245,
+              -23.475
+            ],
+            [
+              -68.245,
+              -23.476
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01103,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.244,
+              -23.476
+            ],
+            [
+              -68.243,
+              -23.476
+            ],
+            [
+              -68.243,
+              -23.475
+            ],
+            [
+              -68.244,
+              -23.475
+            ],
+            [
+              -68.244,
+              -23.476
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.00968,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.243,
+              -23.476
+            ],
+            [
+              -68.242,
+              -23.476
+            ],
+            [
+              -68.242,
+              -23.475
+            ],
+            [
+              -68.243,
+              -23.475
+            ],
+            [
+              -68.243,
+              -23.476
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.00938,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.242,
+              -23.476
+            ],
+            [
+              -68.241,
+              -23.476
+            ],
+            [
+              -68.241,
+              -23.475
+            ],
+            [
+              -68.242,
+              -23.475
+            ],
+            [
+              -68.242,
+              -23.476
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.0099,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.241,
+              -23.476
+            ],
+            [
+              -68.24,
+              -23.476
+            ],
+            [
+              -68.24,
+              -23.475
+            ],
+            [
+              -68.241,
+              -23.475
+            ],
+            [
+              -68.241,
+              -23.476
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01048,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.24,
+              -23.476
+            ],
+            [
+              -68.239,
+              -23.476
+            ],
+            [
+              -68.239,
+              -23.475
+            ],
+            [
+              -68.24,
+              -23.475
+            ],
+            [
+              -68.24,
+              -23.476
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.00915,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.239,
+              -23.476
+            ],
+            [
+              -68.238,
+              -23.476
+            ],
+            [
+              -68.238,
+              -23.475
+            ],
+            [
+              -68.239,
+              -23.475
+            ],
+            [
+              -68.239,
+              -23.476
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01024,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.25,
+              -23.477
+            ],
+            [
+              -68.249,
+              -23.477
+            ],
+            [
+              -68.249,
+              -23.476
+            ],
+            [
+              -68.25,
+              -23.476
+            ],
+            [
+              -68.25,
+              -23.477
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 11,
+        "median_ndvi_delta": -0.01056,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.249,
+              -23.477
+            ],
+            [
+              -68.248,
+              -23.477
+            ],
+            [
+              -68.248,
+              -23.476
+            ],
+            [
+              -68.249,
+              -23.476
+            ],
+            [
+              -68.249,
+              -23.477
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 50,
+        "median_ndvi_delta": -0.01079,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.248,
+              -23.477
+            ],
+            [
+              -68.247,
+              -23.477
+            ],
+            [
+              -68.247,
+              -23.476
+            ],
+            [
+              -68.248,
+              -23.476
+            ],
+            [
+              -68.248,
+              -23.477
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01044,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.247,
+              -23.477
+            ],
+            [
+              -68.246,
+              -23.477
+            ],
+            [
+              -68.246,
+              -23.476
+            ],
+            [
+              -68.247,
+              -23.476
+            ],
+            [
+              -68.247,
+              -23.477
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.00947,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.246,
+              -23.477
+            ],
+            [
+              -68.245,
+              -23.477
+            ],
+            [
+              -68.245,
+              -23.476
+            ],
+            [
+              -68.246,
+              -23.476
+            ],
+            [
+              -68.246,
+              -23.477
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01096,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.245,
+              -23.477
+            ],
+            [
+              -68.244,
+              -23.477
+            ],
+            [
+              -68.244,
+              -23.476
+            ],
+            [
+              -68.245,
+              -23.476
+            ],
+            [
+              -68.245,
+              -23.477
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01088,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.244,
+              -23.477
+            ],
+            [
+              -68.243,
+              -23.477
+            ],
+            [
+              -68.243,
+              -23.476
+            ],
+            [
+              -68.244,
+              -23.476
+            ],
+            [
+              -68.244,
+              -23.477
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01022,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.243,
+              -23.477
+            ],
+            [
+              -68.242,
+              -23.477
+            ],
+            [
+              -68.242,
+              -23.476
+            ],
+            [
+              -68.243,
+              -23.476
+            ],
+            [
+              -68.243,
+              -23.477
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01023,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.242,
+              -23.477
+            ],
+            [
+              -68.241,
+              -23.477
+            ],
+            [
+              -68.241,
+              -23.476
+            ],
+            [
+              -68.242,
+              -23.476
+            ],
+            [
+              -68.242,
+              -23.477
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01004,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.241,
+              -23.477
+            ],
+            [
+              -68.24,
+              -23.477
+            ],
+            [
+              -68.24,
+              -23.476
+            ],
+            [
+              -68.241,
+              -23.476
+            ],
+            [
+              -68.241,
+              -23.477
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.00903,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.24,
+              -23.477
+            ],
+            [
+              -68.239,
+              -23.477
+            ],
+            [
+              -68.239,
+              -23.476
+            ],
+            [
+              -68.24,
+              -23.476
+            ],
+            [
+              -68.24,
+              -23.477
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01067,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.239,
+              -23.477
+            ],
+            [
+              -68.238,
+              -23.477
+            ],
+            [
+              -68.238,
+              -23.476
+            ],
+            [
+              -68.239,
+              -23.476
+            ],
+            [
+              -68.239,
+              -23.477
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.00965,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.248,
+              -23.478
+            ],
+            [
+              -68.247,
+              -23.478
+            ],
+            [
+              -68.247,
+              -23.477
+            ],
+            [
+              -68.248,
+              -23.477
+            ],
+            [
+              -68.248,
+              -23.478
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 3,
+        "median_ndvi_delta": -0.01408,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.247,
+              -23.478
+            ],
+            [
+              -68.246,
+              -23.478
+            ],
+            [
+              -68.246,
+              -23.477
+            ],
+            [
+              -68.247,
+              -23.477
+            ],
+            [
+              -68.247,
+              -23.478
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 11,
+        "median_ndvi_delta": -0.00889,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.246,
+              -23.478
+            ],
+            [
+              -68.245,
+              -23.478
+            ],
+            [
+              -68.245,
+              -23.477
+            ],
+            [
+              -68.246,
+              -23.477
+            ],
+            [
+              -68.246,
+              -23.478
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 26,
+        "median_ndvi_delta": -0.01067,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.245,
+              -23.478
+            ],
+            [
+              -68.244,
+              -23.478
+            ],
+            [
+              -68.244,
+              -23.477
+            ],
+            [
+              -68.245,
+              -23.477
+            ],
+            [
+              -68.245,
+              -23.478
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 44,
+        "median_ndvi_delta": -0.01013,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.244,
+              -23.478
+            ],
+            [
+              -68.243,
+              -23.478
+            ],
+            [
+              -68.243,
+              -23.477
+            ],
+            [
+              -68.244,
+              -23.477
+            ],
+            [
+              -68.244,
+              -23.478
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 56,
+        "median_ndvi_delta": -0.01047,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.243,
+              -23.478
+            ],
+            [
+              -68.242,
+              -23.478
+            ],
+            [
+              -68.242,
+              -23.477
+            ],
+            [
+              -68.243,
+              -23.477
+            ],
+            [
+              -68.243,
+              -23.478
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01065,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.242,
+              -23.478
+            ],
+            [
+              -68.241,
+              -23.478
+            ],
+            [
+              -68.241,
+              -23.477
+            ],
+            [
+              -68.242,
+              -23.477
+            ],
+            [
+              -68.242,
+              -23.478
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.00988,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.241,
+              -23.478
+            ],
+            [
+              -68.24,
+              -23.478
+            ],
+            [
+              -68.24,
+              -23.477
+            ],
+            [
+              -68.241,
+              -23.477
+            ],
+            [
+              -68.241,
+              -23.478
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01084,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.24,
+              -23.478
+            ],
+            [
+              -68.239,
+              -23.478
+            ],
+            [
+              -68.239,
+              -23.477
+            ],
+            [
+              -68.24,
+              -23.477
+            ],
+            [
+              -68.24,
+              -23.478
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01104,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.239,
+              -23.478
+            ],
+            [
+              -68.238,
+              -23.478
+            ],
+            [
+              -68.238,
+              -23.477
+            ],
+            [
+              -68.239,
+              -23.477
+            ],
+            [
+              -68.239,
+              -23.478
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.00983,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.243,
+              -23.479
+            ],
+            [
+              -68.242,
+              -23.479
+            ],
+            [
+              -68.242,
+              -23.478
+            ],
+            [
+              -68.243,
+              -23.478
+            ],
+            [
+              -68.243,
+              -23.479
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 4,
+        "median_ndvi_delta": -0.00977,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.242,
+              -23.479
+            ],
+            [
+              -68.241,
+              -23.479
+            ],
+            [
+              -68.241,
+              -23.478
+            ],
+            [
+              -68.242,
+              -23.478
+            ],
+            [
+              -68.242,
+              -23.479
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 45,
+        "median_ndvi_delta": -0.01027,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.241,
+              -23.479
+            ],
+            [
+              -68.24,
+              -23.479
+            ],
+            [
+              -68.24,
+              -23.478
+            ],
+            [
+              -68.241,
+              -23.478
+            ],
+            [
+              -68.241,
+              -23.479
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01035,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.24,
+              -23.479
+            ],
+            [
+              -68.239,
+              -23.479
+            ],
+            [
+              -68.239,
+              -23.478
+            ],
+            [
+              -68.24,
+              -23.478
+            ],
+            [
+              -68.24,
+              -23.479
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.00953,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.239,
+              -23.479
+            ],
+            [
+              -68.238,
+              -23.479
+            ],
+            [
+              -68.238,
+              -23.478
+            ],
+            [
+              -68.239,
+              -23.478
+            ],
+            [
+              -68.239,
+              -23.479
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.00973,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.242,
+              -23.48
+            ],
+            [
+              -68.241,
+              -23.48
+            ],
+            [
+              -68.241,
+              -23.479
+            ],
+            [
+              -68.242,
+              -23.479
+            ],
+            [
+              -68.242,
+              -23.48
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 6,
+        "median_ndvi_delta": -0.01062,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.241,
+              -23.48
+            ],
+            [
+              -68.24,
+              -23.48
+            ],
+            [
+              -68.24,
+              -23.479
+            ],
+            [
+              -68.241,
+              -23.479
+            ],
+            [
+              -68.241,
+              -23.48
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 61,
+        "median_ndvi_delta": -0.01121,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.24,
+              -23.48
+            ],
+            [
+              -68.239,
+              -23.48
+            ],
+            [
+              -68.239,
+              -23.479
+            ],
+            [
+              -68.24,
+              -23.479
+            ],
+            [
+              -68.24,
+              -23.48
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01093,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -68.239,
+              -23.48
+            ],
+            [
+              -68.238,
+              -23.48
+            ],
+            [
+              -68.238,
+              -23.479
+            ],
+            [
+              -68.239,
+              -23.479
+            ],
+            [
+              -68.239,
+              -23.48
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "valid_overlap_pixels": 64,
+        "median_ndvi_delta": -0.01017,
+        "heuristic_drop_pixels": 0,
+        "drop_fraction": 0.0,
+        "verification_status": "unverified_interpretation"
+      }
+    }
+  ],
+  "processed_utc": "2026-11-20T17:09:22.997013+00:00"
+}
