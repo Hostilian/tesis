@@ -71,6 +71,13 @@ footer{border-top:1px solid var(--edge);padding:.65rem 1.4rem;background:#0b141f
     <p>Sentinel-2 L2A surface reflectance; SCL masking; 96×96 EPSG:4326 preview. Both scenes must have valid pixels. Grid blocks aggregate 8×8 pixels; no farm or commercial coordinates.</p>
     <p><a href="https://planetarycomputer.microsoft.com/docs/" rel="noopener">Planetary Computer documentation</a> · <a href="https://dataspace.copernicus.eu/terms-and-conditions" rel="noopener">Copernicus data terms</a></p>
   </details>
+  <details open><summary>3D / God’s Eye View interoperability</summary>
+    <p>Import the same <strong>116 reviewed public Sentinel-2 observation cells</strong> into the original, locally hosted God’s Eye View Director. This is an <strong>MIT-compatible scene-bundle exchange</strong>, not an embedded God’s Eye application or a live anomaly feed.</p>
+    <p><a href="./gods-eye/sentinel2-observed-2024-2025.gevbundle.json" download="sentinel2-observed-2024-2025.gevbundle.json">Download verified 3D scene bundle (.gevbundle.json)</a></p>
+    <p>In <a href="https://github.com/bilawalsidhu/gods-eye-view" rel="noopener noreferrer" target="_blank">upstream God’s Eye View</a>, open <strong>Director → Authoring → Import</strong>, preview the bundle, and explicitly apply it. Choose the evidence overview shot and load it. No API key, payment, external message or private farm data is required for the bundle.</p>
+    <p><strong>Read this before interpreting:</strong> the polygons float at a fixed 6,500 m ellipsoid height for visual visibility, <em>not</em> observed ground elevation. Their NDVI values remain in the source GeoJSON; upstream renders all cells with its generic cyan geometry style. A 3D overlay is not a model classification or validation.</p>
+    <p><a href="./gods-eye/README.md">Export and scientific-use instructions</a> · <a href="https://github.com/bilawalsidhu/gods-eye-view/blob/main/docs/DIRECTOR-DATA-PACKS.md" rel="noopener noreferrer" target="_blank">Official pack specification</a></p>
+  </details>
 </aside>
 <section class="viewport" aria-label="Exploratory spatial change map">
   <div id="map" role="application" aria-label="Map of public Chile study area with observed NDVI differences"></div>
