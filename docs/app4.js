@@ -30,8 +30,7 @@ const academicChapters = {
         title: "Chapter 1: Introduction",
         sections: [
             { name: "1.1 Background & Motivation", text: "In the modern digital economy, information engineering has expanded beyond terrestrial borders. The rise of Earth Observation (EO) satellite constellations, coupled with cloud-based geospatial computing platforms, has birthed a new domain: Space-Based Economic Intelligence. Remote sensing offers continuous, independent, and spatially explicit alternatives to legacy statistical indicators." },
-            { name: "1.2 Problem Statement", text: "Translating raw, noisy, multi-spectral raster feeds into structured, actionable economic intelligence remains a critical engineering gap. Traditional geospatial analysis relies on localized human photo-interpretation which fails to scale to national or continental monitoring." },
-            { name: "1.3 Research Questions", text: "RQ1: How reliably can open satellite spectral APIs identify localized industrial and mining resource anomalies compared to ground truth records?<br>RQ2: What is the correlation between VIIRS night-time light fluctuations and macro/microeconomic indicators in the target regions?<br>RQ3: What pipeline latency and processing constraints limit the scalability of free satellite APIs for real-time economic monitoring?" }
+            { name: "1.2 Problem Statement", text: "Translating raw, noisy, multi-spectral raster feeds into structured, actionable economic intelligence remains a critical engineering gap. Traditional geospatial analysis relies on localized human photo-interpretation which fails to scale to national or continental monitoring." }
         ]
     },
     "2": {
