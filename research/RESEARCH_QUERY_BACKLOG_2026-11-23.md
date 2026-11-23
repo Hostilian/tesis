@@ -44,6 +44,10 @@ A real STAC item and accessible TIFF asset prove **source availability only**. A
 | SOIL-06 | How do official **SoilGrids** or ESA/JRC products compare as **baselines**, not ground-truth labels? | Compare map predictions to *independent observed lab measurements* | Circular validation against other modeled products | OPEN |
 | SOIL-07 | Can repeated, harmonized lab sampling plus satellite covariates detect credible **change in soil carbon**, not merely spatial differences? | Longitudinal matched measurements and error budget | Measurement noise exceeds expected change | OPEN |
 
+## 23 November venture triage — ranking completed (not commercial validation)
+
+A bounded source-checked [13-idea PyMCDM ranking](RANKED_SOIL_VENTURE_REVIEW_2026-11-23.md) compares the business and scientific feasibility of surface-change monitoring, soil evidence packs, soil sampling triage, orchard pigments, SOC mapping and other candidates. Full [machine-readable scores](venture_rankings/rank_results_20261123.json) and [reuse-first ranker code](venture_rankings/rank_soil_opportunities.py) are saved. ESA NAVISP/SOCBIO-MAP and Spacenus are **actual competitors**, not absent substitutes. Top rank is a hypothesis; paid evidence = none; 90% lab chemical agreement = not established. Future queries below remain OPEN.
+
 ## Track C — research-to-product and original economics (deferred)
 
 | ID | Exact future research query / validation task | Test or decision | Status |
