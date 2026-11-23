@@ -26,6 +26,12 @@ A futuristic, dark-space GIS monitoring console acting as the Decision Support S
 
 ---
 
+## Research Questions and Statistical Consultation
+
+The [research questions and statistical validation webpage](https://hostilian.github.io/tesis/research-questions.html) and [consultation research note](research/STATISTICS_CONSULTATION_2026-11-23.md) record the three **existing** thesis research questions, eight actionable questions for statistical advice, an optional Portugal/Alentejo research extension, a decision checklist, and the scientific evidence limits. These are planning documents: the public anomalies remain synthetic and no thesis-scope change is claimed to have been approved.
+
+---
+
 ## 📊 Evidence Status (19 November 2026)
 
 **This is an exploratory thesis demonstrator, not a validated satellite detection product.** The published JSON and run record explicitly identify a `mock_mode: true` execution. Sentinel-2 feature arrays remain synthetic even when the Earth Engine metadata request authenticates; monthly VIIRS values are also mock-generated.
