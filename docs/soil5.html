@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="SOIL-5: five coordinated research tracks and independently traceable public Sentinel-2 optical comparison. No soil chemistry or independent ground-change conclusions.">
+<link rel="canonical" href="https://hostilian.github.io/tesis/soil5.html">
+<title>SOIL-5 — Five-track soil research evidence | SBEI</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+*{box-sizing:border-box}
+body{background:#080e18;color:#e1eaf4;line-height:1.65;margin:0}
+main{max-width:1000px;padding:28px 22px 80px;margin:auto}
+nav{display:flex;flex-wrap:wrap;gap:14px 24px;border-bottom:1px solid #344052;padding:0 0 20px}
+a{color:#93d7fa;text-underline-offset:3px}a:hover{color:#e1f5ff}
+h1{font-size:clamp(30px,5vw,46px);letter-spacing:-.03em;line-height:1.13;margin:10px 0 16px}
+h2{font-size:22px;margin:42px 0 12px}
+h3{font-size:17px;margin:0 0 7px}
+p{margin:0 0 12px}
+.muted{color:#b5c5d8}.tiny{font-size:13px}.overline{text-transform:uppercase;letter-spacing:.13em;color:#acbdd2;font-size:12px;font-weight:700;margin-top:36px}
+.lead{font-size:18px;max-width:850px;color:#c2d0df}
+.notice{border-left:3px solid #ccae6f;background:#1b1a20;padding:14px 17px;margin:25px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:20px 0}
+.card{border:1px solid #354659;border-radius:9px;padding:16px}
+.label{color:#afc1d5;font-size:13px}
+.num{font-size:27px;font-weight:650;letter-spacing:-.03em}
+.row{display:grid;grid-template-columns:70px 1fr;gap:16px;padding:20px 0;border-bottom:1px solid #304152}
+.id{color:#b6cadb;font-size:13px;font-weight:700}
+.status{display:inline-block;font-size:12px;border:1px solid #567184;border-radius:25px;padding:2px 10px;color:#c2d3e1}
+.status.warn{border-color:#775d4b;color:#e6bd9a}
+blockquote{margin:16px 0;padding-left:16px;border-left:2px solid #8ac8d6;color:#bed1e4}
+footer{border-top:1px solid #344052;margin-top:45px;padding-top:20px;color:#a7b8cc;font-size:13px}
+@media(max-width:580px){main{padding:20px 16px 65px}.row{grid-template-columns:58px 1fr;gap:10px}.lead{font-size:16px}}
+</style>
+</head>
+<body>
+<main>
+<nav><a href="index.html">Dashboard</a><a href="research-questions.html">Thesis research questions</a><a href="evidence.html">Evidence status</a><a href="https://github.com/Hostilian/tesis/blob/main/research/SOIL_FIVE_TRACK_PROGRAM_2026-11-23.md">Research plan</a></nav>
+<p class="overline">Research programme · 23 November 2026 · Public evidence</p>
+<h1>SOIL-5: five linked soil investigations</h1>
+<p class="lead">One reusable, laptop-scale Earth-observation evidence pipeline. Five independently falsifiable applications. Eight earlier candidates remain available for future research.</p>
+<div class="notice"><strong>Research integrity:</strong> We have verified open Sentinel-2 pixel access and a two-date optical calculation, <strong>not</strong> soil sealing, erosion, sample savings, chemical concentrations, 90% laboratory agreement, or customer willingness to pay. This is not an approved change to the registered thesis.</div>
+<h2 id="tracks">The five active tracks</h2>
+<section class="row"><div class="id">SOIL-01</div><div><h3>EU Soil Evidence Pack</h3><p>A reviewable case file with source scene IDs, dates, image quality, permitted source links, optional field references and clear uncertainty. <span class="status">Source proof; report design open</span></p><p class="muted tiny">Buyer evidence: none. Competes with free Copernicus / QGIS reporting.</p></div></section>
+<section class="row"><div class="id">SOIL-02</div><div><h3>Surface sealing and removal change audit</h3><p>Compare real before/after imagery and flag optical change candidates for independent human checking. <span class="status">Two-date optical preview done</span></p><p class="muted tiny">Zero independently verified sealing/removal cases. Existing Copernicus imperviousness products are the baseline.</p></div></section>
+<section class="row"><div class="id">SOIL-03</div><div><h3>Soil sampling priority</h3><p>Prioritize where in-person and laboratory sampling is most informative at a fixed sampling budget. <span class="status warn">No lab labels; evaluation pending</span></p><p class="muted tiny">Benchmark against random, uniform grid and current professional practice; never claim reduced sampling without measurement.</p></div></section>
+<section class="row"><div class="id">SOIL-04</div><div><h3>Bare-soil and erosion exposure</h3><p>Flag changing vegetation cover or exposed surface using real optical features, rather than pretending to measure soil mass loss. <span class="status">Real indices; no erosion labels</span></p><p class="muted tiny">Seasonal harvest, fire, vegetation and moisture can cause false positives.</p></div></section>
+<section class="row"><div class="id">SOIL-05</div><div><h3>pH / nitrogen / phosphorus / potassium laboratory challenge</h3><p>Explicitly test whether satellite data plus other covariates can predict any property within a meaningful independently verified tolerance. <span class="status warn">Not laboratory-equivalent</span></p><p class="muted tiny">Optical satellites do not directly assay soil pH or nutrients. Genuine lab samples, independent regions and error limits are prerequisites.</p></div></section>
+<h2 id="real-evidence">Observed two-date optical preview</h2>
+<p>These are source measurements from one bounded public Alentejo area (not proprietary farms). The source observations were processed with PySTAC Client, Planetary Computer and rasterio, with scene classification QA applied.</p>
+<div class="grid">
+<div class="card"><p class="label">First observation</p><div class="num">12 Jul 2024</div><p class="label">Median NDVI: 0.233</p></div>
+<div class="card"><p class="label">Second observation</p><div class="num">27 Jun 2025</div><p class="label">Median NDVI: 0.262</p></div>
+<div class="card"><p class="label">Median pixel NDVI difference</p><div class="num">+0.0250</div><p class="label">Not a physical change rate</p></div>
+<div class="card"><p class="label">Median Bare Soil Index difference</p><div class="num">−0.0252</div><p class="label">Not erosion or soil chemistry</p></div>
+</div>
+<p><strong>QA retained 9,216 resampled overlapping grid cells</strong>; 21 cells exceeded an exploratory absolute NDVI-difference threshold of 0.15. These cells are spatially correlated and should never be counted as independent study sites. The acquisition dates are approximately 15 calendar days apart between years.</p>
+<p class="tiny"><a href="data/observed_alentejo_soil5_pair_20261123.json">Complete scene IDs, exact values and SHA-256 provenance</a> · <a href="https://github.com/Hostilian/tesis/blob/main/research/prototypes/soil_surface_pair_public_preview.py">Reproducible paired-image reader</a> · <a href="data/observed_alentejo_rededge_20261123.json">Separate red-edge proof</a></p>
+<h2 id="next">Scientific and business validation gates</h2>
+<div class="row"><div class="id">1</div><div><h3>Independent change truth</h3><p>Compare the candidate surface flags with independently dated and permitted field or aerial reference imagery, reporting precision, recall and false alarms across separate sites.</p></div></div>
+<div class="row"><div class="id">2</div><div><h3>Actual soil laboratory samples</h3><p>Only after lawful access: sample depth, date, method and real analyte values. Hold out entire sites or regions. No modelled SoilGrids values masquerading as ground truth.</p></div></div>
+<div class="row"><div class="id">3</div><div><h3>Existing substitutes and buyers</h3><p>Check exact CLMS, QGIS, ESA sampling projects and existing soil consultancies. Identify a named buyer and measurable workflow advantage before claiming a saleable business.</p></div></div>
+<div class="row"><div class="id">4</div><div><h3>Supervisor review</h3><p>Preserve the three registered Informatics thesis questions until explicitly approved. The five SOIL-5 tracks are research candidates, not registered replacement questions.</p></div></div>
+<h2 id="parked">Eight other ideas preserved</h2>
+<p class="muted">Water pigments and bloom QA; habitat/phenology; standalone lab-sample provenance; almond chlorophyll and nitrogen calibration; surface moisture; salinity risk; unsampled-region soil organic carbon mapping; and biochemical economic forecasting. All remain recorded in the <a href="https://github.com/Hostilian/tesis/blob/main/research/RANKED_SOIL_VENTURE_REVIEW_2026-11-23.md">13-candidate ranking</a> and <a href="https://github.com/Hostilian/tesis/blob/main/research/RESEARCH_QUERY_BACKLOG_2026-11-23.md">validation backlog</a>.</p>
+<p><a href="https://github.com/Hostilian/tesis/blob/main/research/SOIL_FIVE_EXECUTION_PROMPTS_2026-11-23.md">Execution and independent-review prompt pack</a> · <a href="https://github.com/Hostilian/tesis/blob/main/research/venture_rankings/rank_results_20261123.json">Reproducible ranked scores</a></p>
+<footer>Space-Based Economic Intelligence · Research feasibility record · All images and measurements are public-source candidates; no proprietary farm data, laboratory reports, customer information or unverified chemistry claims were published.</footer>
+</main>
+</body>
+</html>
