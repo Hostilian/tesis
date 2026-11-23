@@ -91,7 +91,7 @@ Potential independent comparisons: authorized Sentinel-2 time series; Sentinel-1
 
 **Not yet recorded.** No meeting outcome or advice is asserted here. Add dated notes *after* the consultation, distinguishing professor suggestions from supervisor-approved thesis changes. Do not include private farm or identity records.
 
-**Public webpage:** [Research questions & statistical validation](../docs/research-questions.html)  
+**Archived former public page (no longer deployed on GitHub Pages):** [Research questions & statistical validation](archive/research-questions-page-2026-11-23.html)  
 **Related methodology:** [THESIS_VALIDATION_GAPS.md](../THESIS_VALIDATION_GAPS.md)
 
 **Additional candidate research branch (not approved):** [Satellite biochemistry, biology, open-source landscape and OMEGA market validation](BIOCHEM_EO_MARKET_AND_VALIDATION_2026-11-23.md).
