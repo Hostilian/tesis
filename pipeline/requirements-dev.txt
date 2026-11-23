@@ -5,6 +5,8 @@
 # Testing
 pytest==9.1.1
 pytest-cov==6.2.1
+# Starlette >=1.2 uses httpx2 for FastAPI TestClient (separate from httpx).
+httpx2==2.16.2
 
 # Code Quality & Formatting
 black==24.10.0
