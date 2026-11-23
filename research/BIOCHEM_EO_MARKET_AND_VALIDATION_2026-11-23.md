@@ -42,6 +42,8 @@ Source: [thesis introduction](../thesis/chapters/01_introduction.md). The [stati
 
 ## 3. Source-code audit against the proposed biochemical use
 
+**23 November addendum — successful public real-pixel red-edge preview:** The separate [reproducible pilot](prototypes/rededge_real_pixel_preview.py) read an actual public Alentejo Sentinel-2B scene's B05/B06/B07/B8A spectral assets (plus B04/B08/SCL). The signed COG images yielded **9,216 quality-masked analysis-grid pixels**, median **NDRE 0.2127** and **NDVI 0.2621**; [proof JSON](../docs/data/observed_alentejo_rededge_20261123.json) records the source scene and checksum. This validates source availability and spectral-index arithmetic, **not independently measured leaf chlorophyll/nitrogen**, and does not modify the main production ingestion route. The data come from an unspecified public Alentejo sampling window, not proprietary farm information.
+
 **Observed code**, inspected 23 November 2026: [Planetary Computer live pixel reader](../pipeline/planetary_observation.py) uses mapping B02, B03, B04, B08, B11 and scene classification (SCL), reading a bounded 96x96 real-pixel preview. It **does not currently ingest red-edge B05, B06, B07, or a calibrated foliar assay**; it does not have time-series reference-label evaluation.
 
 - Keep the existing fail-closed source reader and synthetic demo separate.
