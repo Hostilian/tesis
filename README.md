@@ -32,6 +32,8 @@ The [research questions and statistical validation webpage](https://hostilian.gi
 
 The [independently sourced satellite biochemistry and market-validation screening](research/BIOCHEM_EO_MARKET_AND_VALIDATION_2026-11-23.md) compares orchard pigment/nitrogen proxies, soil carbon, aquatic pigments, ecosystem phenology, atmospheric chemistry and a strictly hypothetical financial-data angle using the existing VenturaAtlas/OMEGA evidence gates. It is not a paid-market or scientific validation claim.
 
+The [future research and falsification backlog](research/RESEARCH_QUERY_BACKLOG_2026-11-23.md) preserves every plant-pigment, foliar nitrogen, soil chemistry, public-water, environmental-economics and buyer-verification query as an **unapproved open experiment**. A [public Alentejo Sentinel-2 red-edge sample](docs/data/observed_alentejo_rededge_20261123.json) and [reproducible index-only probe](research/prototypes/rededge_real_pixel_preview.py) now demonstrate **real optical pixel ingestion**, not chemical prediction or biological validation.
+
 ---
 
 ## 📊 Evidence Status (19 November 2026)
