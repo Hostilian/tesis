@@ -54,3 +54,9 @@ The repository identifies the existing thesis as **Space-Based Economic Intellig
 Original default and `index3.html`/`index4.html` are untouched. Previous work remains on historical shelf branches. Deleting this feature branch would not affect `main`, but preserve review commits and original scientifically incorrect preliminary outputs as history, clearly marked superseded.
 
 **References:** [ESA L2A processing-baseline radiometry](https://sentiwiki.copernicus.eu/web/s2-processing) · [CDSE Sentinel-2 baseline guidance](https://documentation.dataspace.copernicus.eu/APIs/SentinelHub/Data/S2L2A.html) · [Official STAC API](https://documentation.dataspace.copernicus.eu/APIs/STAC.html) · [Planetary Computer](https://planetarycomputer.microsoft.com/docs/).
+
+## Portugal / Europe geography addendum — 23 November 2026
+
+The **exact selected Candidate A research question above is unchanged**. Portugal/Alentejo is now the preferred **empirical public study context**, with independent European comparison deferred until source quality and sampling design are verified. Candidate B remains an **optional block-scale** agricultural feasibility assessment, not validated almond phenology or tree health. Candidate C remains the standards/integration engineering method and does not require sub-meter imagery.
+
+The existing real Sentinel-2 STAC reader was executed successfully on two **public, non-company** samples near Évora: a tile-transition diagnostic with only 3,684/9,216 three-date common-valid pixels, and a west-of-Évora same-tile pilot with 9,216/9,216 shared valid pixels across June 2024–2026. The latter is a source/QA milestone, **not** a crop/stress/economic event conclusion. See [Portugal/Europe feasibility, source IDs, and official datasets](PORTUGAL_EU_FEASIBILITY_AND_SCOPE_20261123.md). Scientific review and supervisor approval remain outstanding.

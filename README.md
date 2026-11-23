@@ -28,7 +28,9 @@ A futuristic, dark-space GIS monitoring console acting as the Decision Support S
 
 ## 📊 Evidence Status (19 November 2026)
 
-**This is an exploratory thesis demonstrator, not a validated satellite detection product.** The published JSON and run record explicitly identify a `mock_mode: true` execution. Sentinel-2 feature arrays remain synthetic even when the Earth Engine metadata request authenticates; monthly VIIRS values are also mock-generated.
+**This is an exploratory thesis demonstrator, not a validated satellite detection product.**
+
+> **23 NOV 2026 — PORTUGAL-FIRST RESEARCH BRANCH (NOT PRODUCTION):** Real public Sentinel-2 L2A scenes from an Alentejo sample west of Évora (June 2024/2025/2026) were acquired and independently repeated on the same 96×96 analysis grid: **9,216/9,216 common-valid sample cells**, derived-array digest reproduced. The experimental Leaflet interface now offers a Portugal 2025→2026 GeoJSON comparison and a separate Portuguese God’s Eye View bundle, while the Chile reference and original satellite-default/V3/V4 pages remain preserved. **These are real satellite-derived descriptive changes, NOT orchard health, economic anomaly, independent event validation or supervisor approval.** See [Portugal/Europe feasibility and source ledger](docs/research/PORTUGAL_EU_FEASIBILITY_AND_SCOPE_20261123.md) and [experimental viewer instructions](docs/experimental/geo-intelligence/README.md). This work is isolated from the published `main` website. The published JSON and run record explicitly identify a `mock_mode: true` execution. Sentinel-2 feature arrays remain synthetic even when the Earth Engine metadata request authenticates; monthly VIIRS values are also mock-generated.
 
 | Evidence item | Current status |
 |---|---|

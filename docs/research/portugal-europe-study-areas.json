@@ -1,0 +1,62 @@
+{
+  "schema": "sbei.public_europe_study_areas.v1",
+  "date": "2026-11-23",
+  "default_region": "portugal_evora_west",
+  "public_geography_only": true,
+  "publication_state": "experimental_branch_only",
+  "regions": [
+    {
+      "id": "portugal_evora_west",
+      "country": "Portugal",
+      "region": "Alentejo / west of Evora",
+      "bbox_epsg4326": [
+        -8.03,
+        38.53,
+        -8.018,
+        38.542
+      ],
+      "year_windows": [
+        "2024-06-01/2024-06-25",
+        "2025-06-01/2025-06-25",
+        "2026-06-01/2026-06-25"
+      ],
+      "sampling_grid": "96x96 EPSG:4326 resampled preview; not native 10m",
+      "three_scene_common_valid_pixels": 9216,
+      "three_scene_total_grid_pixels": 9216,
+      "verification_status": "real_public_pixels_event_interpretation_unvalidated",
+      "independent_ground_truth": "not_available",
+      "farm_orchard_identity": "unknown"
+    },
+    {
+      "id": "portugal_evora_border_diagnostic",
+      "country": "Portugal",
+      "region": "Alentejo / Evora near tile transition",
+      "bbox_epsg4326": [
+        -7.86,
+        38.52,
+        -7.848,
+        38.532
+      ],
+      "year_windows": [
+        "2024-06-01/2024-06-25",
+        "2025-06-01/2025-06-25",
+        "2026-06-01/2026-06-25"
+      ],
+      "three_scene_common_valid_pixels": 3684,
+      "three_scene_total_grid_pixels": 9216,
+      "verification_status": "quality_diagnostic_not_selected_for_interpretation",
+      "farm_orchard_identity": "unknown"
+    }
+  ],
+  "europe_comparator": {
+    "status": "not_yet_selected_or_queried",
+    "region_candidates": [
+      "Portugal second independent site",
+      "Czechia",
+      "Spain"
+    ],
+    "reason": "Pre-register source quality and independent sampling design first."
+  },
+  "approved_thesis_title_change": false,
+  "supervisor_scope_confirmation": "pending"
+}

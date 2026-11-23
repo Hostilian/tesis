@@ -40,3 +40,22 @@ A full test run on the authorized Windows laptop reported **102 passed** (20 Nov
 Read [ADR](../../research/ADR-THESIS-CONVERGENCE-20261120.md), [license-aware catalog](../../research/OPEN_SOURCE_REUSE_CATALOG_20261120.md) and [ESA processing-baseline documentation](https://sentiwiki.copernicus.eu/web/s2-processing).
 
 Rollback: no production deploy has occurred. The baseline `main@feed5e6` and `preserve/main-20261120-feed5e6` remain untouched; new commits are only on the isolated operation branch.
+
+## Portugal-first extension — 23 November 2026 (isolated branch only)
+
+The **default experimental preview** now displays the public west-of-Évora 2025→2026 Sentinel-2 NDVI comparison. Use its **Public research area** selector to return to the preserved Chile 2024→2025 experiment. The official satellite default website and V3/V4 are not modified.
+
+- Public derived 2D input: [Portugal/Alentejo GeoJSON](data/portugal_alentejo_ndvi_change_20261123.geojson), generated with the original `pipeline.observed_change` and reviewed for approved public research properties.
+- Public derived 3D output: [Portugal God's Eye View Director scene bundle](gods-eye/sentinel2-portugal-alentejo-2025-2026.gevbundle.json), generated with the pre-existing `pipeline.gods_eye_bridge` after adding a **strictly pinned** second public source. Upstream parser verification is separate from actual browser/terrain rendering.
+- The **2025-06-07 and 2026-06-19** source scenes are both tile `T29SNC`; pair overlap **9,216/9,216**, 144 spatial summary cells; median ΔNDVI **−0.10986893628**. The heuristic threshold is **unvalidated**, and the grid is a resampled preview, **not** a parcel or individual-tree map.
+- An independent **2024/2025/2026** three-scene study in the same public extent also achieved 9,216/9,216 common-valid observations. Full private outputs stay under `research_private/`.
+- A separate near-tile-border pilot had only 3,684/9,216 common-valid pixels and is retained as a coverage-selection warning, not hidden.
+- Geographic/research limitations and official Portugal datasets: [Portugal/Europe feasibility and source ledger](../../research/PORTUGAL_EU_FEASIBILITY_AND_SCOPE_20261123.md).
+
+```powershell
+python -m pipeline.gods_eye_bridge --region portugal
+node pipeline/tests/verify_gods_eye_upstream.mjs C:\\path\\to\\gods-eye-view portugal
+python -m pytest pipeline/tests/test_gods_eye_bridge.py pipeline/tests/test_portugal_europe_pilot.py -q --basetemp C:/writable/pytest-portugal
+```
+
+This does not establish farm identity, almond development stages, sensor or drone integration, economic causation, event ground truth, full God's Eye visual performance, or university approval.

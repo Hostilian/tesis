@@ -7,6 +7,7 @@ Only the repository's reviewed public 2024→2025 observation is eligible.
 
 from __future__ import annotations
 
+import argparse
 import base64
 import hashlib
 import json
@@ -23,13 +24,25 @@ ATTRIBUTION = {
 }
 PACK_PATH = "atlas/sentinel2-observed-2024-2025.geojson"
 DISPLAY_HEIGHT_METRES = 6500  # geometric illustration, NOT sensor altitude or land elevation
+PORTUGAL_SOURCE = ROOT / "docs/experimental/geo-intelligence/data/portugal_alentejo_ndvi_change_20261123.geojson"
+PORTUGAL_OUTPUT = ROOT / "docs/experimental/geo-intelligence/gods-eye/sentinel2-portugal-alentejo-2025-2026.gevbundle.json"
+PORTUGAL_PACK_PATH = "atlas/sentinel2-portugal-alentejo-2025-2026.geojson"
+PORTUGAL_PUBLIC_FILE_SHA256 = "da7319eba4ec0bf0287541dd2590d6951548492bacf8171a8b080e3cdf7ad1e5"
+PORTUGAL_SCENES = [
+    "S2B_MSIL2A_20250607T112109_R037_T29SNC_20250607T133245",
+    "S2A_MSIL2A_20260619T112131_R037_T29SNC_20260619T210258",
+]
+
 
 
 def checked_public_observation(source: Path = SOURCE) -> dict:
     """Fail closed rather than exporting unknown or potentially private data."""
-    if source.resolve() != SOURCE.resolve():
+    is_portugal = source.resolve() == PORTUGAL_SOURCE.resolve()
+    if source.resolve() != SOURCE.resolve() and not is_portugal:
         raise ValueError("Exporter accepts only the previously reviewed PUBLIC scene")
     raw = source.read_bytes()
+    if is_portugal and hashlib.sha256(raw).hexdigest() != PORTUGAL_PUBLIC_FILE_SHA256:
+        raise ValueError("Portugal public source bytes differ from the reviewed research export")
     if len(raw) > 8 * 1024 * 1024:
         raise ValueError("Source exceeds the upstream 8 MiB data-pack limit")
     record = json.loads(raw)
@@ -47,18 +60,39 @@ def checked_public_observation(source: Path = SOURCE) -> dict:
         and len(record["derived_arrays_sha256"]) == 64
         and len(record.get("scenes", [])) == 2
         and record.get("overlap_valid_pixels", 0) > 0
-        and record.get("acquisition_times", ["", ""])[0].startswith("2024-")
-        and record.get("acquisition_times", ["", ""])[1].startswith("2025-")
+        and record.get("acquisition_times", ["", ""])[0].startswith("2025-" if is_portugal else "2024-")
+        and record.get("acquisition_times", ["", ""])[1].startswith("2026-" if is_portugal else "2025-")
     ):
         raise ValueError("Source provenance or review gate failed")
     features = record.get("features")
     if not isinstance(features, list) or not (1 <= len(features) <= 2000):
         raise ValueError("Missing or oversized reviewed polygon features")
+    if is_portugal and not (
+        record.get("bounding_box") == [-8.03, 38.53, -8.018, 38.542]
+        and record.get("scenes") == PORTUGAL_SCENES
+        and record.get("overlap_valid_pixels") == 9216
+        and record.get("derived_arrays_sha256") == "89f27454c67a008f91304468d4d8fbae7dda1cd71fd08e2119492805c8b01ee7"
+        and len(features) == 144
+    ):
+        raise ValueError("Portugal public source provenance mismatch")
     return record
 
 
-def build_bundle(record: dict) -> dict:
-    """Use geographic polygons, finite values and explicit provenance labels."""
+def build_bundle(record: dict, *, region: str = "chile") -> dict:
+    """Export exactly one reviewed region; preserve historic Chile output."""
+    if region not in ("chile", "portugal"):
+        raise ValueError("Unknown approved public region")
+    if region == "portugal":
+        if record.get("bounding_box") != [-8.03, 38.53, -8.018, 38.542] or record.get("scenes") != PORTUGAL_SCENES:
+            raise ValueError("Portugal bundle must use the reviewed public observation")
+        pack_path = PORTUGAL_PACK_PATH
+        attribution = {**ATTRIBUTION, "text": "Contains modified public Copernicus Sentinel-2 (Portugal, 2025 and 2026) observations; Microsoft Planetary Computer STAC; not an evaluated crop condition"}
+        scene_id = "sbei-observed-portugal-sentinel2-2025-2026"
+        scene_title = "SBEI / Portugal · observed Sentinel-2 2025–2026 / interpretation unvalidated"
+    else:
+        pack_path, attribution = PACK_PATH, ATTRIBUTION
+        scene_id = "sbei-observed-sentinel2-2024-2025"
+        scene_title = "SBEI / observed Sentinel-2 2024–2025 / interpretation unvalidated"
     bbox = record["bounding_box"]
     if not (len(bbox) == 4 and all(math.isfinite(float(x)) for x in bbox)):
         raise ValueError("Missing valid bbox")
@@ -112,14 +146,14 @@ def build_bundle(record: dict) -> dict:
         raise ValueError("Encoded data pack exceeds upstream 8 MiB limit")
     digest = hashlib.sha256(asset).hexdigest()
     scene = {
-        "id": "sbei-observed-sentinel2-2024-2025",
-        "title": "SBEI / observed Sentinel-2 2024–2025 / interpretation unvalidated",
+        "id": scene_id,
+        "title": scene_title,
         "dataPacks": [{
             "id": "sbei-observed-pixels",
             "version": 1,
             "format": "geojson",
-            "source": {"adapter": "scene-bundle", "path": PACK_PATH},
-            "attribution": ATTRIBUTION,
+            "source": {"adapter": "scene-bundle", "path": pack_path},
+            "attribution": attribution,
             "placement": {"altitudeReference": "ellipsoid"},
             "byteLength": len(asset),
             "sha256": digest,
@@ -139,7 +173,7 @@ def build_bundle(record: dict) -> dict:
         "version": 1,
         "project": {"version": 7, "scenes": [scene]},
         "assets": [{
-            "path": PACK_PATH,
+            "path": pack_path,
             "mimeType": "application/geo+json",
             "base64": base64.b64encode(asset).decode("ascii"),
             "sha256": digest,
@@ -148,11 +182,19 @@ def build_bundle(record: dict) -> dict:
 
 
 def main() -> None:
-    record = checked_public_observation()
-    output = build_bundle(record)
-    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-    OUTPUT.write_text(json.dumps(output, indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
-    print(f"Generated {OUTPUT.relative_to(ROOT)} from reviewed public Sentinel-2 cells")
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--region", choices=("chile", "portugal"), default="chile")
+    args = parser.parse_args()
+    source = PORTUGAL_SOURCE if args.region == "portugal" else SOURCE
+    target = PORTUGAL_OUTPUT if args.region == "portugal" else OUTPUT
+    record = checked_public_observation(source)
+    output = build_bundle(record, region=args.region)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    encoded = json.dumps(output, indent=2, ensure_ascii=False) + "\n"
+    if target.exists() and target.read_text(encoding="utf-8") != encoded:
+        raise FileExistsError("Refusing to overwrite a different reviewed scene bundle")
+    target.write_text(encoded, encoding="utf-8", newline="\n")
+    print(f"Generated {target.relative_to(ROOT)} from reviewed public Sentinel-2 cells")
     print(f"features={len(record['features'])}; overlap_pixels={record['overlap_valid_pixels']}; "
           f"source_derived_sha256={record['derived_arrays_sha256']}")
     print("Research status: observed satellite changes; anomalies and economic causality UNVALIDATED")

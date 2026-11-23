@@ -50,9 +50,9 @@ footer{border-top:1px solid var(--edge);padding:.65rem 1.4rem;background:#0b141f
 </header>
 <main>
 <aside>
-  <p class="kicker">Scientific evidence / 01</p>
+  <p class="kicker">Portugal-first / public Earth observations</p>
   <h1>Observe change.<br>Question the signal.</h1>
-  <p class="desc">Two real Sentinel-2 Level-2A scenes, aligned and quality-masked. This workspace visualizes exploratory vegetation-index differences—not confirmed resource anomalies.</p>
+  <p class="desc">Compare public Alentejo observations with the preserved Chile reference using real Sentinel-2 Level-2A scenes. This research preview shows exploratory vegetation-index differences, never verified crop stress or resource anomalies.</p>
   <div class="truth" role="note"><strong>Unvalidated interpretation.</strong> Real pixels do not provide independent event labels. No detection accuracy, economic effect, causal explanation, or live monitoring is claimed.</div>
   <div class="inline"><span class="pill" id="dataState">Checking evidence</span><span class="overline" id="dates">Two-scene comparison</span></div>
   <div class="metrics" aria-live="polite">
@@ -60,6 +60,9 @@ footer{border-top:1px solid var(--edge);padding:.65rem 1.4rem;background:#0b141f
     <div class="metric"><span>Median Δ NDVI</span><strong id="median">—</strong></div>
     <div class="metric"><span>Heuristic drop flags</span><strong id="flags">—</strong></div>
     <div class="metric"><span>Summary cells</span><strong id="cells">—</strong></div>
+  </div>
+  <div class="control"><label for="area" class="overline">Public research area</label>
+    <select id="area"><option value="portugal" selected>Alentejo / west of Évora · Jun 2025–2026</option><option value="chile">Chile / historical comparison · Oct 2024–2025</option></select>
   </div>
   <div class="control"><label for="layer" class="overline">Display mode</label>
     <select id="layer"><option value="change">NDVI change · median per cell</option><option value="decline">Cells passing heuristic decline threshold</option></select>
@@ -69,23 +72,25 @@ footer{border-top:1px solid var(--edge);padding:.65rem 1.4rem;background:#0b141f
     <div class="overline">Source scenes</div><p id="sceneList">No observation file loaded.</p>
     <div class="overline">Derived array SHA-256</div><p><code id="hash">—</code></p>
     <p>Sentinel-2 L2A surface reflectance; SCL masking; 96×96 EPSG:4326 preview. Both scenes must have valid pixels. Grid blocks aggregate 8×8 pixels; no farm or commercial coordinates.</p>
+    <p><a href="../../research/PORTUGAL_EU_FEASIBILITY_AND_SCOPE_20261123.md">Portugal/Europe study scope, resolution limits and live source IDs</a></p>
     <p><a href="https://planetarycomputer.microsoft.com/docs/" rel="noopener">Planetary Computer documentation</a> · <a href="https://dataspace.copernicus.eu/terms-and-conditions" rel="noopener">Copernicus data terms</a></p>
   </details>
   <details open><summary>3D / God’s Eye View interoperability</summary>
-    <p>Import the same <strong>116 reviewed public Sentinel-2 observation cells</strong> into the original, locally hosted God’s Eye View Director. This is an <strong>MIT-compatible scene-bundle exchange</strong>, not an embedded God’s Eye application or a live anomaly feed.</p>
-    <p><a href="./gods-eye/sentinel2-observed-2024-2025.gevbundle.json" download="sentinel2-observed-2024-2025.gevbundle.json">Download verified 3D scene bundle (.gevbundle.json)</a></p>
+    <p>Export the selected public research region for local import into the original God’s Eye View Director. The <strong>Portugal export contains 144 reviewed derived cells</strong> and the preserved <strong>Chile reference contains 116</strong>. These are separate scenes; neither represents a live event or validated agricultural anomaly.</p>
+    <p><a href="./gods-eye/sentinel2-portugal-alentejo-2025-2026.gevbundle.json" download="sentinel2-portugal-alentejo-2025-2026.gevbundle.json">Portugal 2025–2026 · 144-cell 3D bundle</a></p>
+    <p><a href="./gods-eye/sentinel2-observed-2024-2025.gevbundle.json" download="sentinel2-observed-2024-2025.gevbundle.json">Chile reference 2024–2025 · 116-cell 3D bundle</a></p>
     <p>In <a href="https://github.com/bilawalsidhu/gods-eye-view" rel="noopener noreferrer" target="_blank">upstream God’s Eye View</a>, open <strong>Director → Authoring → Import</strong>, preview the bundle, and explicitly apply it. Choose the evidence overview shot and load it. No API key, payment, external message or private farm data is required for the bundle.</p>
-    <p><strong>Read this before interpreting:</strong> the polygons float at a fixed 6,500 m ellipsoid height for visual visibility, <em>not</em> observed ground elevation. Their NDVI values remain in the source GeoJSON; upstream renders all cells with its generic cyan geometry style. A 3D overlay is not a model classification or validation.</p>
+    <p><strong>Read this before interpreting:</strong> both bundles place polygons at a fixed 6,500 m ellipsoid height solely for visibility, <em>not</em> measured elevation. The original source GeoJSON preserves NDVI values and acquisition records; the upstream 3D renderer does not color-code those values. A 3D overlay is not an anomaly classifier.</p>
     <p><a href="./gods-eye/README.md">Export and scientific-use instructions</a> · <a href="https://github.com/bilawalsidhu/gods-eye-view/blob/main/docs/DIRECTOR-DATA-PACKS.md" rel="noopener noreferrer" target="_blank">Official pack specification</a></p>
   </details>
 </aside>
 <section class="viewport" aria-label="Exploratory spatial change map">
-  <div id="map" role="application" aria-label="Map of public Chile study area with observed NDVI differences"></div>
+  <div id="map" role="application" aria-label="Map of public Portugal or Chile study area with observed Sentinel-2 NDVI differences"></div>
   <div class="map-head"><span><i class="dot" aria-hidden="true"></i> OBSERVED S2 PIXELS / NOT EVENT-VALIDATED</span><span>EXPERIMENTAL 01</span></div>
   <div class="empty" id="empty" role="status"></div>
 </section>
 </main>
-<footer>Data: contains modified Copernicus Sentinel-2 observations (2024, 2025), accessed via Microsoft Planetary Computer. Cartography © OpenStreetMap contributors. Leaflet (BSD-2-Clause) reused from existing thesis site. There are no private Rota Única records here. Development preview; original satellite default is preserved.</footer>
+<footer>Data: contains modified public Copernicus Sentinel-2 observations, accessed via Microsoft Planetary Computer; selected acquisition dates, scene IDs and quality limits are shown in the evidence panel. Cartography © OpenStreetMap contributors. No private farm or Rota Única records. Isolated research preview; original satellite default is preserved.</footer>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 "use strict";
@@ -93,11 +98,15 @@ const $ = id => document.getElementById(id);
 const fmt = n => Number(n).toLocaleString("en-US");
 const signed = n => (n>0?"+":"") + Number(n).toFixed(4);
 const safe = s => String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const map = typeof L === "undefined" ? null : L.map("map",{scrollWheelZoom:false,zoomControl:true}).setView([-23.474,-68.244],15);
+const map = typeof L === "undefined" ? null : L.map("map",{scrollWheelZoom:false,zoomControl:true}).setView([38.536,-8.024],15);
 if(map){
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18,attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
 }
-let observed=null,gridLayer=null;
+let observed=null,gridLayer=null,requestVersion=0;
+const publicDatasets=Object.freeze({
+  portugal:"./data/portugal_alentejo_ndvi_change_20261123.geojson",
+  chile:"./data/observed_ndvi_change_20261120.geojson"
+});
 function color(v){
   if(v<=-.12)return "#e69d79";
   if(v<=-.04)return "#d8b395";
@@ -124,11 +133,19 @@ function render(){
 }
 $("layer").addEventListener("change",render);
 async function init(){
+  const version=++requestVersion;
+  observed=null;
+  if(map && gridLayer){map.removeLayer(gridLayer);gridLayer=null;}
+  $("usable").textContent=$("median").textContent=$("flags").textContent=$("cells").textContent="—";
+  $("dataState").textContent="Checking evidence";
   if(!map){$("dataState").textContent="Map library unavailable";$("empty").style.display="block";$("empty").textContent="Map dependency not loaded. No scientific results have been fabricated.";return;}
   try{
-    const response=await fetch("./data/observed_ndvi_change_20261120.geojson",{cache:"no-cache"});
+    const source=publicDatasets[$("area").value];
+    if(!source)throw Error("Unknown public research area");
+    const response=await fetch(source,{cache:"no-cache"});
     if(!response.ok)throw Error("Research file unavailable (HTTP "+response.status+")");
     const v=await response.json();
+    if(version!==requestVersion)return;
     if(v.type!=="FeatureCollection"||v.schema!=="sbei.observed_ndvi_change.v1"||v.synthetic_data!==false||v.verification_status!=="observed_pixels_unvalidated_change"||!Array.isArray(v.features)||!v.scenes?.length||!v.derived_arrays_sha256)throw Error("Source evidence schema invalid");
     observed=v;
     $("usable").textContent=fmt(v.overlap_valid_pixels);
@@ -141,12 +158,14 @@ async function init(){
     $("dataState").textContent="Real observations · unvalidated";
     render();
   }catch(err){
+    if(version!==requestVersion)return;
     $("dataState").textContent="Evidence not loaded";
     $("empty").style.display="block";
     $("empty").textContent="Observed-data artifact unavailable or invalid. No synthetic fallback. "+err.message;
     $("mapNote").textContent="Source unavailable; do not infer missing observations are zero.";
   }
 }
+$("area").addEventListener("change",init);
 init();
 </script>
 </body>

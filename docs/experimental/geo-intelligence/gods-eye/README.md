@@ -43,3 +43,9 @@ God's Eye's cinematic camera, military overlays, simulated traffic, AIS/ADS-B an
 ## Scientific work still needed
 
 Independent supervisor scope review; reproducible **three-scene common-mask** experiment; harmonization between Sentinel-2B/2C and different processing baselines; residual shadow and cloud sensitivity; independent event labels; uncertainty and validation; any economic interpretation. A passing parser test **does not** constitute validated imagery science or working live external service.
+
+## Portugal scene export (23 November 2026)
+
+The original Chile bundle above is preserved. A **separate, pinned, reviewed public Portugal/Alentejo** export is now available at `sentinel2-portugal-alentejo-2025-2026.gevbundle.json`. It carries **144 derived grid polygons** for 2025-06-07 → 2026-06-19; its data pack and scene title identify **Portugal**, not Chile. The unchanged experimental 2D quantitative GeoJSON is `../data/portugal_alentejo_ndvi_change_20261123.geojson`.
+
+Reproduce with `python -m pipeline.gods_eye_bridge --region portugal` and verify against a pinned original God's Eye checkout using `node pipeline/tests/verify_gods_eye_upstream.mjs PATH_TO_ORIGINAL_GEV portugal`. Existing no-argument exporter and verifier still target the historical Chile scene. Bundle geometry elevation (6,500 m ellipsoid) is display-only. No measured orchard height, tree location, stress signal, economic outcome or live feed is claimed. The review gate refuses unknown private source files and checks the SHA-256 of the approved Portugal public GeoJSON bytes.
