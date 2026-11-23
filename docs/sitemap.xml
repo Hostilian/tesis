@@ -36,4 +36,12 @@
     <priority>0.5</priority>
   </url>
 
+  <!-- Thesis research questions and consultation methodology -->
+  <url>
+    <loc>https://hostilian.github.io/tesis/research-questions.html</loc>
+    <lastmod>2026-11-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
 </urlset>
