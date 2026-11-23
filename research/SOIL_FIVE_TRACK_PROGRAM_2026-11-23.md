@@ -26,7 +26,7 @@ All tracks share one pipeline: public satellite imagery → scene provenance and
 
 ## Work packages
 
-**A. Paired optical pilot (SOIL-01/02/04):** Use two public real Sentinel-2 scenes in the same bounded test region. Retrieve with reproducible source IDs; align grid, mask shadows/cloud and calculate NDVI/visible-bare-surface change candidates. Clearly label output *observed spectral difference*, not verified soil sealing/removal or erosion. Export JSON/CSV candidate packet with checksums. No private field boundary needed.
+**A. Paired optical pilot (SOIL-01/02/04):** **COMPUTATIONAL PROOF EXECUTED 23 NOVEMBER.** The [public source receipt](../docs/data/observed_alentejo_soil5_pair_20261123.json) records two real scenes, aligned optical arrays, QC, ΔNDVI median +0.0250, ΔBSI median −0.0252, and no labels. The [script](prototypes/soil_surface_pair_public_preview.py) is committed. **Next**: independent dated ground imagery and a genuine candidate/reviewer dossier. Original protocol:  Use two public real Sentinel-2 scenes in the same bounded test region. Retrieve with reproducible source IDs; align grid, mask shadows/cloud and calculate NDVI/visible-bare-surface change candidates. Clearly label output *observed spectral difference*, not verified soil sealing/removal or erosion. Export JSON/CSV candidate packet with checksums. No private field boundary needed.
 
 **B. Evidence packet (SOIL-01):** Produce a self-contained static case packet with quality flags, scene lineage, exclusions, uncertainty, and human verification instructions. Benchmark against a human repeating the task using free CLMS/QGIS.
 
@@ -41,7 +41,7 @@ All tracks share one pipeline: public satellite imagery → scene provenance and
 | Gate | Required | Current |
 |---|---|---|
 | Public scene ingestion | Real COG with source IDs, pixel checksum | Passed for one red-edge Alentejo scene |
-| Paired surface comparison | Two real dates, common QA/CRS and source hashes | Pending |
+| Paired surface comparison | Two real dates, common QA/CRS and source hashes | **PASS for an optical candidate-only preview**; independent field verification absent |
 | Independently verified surface labels | Site-independent reference, false-alarm rate, confidence | Missing |
 | Independent soil laboratory values | Actual analyte, depth, sampling date, permitted coordinates | Missing |
 | 90% lab-equivalence | Predefined chemical tolerance and cross-region held-out proof | **Not established** |
