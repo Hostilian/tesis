@@ -36,6 +36,14 @@ The [re-ranked, source-checked 13-idea soil venture feasibility report](research
 
 ---
 
+## SOIL-5 coordinated experimental programme (23 November 2026)
+
+Five linked but independently falsifiable tracks are now active: **(1) Soil Evidence Pack, (2) Surface Sealing/Removal Audit, (3) Soil Sampling Priority, (4) Bare Soil/Erosion Exposure, (5) Analyte-specific pH/N/P/K laboratory-equivalence challenge**. Track 5 is explicitly an *unsupported chemical equivalence hypothesis* until lawfully acquired independent lab labels and outside-region testing exist. All eight other ranked candidates remain in the [original 13-idea review](research/RANKED_SOIL_VENTURE_REVIEW_2026-11-23.md), not discarded. See [SOIL-5 programme](research/SOIL_FIVE_TRACK_PROGRAM_2026-11-23.md) and [14 reusable execution/review prompts](research/SOIL_FIVE_EXECUTION_PROMPTS_2026-11-23.md).
+
+A [real public Sentinel-2 paired-scene preview](docs/data/observed_alentejo_soil5_pair_20261123.json) now compares 12 July 2024 and 27 June 2025 optical source scenes in a bounded Alentejo region, with **9,216 QA-masked analysis-grid cells**, median pixel-level ΔNDVI **+0.0250** and ΔBSI **−0.0252**. [Reproduce](research/prototypes/soil_surface_pair_public_preview.py). These values mean observable optical difference **only**; there is no ground-truth sealing, erosion, sample reduction, chemical prediction or government buyer validation.
+
+---
+
 ## 📊 Evidence Status (19 November 2026)
 
 **This is an exploratory thesis demonstrator, not a validated satellite detection product.** The published JSON and run record explicitly identify a `mock_mode: true` execution. Sentinel-2 feature arrays remain synthetic even when the Earth Engine metadata request authenticates; monthly VIIRS values are also mock-generated.
