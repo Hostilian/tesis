@@ -30,6 +30,8 @@ A futuristic, dark-space GIS monitoring console acting as the Decision Support S
 
 The [research questions and statistical validation webpage](https://hostilian.github.io/tesis/research-questions.html) and [consultation research note](research/STATISTICS_CONSULTATION_2026-11-23.md) record the three **existing** thesis research questions, eight actionable questions for statistical advice, an optional Portugal/Alentejo research extension, a decision checklist, and the scientific evidence limits. These are planning documents: the public anomalies remain synthetic and no thesis-scope change is claimed to have been approved.
 
+The [independently sourced satellite biochemistry and market-validation screening](research/BIOCHEM_EO_MARKET_AND_VALIDATION_2026-11-23.md) compares orchard pigment/nitrogen proxies, soil carbon, aquatic pigments, ecosystem phenology, atmospheric chemistry and a strictly hypothetical financial-data angle using the existing VenturaAtlas/OMEGA evidence gates. It is not a paid-market or scientific validation claim.
+
 ---
 
 ## 📊 Evidence Status (19 November 2026)
