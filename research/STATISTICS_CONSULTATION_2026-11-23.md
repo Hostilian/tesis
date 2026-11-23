@@ -93,3 +93,5 @@ Potential independent comparisons: authorized Sentinel-2 time series; Sentinel-1
 
 **Public webpage:** [Research questions & statistical validation](../docs/research-questions.html)  
 **Related methodology:** [THESIS_VALIDATION_GAPS.md](../THESIS_VALIDATION_GAPS.md)
+
+**Additional candidate research branch (not approved):** [Satellite biochemistry, biology, open-source landscape and OMEGA market validation](BIOCHEM_EO_MARKET_AND_VALIDATION_2026-11-23.md).
