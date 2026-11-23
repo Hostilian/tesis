@@ -20,18 +20,18 @@ CRITERIA = [
 ]
 WEIGHTS = np.array([0.23, 0.16, 0.20, 0.13, 0.12, 0.10, 0.06])
 ROWS = [
-    ("EU Soil Evidence Pack", [9,8,8,7,8,9,7]),
-    ("Soil Sampling Priority Map", [8,9,7,8,7,9,8]),
-    ("Surface Sealing/Removal Change Audit", [9,9,8,5,9,8,9]),
-    ("Bare Soil / Erosion Exposure Alert", [8,9,7,5,8,8,9]),
-    ("Lab Sample Provenance + Satellite QA", [9,9,6,7,5,8,7]),
-    ("Orchard Pigment / Lab Calibration", [6,8,7,6,4,9,6]),
+    ("EU Soil Evidence Pack", [9,8,8,5,8,9,7]),
+    ("Soil Sampling Priority Map", [8,9,7,4,7,9,8]),
+    ("Surface Sealing/Removal Change Audit", [9,9,8,4,9,8,9]),
+    ("Bare Soil / Erosion Exposure Alert", [8,9,7,4,8,8,9]),
+    ("Lab Sample Provenance + Satellite QA", [9,9,6,4,5,8,7]),
+    ("Orchard Pigment / Lab Calibration", [6,8,7,4,4,9,6]),
     ("Carbon Maps for Unsampled Land", [4,7,7,3,3,9,5]),
     ("Satellite Surface Moisture Triage", [6,8,6,4,8,7,7]),
     ("Surface Salinity Risk Screening", [5,7,6,5,6,8,6]),
     ("Lab Nutrients and pH Replacement", [1,5,6,3,2,7,3]),
     ("Bio-chemical Economic Forecasting", [3,5,5,3,4,8,4]),
-    ("Water Pigments / Bloom QA", [7,8,7,5,7,8,7]),
+    ("Water Pigments / Bloom QA", [7,8,7,4,7,8,7]),
     ("Habitat / Phenology Change Watch", [8,9,6,4,9,8,9]),
 ]
 MATRIX = np.array([row[1] for row in ROWS], dtype=float)
@@ -51,6 +51,14 @@ for _ in range(200):
     t = np.asarray(TOPSIS_F(MATRIX,w,TYPES),dtype=float)
     wins[int(np.argmax(t))]+=1
 
+# Red-team sensitivity: the inputs are judgment scores, not measured performance.
+# Treat each criterion score as uncertain by ~1 point, independently.
+score_wins=np.zeros(len(ROWS),dtype=int)
+for _ in range(400):
+    perturbed=np.clip(MATRIX+rng.normal(0,1.0,size=MATRIX.shape),0.1,10.0)
+    s=np.asarray(TOPSIS_F(perturbed, WEIGHTS, TYPES),dtype=float)
+    score_wins[int(np.argmax(s))]+=1
+
 output={
     "schema":"sbei.venture_rank_analyst_v1",
     "date":"2026-11-23",
@@ -58,10 +66,10 @@ output={
     "score_kind":"subjective decision utility, NOT outcome probability, accuracy, buyer revenue, measured market share, or commercial validation",
     "criteria":CRITERIA, "weights":WEIGHTS.tolist(),"higher_is_better":True,
     "sensitivity":{"runs":200,"seed":20261123,"weights_dirichlet_concentration":120,
-                   "note":"Human-value-weight perturbation only; does not address subjective score uncertainty."},
+                   "note":"Weight robustness is conditional on input scores; independent analyst-score jitter 400 trials (SD=1 point, clipped) separately shows rank sensitivity.","score_jitter_runs":400,"score_jitter_sd":1.0},
     "rows":[
         {"name":ROWS[i][0],"scores":ROWS[i][1],"topsis_preference":round(float(ts[i]),6),
-         "wsm_preference":round(float(ws[i]),6),"top_under_weight_variation":int(wins[i]),
+         "wsm_preference":round(float(ws[i]),6),"top_under_weight_variation":int(wins[i]),"top_under_score_uncertainty":int(score_wins[i]),
          "rank":int(1+sum(ts[j]>ts[i] for j in range(len(ROWS))))}
          for i in range(len(ROWS))
     ],
