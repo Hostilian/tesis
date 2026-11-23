@@ -47,6 +47,10 @@ Recheck existing VenturaAtlas 12-round contract and OMEGA revenue/competitor rul
 ## REVIEW-04 — Consolidator and continuity
 Check five tracks individually for: real source, executable code, independent truth, benchmark and named paying buyer. Summarize in a fail-closed matrix; preserve original eight ranked alternatives and every original academic/immigration/wallet/financial/Rota Única goal in its proper workspace. No third-party messages.
 
+## Computation receipt — 23 November 2026
+
+SOIL-02A produced two actual public Sentinel-2 source-scene IDs and [QA/change evidence](../docs/data/observed_alentejo_soil5_pair_20261123.json) from the [reusable script](prototypes/soil_surface_pair_public_preview.py): 9,216 overlapping resampled grid cells, median ΔNDVI +0.0250 and ΔBSI −0.0252. This is **not independently validated soil sealing or erosion**, and lab data remains unavailable. Review-01/02/03 remain unclosed.
+
 ## Current status template
 
 | Track | Source | Runnable pilot | Independent labels | Real buyer | Status |
