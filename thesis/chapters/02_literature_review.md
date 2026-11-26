@@ -67,7 +67,7 @@ Modern data engineering separates high-intensity spatial processing from the cli
 ---
 
 ## 2.7 Information Engineering Principles (KII Department Alignment)
-This study applies core informatics principles from the Department of Informatics (KII) at the Czech University of Life Sciences Prague (CZU PEF):
+This study applies core informatics principles from the Department of Information Engineering (KII) at the Czech University of Life Sciences Prague (CZU PEF):
 1.  **ETL Pipeline Orchestration**: Structuring automated Extract, Transform, Load (ETL) workflows to query APIs, clean raw pixels, run machine learning models, and serialize output datasets [R252].
 2.  **Decision Support Systems (DSS)**: Designing user-centric dashboards that compile complex multi-spectral time-series into clear visual indicators for economic analysts [R253].
 3.  **Data Quality & Standardization**: Enforcing data integrity standards, including metadata documentation (ISO 19115) and vector geometry validation (RFC 7946) [R254].

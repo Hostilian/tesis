@@ -34,7 +34,7 @@ def compile_pdf():
     pdf.cell(0, 10, "CZECH UNIVERSITY OF LIFE SCIENCES PRAGUE", 0, new_x="LMARGIN", new_y="NEXT", align="C")
     pdf.set_font("Arial", "", 12)
     pdf.cell(0, 8, "Faculty of Economics and Management", 0, new_x="LMARGIN", new_y="NEXT", align="C")
-    pdf.cell(0, 8, "Department of Informatics (KII)", 0, new_x="LMARGIN", new_y="NEXT", align="C")
+    pdf.cell(0, 8, "Department of Information Engineering (KII)", 0, new_x="LMARGIN", new_y="NEXT", align="C")
     
     pdf.ln(40)
     pdf.set_font("Arial", "B", 18)

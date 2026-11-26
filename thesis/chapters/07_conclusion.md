@@ -58,7 +58,7 @@ The F1-Score of 0.907 and Pearson r of 0.724 achieved in this study are not labo
 *   **GitHub Repository**: `https://github.com/hostilian/tesis` (Pipeline source code, notebooks, test suite)
 *   **Live Dashboard**: `https://hostilian.github.io/tesis/` (Interactive satellite anomaly map)
 *   **API Documentation**: `https://hostilian.github.io/tesis/api.html` (OpenAPI 3.0 specification)
-*   **Thesis Supervisor**: Dr. Jiří Brožek, Department of Informatics (KII), Czech University of Life Sciences Prague (CZU PEF)
+*   **Thesis Supervisor**: Dr. Jiří Brožek, Department of Information Engineering (KII), Czech University of Life Sciences Prague (CZU PEF)
 *   **Academic Year**: 2025/2026 — Bachelor Thesis Program in Informatics
 
 **BibTeX Citation**:
@@ -68,7 +68,7 @@ The F1-Score of 0.907 and Pearson r of 0.724 achieved in this study are not labo
   title   = {Space-Based Economic Intelligence: Detecting Hidden Resource
              Anomalies Using Open Satellite APIs},
   school  = {Czech University of Life Sciences Prague (CZU PEF),
-             Department of Informatics (KII)},
+             Department of Information Engineering (KII)},
   year    = {2026},
   type    = {Bachelor Thesis},
   advisor = {Bro{\v{z}}ek, Ji{\v{r}}{\'i}}
