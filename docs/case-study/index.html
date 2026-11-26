@@ -103,6 +103,9 @@
     <h2>Provenance</h2>
     <div id="provenance"></div>
 
+    <h2>Checks</h2>
+    <div id="checks"><p class="muted">Loading…</p></div>
+
     <h2>Figures</h2>
     <div id="figures"></div>
 
@@ -297,7 +300,29 @@ async function loadCase(caseId, index) {
 
   const figs = [["fig_overview.png", "Before/after imagery, difference and candidate change"], ["fig_sensitivity.png", "Threshold sensitivity: main vs control pair"], ["fig_histogram.png", "Distribution of differences"]];
   if (ref) figs.push(["fig_reference_cos.png", "Sentinel-2 flags vs COS reference"]);
-  document.getElementById("figures").innerHTML = figs.map(([f, cap]) => `<figure><a href="${base}${f}"><img src="${base}${f}" alt="${esc(cap)}" loading="lazy"></a><figcaption class="muted">${esc(cap)}</figcaption></figure>`).join("");
+
+  // Verification results: each line is read from its own JSON file; missing files are simply skipped.
+  Promise.all([getJSON(base + "independent_check.json", true), getJSON(base + "robustness.json", true), getJSON(base + "interop_planetary_computer.json", true)]).then(([ind, rob, iop]) => {
+    const items = [];
+    if (ind) items.push(`<li><b>Independent re-computation:</b> ${ind.all_match ? "all " + ind.comparisons.length + " headline numbers match" : "<span class='err'>mismatch</span>"} (separate code reading the raw files). <a href="${base}independent_check.json">details</a></li>`);
+    if (iop) {
+      const a = iop.change_agreement.pipeline_like_flag;
+      items.push(`<li><b>Second data provider</b> (Microsoft Planetary Computer): change flags agree on ${pct(a.agreement_share)} of pixels, κ = ${fmt(a.cohen_kappa, 2)}; increase ${fmt(a.increase_area_ha_earth_search, 0)} vs ${fmt(a.increase_area_ha_planetary_computer, 0)} ha. <a href="${base}interop_planetary_computer.json">details</a></li>`);
+      figs.push(["fig_interop.png", "Same scenes from two providers"]);
+    }
+    if (rob) {
+      const b = rob.bootstrap.results["pixel, 500 m blocks"];
+      if (b) items.push(`<li><b>Uncertainty</b> (spatial block bootstrap, 500 m blocks): precision ${fmt(b.precision.estimate, 2)} [${fmt(b.precision.ci_low, 2)}–${fmt(b.precision.ci_high, 2)}], recall ${fmt(b.recall.estimate, 2)} [${fmt(b.recall.ci_low, 2)}–${fmt(b.recall.ci_high, 2)}], 95 % intervals. <span class="muted">Reads as: ${esc(rob.reference.reading)}.</span></li>`);
+      const o = rob.date_pairs.increase_overlap_main_vs_second;
+      const k = o && Object.keys(o).find(x => x.startsWith("both_at_main_threshold"));
+      if (k) items.push(`<li><b>Other date pair</b> at the same threshold: ${pct(o[k].share_of_a_also_in_b)} of flagged pixels are flagged again (Jaccard ${fmt(o[k].jaccard, 2)}). <a href="${base}robustness.json">details</a></li>`);
+      figs.push(["fig_threshold_curve.png", "Agreement with COS across thresholds"], ["fig_bootstrap.png", "Bootstrap distributions"]);
+    }
+    document.getElementById("checks").innerHTML = items.length ? `<ul style="padding-left:18px;margin:6px 0">${items.join("")}</ul>` : '<p class="muted">No additional checks for this area.</p>';
+    renderFigures();
+  });
+  const renderFigures = () => document.getElementById("figures").innerHTML = figs.map(([f, cap]) => `<figure><a href="${base}${f}"><img src="${base}${f}" alt="${esc(cap)}" loading="lazy"></a><figcaption class="muted">${esc(cap)}</figcaption></figure>`).join("");
+  renderFigures();
 }
 
 (async () => {
