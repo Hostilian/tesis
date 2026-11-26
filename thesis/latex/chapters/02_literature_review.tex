@@ -1,7 +1,7 @@
 
 % AI-assisted rewording, 26 Nov 2026 (Claude). CZU Rector's Directive 7/2026, Art. 8(4) allows AI help with style, structure, rewording and source search in the literature review only. Declare this in the thesis declaration and the AI-use note.
 
-This chapter covers the background the thesis builds on: how satellites measure the Earth's surface, how such measurements have been used as evidence of economic activity, how open satellite data is accessed, and how change is detected and evaluated. It ends by stating the gap this thesis addresses.
+This chapter covers the background the thesis builds on: how satellites measure the Earth's surface, how such measurements have been used as evidence of economic activity, how open satellite data is accessed, how change is detected and evaluated, and what earlier studies show about the Alentejo study region. It ends by stating the gap this thesis addresses.
 
 \section{How satellites measure the surface}
 
@@ -127,8 +127,26 @@ Dashboards that turn such data into clear indicators are a form of decision supp
   \item \textbf{Over-interpretation.} A change flag can affect how a farm or mine is seen. Results therefore always state what was measured and what is only interpretation.
 
 \end{itemize}
-\section{Gap and position of this thesis}
+\section{The study region: irrigation and orchard expansion in Alentejo}
 
-The literature offers the building blocks: free imagery, standard catalogues, well-studied indices, change-detection methods and good-practice evaluation. Studies usually report a method and a result. They rarely publish a complete, rerunnable path from catalogue entry to web map that records exactly which scenes, settings and code produced each number.
+The main case study lies in the area served by the Alqueva irrigation scheme in Alentejo, southern Portugal. Over the past 30 years, water from the Alqueva irrigation network let olive groves in Alentejo expand and intensify fast, mainly on the most productive soils \cite{R265}. In one region of southern Portugal, irrigated olive groves went from almost none in 1990 to about 6 \% of the area in 2017 \cite{R264}. They replaced mainly open rainfed annual crops (63 \% of the expansion) and traditional rainfed olive groves (21 \%). Public irrigation water and large farms were the main drivers \cite{R264}.
 
-This thesis builds such a path for two public study areas in Portugal. It uses a deliberately simple and transparent change method, checks it against an official land-use map, and states what 10 m data can and cannot show.
+Mapping these orchards from free satellite data works, but with limits:
+
+\begin{itemize}
+  \item Around the Alqueva reservoir, a classifier using Sentinel-1 and Sentinel-2 images reached 91 \% overall accuracy. It identified almond groves with an F1 score of 0.90 and three olive-growing systems with F1 scores of at least 0.78. Its agreement with the official map COS 2018 was lower (F1 score 0.60) \cite{R266}.
+  \item Researchers at Portugal's Directorate-General for Territory (DGT) tested 2018 Sentinel-2 images over about 1.2 million ha of southern Portugal. Olive groves and orchards had the lowest producer's accuracy of all classes, 46 \% and 35 \%. The authors explain that a 10 m pixel mixes the trees with the soil around them \cite{R269}.
+  \item A Sentinel-2 study of olive planting systems reached about 80 \% accuracy. The most frequent errors were intensive or super-intensive groves labelled as traditional ones, and the authors name the 10 m pixel size as a challenge \cite{R267}.
+
+\end{itemize}
+The reference map in this thesis is COS, the land-use map of mainland Portugal made by DGT. Its 2018v4 and 2025v1 editions share one specification \cite{R268}:
+
+\begin{itemize}
+  \item polygons drawn by visual interpretation of very high resolution orthophotos, helped by administrative databases;
+  \item a smallest mapped unit of 0.5 ha and 102 classes;
+  \item a specified thematic accuracy of at least 85 \%;
+  \item separate classes for low-density, high-density and hedgerow olive groves and orchards.
+
+\end{itemize}
+DGT states that only these two editions can be compared with each other \cite{R268}.
+

@@ -33,7 +33,22 @@ def clean(s: str) -> str:
     return re.sub(r"[{}]", "", s).strip()
 
 
+def is_corporate(a: str) -> bool:
+    """True for an author field that is one braced group, e.g. {{European Space Agency}}."""
+    a = a.strip()
+    if not (a.startswith("{") and a.endswith("}")):
+        return False
+    depth = 0
+    for i, ch in enumerate(a):
+        depth += {"{": 1, "}": -1}.get(ch, 0)
+        if depth == 0 and i < len(a) - 1:
+            return False
+    return True
+
+
 def authors(a: str) -> str:
+    if is_corporate(a):
+        return clean(a)
     names = [clean(x) for x in a.split(" and ")]
     surname = lambda n: n.split(",")[0].strip() if "," in n else n.split()[-1] if " " in n and not n.isupper() else n
     if len(names) > 2:
