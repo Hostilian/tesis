@@ -5,8 +5,8 @@
       "title": "Alqueva irrigation area, Beja - Ferreira do Alentejo (Portugal): summer NDVI change 2018-2025",
       "description": "10 x 10 km public study area inside the Alqueva multipurpose irrigation scheme, south-west of Beja. Bounding box only; no farm or parcel boundaries are used.",
       "selection_rationale": "AOI = 10 km block with the largest share of summer NDVI increase > 0.2 in a coarse (160 m) tile-wide screening of 29SNC, 2018-08-18 vs 2024-08-21 (see screening_29SNC.json). It is a change hotspot chosen on purpose and is not representative of Alentejo. Dates: peak-summer window, relative orbit 037, scene cloud < 1 %, processing baseline 05.xx on both dates, date closest to mid-August.",
-      "run_id": "alqueva_olive-20261126T140929Z",
-      "completed_at": "2026-11-26T14:12:00Z",
+      "run_id": "alqueva_olive-20261126T143509Z",
+      "completed_at": "2026-11-26T14:37:22Z",
       "status": "ok",
       "bbox": [
         -8.042,
@@ -31,8 +31,8 @@
       "title": "Neves-Corvo mine area, Castro Verde / Almodovar (Portugal): summer bare-soil index change 2018-2025",
       "description": "Public bounding box (about 7.5 x 6.1 km) around the Neves-Corvo copper-zinc mine (37.573 N, 7.971 W per Mindat/Wikidata), its deposits (Lombador, Zambujal, Graca) and surrounding land in Baixo Alentejo. Bounding box only; no operator or concession boundaries are used.",
       "selection_rationale": "Chosen a priori as the best-known active metal mine in Alentejo, to match the registered thesis theme (resource-extraction anomalies). Same date rule as alqueva_olive (relative orbit 037, scene cloud < 1 %, baseline 05.xx, mid-August), tile 29SNB. A first run with a box ~17 km too far west (no mine in view) was discarded on 2026-11-26. Delta is median-centred because the first run showed a scene-wide BSI decrease over unchanged pasture.",
-      "run_id": "neves_corvo_mine-20261126T141232Z",
-      "completed_at": "2026-11-26T14:15:17Z",
+      "run_id": "neves_corvo_mine-20261126T143733Z",
+      "completed_at": "2026-11-26T14:39:57Z",
       "status": "ok",
       "bbox": [
         -8.01,
