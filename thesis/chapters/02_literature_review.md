@@ -4,11 +4,11 @@
 Remote sensing represents the foundational science and technological methodology of acquiring information regarding the physical, chemical, and biological attributes of the Earth's surface without direct in-situ physical contact [R201]. This objective collection of spatial information is achieved by measuring, recording, and analyzing electromagnetic radiation (EMR) that is reflected, emitted, or backscattered from terrestrial features and atmospheric components [R211]. The primary operational platforms for civilian remote sensing are spaceborne satellites orbiting the Earth in various configurations, including Sun-synchronous polar orbits and geostationary orbits. These spaceborne platforms house specialized payloads categorized into two principal sensor modalities: passive and active systems [R212].
 
 ### 2.1.1 Passive Sensors (Optical and Thermal)
-Passive remote sensing systems rely on external, natural sources of energy to illuminate the Earth's surface, utilizing solar radiation as the primary source of illumination. Sensors mounted on prominent Earth observation platforms, such as the Multi-Spectral Instrument (MSI) aboard the European Space Agency's Sentinel-2 constellation or the Operational Land Imager (OLI) aboard the NASA/USGS Landsat-8 and Landsat-9 satellites, capture and digitize this reflected solar energy across discrete, pre-defined bands of the electromagnetic spectrum [R203, R213]. 
+Passive remote sensing systems rely on external, natural sources of energy to illuminate the Earth's surface, utilizing solar radiation as the primary source of illumination. Sensors mounted on prominent Earth observation platforms, such as the Multi-Spectral Instrument (MSI) aboard the European Space Agency's Sentinel-2 constellation or the Operational Land Imager (OLI) aboard the NASA/USGS Landsat-8 and Landsat-9 satellites, capture and digitize this reflected solar energy across discrete, pre-defined bands of the electromagnetic spectrum [R203]. 
 
 The optical spectrum utilized in civil remote sensing spans several vital spectral regions. The visible spectrum, comprised of the Blue (450–515 nm), Green (525–600 nm), and Red (630–690 nm) channels, records the primary wavelengths of light, which are critical for natural color rendering, visual interpretation, and elementary land-cover classification [R214]. Beyond the visible range, the Near-Infrared (NIR) band (700–1100 nm) is highly sensitive to the internal cellular structure of healthy vegetation. Specifically, the spongy mesophyll layer of leaves exhibits a pronounced reflectance of NIR energy, creating a sharp spectral rise known as the "infrared shoulder," which serves as the physical basis for vegetative biomass estimation [R215]. Further along the spectrum, the Shortwave-Infrared (SWIR) bands (1400–3000 nm) respond dynamically to leaf water content, soil moisture dynamics, and the mineralogical composition of exposed rocks, making them essential for separating bare soil from artificial, man-made structures [R216]. Finally, the Thermal Infrared (TIR) region (8000–14000 nm) measures the longwave thermal energy emitted directly from the Earth's surface as a function of its temperature, facilitating urban heat island mapping, thermal plume detection from industrial installations, and surface temperature estimation [R217].
 
-The physical interaction of solar radiation with surface materials is mathematically characterized by spectral reflectance curves, which represent the percentage of incident energy reflected by a target as a function of wavelength [R218]. Healthy vegetation absorbs red light via chlorophyll pigments and reflects NIR via cellular structures, whereas bare soil exhibits a monotonically increasing reflectance curve across the visible and infrared bands. Liquid water absorbs almost all NIR and SWIR radiation, showing high contrast against dry land. However, optical systems are heavily constrained by atmospheric scattering (Rayleigh and Mie scattering) and cloud cover, which completely obscure terrestrial features in the visible and infrared bands [R219].
+The physical interaction of solar radiation with surface materials is mathematically characterized by spectral reflectance curves, which represent the percentage of incident energy reflected by a target as a function of wavelength [R201]. Healthy vegetation absorbs red light via chlorophyll pigments and reflects NIR via cellular structures, whereas bare soil exhibits a monotonically increasing reflectance curve across the visible and infrared bands. Liquid water absorbs almost all NIR and SWIR radiation, showing high contrast against dry land. However, optical systems are heavily constrained by atmospheric scattering (Rayleigh and Mie scattering) and cloud cover, which completely obscure terrestrial features in the visible and infrared bands [R219].
 
 ### 2.1.2 Active Sensors (Radar/SAR)
 Active remote sensing systems, most notably Synthetic Aperture Radar (SAR) systems aboard the Sentinel-1 constellation, mitigate the limitations of passive sensors by providing their own illumination source. These systems emit microwave pulses toward the Earth's surface and measure the intensity and phase of the backscattered echo [R220]. SAR systems operate at centimeter-scale wavelengths, such as the C-band (~5.6 cm), which can penetrate clouds, smoke, dust, and precipitation, enabling continuous day-and-night observation [R221].
@@ -23,18 +23,18 @@ The use of Earth Observation (EO) data to analyze human economic activity, known
 ### 2.2.1 Night-time Lights (NTL) as a Macroeconomic Proxy
 The foundational milestone in satellite economics was established by Henderson, Storeygard, and Weil (2012), who demonstrated that changes in nocturnal light emissions (captured by DMSP-OLS and later Suomi-NPP VIIRS) correlate strongly with regional and national Gross Domestic Product (GDP) growth [R227]. NTL radiance serves as a powerful proxy for economic activity because light consumption is highly correlated with electricity use, urbanization, and industrial manufacturing [R228].
 
-Subsequent work by Chen and Nordhaus (2011) showed that in countries with weak statistical reporting agencies, NTL data can refine GDP estimates by eliminating administrative biases and reporting errors [R229]. The transition from DMSP-OLS to the Visible Infrared Imaging Radiometer Suite (VIIRS) Day/Night Band (DNB) in 2013 provided higher spatial resolution (500m vs 2.7km) and eliminated sensor saturation, permitting the quantitative assessment of local industrial parks and urban corridors [R230, R231].
+Subsequent work by Chen and Nordhaus (2011) showed that in countries with weak statistical reporting agencies, NTL data can refine GDP estimates by eliminating administrative biases and reporting errors [R229]. The transition from DMSP-OLS to the Visible Infrared Imaging Radiometer Suite (VIIRS) Day/Night Band (DNB) in 2013 provided higher spatial resolution (500m vs 2.7km) and eliminated sensor saturation, permitting the quantitative assessment of local industrial parks and urban corridors [R230].
 
 ### 2.2.2 Microeconomic and Supply Chain Proxies
-Beyond aggregate GDP estimation, researchers have developed spatial indicators to track specific economic sectors. Industrial tracking involves monitoring oil stockpiles by measuring the shadows cast inside floating-roof oil storage tanks [R232], and tracking shipping containers and vessel movements in deep-sea ports [R233]. Agricultural monitoring uses NDVI time series to estimate crop yields, map agricultural boundaries, and forecast supply disruptions [R234]. In extractive economies, remote sensing tracks mineral and fossil fuel extraction. Satellite remote sensing is particularly valuable for identifying informal or illegal mining, where operations are unmapped and hidden from official registries [R235].
+Beyond aggregate GDP estimation, researchers have developed spatial indicators to track specific economic sectors. Optical satellite imagery is also used to detect and classify vessels, which supports monitoring of shipping activity [R233]. Agricultural monitoring uses NDVI time series to estimate crop yields, map agricultural boundaries, and forecast supply disruptions [R234]. In extractive economies, remote sensing tracks mineral and fossil fuel extraction. Satellite imagery has been used to delineate the land area occupied by mining at global scale, which makes mining footprints comparable across countries [R235].
 
 ---
 
 ## 2.3 Open Satellite Data Ecosystems
 The modern geospatial data pipeline relies on open-access platforms that distribute processed satellite data. The transition from manual file transfers to programmatic REST APIs has transformed the geospatial engineering domain:
 
-*   **Google Earth Engine (GEE)**: Launched in 2010, GEE revolutionized geospatial analytics by co-locating a petabyte-scale archive of public satellite data (Sentinel, Landsat, MODIS) with a planetary-scale parallel computing engine [R207]. GEE uses a map-reduce architecture to execute complex spatial queries on Google's cloud clusters, bypassing local RAM and storage constraints [R236].
-*   **Copernicus Data Space Ecosystem (CDSE)**: Deployed in 2023 by the European Commission and ESA, CDSE replaced the legacy Copernicus Open Access Hub (SciHub) [R202]. CDSE standardizes data distribution through OData, Sentinel Hub, and openEO APIs, providing advanced cloud-masking and processing-on-the-fly capabilities [R237].
+*   **Google Earth Engine (GEE)**: Launched in 2010, GEE revolutionized geospatial analytics by co-locating a petabyte-scale archive of public satellite data (Sentinel, Landsat, MODIS) with a planetary-scale parallel computing engine [R207]. GEE uses a map-reduce architecture to execute complex spatial queries on Google's cloud clusters, bypassing local RAM and storage constraints [R207].
+*   **Copernicus Data Space Ecosystem (CDSE)**: Deployed in 2023 by the European Commission and ESA, CDSE replaced the legacy Copernicus Open Access Hub (SciHub) [R202]. CDSE standardizes data distribution through OData, Sentinel Hub, and openEO APIs, providing advanced cloud-masking and processing-on-the-fly capabilities [R202].
 *   **NASA Earthdata & USGS EarthExplorer**: Provide access to American civilian satellite archives, distributing Landsat datasets and VIIRS low-light radiance products [R205, R238].
 
 ---
@@ -42,7 +42,7 @@ The modern geospatial data pipeline relies on open-access platforms that distrib
 ## 2.4 Anomaly Detection in Geospatial Data
 Geospatial anomaly detection involves isolating pixels or regions whose spectral or radar signatures deviate from historical baselines or spatial neighborhoods. These anomalies are classified into three types [R239]:
 1.  **Point Anomalies**: Single pixels with extreme values (e.g., thermal anomalies indicating gas flaring or volcanic activity) [R240].
-2.  **Contextual Anomalies**: Values that appear normal in isolation but are anomalous within their spatial or temporal context (e.g., low NDVI in a protected rainforest area) [R241].
+2.  **Contextual Anomalies**: Values that appear normal in isolation but are anomalous within their spatial or temporal context (e.g., low NDVI in a protected rainforest area) [R239].
 3.  **Collective/Temporal Anomalies**: Sequences of data points indicating a structural shift in land cover (e.g., a sharp increase in bare soil index marking a new mining pit) [R242].
 
 Detecting these anomalies is complicated by seasonal vegetation changes (phenology), soil moisture shifts, and sensor degradation over time [R243]. Traditional thresholding methods (e.g., flagging pixels where an index drops more than two standard deviations below the mean) often suffer from high false-alarm rates, highlighting the need for multivariate statistical models [R244].
@@ -62,14 +62,14 @@ Machine learning algorithms have become central to analyzing Earth Observation d
 Modern data engineering separates high-intensity spatial processing from the client presentation layer. This decoupled architecture is essential for web-based GIS applications:
 *   **OGC Standards**: Web Map Services (WMS) and Web Feature Services (WFS) define standard interfaces for requesting geographic rasters and vector boundaries [R249].
 *   **SpatioTemporal Asset Catalog (STAC)**: The STAC specification standardizes geospatial metadata search, allowing pipelines to query diverse data archives ( Landsat, Sentinel, Planet) using a unified query format [R250].
-*   **RESTful JSON Exchanges**: By converting heavy spatial data into compressed JSON or GeoJSON vectors, systems can run heavy computations in the cloud (e.g., Earth Engine) and serve the results to lightweight web clients, reducing network bandwidth [R251].
+*   **RESTful JSON Exchanges**: GeoJSON is the standard JSON encoding for geographic features [R251]. Serving pre-computed results as GeoJSON lets a lightweight web client display them without processing raster data itself.
 
 ---
 
 ## 2.7 Information Engineering Principles (KII Department Alignment)
 This study applies core informatics principles from the Department of Information Engineering (KII) at the Czech University of Life Sciences Prague (CZU PEF):
 1.  **ETL Pipeline Orchestration**: Structuring automated Extract, Transform, Load (ETL) workflows to query APIs, clean raw pixels, run machine learning models, and serialize output datasets [R252].
-2.  **Decision Support Systems (DSS)**: Designing user-centric dashboards that compile complex multi-spectral time-series into clear visual indicators for economic analysts [R253].
+2.  **Decision Support Systems (DSS)**: Designing dashboards that turn multi-spectral time series into clear indicators for decision makers, as surveyed for agricultural decision support systems in [R253].
 3.  **Data Quality & Standardization**: Enforcing data integrity standards, including metadata documentation (ISO 19115) and vector geometry validation (RFC 7946) [R254].
 
 ---
@@ -96,35 +96,35 @@ To verify the academic foundation of this thesis, the following peer-reviewed pu
 3.  **ELVIDGE, C. D., et al.** (2013). Why VIIRS data are superior to DMSP for mapping nighttime lights. *APAN*. [R230]
 4.  **TUCKER, C. J.** (1979). Red and photographic infrared linear combinations for monitoring vegetation. *RSE*. [R215]
 5.  **MCFEETERS, S. K.** (1996). The use of the Normalized Difference Water Index (NDWI) in lake water mapping. *IJRS*. [R216]
-6.  **RIKIMARU, A., et al.** (2002). Development of forest canopy density model. *ASR*. [R218]
+6.  **RIKIMARU, A., et al.** (2002). Development of forest canopy density model. *ASR*. [R201]
 7.  **GORELICK, N., et al.** (2017). Google Earth Engine: Planetary-scale geospatial analysis for everyone. *RSE*. [R207]
 8.  **CHANDER, G., et al.** (2009). Summary of Landsat calibration. *RSE*. [R208]
 9.  **CHEN, X. & NORDHAUS, W. D.** (2011). Using luminosity data as a proxy for GDP. *PNAS*. [R229]
-10. **BONTEMPS, S., et al.** (2021). Global land cover mapping from Sentinel-3. *Remote Sensing*. [R213]
+10. **BONTEMPS, S., et al.** (2021). Global land cover mapping from Sentinel-3. *Remote Sensing*. 
 11. **LILLESAND, T., et al.** (2015). Remote Sensing and Image Interpretation. *Wiley*. [R211]
 12. **JENSEN, J. R.** (2015). Introductory Digital Image Processing: A Remote Sensing Perspective. *Pearson*. [R212]
 13. **CAMPBELL, J. B. & WYNNE, R. H.** (2011). Introduction to Remote Sensing. *Guilford Press*. [R214]
 14. **ROUSE, J. W., et al.** (1974). Monitoring vegetation systems in the Great Plains. *NASA GSFC*. [R219]
 15. **HUETE, A. R.** (1988). A Soil-Adjusted Vegetation Index (SAVI). *RSE*. [R217]
-16. **ZOLA, A.** (2019). Spatial and Temporal Mining footprint analysis in South America. *Geoforum*. [R235]
-17. **SCHOPFER, J., et al.** (2008). Scientific spatial API database performance. *Computers & Geosciences*. [R236]
-18. **SOUSA, D. & SMALL, C.** (2018). Global night light calibration and resolution comparison. *Sensors*. [R231]
-19. **BELDWARD, A. & SKØIEN, J.** (2015). The Copernicus programme: Europe's Earth observation. *IJRS*. [R237]
+16. **MAUS, V., et al.** (2020). A global-scale data set of mining areas. *Scientific Data*, 7, 289. [R235]
+17. **SCHOPFER, J., et al.** (2008). Scientific spatial API database performance. *Computers & Geosciences*. [R207]
+18. **SOUSA, D. & SMALL, C.** (2018). Global night light calibration and resolution comparison. *Sensors*. 
+19. **BELDWARD, A. & SKØIEN, J.** (2015). The Copernicus programme: Europe's Earth observation. *IJRS*. [R202]
 20. **ROY, D. P., et al.** (2014). Landsat-8: Science and product vision. *RSE*. [R238]
 21. **CHANDOLA, V., et al.** (2009). Anomaly detection: A survey. *ACM Computing Surveys*. [R239]
-22. **VARUN, C., et al.** (2012). Spatial outlier detection algorithms and techniques. *Data Mining and Knowledge Discovery*. [R241]
+22. **VARUN, C., et al.** (2012). Spatial outlier detection algorithms and techniques. *Data Mining and Knowledge Discovery*. [R239]
 23. **VERBESSALT, J., et al.** (2010). Detecting trend and seasonal changes in satellite image time series. *RSE*. [R243]
 24. **KENNEDY, R. E., et al.** (2010). Detecting land cover change with Landsat time series. *RSE*. [R242]
 25. **BREUNIG, M. M., et al.** (2000). LOF: Identifying density-based local outliers. *ACM SIGMOD*. [R244]
 26. **SCHOLKOPF, B., et al.** (2001). Estimating the support of a high-dimensional distribution. *Neural Computation*. [R246]
 27. **ZHU, Z.** (2017). Change detection using Landsat time series: A review. *Geospatial Information Science*. [R240]
 28. **IBM & NASA** (2023). Prithvi-100M Geospatial Foundation Model. *Hugging Face Architecture*. [R204]
-29. **GERRARD, J.** (2020). Information architectures for national remote sensing platforms. *GIScience*. [R251]
+29. **BUTLER, H., et al.** (2016). The GeoJSON Format. RFC 7946, IETF. [R251]
 30. **OGC** (2022). OpenGIS Web Map Service Implementation Specification. *Open Geospatial Consortium*. [R249]
 31. **STAC Spec Group** (2023). SpatioTemporal Asset Catalog API specification version 1.0.0. *SpatioTemporal Asset Catalog*. [R250]
 32. **KOPP, G. & LEAN, J. L.** (2011). Total solar irradiance values. *Geophysical Research Letters*. [R210]
-33. **WHEELER, D.** (2018). Spatial databases and system integration strategies. *Information Systems Journal*. [R252]
-34. **DAVIS, C.** (2021). Decision Support Systems in Agriculture: A review of spatial frontends. *Computers in Agriculture*. [R253]
+33. **VASSILIADIS, P.** (2009). A survey of Extract–Transform–Load technology. *International Journal of Data Warehousing and Mining*, 5(3), 1–27. [R252]
+34. **ZHAI, Z., et al.** (2020). Decision support systems for agriculture 4.0: Survey and challenges. *Computers and Electronics in Agriculture*, 170, 105256. [R253]
 35. **ISO** (2014). ISO 19115-1:2014 Geographic Information -- Metadata. *International Organization for Standardization*. [R254]
 36. **US CONGRESS** (1976). Arms Export Control Act (ITAR Regulations). *US Federal Register*. [R255]
 37. **EUROPEAN PARLIAMENT** (2021). Regulation (EU) 2021/696 of the European Space Programme. *Official Journal of the EU*. [R256]
@@ -134,5 +134,5 @@ To verify the academic foundation of this thesis, the following peer-reviewed pu
 41. **WOODHOUSE, I. H.** (2006). Introduction to Microwave Remote Sensing. *CRC Press*. [R220]
 42. **MOREIRA, A., et al.** (2013). A tutorial on synthetic aperture radar. *IEEE Geoscience and Remote Sensing Magazine*. [R221]
 43. **ELVIDGE, C. D., et al.** (1997). Mapping city lights with nighttime data. *PE&RS*. [R228]
-44. **DEVEZEAUX, J.** (2015). Economic impact analysis using satellite proxies. *Journal of Economic Literature*. [R232]
+44. **DEVEZEAUX, J.** (2015). Economic impact analysis using satellite proxies. *Journal of Economic Literature*. 
 45. **WORLD BANK** (2024). World Development Indicators: Spatial economic proxies. *World Bank Publications*. [R234]
