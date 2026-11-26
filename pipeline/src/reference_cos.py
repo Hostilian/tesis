@@ -159,13 +159,14 @@ def polygon_units(
         (mapping(shp_transform(to_grid, shape(f["geometry"]))), i + 1)
         for i, f in enumerate(features_2025)
     ]
-    return rfeatures.rasterize(
+    units = rfeatures.rasterize(
         shapes,
         out_shape=(grid.height, grid.width),
         transform=grid.transform,
         fill=0,
         dtype="int32",
     )
+    return np.asarray(units)
 
 
 def polygon_agreement(

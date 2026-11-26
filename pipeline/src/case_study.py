@@ -136,7 +136,7 @@ class CaseStudyConfig:
                 raise ValueError("primary_threshold must be one of thresholds")
         if any(t <= 0 for t in thresholds):
             raise ValueError("thresholds must be positive magnitudes")
-        known = {f for f in cls.__dataclass_fields__}  # type: ignore[attr-defined]
+        known = {f for f in cls.__dataclass_fields__}
         extra = {k: v for k, v in raw.items() if k not in known}
         return cls(
             case_id=str(raw["case_id"]),
@@ -376,7 +376,7 @@ def keep_patches_ge(mask: np.ndarray, min_pixels: int) -> np.ndarray:
     sizes = np.bincount(labels.ravel())
     keep = sizes >= min_pixels
     keep[0] = False
-    return keep[labels]
+    return np.asarray(keep[labels], dtype=bool)
 
 
 def resolution_table(
@@ -598,7 +598,7 @@ def reference_grid(item_meta: Mapping[str, Any], bbox: Sequence[float]) -> Grid:
         win = win.intersection(rasterio.windows.Window(0, 0, ds.width, ds.height))
         tr = ds.window_transform(win)
         bounds = rasterio.windows.bounds(win, ds.transform)
-        return Grid(ds.crs, tr, int(win.width), int(win.height), tuple(bounds))  # type: ignore[arg-type]
+        return Grid(ds.crs, tr, int(win.width), int(win.height), tuple(bounds))
 
 
 def read_band(
@@ -639,12 +639,13 @@ def _read_band_once(
             or abs(win.row_off - round(win.row_off)) > 1e-6
         ):
             raise ValueError("Grid misalignment between assets")
-        return ds.read(
+        data = ds.read(
             1,
             window=win,
             out_shape=(grid.height, grid.width),
             resampling=getattr(Resampling, resampling),
         )
+        return np.asarray(data)
 
 
 @dataclass
