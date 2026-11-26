@@ -1,8 +1,8 @@
 """Independent reference: Portuguese land-use/land-cover map (COS, DGT).
 
 COS Série 2 (COS2018v4, COS2025v1) is produced by the Direção-Geral do
-Território by visual interpretation of orthophotos (minimum mapping unit 1 ha
-in 2018v4 lineage, 0.5 ha in 2025v1; equivalent scale 1:25 000) and is
+Território by visual interpretation of very high resolution orthophotos (minimum mapping unit
+0.5 ha for both COS2018v4 and COS2025v1, which share one specification; DGT, July 2026) and is
 published as open data under CC-BY via an OGC API - Features service.
 
 It is used here as an *independent* reference for the Sentinel-2 change

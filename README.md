@@ -22,7 +22,16 @@
 
 👉 **[View the Live Satellite Anomaly Explorer](https://hostilian.github.io/tesis/)**
 
-A futuristic, dark-space GIS monitoring console acting as the Decision Support System (DSS) and thesis presentation artifact, visualizing 10 synthetic demonstration anomaly records across 3 study regions. These records are not independent satellite detections or field-verified findings.
+The main dashboard is a web map that shows 10 synthetic demonstration records across 3 study regions. They are not satellite detections or field findings.
+
+## Thesis case study (real data)
+
+The empirical part of the thesis is a Sentinel-2 change study of two public areas in southern Portugal, checked against the official Portuguese land-use map (COS, DGT):
+
+- **Map:** [case-study page](https://hostilian.github.io/tesis/case-study/) (satellite view; every layer is labelled as observation, derived result or interpretation).
+- **Results and run records:** [`docs/case-study/data/`](docs/case-study/data/).
+- **Rerun it:** [`docs/case-study/REPRODUCE.md`](docs/case-study/REPRODUCE.md), about 2 minutes per area, no account needed.
+- **Rules for anyone working on this repository:** [`AGENTS.md`](AGENTS.md) and [`docs/WRITING_STYLE.md`](docs/WRITING_STYLE.md).
 
 ---
 

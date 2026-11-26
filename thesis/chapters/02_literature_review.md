@@ -2,7 +2,7 @@
 
 <!-- AI-assisted rewording, 26 Nov 2026 (Claude). CZU Rector's Directive 7/2026, Art. 8(4) allows AI help with style, structure, rewording and source search in the literature review only. Declare this in the thesis declaration and the AI-use note. -->
 
-This chapter covers the background the thesis builds on: how satellites measure the Earth's surface, how such measurements have been used as evidence of economic activity, how open satellite data is accessed, how change is detected and evaluated, and what earlier studies show about the Alentejo study region. It ends by stating the gap this thesis addresses.
+This chapter covers the background the thesis builds on. It explains how satellites measure the surface and how their data have served as evidence of economic activity. It then covers open data access, change detection and evaluation, and earlier studies of the Alentejo region. It ends with the gap this thesis addresses.
 
 ## 2.1 How satellites measure the surface
 

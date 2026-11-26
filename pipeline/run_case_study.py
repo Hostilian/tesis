@@ -982,7 +982,7 @@ def cmd_evaluate_cos(args: argparse.Namespace) -> int:
         "agreement_matrix": rc.agreement_matrix(flags, reference, ev_valid, pix_area),
         "caveats": [
             "COS is a photo-interpreted map with its own errors; agreement is not ground-truth accuracy.",
-            "Generalisation: COS mapping units are >= 1 ha (2018v4 lineage) / >= 0.5 ha (2025v1); internal roads, gaps and field margins are absorbed into polygons.",
+            "Generalisation: COS mapping units are >= 0.5 ha (COS2018v4 and COS2025v1 share one specification); internal roads, gaps and field margins are absorbed into polygons.",
             "Reference dates are the COS reference years, not the exact Sentinel-2 acquisition dates.",
             "Pixel counts are spatially autocorrelated; they are not independent samples.",
         ],

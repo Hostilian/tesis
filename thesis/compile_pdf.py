@@ -55,7 +55,8 @@ def compile_pdf():
     # Declaration, AI-use note, abstract and keywords come from chapters/00_front_matter.md.
 
     # ── CHAPTERS ──
-    chapters_dir = r"d:\CODING\tesis\thesis\chapters"
+    # Paths relative to this script, so a build in any checkout or worktree writes only there.
+    chapters_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "chapters")
     files = [
         "00_front_matter.md",
         "01_introduction.md",
@@ -150,7 +151,7 @@ def compile_pdf():
         if in_table:
             render_pdf_table(pdf, table_lines)
             
-    output_path = r"d:\CODING\tesis\thesis\thesis.pdf"
+    output_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "thesis.pdf")
     pdf.output(output_path)
     print(f"Thesis PDF compiled successfully at: {output_path}")
 
