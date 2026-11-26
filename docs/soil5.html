@@ -7,7 +7,9 @@
 <meta name="description" content="SOIL-5: five coordinated research tracks and independently traceable public Sentinel-2 optical comparison. No soil chemistry or independent ground-change conclusions.">
 <link rel="canonical" href="https://hostilian.github.io/tesis/soil5.html">
 <title>SOIL-5 — Five-track soil research evidence | SBEI</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" integrity="sha512-Zcn6bjR/8RZbLEpLIeOwNtzREBAJnUKESxces60Mpoj+2okopSAcSUIUOseddDm0cxnGQzxIR7vJgsLZbdLE3w==" crossorigin="anonymous" />
 <style>
+#soil-map{height:420px;border:1px solid #354659;border-radius:9px;background:#152030}.leaflet-container a{color:#075985}
 :root{color-scheme:dark;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
 *{box-sizing:border-box}
 body{background:#080e18;color:#e1eaf4;line-height:1.65;margin:0}
@@ -57,6 +59,18 @@ footer{border-top:1px solid #344052;margin-top:45px;padding-top:20px;color:#a7b8
 </div>
 <p><strong>QA retained 9,216 resampled overlapping grid cells</strong>; 21 cells exceeded an exploratory absolute NDVI-difference threshold of 0.15. These cells are spatially correlated and should never be counted as independent study sites. The acquisition dates are approximately 15 calendar days apart between years.</p>
 <p class="tiny"><a href="data/observed_alentejo_soil5_pair_20261123.json">Complete scene IDs, exact values and SHA-256 provenance</a> · <a href="https://github.com/Hostilian/tesis/blob/main/research/prototypes/soil_surface_pair_public_preview.py">Reproducible paired-image reader</a> · <a href="data/observed_alentejo_rededge_20261123.json">Separate red-edge proof</a></p>
+<h2 id="study-map">Public Alentejo study footprint</h2>
+<p>This rectangle locates the actual paired-scene sampling window. Basemap imagery is contextual and is not either dated Sentinel-2 observation. No per-pixel NDVI, BSI or soil chemistry layer is provided by this summary record.</p>
+<div class="grid" aria-label="Soil map controls">
+<label>Basemap<br><select id="soil-basemap" style="max-width:100%;padding:8px"><option value="satellite">Satellite context</option><option value="street">Street reference</option></select></label>
+<label>SoilGrids model layer (0-5 cm, mean)<br><select id="soil-layer" style="max-width:100%;padding:8px"><option value="">None - satellite context</option></select></label>
+<label>Overlay opacity<br><input id="soil-opacity" type="range" min="0" max="100" value="65"></label>
+</div>
+<p class="tiny">ISRIC SoilGrids predictions have a native resolution of 250 m; they are not laboratory samples or direct satellite measurements. <a href="https://docs.isric.org/globaldata/soilgrids/SoilGrids_faqs_01.html">Properties, units and uncertainty</a> | <a href="https://docs.isric.org/globaldata/soilgrids/SoilGrids_faqs_02.html">Access and license (CC BY 4.0)</a>. <a href="data/soilgrids_layer_registry.json">Map source and verification registry</a>.</p>
+<div id="soil-map" role="region" aria-label="Public Alentejo study area"></div>
+<div id="soil-legend" hidden><p id="soil-layer-meta" class="tiny"></p><img id="soil-legend-image" alt="Provider legend for selected soil property" style="background:white;max-width:100%;height:auto"><p class="tiny"><a id="soil-layer-source" href="https://maps.isric.org/">Original WMS source</a></p></div>
+<p id="soil-map-status" class="tiny muted" role="status">Loading source footprint...</p>
+<p class="tiny">Sources: <a href="data/observed_alentejo_soil5_pair_20261123.json">Observation record</a> | <a href="https://planetarycomputer.microsoft.com/">Planetary Computer</a> | <a href="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer">Esri World Imagery</a> | <a href="https://www.openstreetmap.org/copyright">OpenStreetMap attribution</a>.</p>
 <h2 id="next">Scientific and business validation gates</h2>
 <div class="row"><div class="id">1</div><div><h3>Independent change truth</h3><p>Compare the candidate surface flags with independently dated and permitted field or aerial reference imagery, reporting precision, recall and false alarms across separate sites.</p></div></div>
 <div class="row"><div class="id">2</div><div><h3>Actual soil laboratory samples</h3><p>Only after lawful access: sample depth, date, method and real analyte values. Hold out entire sites or regions. No modelled SoilGrids values masquerading as ground truth.</p></div></div>
@@ -67,5 +81,7 @@ footer{border-top:1px solid #344052;margin-top:45px;padding-top:20px;color:#a7b8
 <p><a href="https://github.com/Hostilian/tesis/blob/main/research/SOIL_FIVE_EXECUTION_PROMPTS_2026-11-23.md">Execution and independent-review prompt pack</a> · <a href="https://github.com/Hostilian/tesis/blob/main/research/venture_rankings/rank_results_20261123.json">Reproducible ranked scores</a></p>
 <footer>Space-Based Economic Intelligence · Research feasibility record · All images and measurements are public-source candidates; no proprietary farm data, laboratory reports, customer information or unverified chemistry claims were published.</footer>
 </main>
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js" integrity="sha512-BwHfrr4c9kmRkLw6iXFdzcdWV/PGkVgiIyIWLLlTSXzWQzxuSg4DiQUCpauz/EWjgk5TYQqX/kvn9pG1NpYfqg==" crossorigin="anonymous"></script>
+<script src="soil-map.js" defer></script>
 </body>
 </html>

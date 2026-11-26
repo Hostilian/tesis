@@ -51,8 +51,10 @@ def test_api_anomalies_by_id_endpoint_not_found(client):
     assert "not found" in response.json()["detail"].lower()
 
 
-def test_api_financial_webhook(client):
+def test_api_financial_webhook(client, monkeypatch, tmp_path):
     """POST /api/v1/webhooks/financial must successfully ingest market data and return combined provenance hash."""
+    feed = tmp_path / "financial_feed.json"
+    monkeypatch.setattr("pipeline.src.api_server.FINANCIAL_FEED_FILE", feed)
     payload = {
         "indicator": "lithium_carbonate_spot_price",
         "value": 14200.0,
@@ -65,6 +67,9 @@ def test_api_financial_webhook(client):
     assert data["status"] == "success"
     assert "transaction_hash" in data
     assert len(data["transaction_hash"]) == 64  # SHA-256 length
+    records = json.loads(feed.read_text(encoding="utf-8"))
+    assert len(records) == 1
+    assert records[0]["tx_hash"] == data["transaction_hash"]
 
 
 def test_api_satellite_ingest_endpoint(client):

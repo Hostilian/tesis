@@ -1,0 +1,302 @@
+{
+  "schema": "sbei.soilgrids.map_layer_registry.v1",
+  "verification_bbox_lonlat": [
+    -8.05,
+    38.55,
+    -7.96,
+    38.64
+  ],
+  "documentation": "https://docs.isric.org/globaldata/soilgrids/SoilGrids_faqs_01.html",
+  "license_documentation": "https://docs.isric.org/globaldata/soilgrids/SoilGrids_faqs_02.html",
+  "notice": "These are third-party modeled predictions, not measurements or validation targets. Map requests were decoded as nonempty PNG images; this does not establish model accuracy.",
+  "layers": [
+    {
+      "property": "phh2o",
+      "layer": "phh2o_0-5cm_mean",
+      "map_status": 200,
+      "map_size": [
+        256,
+        256
+      ],
+      "visible_pixels": 65536,
+      "map_content_type": "image/png",
+      "legend_status": 200,
+      "legend_size": [
+        50,
+        470
+      ],
+      "name": "pH in water",
+      "source_organization": "ISRIC",
+      "source_url": "https://soilgrids.org/",
+      "technical_endpoint": "https://maps.isric.org/mapserv?map=/map/phh2o.map",
+      "depth_cm": [
+        0,
+        5
+      ],
+      "statistic": "mean",
+      "native_resolution_m": 250,
+      "license": "CC BY 4.0",
+      "evidence_class": "modeled_soil_property_not_field_measurement",
+      "geographic_coverage": "global, subject to provider mask",
+      "display_crs": "EPSG:3857",
+      "last_verified": "2026-11-26",
+      "browser_integration": "desktop_and_mobile_verified"
+    },
+    {
+      "property": "soc",
+      "layer": "soc_0-5cm_mean",
+      "map_status": 200,
+      "map_size": [
+        256,
+        256
+      ],
+      "visible_pixels": 65536,
+      "map_content_type": "image/png",
+      "legend_status": 200,
+      "legend_size": [
+        65,
+        500
+      ],
+      "name": "Soil organic carbon",
+      "source_organization": "ISRIC",
+      "source_url": "https://soilgrids.org/",
+      "technical_endpoint": "https://maps.isric.org/mapserv?map=/map/soc.map",
+      "depth_cm": [
+        0,
+        5
+      ],
+      "statistic": "mean",
+      "native_resolution_m": 250,
+      "license": "CC BY 4.0",
+      "evidence_class": "modeled_soil_property_not_field_measurement",
+      "geographic_coverage": "global, subject to provider mask",
+      "display_crs": "EPSG:3857",
+      "last_verified": "2026-11-26",
+      "browser_integration": "endpoint_and_legend_verified_browser_selection_not_individually_tested"
+    },
+    {
+      "property": "nitrogen",
+      "layer": "nitrogen_0-5cm_mean",
+      "map_status": 200,
+      "map_size": [
+        256,
+        256
+      ],
+      "visible_pixels": 65536,
+      "map_content_type": "image/png",
+      "legend_status": 200,
+      "legend_size": [
+        65,
+        500
+      ],
+      "name": "Total nitrogen",
+      "source_organization": "ISRIC",
+      "source_url": "https://soilgrids.org/",
+      "technical_endpoint": "https://maps.isric.org/mapserv?map=/map/nitrogen.map",
+      "depth_cm": [
+        0,
+        5
+      ],
+      "statistic": "mean",
+      "native_resolution_m": 250,
+      "license": "CC BY 4.0",
+      "evidence_class": "modeled_soil_property_not_field_measurement",
+      "geographic_coverage": "global, subject to provider mask",
+      "display_crs": "EPSG:3857",
+      "last_verified": "2026-11-26",
+      "browser_integration": "endpoint_and_legend_verified_browser_selection_not_individually_tested"
+    },
+    {
+      "property": "clay",
+      "layer": "clay_0-5cm_mean",
+      "map_status": 200,
+      "map_size": [
+        256,
+        256
+      ],
+      "visible_pixels": 65536,
+      "map_content_type": "image/png",
+      "legend_status": 200,
+      "legend_size": [
+        57,
+        500
+      ],
+      "name": "Clay fraction",
+      "source_organization": "ISRIC",
+      "source_url": "https://soilgrids.org/",
+      "technical_endpoint": "https://maps.isric.org/mapserv?map=/map/clay.map",
+      "depth_cm": [
+        0,
+        5
+      ],
+      "statistic": "mean",
+      "native_resolution_m": 250,
+      "license": "CC BY 4.0",
+      "evidence_class": "modeled_soil_property_not_field_measurement",
+      "geographic_coverage": "global, subject to provider mask",
+      "display_crs": "EPSG:3857",
+      "last_verified": "2026-11-26",
+      "browser_integration": "endpoint_and_legend_verified_browser_selection_not_individually_tested"
+    },
+    {
+      "property": "sand",
+      "layer": "sand_0-5cm_mean",
+      "map_status": 200,
+      "map_size": [
+        256,
+        256
+      ],
+      "visible_pixels": 65536,
+      "map_content_type": "image/png",
+      "legend_status": 200,
+      "legend_size": [
+        57,
+        500
+      ],
+      "name": "Sand fraction",
+      "source_organization": "ISRIC",
+      "source_url": "https://soilgrids.org/",
+      "technical_endpoint": "https://maps.isric.org/mapserv?map=/map/sand.map",
+      "depth_cm": [
+        0,
+        5
+      ],
+      "statistic": "mean",
+      "native_resolution_m": 250,
+      "license": "CC BY 4.0",
+      "evidence_class": "modeled_soil_property_not_field_measurement",
+      "geographic_coverage": "global, subject to provider mask",
+      "display_crs": "EPSG:3857",
+      "last_verified": "2026-11-26",
+      "browser_integration": "endpoint_and_legend_verified_browser_selection_not_individually_tested"
+    },
+    {
+      "property": "silt",
+      "layer": "silt_0-5cm_mean",
+      "map_status": 200,
+      "map_size": [
+        256,
+        256
+      ],
+      "visible_pixels": 65536,
+      "map_content_type": "image/png",
+      "legend_status": 200,
+      "legend_size": [
+        57,
+        500
+      ],
+      "name": "Silt fraction",
+      "source_organization": "ISRIC",
+      "source_url": "https://soilgrids.org/",
+      "technical_endpoint": "https://maps.isric.org/mapserv?map=/map/silt.map",
+      "depth_cm": [
+        0,
+        5
+      ],
+      "statistic": "mean",
+      "native_resolution_m": 250,
+      "license": "CC BY 4.0",
+      "evidence_class": "modeled_soil_property_not_field_measurement",
+      "geographic_coverage": "global, subject to provider mask",
+      "display_crs": "EPSG:3857",
+      "last_verified": "2026-11-26",
+      "browser_integration": "endpoint_and_legend_verified_browser_selection_not_individually_tested"
+    },
+    {
+      "property": "bdod",
+      "layer": "bdod_0-5cm_mean",
+      "map_status": 200,
+      "map_size": [
+        256,
+        256
+      ],
+      "visible_pixels": 65536,
+      "map_content_type": "image/png",
+      "legend_status": 200,
+      "legend_size": [
+        57,
+        500
+      ],
+      "name": "Bulk density",
+      "source_organization": "ISRIC",
+      "source_url": "https://soilgrids.org/",
+      "technical_endpoint": "https://maps.isric.org/mapserv?map=/map/bdod.map",
+      "depth_cm": [
+        0,
+        5
+      ],
+      "statistic": "mean",
+      "native_resolution_m": 250,
+      "license": "CC BY 4.0",
+      "evidence_class": "modeled_soil_property_not_field_measurement",
+      "geographic_coverage": "global, subject to provider mask",
+      "display_crs": "EPSG:3857",
+      "last_verified": "2026-11-26",
+      "browser_integration": "endpoint_and_legend_verified_browser_selection_not_individually_tested"
+    },
+    {
+      "property": "cfvo",
+      "layer": "cfvo_0-5cm_mean",
+      "map_status": 200,
+      "map_size": [
+        256,
+        256
+      ],
+      "visible_pixels": 65536,
+      "map_content_type": "image/png",
+      "legend_status": 200,
+      "legend_size": [
+        57,
+        485
+      ],
+      "name": "Coarse fragments",
+      "source_organization": "ISRIC",
+      "source_url": "https://soilgrids.org/",
+      "technical_endpoint": "https://maps.isric.org/mapserv?map=/map/cfvo.map",
+      "depth_cm": [
+        0,
+        5
+      ],
+      "statistic": "mean",
+      "native_resolution_m": 250,
+      "license": "CC BY 4.0",
+      "evidence_class": "modeled_soil_property_not_field_measurement",
+      "geographic_coverage": "global, subject to provider mask",
+      "display_crs": "EPSG:3857",
+      "last_verified": "2026-11-26",
+      "browser_integration": "endpoint_and_legend_verified_browser_selection_not_individually_tested"
+    },
+    {
+      "property": "cec",
+      "layer": "cec_0-5cm_mean",
+      "map_status": 200,
+      "map_size": [
+        256,
+        256
+      ],
+      "visible_pixels": 65536,
+      "map_content_type": "image/png",
+      "legend_status": 200,
+      "legend_size": [
+        57,
+        500
+      ],
+      "name": "Cation exchange capacity",
+      "source_organization": "ISRIC",
+      "source_url": "https://soilgrids.org/",
+      "technical_endpoint": "https://maps.isric.org/mapserv?map=/map/cec.map",
+      "depth_cm": [
+        0,
+        5
+      ],
+      "statistic": "mean",
+      "native_resolution_m": 250,
+      "license": "CC BY 4.0",
+      "evidence_class": "modeled_soil_property_not_field_measurement",
+      "geographic_coverage": "global, subject to provider mask",
+      "display_crs": "EPSG:3857",
+      "last_verified": "2026-11-26",
+      "browser_integration": "endpoint_and_legend_verified_browser_selection_not_individually_tested"
+    }
+  ]
+}
