@@ -45,33 +45,19 @@ def compile_pdf():
     
     pdf.ln(60)
     pdf.set_font("Arial", "B", 12)
-    pdf.cell(0, 8, "Author: Eren Ozturk (XOZTE001@studenti.czu.cz)", 0, new_x="LMARGIN", new_y="NEXT", align="L")
-    pdf.cell(0, 8, "Supervisor: Dr. Jirí Brožek", 0, new_x="LMARGIN", new_y="NEXT", align="L")
-    pdf.cell(0, 8, "Academic Year: 2025–2026", 0, new_x="LMARGIN", new_y="NEXT", align="L")
+    pdf.cell(0, 8, "Author: Eren Öztürk", 0, new_x="LMARGIN", new_y="NEXT", align="L")
+    pdf.cell(0, 8, "Supervisor: Ing. Jiří Brožek, Ph.D.", 0, new_x="LMARGIN", new_y="NEXT", align="L")
+    pdf.cell(0, 8, "Academic Year: 2026/2027", 0, new_x="LMARGIN", new_y="NEXT", align="L")
     
     pdf.ln(20)
     pdf.cell(0, 10, "Prague, 2026", 0, new_x="LMARGIN", new_y="NEXT", align="C")
     
-    # ── ABSTRACT PAGE ──
-    pdf.add_page()
-    pdf.set_font("Arial", "B", 14)
-    pdf.cell(0, 12, "Abstract", 0, new_x="LMARGIN", new_y="NEXT", align="L")
-    pdf.ln(5)
-    pdf.set_font("Arial", "", 11)
-    abstract_text = (
-        "This thesis investigates the implementation of space-based economic intelligence systems "
-        "using civilian satellite APIs. By constructing an automated pipeline querying Google Earth Engine "
-        "and Copernicus Data Space Ecosystem collections, spectral anomalies are extracted and analyzed "
-        "via unsupervised Isolation Forests and temporal Z-scores. The resulting dashboard provides a "
-        "practical Decision Support System (DSS) demonstrating real-world applications in monitoring "
-        "lithium brine evaporation ponds in Chile, informal gold mining deforestation in Peru, and "
-        "industrial night-light changes in the Czech Republic."
-    )
-    pdf.multi_cell(0, 6, abstract_text, new_x="LMARGIN", new_y="NEXT")
-    
+    # Declaration, AI-use note, abstract and keywords come from chapters/00_front_matter.md.
+
     # ── CHAPTERS ──
     chapters_dir = r"d:\CODING\tesis\thesis\chapters"
     files = [
+        "00_front_matter.md",
         "01_introduction.md",
         "02_literature_review.md",
         "03_methodology.md",
