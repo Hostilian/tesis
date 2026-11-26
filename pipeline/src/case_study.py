@@ -416,7 +416,12 @@ def seasonal_split(
     are *consistent with* a permanent crop; this is an interpretation, not a
     land-use label.
     """
-    usable = increase_mask & other_valid & np.isfinite(after_other_season)
+    usable = (
+        increase_mask
+        & other_valid
+        & np.isfinite(after_other_season)
+        & np.isfinite(after_summer)
+    )
     amp = after_summer - after_other_season
     stable = usable & (np.abs(amp) <= amplitude_threshold)
     seasonal = usable & (np.abs(amp) > amplitude_threshold)
