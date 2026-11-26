@@ -6,7 +6,8 @@ import sys
 import time
 import urllib.request
 
-bib = open(sys.argv[1], encoding="utf-8").read()
+with open(sys.argv[1], encoding="utf-8") as fh:
+    bib = fh.read()
 entries = re.split(r"\n(?=@)", bib)
 rows = []
 for e in entries:
@@ -34,7 +35,8 @@ for e in entries:
     except Exception as ex:  # noqa: BLE001
         rows.append({"key": key, "doi": d, "bib_title": title, "status": f"DOI NOT RESOLVED ({type(ex).__name__}: {ex})"})
     time.sleep(0.3)
-json.dump(rows, open(sys.argv[2], "w", encoding="utf-8"), indent=1, ensure_ascii=False)
+with open(sys.argv[2], "w", encoding="utf-8") as fh:
+    json.dump(rows, fh, indent=1, ensure_ascii=False)
 for r in rows:
     if r["status"] != "OK":
         print(r["key"], "|", r["status"], "|", r.get("doi"), "|", (r.get("bib_title") or r.get("title", ""))[:70], "| CR:", (r.get("crossref_title") or "")[:70])
