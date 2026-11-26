@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 import re
 from fpdf import FPDF
 
@@ -59,18 +60,17 @@ def compile_pdf():
     pdf.ln(5)
     pdf.set_font("Arial", "", 11)
     abstract_text = (
-        "This thesis investigates the implementation of space-based economic intelligence systems "
-        "using civilian satellite APIs. By constructing an automated pipeline querying Google Earth Engine "
-        "and Copernicus Data Space Ecosystem collections, spectral anomalies are extracted and analyzed "
-        "via unsupervised Isolation Forests and temporal Z-scores. The resulting dashboard provides a "
-        "practical Decision Support System (DSS) demonstrating real-world applications in monitoring "
-        "lithium brine evaporation ponds in Chile, informal gold mining deforestation in Peru, and "
-        "industrial night-light changes in the Czech Republic."
+        "This thesis investigates space-based economic intelligence using open satellite APIs. "
+        "The software demonstrates spectral processing, anomaly detection, provenance and geospatial visualization. "
+        "The published anomaly records are synthetic demonstrations, not independently validated detections. "
+        "Bounded public Sentinel-2 raster access has been demonstrated separately. "
+        "Independent anomaly labels, real VIIRS-economic analysis and controlled benchmarks remain necessary "
+        "before the research hypotheses can be evaluated."
     )
     pdf.multi_cell(0, 6, abstract_text, new_x="LMARGIN", new_y="NEXT")
     
     # ── CHAPTERS ──
-    chapters_dir = r"d:\CODING\tesis\thesis\chapters"
+    chapters_dir = Path(__file__).resolve().parent / "chapters"
     files = [
         "01_introduction.md",
         "02_literature_review.md",
@@ -90,7 +90,7 @@ def compile_pdf():
     for filename in files:
         filepath = os.path.join(chapters_dir, filename)
         if not os.path.exists(filepath):
-            continue
+            raise FileNotFoundError(f"Required manuscript chapter missing: {filepath}")
             
         print(f"Processing chapter file: {filename}")
         with open(filepath, "r", encoding="utf-8") as f:
@@ -162,7 +162,7 @@ def compile_pdf():
         if in_table:
             render_pdf_table(pdf, table_lines)
             
-    output_path = r"d:\CODING\tesis\thesis\thesis.pdf"
+    output_path = Path(__file__).resolve().parent / "thesis-review-draft.pdf"
     pdf.output(output_path)
     print(f"Thesis PDF compiled successfully at: {output_path}")
 
