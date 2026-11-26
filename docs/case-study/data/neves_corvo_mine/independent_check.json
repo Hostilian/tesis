@@ -1,0 +1,54 @@
+{
+  "schema": "tesis.case_study.independent_check.v1",
+  "data_status": "observation_derived_result",
+  "case_id": "neves_corvo_mine",
+  "checked_run_id": "neves_corvo_mine-20261126T143733Z",
+  "checked_at": "2026-11-26T18:43:55Z",
+  "code_commit": "f042f4ba59c1fbb551f6caeffeef55cae0b0d729",
+  "command": "python pipeline/verify_independent.py pipeline/case_studies/neves_corvo_mine.json",
+  "method": "Second implementation sharing no code with the pipeline; reads STAC items over plain HTTP and the public COGs directly.",
+  "shared_inputs": [
+    "config file",
+    "AOI grid bounds from results.json"
+  ],
+  "all_match": true,
+  "comparisons": [
+    {
+      "quantity": "joint_valid_pixels_main",
+      "independent": 469408,
+      "published": 469408,
+      "match": true
+    },
+    {
+      "quantity": "joint_valid_pixels_control",
+      "independent": 469572,
+      "published": 469572,
+      "match": true
+    },
+    {
+      "quantity": "threshold",
+      "independent": 0.05,
+      "published": 0.05,
+      "match": true
+    },
+    {
+      "quantity": "increase_area_ha",
+      "independent": 326.99,
+      "published": 326.99,
+      "match": true
+    },
+    {
+      "quantity": "decrease_area_ha",
+      "independent": 284.22,
+      "published": 284.22,
+      "match": true
+    },
+    {
+      "quantity": "control_flagged_share_at_threshold",
+      "independent": 0.009659860468682118,
+      "published": 0.009659860468682118,
+      "match": true
+    }
+  ],
+  "runtime_seconds": 128.9
+}
