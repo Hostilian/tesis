@@ -15,22 +15,37 @@
     header h1 { font-size:16px; margin:0; font-weight:600; }
     header a { color:var(--accent); text-decoration:none; font-size:13px; }
     header .spacer { flex:1; }
+    header nav { display:flex; flex-wrap:wrap; gap:10px 18px; }
+    .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+    .skip { position:absolute; left:8px; top:-60px; z-index:2000; background:#ffd24d; color:#0f1419; padding:8px 12px; border-radius:4px; font-weight:600; }
+    .skip:focus { top:8px; }
+    /* Visible keyboard focus: yellow ring with a dark inner ring, so it shows on dark panels and on white map controls. */
+    :focus-visible { outline:3px solid #ffd24d; outline-offset:2px; box-shadow:0 0 0 5px #0f1419; }
+    #map:focus-visible { outline-offset:-4px; box-shadow:none; }
     main { display:grid; grid-template-columns: 1fr 380px; height: calc(100vh - 53px); }
     #map { height:100%; min-height:420px; }
     aside { overflow-y:auto; border-left:1px solid var(--line); background:var(--panel); padding:14px 16px 40px; }
     h2 { font-size:14px; margin:18px 0 6px; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; font-weight:600; }
     select, input[type=range] { width:100%; }
-    select { background:#0f1419; color:var(--text); border:1px solid var(--line); border-radius:6px; padding:6px; font-size:14px; }
+    select { background:#0f1419; color:var(--text); border:1px solid #6b7f92; border-radius:6px; padding:6px; font-size:14px; }
     label.layer { display:flex; gap:8px; align-items:center; padding:3px 0; cursor:pointer; }
     .badge { display:inline-block; font-size:11px; padding:1px 7px; border-radius:10px; border:1px solid; white-space:nowrap; }
     .b-obs { color:#8fd18f; border-color:#3d6b3d; }
     .b-der { color:#7fc4ff; border-color:#2e5778; }
     .b-int { color:var(--warn); border-color:#7a5a24; }
     .b-syn { color:#d48fd4; border-color:#6b3d6b; }
+    /* Leaflet popups have a white background: use darker text so badges and notes stay readable there. */
+    .leaflet-popup-content .b-obs { color:#1b5e20; }
+    .leaflet-popup-content .b-der { color:#0b4f8a; }
+    .leaflet-popup-content .b-int { color:#8a5300; }
+    .leaflet-popup-content .b-syn { color:#7b2a7b; }
+    .leaflet-popup-content .muted { color:#526070; }
+    /* Attribution and scale sit over imagery: an opaque background keeps their text readable. */
+    .leaflet-container .leaflet-control-attribution, .leaflet-container .leaflet-control-scale-line { background:#fff; }
     table { width:100%; border-collapse:collapse; font-size:13px; }
     td, th { padding:4px 4px; border-bottom:1px solid var(--line); vertical-align:top; text-align:left; }
     td.n { text-align:right; font-variant-numeric: tabular-nums; white-space:nowrap; }
-    .legend span.sw { display:inline-block; width:12px; height:12px; border-radius:2px; margin-right:6px; vertical-align:-1px; }
+    .legend span.sw { display:inline-block; width:12px; height:12px; border-radius:2px; margin-right:6px; vertical-align:-1px; outline:1px solid var(--text); }
     .muted { color:var(--muted); font-size:12.5px; }
     .note { background:#1d252d; border-left:3px solid var(--warn); padding:8px 10px; font-size:12.5px; margin:10px 0; }
     .err { background:#3a1d1d; border-left:3px solid #e06060; padding:8px 10px; }
@@ -42,26 +57,33 @@
       #map { height:60vh; }
       aside { border-left:none; border-top:1px solid var(--line); }
     }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important; }
+    }
   </style>
 </head>
 <body>
+<a class="skip" href="#details">Skip to study area, layers and numbers</a>
 <header>
   <h1>Portugal case study · Sentinel-2 change 2018 → 2025</h1>
   <span class="spacer"></span>
-  <a href="../">← Main dashboard</a>
-  <a href="https://github.com/Hostilian/tesis/tree/main/pipeline" rel="noopener">Pipeline code</a>
+  <nav aria-label="Site">
+    <a href="../"><span aria-hidden="true">← </span>Main dashboard</a>
+    <a href="https://github.com/Hostilian/tesis/tree/main/pipeline" rel="noopener">Pipeline code</a>
+  </nav>
 </header>
 <main>
-  <div id="map" role="region" aria-label="Satellite map of the selected study area"></div>
-  <aside>
+  <div id="map" role="region" aria-label="Satellite map of the selected study area" aria-describedby="map-summary"></div>
+  <aside id="details" role="region" aria-label="Study area, layers and numbers" tabindex="-1">
+    <p id="map-summary" class="sr-only" aria-live="polite">Loading the study area.</p>
     <label for="case" class="muted">Study area</label>
-    <select id="case" aria-label="Select study area"></select>
+    <select id="case"></select>
     <p id="case-desc" class="muted"></p>
 
-    <h2>Layers</h2>
-    <div id="layers"></div>
+    <h2 id="layers-h">Layers</h2>
+    <div id="layers" role="group" aria-labelledby="layers-h"></div>
     <label class="muted" for="opacity">Overlay opacity</label>
-    <input id="opacity" type="range" min="0" max="1" step="0.05" value="0.85">
+    <input id="opacity" type="range" min="0" max="1" step="0.05" value="0.85" aria-valuetext="85 %">
     <div id="legend" class="legend"></div>
 
     <h2>Data status</h2>
@@ -97,7 +119,10 @@ const pct = (x, d = 1) => (x === null || x === undefined) ? "–" : fmt(100 * x,
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const badge = s => ({ public_observation: '<span class="badge b-obs">public observation</span>', observation_derived_result: '<span class="badge b-der">derived</span>', unverified_interpretation: '<span class="badge b-int">interpretation</span>', synthetic_demonstration: '<span class="badge b-syn">synthetic</span>' }[s] || "");
 
-const map = L.map("map", { zoomControl: true, maxZoom: 18 });
+// The skip link moves focus without replacing the #case hash that the page uses for sharing.
+document.querySelector(".skip").addEventListener("click", e => { e.preventDefault(); document.getElementById("details").focus(); });
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const map = L.map("map", { zoomControl: true, maxZoom: 18, zoomAnimation: !reduceMotion, fadeAnimation: !reduceMotion, markerZoomAnimation: !reduceMotion, inertia: !reduceMotion });
 const satellite = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
   maxZoom: 18, attribution: "Basemap © Esri, Maxar, Earthstar Geographics · Overlays: contains modified Copernicus Sentinel data 2018, 2025 · COS © DGT (CC-BY)"
 }).addTo(map);
@@ -162,12 +187,13 @@ async function loadCase(caseId, index) {
   try {
     [results, manifest, ref] = await Promise.all([getJSON(base + "results.json"), getJSON(base + "manifest.json"), getJSON(base + "reference_cos.json", true)]);
   } catch (e) {
-    document.getElementById("numbers").innerHTML = `<p class="err">Results for this area could not be loaded (${esc(e.message)}). No change layer is shown.</p>`;
+    document.getElementById("numbers").innerHTML = `<p class="err" role="alert">Results for this area could not be loaded (${esc(e.message)}). No change layer is shown.</p>`;
+    document.getElementById("map-summary").textContent = `${meta.title}. Results could not be loaded; no change layer is shown.`;
     const b = meta.bbox; map.fitBounds([[b[1], b[0]], [b[3], b[2]]]);
     return;
   }
   if (results.status !== "ok") {
-    document.getElementById("numbers").innerHTML = `<p class="err">Run status: ${esc(results.status)}. Valid coverage was too low to report change.</p>`;
+    document.getElementById("numbers").innerHTML = `<p class="err" role="alert">Run status: ${esc(results.status)}. Valid coverage was too low to report change.</p>`;
   }
   const b = results.aoi.bbox_wgs84;
   current.aoi = L.rectangle([[b[1], b[0]], [b[3], b[2]]], { color: "#ffffff", weight: 1.5, fill: false, dashArray: "5 4", interactive: false }).addTo(map);
@@ -206,7 +232,7 @@ async function loadCase(caseId, index) {
       const pick = f => { const c = f.properties.cos25v1_n4_c || ""; return c.startsWith("2.2.") || c.startsWith("1.6."); };
       current.layers.cos = L.geoJSON({ type: "FeatureCollection", features: gj.features.filter(pick) }, {
         style: f => ({ color: (f.properties.cos25v1_n4_c || "").startsWith("1.6.") ? "#ffcc00" : "#b8f2b8", weight: 1.2, fill: false, dashArray: "3 3" }),
-        onEachFeature: (f, l) => l.bindPopup(`<b>COS 2025v1</b> ${badge("public_observation")}<br>${esc(f.properties.cos25v1_n4_c)} – ${esc(f.properties.cos25v1_n4_l)}<br><span class="muted">© DGT, CC-BY</span>`)
+        onEachFeature: (f, l) => l.bindPopup(`<b>COS 2025v1</b> ${badge("public_observation")}<br>${esc(f.properties.cos25v1_n4_c)} – <span lang="pt">${esc(f.properties.cos25v1_n4_l)}</span><br><span class="muted">© DGT, CC-BY</span>`)
       });
       renderLayers(caseId);
     });
@@ -234,7 +260,13 @@ async function loadCase(caseId, index) {
     const s = results.seasonal_split;
     rows += `<tr><td>Increase pixels stable May→Aug ${badge("unverified_interpretation")}<div class="muted">consistent with evergreen permanent crops</div></td><td class="n">${pct(s.stable_within_year / s.with_valid_second_date)}</td></tr>`;
   }
-  document.getElementById("numbers").innerHTML = `<table>${rows}</table>`;
+  document.getElementById("numbers").innerHTML = `<table><caption class="sr-only">Key numbers: ${esc(meta.title)}</caption>${rows}</table>`;
+  // Text alternative to the map for screen readers: the same figures as the Key numbers table.
+  document.getElementById("map-summary").textContent =
+    `${meta.title}. ${results.web.index_label} compared between ${d0} and ${d1}. ` +
+    `Candidate change in patches of at least ${fmt(c.min_patch_ha)} ha: increase ${fmt(c.increase_area_ha, 0)} ha (${pct(c.increase_share_of_valid)} of valid pixels), ` +
+    `decrease ${fmt(c.decrease_area_ha, 0)} ha (${pct(c.decrease_share_of_valid)}). ` +
+    `The map shows where the surface changed, not why. Full figures are in the Key numbers table.`;
 
   if (ref) {
     let html = `<p class="muted">${esc(ref.reference.name)} · ${esc(ref.reference.license)}. Not used to tune the method.</p><table><tr><th>COS category (2018 → 2025)</th><th class="n">area</th><th class="n">flagged ↑</th><th class="n">flagged ↓</th></tr>`;
@@ -272,7 +304,7 @@ async function loadCase(caseId, index) {
   let index;
   try { index = await getJSON(DATA + "index.json"); }
   catch (e) {
-    document.getElementById("numbers").innerHTML = `<p class="err">Case-study index could not be loaded (${esc(e.message)}).</p>`;
+    document.getElementById("numbers").innerHTML = `<p class="err" role="alert">Case-study index could not be loaded (${esc(e.message)}).</p>`;
     map.setView([38.0, -8.0], 8);
     return;
   }
@@ -282,7 +314,7 @@ async function loadCase(caseId, index) {
   const fromHash = decodeURIComponent(location.hash.slice(1));
   sel.value = index.cases[fromHash] ? fromHash : order[0];
   sel.addEventListener("change", () => { history.replaceState(null, "", "#" + sel.value); loadCase(sel.value, index); });
-  document.getElementById("opacity").addEventListener("input", e => setOpacity(Number(e.target.value)));
+  document.getElementById("opacity").addEventListener("input", e => { setOpacity(Number(e.target.value)); e.target.setAttribute("aria-valuetext", Math.round(100 * Number(e.target.value)) + " %"); });
   window.addEventListener("hashchange", () => { const h = decodeURIComponent(location.hash.slice(1)); if (index.cases[h] && h !== sel.value) { sel.value = h; loadCase(h, index); } });
   loadCase(sel.value, index);
 })();
