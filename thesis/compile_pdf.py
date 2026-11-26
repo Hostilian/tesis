@@ -95,7 +95,9 @@ def compile_pdf():
         print(f"Processing chapter file: {filename}")
         with open(filepath, "r", encoding="utf-8") as f:
             content = f.read()
-            
+        # HTML comments are notes for authors (e.g. AI-use markers), not thesis text.
+        content = re.sub(r"<!--.*?-->", "", content, flags=re.S)
+
         pdf.add_page()
         lines = content.split("\n")
         

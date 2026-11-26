@@ -21,7 +21,7 @@ Read this before you change anything. It applies to every AI agent working in th
 - Label every public number or layer as one of: **public observation**, **observation-derived result**, **unverified interpretation** or **synthetic demonstration**. Mock data is never evidence.
 - Never claim a score, finding or validation unless data, code, timestamp and the exact command exist. A change flag says *where* the surface changed, never *why*.
 - The old figures (F1 0.907, r 0.724, Moran's I 0.648, "9-second runtime") are untraceable. Don't reuse them as results.
-- Every reference must resolve to a real publication. Check with `python -I docs/thesis_audit/check_dois.py thesis/latex/references.bib out.json` (Crossref title match) before adding or citing one.
+- Every reference must resolve to a real publication. Check with `python -I thesis/tools/check_dois.py thesis/latex/references.bib out.json` (Crossref title match) before adding or citing one.
 - **CZU Rector's Directive 7/2026, Art. 8:**
   - AI may help only in the literature review: grammar, style, structure, rewording, finding sources.
   - AI must not write the results, discussion or conclusions.
