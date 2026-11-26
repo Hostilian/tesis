@@ -2,7 +2,7 @@
   "schema": "tesis.case_study.reference_cos.v1",
   "data_status": "observation_derived_result",
   "case_id": "alqueva_olive",
-  "run_id": "alqueva_olive-20261126T132226Z",
+  "run_id": "alqueva_olive-20261126T140929Z",
   "reference": {
     "name": "Carta de Uso e Ocupação do Solo (COS) 2018v4 / 2025v1, Direção-Geral do Território (DGT)",
     "license": "CC-BY (dados.gov.pt: 'Carta de Uso e Ocupação do Solo (COS) - Série 2 - (2018v4 - 2025v1)')",
@@ -12,7 +12,7 @@
       "cos2018v4",
       "cos2025v1"
     ],
-    "retrieved_at": "2026-11-26T13:24:30Z",
+    "retrieved_at": "2026-11-26T14:12:02Z",
     "polygons_2018": 183,
     "polygons_2025": 193,
     "class_codes_2025": [
