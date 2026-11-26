@@ -3,16 +3,16 @@
   "case_id": "alqueva_olive",
   "data_status": "observation_derived_result",
   "purpose": "Same Sentinel-2 L2A acquisitions read from two public STAC providers on one 10 m grid; differences are provider/processing differences, not surface change.",
-  "started_at": "2026-11-26T18:34:10Z",
-  "completed_at": "2026-11-26T18:35:06Z",
-  "sas_token_retrieved_at": "2026-11-26T18:34:14Z",
-  "runtime_seconds": 56.3,
+  "started_at": "2026-11-26T18:55:59Z",
+  "completed_at": "2026-11-26T18:56:53Z",
+  "sas_token_retrieved_at": "2026-11-26T18:56:04Z",
+  "runtime_seconds": 54.0,
   "command": "python pipeline/run_interop_check.py pipeline/case_studies/alqueva_olive.json",
   "config_path": "pipeline/case_studies/alqueva_olive.json",
   "config_sha256": "a199b0c58514e7a553cde91158f6ae819cf0d1171395dd67617255a785f4139b",
   "code": {
-    "commit": "eadc7c828f1989c2696de27687cec20919ab851c",
-    "branch": "worktree-agent-a7f6d9479f2ff8fce",
+    "commit": "d1709f47dcd777b4196b742ceaaced09647f64fe",
+    "branch": "case-study/portugal-sentinel2",
     "interop_code_dirty": false
   },
   "environment": {
@@ -592,7 +592,7 @@
       "jaccard_of_flagged": 0.9693716010239994
     },
     "earth_search_reproduces_published_run": {
-      "published_run_id": "alqueva_olive-20261126T143509Z",
+      "published_run_id": "alqueva_olive-20261126T184505Z",
       "published_main_increase_pixels": 243423,
       "recomputed_main_increase_pixels": 243423,
       "equal": true

@@ -2,7 +2,7 @@
   "schema": "tesis.case_study.robustness.v1",
   "data_status": "observation_derived_result",
   "case_id": "neves_corvo_mine",
-  "main_run_id": "neves_corvo_mine-20261126T143733Z",
+  "main_run_id": "neves_corvo_mine-20261126T184732Z",
   "reference": {
     "flag": "BSI increase (median-centred) in patches >= min_patch_ha",
     "reference_positive": "COS2025v1 mines and quarries (1.6.x); a land-use state, not a mapped change",
@@ -851,21 +851,23 @@
     "threshold_matches_results_json": true,
     "increase_area_ha_matches_results_json": true,
     "local_delta_geotiff": {
-      "path": "pipeline/data/case_studies/neves_corvo_mine/neves_corvo_mine-20261126T143733Z/delta_bsi.tif",
-      "found": false
+      "path": "pipeline/data/case_studies/neves_corvo_mine/neves_corvo_mine-20261126T184732Z/delta_bsi.tif",
+      "found": true,
+      "same_valid_mask": true,
+      "max_abs_difference": 0.0
     },
     "precision_recall_match_reference_cos_json_mining_row": true
   },
   "manifest": {
     "command": "python pipeline/run_robustness.py pipeline/case_studies/neves_corvo_mine.json --alt-before S2B_29SNB_20180823_1_L2A --alt-after S2B_29SNB_20250826_0_L2A --alt-control-before S2A_29SNB_20250803_1_L2A --fine-grid 0.01 0.20 0.01",
-    "started_at": "2026-11-26T18:38:00Z",
-    "completed_at": "2026-11-26T18:41:45Z",
-    "runtime_seconds": 224.9,
+    "started_at": "2026-11-26T18:52:18Z",
+    "completed_at": "2026-11-26T18:55:58Z",
+    "runtime_seconds": 220.6,
     "random_seed": 20261126,
     "iterations": 1000,
     "code": {
-      "commit": "0ada693f394db2d831a1610365eaab9c75f955b7",
-      "branch": "robustness/case-study-portugal",
+      "commit": "d1709f47dcd777b4196b742ceaaced09647f64fe",
+      "branch": "case-study/portugal-sentinel2",
       "code_dirty": false,
       "code_paths_checked": [
         "pipeline/src/robustness.py",
@@ -893,7 +895,7 @@
       "stac": {
         "url": "https://earth-search.aws.element84.com/v1",
         "collection": "sentinel-2-l2a",
-        "retrieved_at": "2026-11-26T18:38:05Z",
+        "retrieved_at": "2026-11-26T18:52:22Z",
         "items": [
           {
             "id": "S2A_29SNB_20180818_1_L2A",
@@ -957,14 +959,14 @@
           "cos2018v4",
           "cos2025v1"
         ],
-        "retrieved_at": "2026-11-26T18:41:31Z",
+        "retrieved_at": "2026-11-26T18:55:45Z",
         "polygons_2018": 230,
         "polygons_2025": 231
       },
       "published_files_read": {
-        "docs/case-study/data/neves_corvo_mine/results.json": "a009031989ca73af9003ff3c4ef09b2fe99e59becfe76288f90ebada274e423b",
-        "docs/case-study/data/neves_corvo_mine/manifest.json": "09583e54279b781924de3819cabbc6ab2acf4b5e720a62e3e7566fe32f6d7180",
-        "docs/case-study/data/neves_corvo_mine/reference_cos.json": "434e5edd63331a77706e91ee352bd23df0ac36b52bf8217dac2702df69bfcab8"
+        "docs/case-study/data/neves_corvo_mine/results.json": "72d08da1023df602cb791f071d9385c30a2cb7e7b3ba104222ab70bb3afd44ee",
+        "docs/case-study/data/neves_corvo_mine/manifest.json": "9e9ebd994d1424a14d6e17eb65295019c95c41cb4618f5b17cc07e39d7059ef1",
+        "docs/case-study/data/neves_corvo_mine/reference_cos.json": "2afbfce220d76a111a19dd4491577028e7cd7603c721a30d1f24ca890676e0ce"
       }
     },
     "outputs": {

@@ -2,9 +2,9 @@
   "schema": "tesis.case_study.independent_check.v1",
   "data_status": "observation_derived_result",
   "case_id": "neves_corvo_mine",
-  "checked_run_id": "neves_corvo_mine-20261126T143733Z",
-  "checked_at": "2026-11-26T18:43:55Z",
-  "code_commit": "f042f4ba59c1fbb551f6caeffeef55cae0b0d729",
+  "checked_run_id": "neves_corvo_mine-20261126T184732Z",
+  "checked_at": "2026-11-26T19:00:25Z",
+  "code_commit": "d1709f47dcd777b4196b742ceaaced09647f64fe",
   "command": "python pipeline/verify_independent.py pipeline/case_studies/neves_corvo_mine.json",
   "method": "Second implementation sharing no code with the pipeline; reads STAC items over plain HTTP and the public COGs directly.",
   "shared_inputs": [
@@ -50,5 +50,5 @@
       "match": true
     }
   ],
-  "runtime_seconds": 128.9
+  "runtime_seconds": 131.6
 }

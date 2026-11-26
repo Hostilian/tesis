@@ -2,7 +2,7 @@
   "schema": "tesis.case_study.robustness.v1",
   "data_status": "observation_derived_result",
   "case_id": "alqueva_olive",
-  "main_run_id": "alqueva_olive-20261126T143509Z",
+  "main_run_id": "alqueva_olive-20261126T184505Z",
   "reference": {
     "flag": "NDVI increase in patches >= min_patch_ha",
     "reference_positive": "COS new permanent crop: not 2.2.x in COS2018v4, 2.2.x in COS2025v1",
@@ -884,22 +884,24 @@
     "threshold_matches_results_json": true,
     "increase_area_ha_matches_results_json": true,
     "local_delta_geotiff": {
-      "path": "pipeline/data/case_studies/alqueva_olive/alqueva_olive-20261126T143509Z/delta_ndvi.tif",
-      "found": false
+      "path": "pipeline/data/case_studies/alqueva_olive/alqueva_olive-20261126T184505Z/delta_ndvi.tif",
+      "found": true,
+      "same_valid_mask": true,
+      "max_abs_difference": 0.0
     },
     "pixel_counts_match_reference_cos_json": true,
     "polygon_counts_match_reference_cos_json": true
   },
   "manifest": {
     "command": "python pipeline/run_robustness.py pipeline/case_studies/alqueva_olive.json --alt-before S2B_29SNC_20180823_1_L2A --alt-after S2A_29SNC_20250823_0_L2A --alt-control-before S2A_29SNC_20250803_0_L2A",
-    "started_at": "2026-11-26T18:38:00Z",
-    "completed_at": "2026-11-26T18:40:09Z",
-    "runtime_seconds": 129.6,
+    "started_at": "2026-11-26T18:50:03Z",
+    "completed_at": "2026-11-26T18:52:17Z",
+    "runtime_seconds": 134.3,
     "random_seed": 20261126,
     "iterations": 1000,
     "code": {
-      "commit": "0ada693f394db2d831a1610365eaab9c75f955b7",
-      "branch": "robustness/case-study-portugal",
+      "commit": "d1709f47dcd777b4196b742ceaaced09647f64fe",
+      "branch": "case-study/portugal-sentinel2",
       "code_dirty": false,
       "code_paths_checked": [
         "pipeline/src/robustness.py",
@@ -927,7 +929,7 @@
       "stac": {
         "url": "https://earth-search.aws.element84.com/v1",
         "collection": "sentinel-2-l2a",
-        "retrieved_at": "2026-11-26T18:38:04Z",
+        "retrieved_at": "2026-11-26T18:50:08Z",
         "items": [
           {
             "id": "S2A_29SNC_20180818_1_L2A",
@@ -991,14 +993,14 @@
           "cos2018v4",
           "cos2025v1"
         ],
-        "retrieved_at": "2026-11-26T18:40:00Z",
+        "retrieved_at": "2026-11-26T18:52:07Z",
         "polygons_2018": 183,
         "polygons_2025": 193
       },
       "published_files_read": {
-        "docs/case-study/data/alqueva_olive/results.json": "7aba854897c3f120149b62bef2b2e300c878c346cb251786af80e718e2cc7290",
-        "docs/case-study/data/alqueva_olive/manifest.json": "69e6679d8032bf3ce1e5cd99c723d0ee3ec7b6f48498539e629f811a1f83933d",
-        "docs/case-study/data/alqueva_olive/reference_cos.json": "b9daed6c7dd787a23719bb2754d922b8bb96709857d0f565e74d7b33e22dbae1"
+        "docs/case-study/data/alqueva_olive/results.json": "6d40c2554db2ce9afce82842ddf273f7013bdd06895ce93667a16c558657d973",
+        "docs/case-study/data/alqueva_olive/manifest.json": "3a8615d9c9a3d8558e6d7399df03ac689f502ef2dcfe19ef0caf053a05336b05",
+        "docs/case-study/data/alqueva_olive/reference_cos.json": "28124547282b7f07a0ecafd8dcbd2d49b85307bc3199db750565d9b8c35dd77a"
       }
     },
     "outputs": {

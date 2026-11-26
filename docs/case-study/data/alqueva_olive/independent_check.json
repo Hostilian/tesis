@@ -2,9 +2,9 @@
   "schema": "tesis.case_study.independent_check.v1",
   "data_status": "observation_derived_result",
   "case_id": "alqueva_olive",
-  "checked_run_id": "alqueva_olive-20261126T143509Z",
-  "checked_at": "2026-11-26T18:41:44Z",
-  "code_commit": "f042f4ba59c1fbb551f6caeffeef55cae0b0d729",
+  "checked_run_id": "alqueva_olive-20261126T184505Z",
+  "checked_at": "2026-11-26T18:58:11Z",
+  "code_commit": "d1709f47dcd777b4196b742ceaaced09647f64fe",
   "command": "python pipeline/verify_independent.py pipeline/case_studies/alqueva_olive.json",
   "method": "Second implementation sharing no code with the pipeline; reads STAC items over plain HTTP and the public COGs directly.",
   "shared_inputs": [
@@ -50,5 +50,5 @@
       "match": true
     }
   ],
-  "runtime_seconds": 77.6
+  "runtime_seconds": 76.0
 }

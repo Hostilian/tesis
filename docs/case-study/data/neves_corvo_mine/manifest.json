@@ -1,11 +1,11 @@
 {
   "schema": "tesis.case_study.manifest.v1",
-  "run_id": "neves_corvo_mine-20261126T143733Z",
+  "run_id": "neves_corvo_mine-20261126T184732Z",
   "case_id": "neves_corvo_mine",
   "status": "ok",
-  "started_at": "2026-11-26T14:37:33Z",
-  "completed_at": "2026-11-26T14:39:57Z",
-  "runtime_seconds": 143.3,
+  "started_at": "2026-11-26T18:47:32Z",
+  "completed_at": "2026-11-26T18:49:50Z",
+  "runtime_seconds": 138.3,
   "command": "python pipeline/run_case_study.py run pipeline/case_studies/neves_corvo_mine.json",
   "config_path": "pipeline/case_studies/neves_corvo_mine.json",
   "config_sha256": "e93cadd52e44e9bbcecafedf74c31a45ff2641db393b4a5f01931b51e3154bc0",
@@ -44,8 +44,8 @@
     "center_delta": "median"
   },
   "code": {
-    "commit": "1ed73ec2597f477111b22da73e42b14d6bd9a55c",
-    "branch": "fix/ci-49",
+    "commit": "d1709f47dcd777b4196b742ceaaced09647f64fe",
+    "branch": "case-study/portugal-sentinel2",
     "case_study_code_dirty": false
   },
   "environment": {
@@ -62,7 +62,7 @@
   "catalogue": {
     "url": "https://earth-search.aws.element84.com/v1",
     "collection": "sentinel-2-l2a",
-    "retrieved_at": "2026-11-26T14:37:37Z",
+    "retrieved_at": "2026-11-26T18:47:35Z",
     "access": "live, anonymous HTTPS range reads of public COGs (no credentials, no signed URLs)",
     "license": "https://sentinel.esa.int/documents/247904/690755/Sentinel_Data_Legal_Notice",
     "attribution": "Contains modified Copernicus Sentinel data 2018, 2025"
@@ -354,7 +354,7 @@
     },
     "patches_geojson": {
       "path": "docs/case-study/data/neves_corvo_mine/patches.geojson",
-      "sha256": "ba64ba05d55df86044d7e0edfe9abc8a079d181689fc7b12a3d9d174ef8700d1",
+      "sha256": "986bc0ec912575010b0974b75bb14e8f679b665c42e531b5f597eac044ce6527",
       "data_status": "observation_derived_result"
     },
     "sensitivity_csv": {
@@ -364,12 +364,12 @@
     },
     "results_json": {
       "path": "docs/case-study/data/neves_corvo_mine/results.json",
-      "sha256": "a009031989ca73af9003ff3c4ef09b2fe99e59becfe76288f90ebada274e423b",
+      "sha256": "72d08da1023df602cb791f071d9385c30a2cb7e7b3ba104222ab70bb3afd44ee",
       "data_status": "observation_derived_result"
     }
   },
   "local_outputs_not_in_git": [
-    "pipeline/data/case_studies/neves_corvo_mine/neves_corvo_mine-20261126T143733Z/change_classes.tif",
-    "pipeline/data/case_studies/neves_corvo_mine/neves_corvo_mine-20261126T143733Z/delta_bsi.tif"
+    "pipeline/data/case_studies/neves_corvo_mine/neves_corvo_mine-20261126T184732Z/change_classes.tif",
+    "pipeline/data/case_studies/neves_corvo_mine/neves_corvo_mine-20261126T184732Z/delta_bsi.tif"
   ]
 }

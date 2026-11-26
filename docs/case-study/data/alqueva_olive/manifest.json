@@ -1,11 +1,11 @@
 {
   "schema": "tesis.case_study.manifest.v1",
-  "run_id": "alqueva_olive-20261126T143509Z",
+  "run_id": "alqueva_olive-20261126T184505Z",
   "case_id": "alqueva_olive",
   "status": "ok",
-  "started_at": "2026-11-26T14:35:09Z",
-  "completed_at": "2026-11-26T14:37:22Z",
-  "runtime_seconds": 133.6,
+  "started_at": "2026-11-26T18:45:05Z",
+  "completed_at": "2026-11-26T18:47:21Z",
+  "runtime_seconds": 135.7,
   "command": "python pipeline/run_case_study.py run pipeline/case_studies/alqueva_olive.json",
   "config_path": "pipeline/case_studies/alqueva_olive.json",
   "config_sha256": "f975ee083627ea088d748b822ab92eb647b5eceefa557eb016545e1c39dec1aa",
@@ -47,8 +47,8 @@
     "exclude_water_from_change": true
   },
   "code": {
-    "commit": "1ed73ec2597f477111b22da73e42b14d6bd9a55c",
-    "branch": "fix/ci-49",
+    "commit": "d1709f47dcd777b4196b742ceaaced09647f64fe",
+    "branch": "case-study/portugal-sentinel2",
     "case_study_code_dirty": false
   },
   "environment": {
@@ -65,7 +65,7 @@
   "catalogue": {
     "url": "https://earth-search.aws.element84.com/v1",
     "collection": "sentinel-2-l2a",
-    "retrieved_at": "2026-11-26T14:35:13Z",
+    "retrieved_at": "2026-11-26T18:45:09Z",
     "access": "live, anonymous HTTPS range reads of public COGs (no credentials, no signed URLs)",
     "license": "https://sentinel.esa.int/documents/247904/690755/Sentinel_Data_Legal_Notice",
     "attribution": "Contains modified Copernicus Sentinel data 2018, 2025"
@@ -425,7 +425,7 @@
     },
     "patches_geojson": {
       "path": "docs/case-study/data/alqueva_olive/patches.geojson",
-      "sha256": "3374e4e9e3108bd6abfc81480865b9c18a097f810f320de2f319c3b500a6cea1",
+      "sha256": "62e76ea45eb92d1bbfddc512ad8c09e551a8a42f9b1476f4a6747213e769f5ac",
       "data_status": "observation_derived_result"
     },
     "sensitivity_csv": {
@@ -435,13 +435,13 @@
     },
     "results_json": {
       "path": "docs/case-study/data/alqueva_olive/results.json",
-      "sha256": "7aba854897c3f120149b62bef2b2e300c878c346cb251786af80e718e2cc7290",
+      "sha256": "6d40c2554db2ce9afce82842ddf273f7013bdd06895ce93667a16c558657d973",
       "data_status": "observation_derived_result"
     }
   },
   "local_outputs_not_in_git": [
-    "pipeline/data/case_studies/alqueva_olive/alqueva_olive-20261126T143509Z/change_classes.tif",
-    "pipeline/data/case_studies/alqueva_olive/alqueva_olive-20261126T143509Z/delta_ndvi.tif",
-    "pipeline/data/case_studies/alqueva_olive/alqueva_olive-20261126T143509Z/increase_stability.tif"
+    "pipeline/data/case_studies/alqueva_olive/alqueva_olive-20261126T184505Z/change_classes.tif",
+    "pipeline/data/case_studies/alqueva_olive/alqueva_olive-20261126T184505Z/delta_ndvi.tif",
+    "pipeline/data/case_studies/alqueva_olive/alqueva_olive-20261126T184505Z/increase_stability.tif"
   ]
 }
