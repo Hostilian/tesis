@@ -28,15 +28,23 @@ COLLECTIONS = {
 }
 
 PERMANENT_CROP_PREFIX = "2.2."  # 2.2.1 vineyards, 2.2.2 orchards, 2.2.3 olive groves
-MINING_PREFIXES = ("1.6.",)  # 1.6.x mines and quarries (e.g. 1.6.1.1 "Minas a céu aberto") in COS Série 2
+MINING_PREFIXES = (
+    "1.6.",
+)  # 1.6.x mines and quarries (e.g. 1.6.1.1 "Minas a céu aberto") in COS Série 2
 
 
-def fetch_features(collection: str, bbox: Sequence[float], page_size: int = 500, timeout: int = 120) -> list[dict[str, Any]]:
+def fetch_features(
+    collection: str, bbox: Sequence[float], page_size: int = 500, timeout: int = 120
+) -> list[dict[str, Any]]:
     """Page through an OGC API - Features collection for a WGS84 bbox."""
     import requests
 
     url: str | None = f"{OGC_API}/collections/{collection}/items"
-    params: dict[str, Any] | None = {"f": "json", "limit": page_size, "bbox": ",".join(f"{v:.6f}" for v in bbox)}
+    params: dict[str, Any] | None = {
+        "f": "json",
+        "limit": page_size,
+        "bbox": ",".join(f"{v:.6f}" for v in bbox),
+    }
     feats: list[dict[str, Any]] = []
     while url:
         r = requests.get(url, params=params, timeout=timeout)
@@ -52,7 +60,9 @@ def class_codes(features: Iterable[Mapping[str, Any]], prefix: str) -> list[str]
     return sorted({str(f["properties"][f"{prefix}_n4_c"]) for f in features})
 
 
-def rasterize_classes(features: Sequence[Mapping[str, Any]], prefix: str, grid: Any) -> tuple[np.ndarray, list[str]]:
+def rasterize_classes(
+    features: Sequence[Mapping[str, Any]], prefix: str, grid: Any
+) -> tuple[np.ndarray, list[str]]:
     """Burn level-4 class codes onto the case-study grid; returns (index raster, code list)."""
     from pyproj import Transformer
     from rasterio import features as rfeatures
@@ -67,7 +77,12 @@ def rasterize_classes(features: Sequence[Mapping[str, Any]], prefix: str, grid: 
         geom = shp_transform(to_grid, shape(f["geometry"]))
         shapes.append((mapping(geom), lookup[str(f["properties"][f"{prefix}_n4_c"])]))
     raster = rfeatures.rasterize(
-        shapes, out_shape=(grid.height, grid.width), transform=grid.transform, fill=0, dtype="uint16", all_touched=False
+        shapes,
+        out_shape=(grid.height, grid.width),
+        transform=grid.transform,
+        fill=0,
+        dtype="uint16",
+        all_touched=False,
     )
     return raster, codes
 
@@ -77,7 +92,12 @@ def code_mask(raster: np.ndarray, codes: Sequence[str], predicate: Any) -> np.nd
     return np.isin(raster, hits)
 
 
-def agreement_matrix(flags: np.ndarray, reference: Mapping[str, np.ndarray], valid: np.ndarray, pixel_area_m2: float) -> list[dict[str, Any]]:
+def agreement_matrix(
+    flags: np.ndarray,
+    reference: Mapping[str, np.ndarray],
+    valid: np.ndarray,
+    pixel_area_m2: float,
+) -> list[dict[str, Any]]:
     """Share of each reference category flagged as increase (1) / decrease (2) / none (0)."""
     rows = []
     n_valid = int(valid.sum())
@@ -92,8 +112,12 @@ def agreement_matrix(flags: np.ndarray, reference: Mapping[str, np.ndarray], val
                 "pixels": n,
                 "area_ha": n * pixel_area_m2 / 10_000,
                 "share_of_aoi": n / n_valid if n_valid else None,
-                "share_of_all_increase_flags_in_category": int(((flags == 1) & m).sum()) / inc_total if inc_total else None,
-                "share_of_all_decrease_flags_in_category": int(((flags == 2) & m).sum()) / dec_total if dec_total else None,
+                "share_of_all_increase_flags_in_category": (
+                    int(((flags == 1) & m).sum()) / inc_total if inc_total else None
+                ),
+                "share_of_all_decrease_flags_in_category": (
+                    int(((flags == 2) & m).sum()) / dec_total if dec_total else None
+                ),
                 "share_flagged_increase": float((flags[m] == 1).mean()) if n else None,
                 "share_flagged_decrease": float((flags[m] == 2).mean()) if n else None,
                 "share_not_flagged": float((flags[m] == 0).mean()) if n else None,
@@ -110,10 +134,20 @@ def binary_agreement(pred: np.ndarray, ref: np.ndarray) -> dict[str, Any]:
     precision = tp / (tp + fp) if tp + fp else None
     recall = tp / (tp + fn) if tp + fn else None
     f1 = 2 * precision * recall / (precision + recall) if precision and recall else None
-    return {"tp": tp, "fp": fp, "fn": fn, "tn": tn, "precision": precision, "recall": recall, "f1": f1}
+    return {
+        "tp": tp,
+        "fp": fp,
+        "fn": fn,
+        "tn": tn,
+        "precision": precision,
+        "recall": recall,
+        "f1": f1,
+    }
 
 
-def polygon_units(features_2025: Sequence[Mapping[str, Any]], prefix: str, grid: Any) -> np.ndarray:
+def polygon_units(
+    features_2025: Sequence[Mapping[str, Any]], prefix: str, grid: Any
+) -> np.ndarray:
     """Raster of 2025 COS polygon ids (1..n) used as the evaluation unit."""
     from pyproj import Transformer
     from rasterio import features as rfeatures
@@ -121,8 +155,17 @@ def polygon_units(features_2025: Sequence[Mapping[str, Any]], prefix: str, grid:
     from shapely.ops import transform as shp_transform
 
     to_grid = Transformer.from_crs("EPSG:4326", grid.crs, always_xy=True).transform
-    shapes = [(mapping(shp_transform(to_grid, shape(f["geometry"]))), i + 1) for i, f in enumerate(features_2025)]
-    return rfeatures.rasterize(shapes, out_shape=(grid.height, grid.width), transform=grid.transform, fill=0, dtype="int32")
+    shapes = [
+        (mapping(shp_transform(to_grid, shape(f["geometry"]))), i + 1)
+        for i, f in enumerate(features_2025)
+    ]
+    return rfeatures.rasterize(
+        shapes,
+        out_shape=(grid.height, grid.width),
+        transform=grid.transform,
+        fill=0,
+        dtype="int32",
+    )
 
 
 def polygon_agreement(
@@ -150,5 +193,11 @@ def polygon_agreement(
     pred = (pred_c[keep] / count[keep]) >= share
     ref = (ref_c[keep] / count[keep]) >= share
     out = binary_agreement(pred, ref)
-    out.update({"units_evaluated": int(keep.sum()), "min_unit_pixels": min_pixels, "majority_share": share})
+    out.update(
+        {
+            "units_evaluated": int(keep.sum()),
+            "min_unit_pixels": min_pixels,
+            "majority_share": share,
+        }
+    )
     return out

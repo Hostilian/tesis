@@ -1,2 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Case-study outputs are hashed in their run manifests: store them byte-for-byte.
+docs/case-study/data/** -text

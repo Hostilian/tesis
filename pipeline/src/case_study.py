@@ -48,7 +48,9 @@ import numpy as np
 
 EARTH_SEARCH_URL = "https://earth-search.aws.element84.com/v1"
 COLLECTION = "sentinel-2-l2a"
-SENTINEL_LICENSE_URL = "https://sentinel.esa.int/documents/247904/690755/Sentinel_Data_Legal_Notice"
+SENTINEL_LICENSE_URL = (
+    "https://sentinel.esa.int/documents/247904/690755/Sentinel_Data_Legal_Notice"
+)
 
 # Sen2Cor Scene Classification Layer codes (ESA Sentinel-2 L2A product spec).
 SCL_LABELS: dict[int, str] = {
@@ -91,13 +93,17 @@ class CaseStudyConfig:
 
     case_id: str
     title: str
-    bbox: tuple[float, float, float, float]  # lon_min, lat_min, lon_max, lat_max (WGS84)
+    bbox: tuple[
+        float, float, float, float
+    ]  # lon_min, lat_min, lon_max, lat_max (WGS84)
     index: str
     before_item: str
     after_item: str
     control_before_item: str
     control_after_item: str
-    primary_threshold: float | str  # number, or "control_p99" (rule applied at run time)
+    primary_threshold: (
+        float | str
+    )  # number, or "control_p99" (rule applied at run time)
     thresholds: tuple[float, ...]
     min_patch_ha: float = 1.0
     min_joint_valid_fraction: float = 0.8
@@ -114,7 +120,9 @@ class CaseStudyConfig:
         validate_bbox(bbox)
         index = str(raw["index"]).lower()
         if index not in INDEX_BANDS:
-            raise ValueError(f"Unsupported index {index!r}; choose one of {sorted(INDEX_BANDS)}")
+            raise ValueError(
+                f"Unsupported index {index!r}; choose one of {sorted(INDEX_BANDS)}"
+            )
         thresholds = tuple(sorted(float(t) for t in raw["thresholds"]))
         primary_raw = raw["primary_threshold"]
         primary: float | str
@@ -145,7 +153,9 @@ class CaseStudyConfig:
             min_joint_valid_fraction=float(raw.get("min_joint_valid_fraction", 0.8)),
             valid_scl=tuple(int(v) for v in raw.get("valid_scl", DEFAULT_VALID_SCL)),
             seasonal_item=raw.get("seasonal_item"),
-            seasonal_amplitude_threshold=float(raw.get("seasonal_amplitude_threshold", 0.15)),
+            seasonal_amplitude_threshold=float(
+                raw.get("seasonal_amplitude_threshold", 0.15)
+            ),
             description=str(raw.get("description", "")),
             selection_rationale=str(raw.get("selection_rationale", "")),
             extra=extra,
@@ -156,7 +166,12 @@ class CaseStudyConfig:
         return cls.from_mapping(json.loads(Path(path).read_text(encoding="utf-8")))
 
     def item_ids(self) -> list[str]:
-        ids = [self.before_item, self.after_item, self.control_before_item, self.control_after_item]
+        ids = [
+            self.before_item,
+            self.after_item,
+            self.control_before_item,
+            self.control_after_item,
+        ]
         if self.seasonal_item:
             ids.append(self.seasonal_item)
         return list(dict.fromkeys(ids))
@@ -167,7 +182,9 @@ def validate_bbox(bbox: Sequence[float]) -> None:
         raise ValueError("bbox must be four finite numbers")
     lon_min, lat_min, lon_max, lat_max = bbox
     if not (-180 <= lon_min < lon_max <= 180 and -90 <= lat_min < lat_max <= 90):
-        raise ValueError("bbox must be lon_min, lat_min, lon_max, lat_max in WGS84 degrees")
+        raise ValueError(
+            "bbox must be lon_min, lat_min, lon_max, lat_max in WGS84 degrees"
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -175,7 +192,9 @@ def validate_bbox(bbox: Sequence[float]) -> None:
 # ---------------------------------------------------------------------------
 
 
-def to_reflectance(dn: np.ndarray, scale: float, offset: float, nodata: int | None = 0) -> np.ndarray:
+def to_reflectance(
+    dn: np.ndarray, scale: float, offset: float, nodata: int | None = 0
+) -> np.ndarray:
     """Convert L2A digital numbers to surface reflectance; nodata -> NaN."""
     out = dn.astype("float32") * np.float32(scale) + np.float32(offset)
     if nodata is not None:
@@ -197,20 +216,32 @@ def compute_index(index: str, bands: Mapping[str, np.ndarray]) -> np.ndarray:
         return normalized_difference(bands["nir"], bands["red"])
     if index == "bsi":
         # Bare Soil Index: ((SWIR1 + Red) - (NIR + Blue)) / ((SWIR1 + Red) + (NIR + Blue))
-        return normalized_difference(bands["swir16"] + bands["red"], bands["nir"] + bands["blue"])
+        return normalized_difference(
+            bands["swir16"] + bands["red"], bands["nir"] + bands["blue"]
+        )
     raise ValueError(f"Unsupported index {index!r}")
 
 
-def scl_valid_mask(scl: np.ndarray, valid_classes: Iterable[int] = DEFAULT_VALID_SCL) -> np.ndarray:
+def scl_valid_mask(
+    scl: np.ndarray, valid_classes: Iterable[int] = DEFAULT_VALID_SCL
+) -> np.ndarray:
     return np.isin(scl, np.asarray(list(valid_classes), dtype=scl.dtype))
 
 
 def scl_class_counts(scl: np.ndarray) -> dict[str, int]:
     values, counts = np.unique(scl, return_counts=True)
-    return {SCL_LABELS.get(int(v), f"class_{int(v)}"): int(c) for v, c in zip(values, counts)}
+    return {
+        SCL_LABELS.get(int(v), f"class_{int(v)}"): int(c)
+        for v, c in zip(values, counts)
+    }
 
 
-def difference(before: np.ndarray, after: np.ndarray, valid_before: np.ndarray, valid_after: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+def difference(
+    before: np.ndarray,
+    after: np.ndarray,
+    valid_before: np.ndarray,
+    valid_after: np.ndarray,
+) -> tuple[np.ndarray, np.ndarray]:
     """Return (after - before, joint-valid mask). Invalid pixels are NaN."""
     joint = valid_before & valid_after & np.isfinite(before) & np.isfinite(after)
     delta = np.full(before.shape, np.nan, dtype="float32")
@@ -237,7 +268,9 @@ def summarize(values: np.ndarray) -> dict[str, float | int]:
     }
 
 
-def threshold_table(main_delta: np.ndarray, control_delta: np.ndarray, thresholds: Iterable[float]) -> list[dict[str, float | int]]:
+def threshold_table(
+    main_delta: np.ndarray, control_delta: np.ndarray, thresholds: Iterable[float]
+) -> list[dict[str, float | int]]:
     """Flagged share of the main pair vs the no-change control pair per threshold.
 
     The control share is read as an empirical false-alarm proxy: under the
@@ -257,7 +290,9 @@ def threshold_table(main_delta: np.ndarray, control_delta: np.ndarray, threshold
                 "main_valid_pixels": int(m.size),
                 "main_increase_pixels": main_inc,
                 "main_decrease_pixels": main_dec,
-                "main_flagged_share": (main_inc + main_dec) / m.size if m.size else float("nan"),
+                "main_flagged_share": (
+                    (main_inc + main_dec) / m.size if m.size else float("nan")
+                ),
                 "control_valid_pixels": int(c.size),
                 "control_flagged_pixels": ctrl_flag,
                 "control_flagged_share": ctrl_flag / c.size if c.size else float("nan"),
@@ -266,7 +301,9 @@ def threshold_table(main_delta: np.ndarray, control_delta: np.ndarray, threshold
     return rows
 
 
-def resolve_threshold(rule: float | str, thresholds: Sequence[float], control_delta: np.ndarray) -> tuple[float, str]:
+def resolve_threshold(
+    rule: float | str, thresholds: Sequence[float], control_delta: np.ndarray
+) -> tuple[float, str]:
     """Pick the change threshold.
 
     ``control_p99``: smallest grid threshold that is >= the 99th percentile of
@@ -281,9 +318,14 @@ def resolve_threshold(rule: float | str, thresholds: Sequence[float], control_de
     p99 = float(np.percentile(c, 99))
     for t in sorted(thresholds):
         if t >= p99:
-            return float(t), f"control_p99: smallest grid value >= p99(|control delta|) = {p99:.4f}"
+            return (
+                float(t),
+                f"control_p99: smallest grid value >= p99(|control delta|) = {p99:.4f}",
+            )
     # Fail loudly instead of silently using a threshold that breaks the stated rule.
-    raise ValueError(f"control p99 |delta| = {p99:.4f} exceeds every threshold in the grid {sorted(thresholds)}; extend the grid")
+    raise ValueError(
+        f"control p99 |delta| = {p99:.4f} exceeds every threshold in the grid {sorted(thresholds)}; extend the grid"
+    )
 
 
 def label_patches(mask: np.ndarray) -> tuple[np.ndarray, int]:
@@ -294,11 +336,18 @@ def label_patches(mask: np.ndarray) -> tuple[np.ndarray, int]:
     return labels, int(n)
 
 
-def patch_statistics(mask: np.ndarray, pixel_area_m2: float, min_patch_ha: float) -> dict[str, Any]:
+def patch_statistics(
+    mask: np.ndarray, pixel_area_m2: float, min_patch_ha: float
+) -> dict[str, Any]:
     """Connected-patch summary of a boolean change mask."""
     labels, n = label_patches(mask)
     if n == 0:
-        return {"patches_total": 0, "patches_ge_min": 0, "flagged_pixels": 0, "share_of_flagged_in_patches_ge_min": float("nan")}
+        return {
+            "patches_total": 0,
+            "patches_ge_min": 0,
+            "flagged_pixels": 0,
+            "share_of_flagged_in_patches_ge_min": float("nan"),
+        }
     sizes = np.bincount(labels.ravel())[1:]
     min_px = max(1, int(math.ceil(min_patch_ha * 10_000 / pixel_area_m2)))
     big = sizes[sizes >= min_px]
@@ -310,8 +359,12 @@ def patch_statistics(mask: np.ndarray, pixel_area_m2: float, min_patch_ha: float
         "flagged_pixels": int(sizes.sum()),
         "share_of_flagged_in_patches_ge_min": float(big.sum() / sizes.sum()),
         "area_ge_min_ha": float(areas_ha.sum()) if big.size else 0.0,
-        "patch_area_ha_median": float(np.median(areas_ha)) if big.size else float("nan"),
-        "patch_area_ha_p90": float(np.percentile(areas_ha, 90)) if big.size else float("nan"),
+        "patch_area_ha_median": (
+            float(np.median(areas_ha)) if big.size else float("nan")
+        ),
+        "patch_area_ha_p90": (
+            float(np.percentile(areas_ha, 90)) if big.size else float("nan")
+        ),
         "patch_area_ha_max": float(areas_ha.max()) if big.size else float("nan"),
     }
 
@@ -326,7 +379,9 @@ def keep_patches_ge(mask: np.ndarray, min_pixels: int) -> np.ndarray:
     return keep[labels]
 
 
-def resolution_table(target_area_ha: float, resolutions_m: Iterable[float] = (3, 10, 20, 30, 60)) -> list[dict[str, float]]:
+def resolution_table(
+    target_area_ha: float, resolutions_m: Iterable[float] = (3, 10, 20, 30, 60)
+) -> list[dict[str, float]]:
     """How many whole pixels fit in a square target of the given area.
 
     Interior (pure) pixels assume a square target aligned with the grid and a
@@ -337,7 +392,13 @@ def resolution_table(target_area_ha: float, resolutions_m: Iterable[float] = (3,
     for r in resolutions_m:
         total = (side / r) ** 2
         interior = max(0.0, side / r - 2) ** 2
-        rows.append({"resolution_m": float(r), "pixels_total": total, "pixels_interior": interior})
+        rows.append(
+            {
+                "resolution_m": float(r),
+                "pixels_total": total,
+                "pixels_interior": interior,
+            }
+        )
     return rows
 
 
@@ -406,7 +467,9 @@ def item_metadata(item: Any) -> dict[str, Any]:
             rb = (a.extra_fields.get("raster:bands") or [{}])[0]
             if key != "scl" and ("scale" not in rb or "offset" not in rb):
                 # Never guess calibration: a silent scale=1/offset=0 would change the physical meaning.
-                raise ValueError(f"{item.id}/{key}: raster:bands scale/offset missing; refusing to guess reflectance calibration")
+                raise ValueError(
+                    f"{item.id}/{key}: raster:bands scale/offset missing; refusing to guess reflectance calibration"
+                )
             meta_offset = float(rb.get("offset", 0.0) or 0.0)
             assets[key] = {
                 "href": a.href,
@@ -451,7 +514,13 @@ def fetch_items(item_ids: Sequence[str], url: str = EARTH_SEARCH_URL) -> dict[st
     return items
 
 
-def discover_items(bbox: Sequence[float], start: str, end: str, max_cloud: float = 5.0, url: str = EARTH_SEARCH_URL) -> list[dict[str, Any]]:
+def discover_items(
+    bbox: Sequence[float],
+    start: str,
+    end: str,
+    max_cloud: float = 5.0,
+    url: str = EARTH_SEARCH_URL,
+) -> list[dict[str, Any]]:
     """List candidate scenes so the date-selection rule can be audited."""
     search = open_catalog(url).search(
         collections=[COLLECTION],
@@ -532,7 +601,9 @@ def reference_grid(item_meta: Mapping[str, Any], bbox: Sequence[float]) -> Grid:
         return Grid(ds.crs, tr, int(win.width), int(win.height), tuple(bounds))  # type: ignore[arg-type]
 
 
-def read_band(asset: Mapping[str, Any], grid: Grid, resampling: str = "nearest", attempts: int = 3) -> np.ndarray:
+def read_band(
+    asset: Mapping[str, Any], grid: Grid, resampling: str = "nearest", attempts: int = 3
+) -> np.ndarray:
     """Read one asset on the reference grid, retrying transient HTTP short reads."""
     import time
 
@@ -548,7 +619,9 @@ def read_band(asset: Mapping[str, Any], grid: Grid, resampling: str = "nearest",
     raise AssertionError("unreachable")
 
 
-def _read_band_once(asset: Mapping[str, Any], grid: Grid, resampling: str) -> np.ndarray:
+def _read_band_once(
+    asset: Mapping[str, Any], grid: Grid, resampling: str
+) -> np.ndarray:
     """Read one asset on the reference grid; asserts CRS/grid compatibility."""
     import rasterio
     from rasterio.enums import Resampling
@@ -556,10 +629,15 @@ def _read_band_once(asset: Mapping[str, Any], grid: Grid, resampling: str) -> np
 
     with _gdal_env(), rasterio.open(asset["href"]) as ds:
         if ds.crs != grid.crs:
-            raise ValueError(f"CRS mismatch {ds.crs} vs {grid.crs}; items must share an MGRS tile")
+            raise ValueError(
+                f"CRS mismatch {ds.crs} vs {grid.crs}; items must share an MGRS tile"
+            )
         win = from_bounds(*grid.window_bounds, transform=ds.transform)
         # Pixel edges must coincide (all S2 tile grids are multiples of 10 m from the same origin).
-        if abs(win.col_off - round(win.col_off)) > 1e-6 or abs(win.row_off - round(win.row_off)) > 1e-6:
+        if (
+            abs(win.col_off - round(win.col_off)) > 1e-6
+            or abs(win.row_off - round(win.row_off)) > 1e-6
+        ):
             raise ValueError("Grid misalignment between assets")
         return ds.read(
             1,
@@ -578,7 +656,13 @@ class Observation:
     index: np.ndarray
 
 
-def load_observation(item_meta: Mapping[str, Any], grid: Grid, index: str, valid_scl: Sequence[int], rgb: bool = False) -> Observation:
+def load_observation(
+    item_meta: Mapping[str, Any],
+    grid: Grid,
+    index: str,
+    valid_scl: Sequence[int],
+    rgb: bool = False,
+) -> Observation:
     needed = set(INDEX_BANDS[index]) | ({"red", "green", "blue"} if rgb else set())
     bands = {}
     for key in sorted(needed):
@@ -609,11 +693,20 @@ def sha256_file(path: Path) -> str:
 def git_state(repo: Path) -> dict[str, Any]:
     def run(*args: str) -> str:
         try:
-            return subprocess.run(["git", *args], cwd=repo, capture_output=True, text=True, check=True).stdout.strip()  # nosec B603 B607
+            return subprocess.run(
+                ["git", *args], cwd=repo, capture_output=True, text=True, check=True
+            ).stdout.strip()  # nosec B603 B607
         except Exception:
             return "unknown"
 
-    status = run("status", "--porcelain", "--", "pipeline/src/case_study.py", "pipeline/run_case_study.py", "pipeline/case_studies")
+    status = run(
+        "status",
+        "--porcelain",
+        "--",
+        "pipeline/src/case_study.py",
+        "pipeline/run_case_study.py",
+        "pipeline/case_studies",
+    )
     return {
         "commit": run("rev-parse", "HEAD"),
         "branch": run("rev-parse", "--abbrev-ref", "HEAD"),
@@ -640,8 +733,15 @@ def environment_versions() -> dict[str, str]:
 
 
 def utc_now() -> str:
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    return (
+        datetime.now(timezone.utc)
+        .replace(microsecond=0)
+        .isoformat()
+        .replace("+00:00", "Z")
+    )
 
 
 def config_hash(cfg_raw: Mapping[str, Any]) -> str:
-    return hashlib.sha256(json.dumps(cfg_raw, sort_keys=True).encode("utf-8")).hexdigest()
+    return hashlib.sha256(
+        json.dumps(cfg_raw, sort_keys=True).encode("utf-8")
+    ).hexdigest()
