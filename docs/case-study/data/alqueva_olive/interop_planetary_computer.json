@@ -1,0 +1,622 @@
+{
+  "schema": "tesis.case_study.interop.v1",
+  "case_id": "alqueva_olive",
+  "data_status": "observation_derived_result",
+  "purpose": "Same Sentinel-2 L2A acquisitions read from two public STAC providers on one 10 m grid; differences are provider/processing differences, not surface change.",
+  "started_at": "2026-11-26T18:34:10Z",
+  "completed_at": "2026-11-26T18:35:06Z",
+  "sas_token_retrieved_at": "2026-11-26T18:34:14Z",
+  "runtime_seconds": 56.3,
+  "command": "python pipeline/run_interop_check.py pipeline/case_studies/alqueva_olive.json",
+  "config_path": "pipeline/case_studies/alqueva_olive.json",
+  "config_sha256": "a199b0c58514e7a553cde91158f6ae819cf0d1171395dd67617255a785f4139b",
+  "code": {
+    "commit": "eadc7c828f1989c2696de27687cec20919ab851c",
+    "branch": "worktree-agent-a7f6d9479f2ff8fce",
+    "interop_code_dirty": false
+  },
+  "environment": {
+    "python": "3.12.5",
+    "platform": "Windows-11-10.0.22631-SP0",
+    "numpy": "2.2.2",
+    "scipy": "1.15.3",
+    "rasterio": "1.5.0",
+    "pystac-client": "0.8.6",
+    "pyproj": "3.7.2",
+    "matplotlib": "3.11.0",
+    "gdal": "3.12.1"
+  },
+  "providers": {
+    "earth_search": {
+      "stac_api": "https://earth-search.aws.element84.com/v1",
+      "collection": "sentinel-2-l2a",
+      "access": "anonymous, public S3"
+    },
+    "planetary_computer": {
+      "stac_api": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "collection": "sentinel-2-l2a",
+      "access": "anonymous SAS token per collection (not stored)",
+      "sas_token_endpoint": "https://planetarycomputer.microsoft.com/api/sas/v1/token/sentinel-2-l2a"
+    }
+  },
+  "aoi": {
+    "bbox_wgs84": [
+      -8.042,
+      37.907,
+      -7.928,
+      37.997
+    ],
+    "grid": {
+      "crs": "EPSG:32629",
+      "transform": [
+        10.0,
+        0.0,
+        584100.0,
+        0.0,
+        -10.0,
+        4206040.0
+      ],
+      "width": 1014,
+      "height": 1012,
+      "pixel_size_m": 10.0,
+      "bounds": [
+        584100.0,
+        4195920.0,
+        594240.0,
+        4206040.0
+      ]
+    }
+  },
+  "valid_scl": [
+    4,
+    5,
+    6
+  ],
+  "tolerance_abs_ndvi": 0.01,
+  "scenes": [
+    {
+      "scene": "before",
+      "earth_search": {
+        "id": "S2A_29SNC_20180818_1_L2A",
+        "datetime": "2018-08-18T11:30:42.942000Z",
+        "platform": "sentinel-2a",
+        "mgrs_tile": "29SNC",
+        "relative_orbit": "037",
+        "processing_baseline": "05.00",
+        "product_uri": "S2A_MSIL2A_20180818T112111_N0500_R037_T29SNC_20230810T181646.SAFE",
+        "earthsearch_boa_offset_applied": true,
+        "stac_item_url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2A_29SNC_20180818_1_L2A",
+        "assets": {
+          "red": {
+            "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/29/S/NC/2018/8/S2A_29SNC_20180818_1_L2A/B04.tif",
+            "scale": 0.0001,
+            "offset": 0.0,
+            "offset_in_stac_metadata": -0.1,
+            "nodata": 0,
+            "gsd_m": 10
+          },
+          "nir": {
+            "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/29/S/NC/2018/8/S2A_29SNC_20180818_1_L2A/B08.tif",
+            "scale": 0.0001,
+            "offset": 0.0,
+            "offset_in_stac_metadata": -0.1,
+            "nodata": 0,
+            "gsd_m": 10
+          },
+          "scl": {
+            "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/29/S/NC/2018/8/S2A_29SNC_20180818_1_L2A/SCL.tif",
+            "scale": 1.0,
+            "offset": 0.0,
+            "offset_in_stac_metadata": 0.0,
+            "nodata": 0,
+            "gsd_m": 20
+          }
+        }
+      },
+      "planetary_computer": {
+        "id": "S2A_MSIL2A_20180818T112111_R037_T29SNC_20201011T032718",
+        "datetime": "2018-08-18T11:21:11.024000Z",
+        "platform": "Sentinel-2A",
+        "mgrs_tile": "29SNC",
+        "processing_baseline": "02.12",
+        "product_uri": "S2A_MSIL2A_20180818T112111_N0212_R037_T29SNC_20201011T032718.SAFE",
+        "granule_id": "S2A_OPER_MSI_L2A_TL_ESRI_20201011T032721_A016479_T29SNC_N02.12",
+        "generation_time": "2020-10-11T03:27:18.511Z",
+        "eo_cloud_cover": 0.073039,
+        "epsg": 32629,
+        "calibration": {
+          "source": "product-metadata asset (MTD_MSIL2A.xml)",
+          "product_metadata_href": "https://sentinel2l2a01.blob.core.windows.net/sentinel2-l2/29/S/NC/2018/08/18/S2A_MSIL2A_20180818T112111_N0212_R037_T29SNC_20201011T032718.SAFE/MTD_MSIL2A.xml",
+          "processing_baseline": "02.12",
+          "boa_quantification_value": 10000.0,
+          "boa_add_offset_dn": {
+            "red": null,
+            "nir": null
+          },
+          "nodata_dn": 0,
+          "saturated_dn": 65535,
+          "rule": "reflectance = (DN + BOA_ADD_OFFSET) / BOA_QUANTIFICATION_VALUE; offset required iff baseline >= 04.00"
+        },
+        "assets": {
+          "red": {
+            "pc_asset_key": "B04",
+            "href": "https://sentinel2l2a01.blob.core.windows.net/sentinel2-l2/29/S/NC/2018/08/18/S2A_MSIL2A_20180818T112111_N0212_R037_T29SNC_20201011T032718.SAFE/GRANULE/L2A_T29SNC_A016479_20180818T112627/IMG_DATA/R10m/T29SNC_20180818T112111_B04_10m.tif",
+            "scale": 0.0001,
+            "offset": 0.0,
+            "nodata": 0,
+            "gsd_m": 10,
+            "raster_bands_in_stac": false
+          },
+          "nir": {
+            "pc_asset_key": "B08",
+            "href": "https://sentinel2l2a01.blob.core.windows.net/sentinel2-l2/29/S/NC/2018/08/18/S2A_MSIL2A_20180818T112111_N0212_R037_T29SNC_20201011T032718.SAFE/GRANULE/L2A_T29SNC_A016479_20180818T112627/IMG_DATA/R10m/T29SNC_20180818T112111_B08_10m.tif",
+            "scale": 0.0001,
+            "offset": 0.0,
+            "nodata": 0,
+            "gsd_m": 10,
+            "raster_bands_in_stac": false
+          },
+          "scl": {
+            "pc_asset_key": "SCL",
+            "href": "https://sentinel2l2a01.blob.core.windows.net/sentinel2-l2/29/S/NC/2018/08/18/S2A_MSIL2A_20180818T112111_N0212_R037_T29SNC_20201011T032718.SAFE/GRANULE/L2A_T29SNC_A016479_20180818T112627/IMG_DATA/R20m/T29SNC_20180818T112111_SCL_20m.tif",
+            "scale": 1.0,
+            "offset": 0.0,
+            "nodata": 0,
+            "gsd_m": 20,
+            "raster_bands_in_stac": false
+          }
+        },
+        "stac_item_url": "https://planetarycomputer.microsoft.com/api/stac/v1/collections/sentinel-2-l2a/items/S2A_MSIL2A_20180818T112111_R037_T29SNC_20201011T032718",
+        "license": "https://sentinel.esa.int/documents/247904/690755/Sentinel_Data_Legal_Notice",
+        "data_status": "public_observation"
+      },
+      "matching": {
+        "search": {
+          "collection": "sentinel-2-l2a",
+          "datetime": "2018-08-18",
+          "query": {
+            "s2:mgrs_tile": "29SNC"
+          }
+        },
+        "candidates_same_day_and_tile": [
+          {
+            "id": "S2A_MSIL2A_20180818T112111_R037_T29SNC_20201011T032718",
+            "product_uri": "S2A_MSIL2A_20180818T112111_N0212_R037_T29SNC_20201011T032718.SAFE",
+            "processing_baseline": "02.12"
+          }
+        ],
+        "matching_items": [
+          "S2A_MSIL2A_20180818T112111_R037_T29SNC_20201011T032718"
+        ],
+        "match_rule": "same acquisition; Earth Search baseline not available on PC, highest PC baseline taken",
+        "match_key": {
+          "platform": "S2A",
+          "sensing_start": "20180818T112111",
+          "relative_orbit": "037",
+          "tile": "29SNC"
+        }
+      },
+      "grid_alignment": {
+        "crs_earth_search": "EPSG:32629",
+        "crs_planetary_computer": "EPSG:32629",
+        "same_crs": true,
+        "transform_earth_search": [
+          10.0,
+          0.0,
+          499980.0,
+          0.0,
+          -10.0,
+          4300020.0
+        ],
+        "transform_planetary_computer": [
+          10.0,
+          0.0,
+          499980.0,
+          0.0,
+          -10.0,
+          4300020.0
+        ],
+        "tile_shape_earth_search": [
+          10980,
+          10980
+        ],
+        "tile_shape_planetary_computer": [
+          10980,
+          10980
+        ],
+        "origin_shift_m": [
+          0.0,
+          0.0
+        ],
+        "pc_window_col_row_off": [
+          8412.0,
+          9398.0
+        ],
+        "identical_transform": true,
+        "aoi_window_on_whole_pixels": true,
+        "aligned": true
+      },
+      "data_status": "observation_derived_result",
+      "joint_valid_pixels": 1023223,
+      "valid_pixels_earth_search": 1025191,
+      "valid_pixels_planetary_computer": 1023324,
+      "scl_identical_share": 0.9888166460072815,
+      "valid_mask_agreement": {
+        "n": 1026168,
+        "both_flagged": 1023223,
+        "only_first": 1968,
+        "only_second": 101,
+        "neither": 876,
+        "agreement_share": 0.9979837609436272,
+        "cohen_kappa": 0.4577501872774982,
+        "jaccard_of_flagged": 0.9979820382876293
+      },
+      "ndvi_es_minus_pc": {
+        "n": 1023223,
+        "mean_diff": 0.0005554963908079462,
+        "median_diff": 0.0005042105913162231,
+        "median_abs_diff": 0.004923835396766663,
+        "p95_abs_diff": 0.03945055454969398,
+        "p99_abs_diff": 0.08350452542304994,
+        "max_abs_diff": 0.4726601243019104,
+        "tolerance": 0.01,
+        "share_abs_diff_gt_tolerance": 0.26868923001144424,
+        "share_exactly_equal": 0.000639156860234768
+      },
+      "reflectance_es_minus_pc": {
+        "red": {
+          "n": 1023223,
+          "mean_diff": 0.00026591661009041075,
+          "median_diff": 0.00010000169277191162,
+          "median_abs_diff": 0.0032000094652175903,
+          "p95_abs_diff": 0.015799999237060547,
+          "p99_abs_diff": 0.02819999597966671,
+          "max_abs_diff": 0.11860001087188721,
+          "tolerance": 0.01,
+          "share_abs_diff_gt_tolerance": 0.12425541646346887,
+          "share_exactly_equal": 0.016230088651251976
+        },
+        "nir": {
+          "n": 1023223,
+          "mean_diff": 0.0008413989843654834,
+          "median_diff": 0.000800013542175293,
+          "median_abs_diff": 0.0045999884605407715,
+          "p95_abs_diff": 0.017199993133544922,
+          "p99_abs_diff": 0.029799997806549072,
+          "max_abs_diff": 0.12860000133514404,
+          "tolerance": 0.01,
+          "share_abs_diff_gt_tolerance": 0.1756293593869567,
+          "share_exactly_equal": 0.01910043069790261
+        }
+      },
+      "raw_dn_pc_minus_es": {
+        "red": {
+          "pc_boa_add_offset_dn": 0.0,
+          "median_dn_pc_minus_es": -1.0,
+          "share_pc_dn_plus_offset_equals_es_dn": 0.016230088651251976
+        },
+        "nir": {
+          "pc_boa_add_offset_dn": 0.0,
+          "median_dn_pc_minus_es": -8.0,
+          "share_pc_dn_plus_offset_equals_es_dn": 0.01910043069790261
+        }
+      }
+    },
+    {
+      "scene": "after",
+      "earth_search": {
+        "id": "S2C_29SNC_20250821_0_L2A",
+        "datetime": "2025-08-21T11:31:03.493000Z",
+        "platform": "sentinel-2c",
+        "mgrs_tile": "29SNC",
+        "relative_orbit": "037",
+        "processing_baseline": "05.11",
+        "product_uri": "S2C_MSIL2A_20250821T112131_N0511_R037_T29SNC_20250821T150517.SAFE",
+        "earthsearch_boa_offset_applied": true,
+        "stac_item_url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2C_29SNC_20250821_0_L2A",
+        "assets": {
+          "red": {
+            "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/29/S/NC/2025/8/S2C_29SNC_20250821_0_L2A/B04.tif",
+            "scale": 0.0001,
+            "offset": 0.0,
+            "offset_in_stac_metadata": -0.1,
+            "nodata": 0,
+            "gsd_m": 10
+          },
+          "nir": {
+            "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/29/S/NC/2025/8/S2C_29SNC_20250821_0_L2A/B08.tif",
+            "scale": 0.0001,
+            "offset": 0.0,
+            "offset_in_stac_metadata": -0.1,
+            "nodata": 0,
+            "gsd_m": 10
+          },
+          "scl": {
+            "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/29/S/NC/2025/8/S2C_29SNC_20250821_0_L2A/SCL.tif",
+            "scale": 1.0,
+            "offset": 0.0,
+            "offset_in_stac_metadata": 0.0,
+            "nodata": 0,
+            "gsd_m": 20
+          }
+        }
+      },
+      "planetary_computer": {
+        "id": "S2C_MSIL2A_20250821T112131_R037_T29SNC_20250821T150517",
+        "datetime": "2025-08-21T11:21:31.025000Z",
+        "platform": "Sentinel-2C",
+        "mgrs_tile": "29SNC",
+        "processing_baseline": "05.11",
+        "product_uri": "S2C_MSIL2A_20250821T112131_N0511_R037_T29SNC_20250821T150517.SAFE",
+        "granule_id": "S2C_OPER_MSI_L2A_TL_2CPS_20250821T150517_A005012_T29SNC_N05.11",
+        "generation_time": "2025-08-21T15:05:17.000000Z",
+        "eo_cloud_cover": 0.006082,
+        "epsg": 32629,
+        "calibration": {
+          "source": "product-metadata asset (MTD_MSIL2A.xml)",
+          "product_metadata_href": "https://sentinel2l2a01.blob.core.windows.net/sentinel2-l2/29/S/NC/2025/08/21/S2C_MSIL2A_20250821T112131_N0511_R037_T29SNC_20250821T150517.SAFE/MTD_MSIL2A.xml",
+          "processing_baseline": "05.11",
+          "boa_quantification_value": 10000.0,
+          "boa_add_offset_dn": {
+            "red": -1000,
+            "nir": -1000
+          },
+          "nodata_dn": 0,
+          "saturated_dn": 65535,
+          "rule": "reflectance = (DN + BOA_ADD_OFFSET) / BOA_QUANTIFICATION_VALUE; offset required iff baseline >= 04.00"
+        },
+        "assets": {
+          "red": {
+            "pc_asset_key": "B04",
+            "href": "https://sentinel2l2a01.blob.core.windows.net/sentinel2-l2/29/S/NC/2025/08/21/S2C_MSIL2A_20250821T112131_N0511_R037_T29SNC_20250821T150517.SAFE/GRANULE/L2A_T29SNC_A005012_20250821T112526/IMG_DATA/R10m/T29SNC_20250821T112131_B04_10m.tif",
+            "scale": 0.0001,
+            "offset": -0.1,
+            "nodata": 0,
+            "gsd_m": 10,
+            "raster_bands_in_stac": false
+          },
+          "nir": {
+            "pc_asset_key": "B08",
+            "href": "https://sentinel2l2a01.blob.core.windows.net/sentinel2-l2/29/S/NC/2025/08/21/S2C_MSIL2A_20250821T112131_N0511_R037_T29SNC_20250821T150517.SAFE/GRANULE/L2A_T29SNC_A005012_20250821T112526/IMG_DATA/R10m/T29SNC_20250821T112131_B08_10m.tif",
+            "scale": 0.0001,
+            "offset": -0.1,
+            "nodata": 0,
+            "gsd_m": 10,
+            "raster_bands_in_stac": false
+          },
+          "scl": {
+            "pc_asset_key": "SCL",
+            "href": "https://sentinel2l2a01.blob.core.windows.net/sentinel2-l2/29/S/NC/2025/08/21/S2C_MSIL2A_20250821T112131_N0511_R037_T29SNC_20250821T150517.SAFE/GRANULE/L2A_T29SNC_A005012_20250821T112526/IMG_DATA/R20m/T29SNC_20250821T112131_SCL_20m.tif",
+            "scale": 1.0,
+            "offset": 0.0,
+            "nodata": 0,
+            "gsd_m": 20,
+            "raster_bands_in_stac": false
+          }
+        },
+        "stac_item_url": "https://planetarycomputer.microsoft.com/api/stac/v1/collections/sentinel-2-l2a/items/S2C_MSIL2A_20250821T112131_R037_T29SNC_20250821T150517",
+        "license": "https://sentinel.esa.int/documents/247904/690755/Sentinel_Data_Legal_Notice",
+        "data_status": "public_observation"
+      },
+      "matching": {
+        "search": {
+          "collection": "sentinel-2-l2a",
+          "datetime": "2025-08-21",
+          "query": {
+            "s2:mgrs_tile": "29SNC"
+          }
+        },
+        "candidates_same_day_and_tile": [
+          {
+            "id": "S2C_MSIL2A_20250821T112131_R037_T29SNC_20250821T150517",
+            "product_uri": "S2C_MSIL2A_20250821T112131_N0511_R037_T29SNC_20250821T150517.SAFE",
+            "processing_baseline": "05.11"
+          }
+        ],
+        "matching_items": [
+          "S2C_MSIL2A_20250821T112131_R037_T29SNC_20250821T150517"
+        ],
+        "match_rule": "same acquisition, same processing baseline",
+        "match_key": {
+          "platform": "S2C",
+          "sensing_start": "20250821T112131",
+          "relative_orbit": "037",
+          "tile": "29SNC"
+        }
+      },
+      "grid_alignment": {
+        "crs_earth_search": "EPSG:32629",
+        "crs_planetary_computer": "EPSG:32629",
+        "same_crs": true,
+        "transform_earth_search": [
+          10.0,
+          0.0,
+          499980.0,
+          0.0,
+          -10.0,
+          4300020.0
+        ],
+        "transform_planetary_computer": [
+          10.0,
+          0.0,
+          499980.0,
+          0.0,
+          -10.0,
+          4300020.0
+        ],
+        "tile_shape_earth_search": [
+          10980,
+          10980
+        ],
+        "tile_shape_planetary_computer": [
+          10980,
+          10980
+        ],
+        "origin_shift_m": [
+          0.0,
+          0.0
+        ],
+        "pc_window_col_row_off": [
+          8412.0,
+          9398.0
+        ],
+        "identical_transform": true,
+        "aoi_window_on_whole_pixels": true,
+        "aligned": true
+      },
+      "data_status": "observation_derived_result",
+      "joint_valid_pixels": 1025116,
+      "valid_pixels_earth_search": 1025116,
+      "valid_pixels_planetary_computer": 1025116,
+      "scl_identical_share": 1.0,
+      "valid_mask_agreement": {
+        "n": 1026168,
+        "both_flagged": 1025116,
+        "only_first": 0,
+        "only_second": 0,
+        "neither": 1052,
+        "agreement_share": 1.0,
+        "cohen_kappa": 1.0,
+        "jaccard_of_flagged": 1.0
+      },
+      "ndvi_es_minus_pc": {
+        "n": 1025116,
+        "mean_diff": -1.1121292142429013e-08,
+        "median_diff": 0.0,
+        "median_abs_diff": 0.0,
+        "p95_abs_diff": 8.940696716308594e-08,
+        "p99_abs_diff": 1.1920928955078125e-07,
+        "max_abs_diff": 2.980232238769531e-07,
+        "tolerance": 0.01,
+        "share_abs_diff_gt_tolerance": 0.0,
+        "share_exactly_equal": 0.5672431217540259
+      },
+      "reflectance_es_minus_pc": {
+        "red": {
+          "n": 1025116,
+          "mean_diff": 1.2319322019933245e-09,
+          "median_diff": 0.0,
+          "median_abs_diff": 3.725290298461914e-09,
+          "p95_abs_diff": 1.4901161193847656e-08,
+          "p99_abs_diff": 2.9802322387695312e-08,
+          "max_abs_diff": 5.960464477539063e-08,
+          "tolerance": 0.01,
+          "share_abs_diff_gt_tolerance": 0.0,
+          "share_exactly_equal": 0.49730274427479426
+        },
+        "nir": {
+          "n": 1025116,
+          "mean_diff": -3.292352437395766e-09,
+          "median_diff": 0.0,
+          "median_abs_diff": 0.0,
+          "p95_abs_diff": 2.9802322387695312e-08,
+          "p99_abs_diff": 2.9802322387695312e-08,
+          "max_abs_diff": 5.960464477539063e-08,
+          "tolerance": 0.01,
+          "share_abs_diff_gt_tolerance": 0.0,
+          "share_exactly_equal": 0.7926049344659531
+        }
+      },
+      "raw_dn_pc_minus_es": {
+        "red": {
+          "pc_boa_add_offset_dn": -1000.0,
+          "median_dn_pc_minus_es": 1000.0,
+          "share_pc_dn_plus_offset_equals_es_dn": 1.0
+        },
+        "nir": {
+          "pc_boa_add_offset_dn": -1000.0,
+          "median_dn_pc_minus_es": 1000.0,
+          "share_pc_dn_plus_offset_equals_es_dn": 1.0
+        }
+      },
+      "if_pc_offset_ignored": {
+        "note": "NDVI_ES minus NDVI computed from PC without BOA_ADD_OFFSET; shows the size of the calibration error avoided.",
+        "ndvi_es_minus_pc": {
+          "n": 1025116,
+          "mean_diff": 0.1275108130762324,
+          "median_diff": 0.1283302903175354,
+          "median_abs_diff": 0.13154587149620056,
+          "p95_abs_diff": 0.25006362795829773,
+          "p99_abs_diff": 0.27026548981666565,
+          "max_abs_diff": 0.42499997466802597,
+          "tolerance": 0.01,
+          "share_abs_diff_gt_tolerance": 0.9995727312811428,
+          "share_exactly_equal": 9.754993581214223e-06
+        }
+      }
+    }
+  ],
+  "change_agreement": {
+    "data_status": "observation_derived_result",
+    "threshold_ndvi_increase": 0.3,
+    "definition": "flag = (NDVI_after - NDVI_before) > threshold, each provider with its own SCL mask (classes 4, 5, 6)",
+    "joint_valid_pixels_earth_search": 1024579,
+    "joint_valid_pixels_planetary_computer": 1022872,
+    "pixels_valid_in_all_four": 1022815,
+    "delta_ndvi_es_minus_pc": {
+      "n": 1022815,
+      "mean_diff": -0.000560792726505476,
+      "median_diff": -0.0005050152540206909,
+      "median_abs_diff": 0.004921756684780121,
+      "p95_abs_diff": 0.03938267529010768,
+      "p99_abs_diff": 0.08345194697380065,
+      "max_abs_diff": 0.43441641330718994,
+      "tolerance": 0.01,
+      "share_abs_diff_gt_tolerance": 0.26849821326437334,
+      "share_exactly_equal": 0.0003627244418589872
+    },
+    "pixel_flag": {
+      "scope": "pixels valid on both dates for both providers; no water exclusion, no patch filter",
+      "increase_pixels_earth_search": 242704,
+      "increase_pixels_planetary_computer": 242889,
+      "n": 1022815,
+      "both_flagged": 238760,
+      "only_first": 3944,
+      "only_second": 4129,
+      "neither": 775982,
+      "agreement_share": 0.9921070770373919,
+      "cohen_kappa": 0.9782000900007147,
+      "jaccard_of_flagged": 0.9672936762912576
+    },
+    "pipeline_like_flag": {
+      "scope": "as run_case_study.py: water (SCL 6 on either date) excluded, patches >= 100 pixels kept; compared over the whole grid, invalid pixels count as not flagged",
+      "increase_area_ha_earth_search": 2260.19,
+      "increase_area_ha_planetary_computer": 2255.52,
+      "n": 1026168,
+      "both_flagged": 222274,
+      "only_first": 3745,
+      "only_second": 3278,
+      "neither": 796871,
+      "agreement_share": 0.9931560914002385,
+      "cohen_kappa": 0.9800603570734947,
+      "jaccard_of_flagged": 0.9693716010239994
+    },
+    "earth_search_reproduces_published_run": {
+      "published_run_id": "alqueva_olive-20261126T143509Z",
+      "published_main_increase_pixels": 243423,
+      "recomputed_main_increase_pixels": 243423,
+      "equal": true
+    }
+  },
+  "steps_required": [
+    "Second STAC API root: https://planetarycomputer.microsoft.com/api/stac/v1 (Earth Search: https://earth-search.aws.element84.com/v1). The collection ID is the same: sentinel-2-l2a.",
+    "Item IDs follow different schemes (Earth Search: platform_tile_date_sequence_level; Planetary Computer: ESA product name without the processing-baseline field). Neither ID can be converted into the other; items were matched on platform, sensing start, relative orbit and MGRS tile parsed from the s2:product_uri property.",
+    "The tile is queried with different properties: Earth Search splits it into mgrs:utm_zone, mgrs:latitude_band and mgrs:grid_square; Planetary Computer has s2:mgrs_tile.",
+    "Asset keys differ: red -> B04, nir -> B08, scl -> SCL (Earth Search key -> Planetary Computer key).",
+    "Planetary Computer assets need a short-lived SAS token from https://planetarycomputer.microsoft.com/api/sas/v1/token/sentinel-2-l2a appended to every asset URL; an unsigned range request returned HTTP 409. Earth Search assets are public S3 objects read without a token.",
+    "Calibration source differs: Earth Search assets publish raster:bands scale 0.0001 and offset -0.1, but the pixels already have the offset removed (earthsearch:boa_offset_applied = True), so offset 0 is used. Planetary Computer assets have no raster:bands entry (raster_bands_in_stac = False); scale and offset were read from MTD_MSIL2A.xml (BOA_QUANTIFICATION_VALUE, BOA_ADD_OFFSET), one extra HTTP request per item.",
+    "before: item datetime differs for the same acquisition (Earth Search 2018-08-18T11:30:42.942000Z, Planetary Computer 2018-08-18T11:21:11.024000Z); processing baseline Earth Search 05.00 vs Planetary Computer 02.12; Planetary Computer product has no BOA_ADD_OFFSET (baseline < 04.00), offset 0.",
+    "after: item datetime differs for the same acquisition (Earth Search 2025-08-21T11:31:03.493000Z, Planetary Computer 2025-08-21T11:21:31.025000Z); processing baseline Earth Search 05.11 vs Planetary Computer 05.11; Planetary Computer BOA_ADD_OFFSET red/NIR = -1000/-1000 DN, applied.",
+    "Platform property spelling differs (Earth Search 'sentinel-2a', Planetary Computer 'Sentinel-2A').",
+    "Pixel grids: same CRS and identical 10 m tile transform on both providers, so no resampling was needed."
+  ],
+  "notes": [
+    "Reflectance and NDVI are computed in float32, as in run_case_study.py; differences below about 1e-6 are floating-point rounding, not data differences.",
+    "SCL masks are taken from each provider's own product; pixels are compared only where both masks are valid (joint_valid_pixels).",
+    "share_pc_dn_plus_offset_equals_es_dn = share of jointly valid pixels where PC DN + BOA_ADD_OFFSET equals the Earth Search DN exactly."
+  ],
+  "figure": {
+    "path": "docs/case-study/data/alqueva_olive/fig_interop.png",
+    "sha256": "b222ab0a68d74f7056e123b969bee9bec1c473af2224801b40e948fe6d2cc01f"
+  }
+}
