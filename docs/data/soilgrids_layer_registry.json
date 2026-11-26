@@ -40,7 +40,9 @@
       "geographic_coverage": "global, subject to provider mask",
       "display_crs": "EPSG:3857",
       "last_verified": "2026-11-26",
-      "browser_integration": "desktop_and_mobile_verified"
+      "browser_integration": "production_chrome_verified",
+      "browser_tiles_loaded": 14,
+      "browser_legend_width": 50
     },
     {
       "property": "soc",
@@ -72,7 +74,9 @@
       "geographic_coverage": "global, subject to provider mask",
       "display_crs": "EPSG:3857",
       "last_verified": "2026-11-26",
-      "browser_integration": "endpoint_and_legend_verified_browser_selection_not_individually_tested"
+      "browser_integration": "production_chrome_verified",
+      "browser_tiles_loaded": 15,
+      "browser_legend_width": 65
     },
     {
       "property": "nitrogen",
@@ -104,7 +108,9 @@
       "geographic_coverage": "global, subject to provider mask",
       "display_crs": "EPSG:3857",
       "last_verified": "2026-11-26",
-      "browser_integration": "endpoint_and_legend_verified_browser_selection_not_individually_tested"
+      "browser_integration": "production_chrome_verified",
+      "browser_tiles_loaded": 14,
+      "browser_legend_width": 65
     },
     {
       "property": "clay",
@@ -136,7 +142,9 @@
       "geographic_coverage": "global, subject to provider mask",
       "display_crs": "EPSG:3857",
       "last_verified": "2026-11-26",
-      "browser_integration": "endpoint_and_legend_verified_browser_selection_not_individually_tested"
+      "browser_integration": "production_chrome_verified",
+      "browser_tiles_loaded": 14,
+      "browser_legend_width": 57
     },
     {
       "property": "sand",
@@ -168,7 +176,9 @@
       "geographic_coverage": "global, subject to provider mask",
       "display_crs": "EPSG:3857",
       "last_verified": "2026-11-26",
-      "browser_integration": "endpoint_and_legend_verified_browser_selection_not_individually_tested"
+      "browser_integration": "production_chrome_verified",
+      "browser_tiles_loaded": 14,
+      "browser_legend_width": 57
     },
     {
       "property": "silt",
@@ -200,7 +210,9 @@
       "geographic_coverage": "global, subject to provider mask",
       "display_crs": "EPSG:3857",
       "last_verified": "2026-11-26",
-      "browser_integration": "endpoint_and_legend_verified_browser_selection_not_individually_tested"
+      "browser_integration": "production_chrome_verified",
+      "browser_tiles_loaded": 13,
+      "browser_legend_width": 57
     },
     {
       "property": "bdod",
@@ -232,7 +244,9 @@
       "geographic_coverage": "global, subject to provider mask",
       "display_crs": "EPSG:3857",
       "last_verified": "2026-11-26",
-      "browser_integration": "endpoint_and_legend_verified_browser_selection_not_individually_tested"
+      "browser_integration": "production_chrome_verified",
+      "browser_tiles_loaded": 15,
+      "browser_legend_width": 57
     },
     {
       "property": "cfvo",
@@ -264,7 +278,9 @@
       "geographic_coverage": "global, subject to provider mask",
       "display_crs": "EPSG:3857",
       "last_verified": "2026-11-26",
-      "browser_integration": "endpoint_and_legend_verified_browser_selection_not_individually_tested"
+      "browser_integration": "production_chrome_verified",
+      "browser_tiles_loaded": 14,
+      "browser_legend_width": 57
     },
     {
       "property": "cec",
@@ -296,7 +312,9 @@
       "geographic_coverage": "global, subject to provider mask",
       "display_crs": "EPSG:3857",
       "last_verified": "2026-11-26",
-      "browser_integration": "endpoint_and_legend_verified_browser_selection_not_individually_tested"
+      "browser_integration": "production_chrome_verified",
+      "browser_tiles_loaded": 14,
+      "browser_legend_width": 57
     }
   ]
 }

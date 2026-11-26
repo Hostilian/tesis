@@ -1,0 +1,49 @@
+{
+  "date": "2026-11-26T23:39:39.412034+00:00",
+  "workload": "Existing real two-scene Alentejo Sentinel-2 optical preview, 96x96 grid, 5 assets per scene",
+  "software": {
+    "numpy": "2.2.2",
+    "rasterio": "1.5.0",
+    "pystac-client": "0.8.6",
+    "planetary-computer": "1.0.0"
+  },
+  "python": "3.12.5",
+  "os": "Windows 11",
+  "logical_cpu_count": 12,
+  "runs": [
+    {
+      "repeat": 1,
+      "cache": "new Python process; OS/provider caches uncontrolled",
+      "seconds": 12.686,
+      "exit_code": 0,
+      "cells": 9216,
+      "checksum_matches": true,
+      "scenes_match": true
+    },
+    {
+      "repeat": 2,
+      "cache": "new Python process; OS/provider caches uncontrolled",
+      "seconds": 13.574,
+      "exit_code": 0,
+      "cells": 9216,
+      "checksum_matches": true,
+      "scenes_match": true
+    },
+    {
+      "repeat": 3,
+      "cache": "new Python process; OS/provider caches uncontrolled",
+      "seconds": 12.795,
+      "exit_code": 0,
+      "cells": 9216,
+      "checksum_matches": true,
+      "scenes_match": true
+    }
+  ],
+  "limitations": "End-to-end elapsed time only, provider/network/cache uncontrolled; not API scalability or independent scientific validation.",
+  "summary": {
+    "successful_repeats": 3,
+    "median_seconds": 12.795,
+    "min_seconds": 12.686,
+    "max_seconds": 13.574
+  }
+}

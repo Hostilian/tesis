@@ -88,4 +88,10 @@ The next evidence release requires an observed source-asset inventory, immutable
 
 For detailed implementation steps, see `THESIS_VALIDATION_GAPS.md`, `REAL_OBSERVATION.md` and `docs/evidence.html` in the repository.
 
+### Supplementary real-data reproducibility and timing (26 November 2026)
+
+The public Alentejo two-date Sentinel-2 prototype was rerun using the existing PySTAC Client, Planetary Computer and rasterio workflow. Three fresh Python processes each reproduced 9,216 quality-masked overlapping grid cells, identical source scene records and the original analytical-array SHA-256. The recorded elapsed times were 12.686, 13.574 and 12.795 seconds (median 12.795 seconds). The workload used two scenes, five assets per scene and a 96 by 96 resampled grid. The machine ran Windows 11, Python 3.12.5 and had 12 logical CPU threads; software versions and raw timing observations are in `research/benchmarks/alentejo_pair_20261126.json`.
+
+These are end-to-end timings for one bounded real-data workload; network conditions and operating-system/provider caches were not controlled. This is preliminary evidence for the engineering feasibility component of RQ3, not an evaluation of scalability, quota ceilings, or the historical runtime claim. The cells are spatially dependent and provide no independent physical soil-change labels or economic-event accuracy estimates. The Alentejo study is supplementary and does not replace the three research questions.
+
 **Chapter conclusion:** The primary reproducible results at this stage concern the demonstrator's software architecture, transformations, API structure and deployment, not validated geographical discoveries or confirmed hypotheses.
