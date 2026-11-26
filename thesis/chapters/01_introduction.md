@@ -60,3 +60,8 @@ This thesis is organized into seven chapters, structured in accordance with the 
 *   **Chapter 6: Discussion** addresses threats to validity, limitations of the current pipeline, and academic ethics.
 *   **Chapter 7: Conclusion** summarizes the core research contributions and proposes future research directions, including the integration of geospatial foundation models.
 *   **Appendices A to F** provide source code maps, API endpoint references, sensor specifications, glossary definitions, and acronym tables.
+
+
+## Portuguese case study
+
+Within the existing thesis scope, the case asks which optical changes a transparent baseline flags and how the count varies with preprocessing and threshold.

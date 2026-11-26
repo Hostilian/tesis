@@ -139,3 +139,8 @@ To guarantee that third-party researchers can replicate all findings, the method
 1.  **Software Environment Locks**: All Python packages and system libraries are locked in a Docker configuration file ([Dockerfile](file:///d:/CODING/tesis/pipeline/Dockerfile)) and [requirements.txt](file:///d:/CODING/tesis/pipeline/requirements.txt).
 2.  **Algorithmic Seeds**: Random number generation seeds in scikit-learn's Isolation Forest are locked (`random_state=42`), ensuring deterministic decision-tree splits.
 3.  **Data Archives**: Raw coordinates, sensor metadata, and processing parameters are saved in a static [regions.geojson](file:///d:/CODING/tesis/docs/data/regions.geojson) file, allowing identical geographic bounding boxes to be queried in future runs.
+
+
+## Paired Sentinel-2 observations
+
+The public rectangle extends from 8.01 to 8.00 degrees west and 38.59 to 38.60 degrees north. The existing reader searches 15 June to 15 July each year and ranks complete scenes by catalogue cloud percentage, breaking ties by item ID. The replay checks both selected IDs against the archived pair. Red and near-infrared bands use bilinear resampling on one 96 by 96 WGS84 grid. Scene classification uses nearest-neighbour resampling. Both dates must retain vegetation or bare ground, positive valid digital counts, nonnegative calibrated reflectances and a positive NDVI denominator. Both product XML files specify an additive offset of -1000 and a quantification value of 10000. Adding the offset before division matters because an additive term remains in the NDVI denominator. The processing baselines identify the applicable product conventions. [Copernicus processing documentation](https://sentiwiki.copernicus.eu/web/s2-processing)

@@ -78,3 +78,8 @@ The most effective next sequence is: (1) authenticate and retrieve one bounded r
 Only then can the manuscript make results-level conclusions about specific extraction sites, model accuracy or economic relationships.
 
 **Discussion conclusion:** Software engineering feasibility has been demonstrated. The scientific hypotheses and operational value remain open questions requiring observed data and independent evaluation.
+
+
+## Resolution and attribution
+
+The two dates fall 15 days apart on the seasonal calendar. Drying, phenology, management and residual atmospheric differences can all affect the signal. Adjacent cells share information through canopy structure and resampling. A hypothetical one-hectare square covers roughly 100 native 10 m footprints before boundary mixing and masking. Its footprint alone cannot identify orchard management or individual trees. Dated aerial imagery or field observations would be needed to attribute a cause.

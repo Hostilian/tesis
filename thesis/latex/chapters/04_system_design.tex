@@ -2,7 +2,7 @@
 \section{Architecture Overview}
 The system is designed as a modular, decoupled data engineering pipeline that separates high-performance geospatial extraction from lightweight, interactive user rendering. This architecture is divided into three distinct layers: the Ingestion and Processing Layer, the Storage and Serialization Layer, and the Visualization Dashboard Layer. The Ingestion and Processing Layer, written in Python, interfaces directly with cloud-based geospatial databases (GEE and CDSE) to download, mask, and compute spectral and radar matrices, fitting unsupervised machine learning models to detect outliers. The Storage and Serialization Layer stores these processed results in static, compressed JSON and RFC 7946 GeoJSON formats. Finally, the Visualization Dashboard Layer, built as a responsive single-page web application (SPA) using HTML5, CSS3, and Vanilla JavaScript, functions as a user-friendly Decision Support System (DSS) that loads these pre-computed files from a static hosting provider (such as GitHub Pages), minimizing server overhead.
 
-\texttt{}`
+\begin{verbatim}
 +-----------------------------------------------------------------------------------+
 \begin{table}[h]
 \centering
@@ -61,7 +61,7 @@ DECISION SUPPORT SYSTEM (FRONTEND SPA) \\
 \bottomrule
 \end{tabular}
 \end{table}+-----------------------------------------------------------------------------------+
-\texttt{}`
+\end{verbatim}
 
 By decoupling the high-performance back-end execution from the front-end visualization, the system bypasses the need to run resource-heavy geospatial libraries (such as GDAL, Rasterio, or Fiona) within the user's browser. Instead, the heavy computations are performed asynchronously, and the client browser only loads lightweight, pre-processed vector datasets.
 
@@ -73,20 +73,20 @@ The ingestion layer implements programmatic connections with three cloud registr
 \subsection{Google Earth Engine REST API Contract \& SDK Resilience}
 The pipeline initializes connection with Google Earth Engine using OAuth 2.0 credentials. To safeguard the pipeline against rate limits and transient connection drops (e.g., during intensive spatial operations), all Earth Engine calls (such as \texttt{.getInfo()} and \texttt{.reduceRegion()}) are wrapped in a resilient execution handler (\texttt{execute\_resilient\_call}) that enforces exponential backoff and jitter. The Python initialization and call wrapping are executed as follows:
 
-\texttt{}`python
+\begin{verbatim}
 import ee
-from pipeline.src.http\_resilience import execute\_resilient\_call
+from pipeline.src.http_resilience import execute_resilient_call
 
 # Resilient GEE initialization wrapper
-def init\_gee\_resilient():
+def init_gee_resilient():
     try:
         ee.Initialize(project='tesis-500804')
         return True
     except Exception as e:
         return False
 
-success = execute\_resilient\_call(init\_gee\_resilient, service\_name="GEE Init")
-\texttt{}`
+success = execute_resilient_call(init_gee_resilient, service_name="GEE Init")
+\end{verbatim}
 When querying satellite image collections (e.g., Landsat-8/9 OLI), spatial queries are constrained using bounding boxes represented as \texttt{ee.Geometry.Polygon}. The temporal filter is applied using \texttt{ee.Filter.date(start\_date, end\_date)}. If GEE is unreachable, the client falls back to deterministic mock datasets.
 
 \subsection{Copernicus CDSE REST API Contract \& Token-Bucket Throttling}
@@ -109,16 +109,16 @@ Once raw rasters are ingested into memory as NumPy arrays, they pass through a t
 To eliminate cloud obstruction from spectral calculations, the pipeline performs bitwise masking operations:
 \begin{itemize}
   \item \textbf{Sentinel-2 MSI}: The \texttt{QA60} band contains cloud and cirrus indicators in bits 10 and 11. The mask is calculated by shifting bits and evaluating whether both cloud flags are zero:
-    \texttt{}`python
-    def mask\_clouds\_s2(qa\_band):
+\begin{verbatim}
+    def mask_clouds_s2(qa_band):
         # Bit 10: Opaque clouds, Bit 11: Cirrus clouds
-        cloud\_bit\_mask = 1 << 10
-        cirrus\_bit\_mask = 1 << 11
+        cloud_bit_mask = 1 << 10
+        cirrus_bit_mask = 1 << 11
         
         # Binary flag must be 0 for both bits to indicate clear conditions
-        mask = (qa\_band \& cloud\_bit\_mask == 0) \& (qa\_band \& cirrus\_bit\_mask == 0)
+        mask = (qa_band \& cloud_bit_mask == 0) \& (qa_band \& cirrus_bit_mask == 0)
         return mask
-    \texttt{}`
+\end{verbatim}
   \item \textbf{Landsat-8/9 OLI}: The \texttt{QA\_PIXEL} band contains cloud (bit 3) and cloud shadow (bit 4) flags. The pipeline shifts these bits to isolate clear surface pixels.
 
 \end{itemize}
@@ -137,15 +137,15 @@ To support enterprise deployment, SBEI's mathematical models are isolated inside
    where $\mu\_w$ and $\sigma\_w$ represent the rolling mean and standard deviation over window $w=12$ months, and the denominator is bounded by a variance floor $\sigma\_w = \max(\sigma\_w, 10^{-5})$ to guarantee numeric stability.
 
 \end{enumerate}
-\texttt{}`python
-from pipeline.src.engine.spatial\_temporal\_engine import SpatialTemporalEconomicEngine
+\begin{verbatim}
+from pipeline.src.engine.spatial_temporal_engine import SpatialTemporalEconomicEngine
 
 # Initialize the proprietary mathematical engine
-engine = SpatialTemporalEconomicEngine(contamination=0.08, random\_state=42)
+engine = SpatialTemporalEconomicEngine(contamination=0.08, random_state=42)
 
 # Fit spatial features and compute mean anomaly scores and confidence bounds
-scores, ci\_low, ci\_high = engine.compute\_spatial\_anomalies\_bootstrap(X, n\_bootstrap=50)
-\texttt{}`
+scores, ci_low, ci_high = engine.compute_spatial_anomalies_bootstrap(X, n_bootstrap=50)
+\end{verbatim}
 
 ---
 
@@ -154,31 +154,31 @@ To provide near-instantaneous page load speeds, the pipeline avoids dynamic data
 
 \subsection{anomalies.json Schema}
 The serialized output contains structured metadata for each flagged anomaly event, including the audit-ready provenance ledger hash:
-\texttt{}`json
+\begin{verbatim}
 [
   {
-    "id": "anomaly\_madre\_de\_dios\_01",
+    "id": "anomaly_madre_de_dios_01",
     "type": "Deforestation/Gold Mining",
     "region": "Madre de Dios, Peru",
     "coordinates": [-12.894, -69.912],
     "confidence": 0.91,
     "uncertainty": 0.007,
-    "confidence\_interval": [0.903, 0.917],
+    "confidence_interval": [0.903, 0.917],
     "date": "2026-05-14",
-    "spectral\_profile": {
+    "spectral_profile": {
       "ndvi": -0.52,
       "ndwi": -0.15,
       "bsi": 0.38
     },
     "verification": {
-      "ground\_truth": "Artisanal mining deforestation corridor (ASGM expansion)",
+      "ground_truth": "Artisanal mining deforestation corridor (ASGM expansion)",
       "status": "Audited"
     },
     "details": "Unsupervised Isolation Forest flagged a sharp drop in NDVI (-0.52) and a corresponding increase in BSI (+0.38). Spatial clusters align with illegal mining corridors near the Interoceanic Highway.",
-    "provenance\_hash": "c71fa7a88bcde119f0deae99b8219abf55b9e0f6c2419efde09c8d19bc2e1180"
+    "provenance_hash": "c71fa7a88bcde119f0deae99b8219abf55b9e0f6c2419efde09c8d19bc2e1180"
   }
 ]
-\texttt{}`
+\end{verbatim}
 
 \subsection{Cryptographic Provenance, Audit Ledger \& PipelineRunRecord}
 To ensure that all economic insights are legally defensible and auditable by investment banks and audit entities, SBEI implements a provenance hashing mechanism and signed execution audit trails. 
@@ -202,7 +202,7 @@ Additionally, the pipeline produces a signed execution log:
 \end{itemize}
 \subsection{regions.geojson Schema}
 Study area boundary polygons are serialized according to the RFC 7946 GeoJSON standard:
-\texttt{}`json
+\begin{verbatim}
 {
   "type": "FeatureCollection",
   "features": [
@@ -227,7 +227,7 @@ Study area boundary polygons are serialized according to the RFC 7946 GeoJSON st
     }
   ]
 }
-\texttt{}`
+\end{verbatim}
 
 ---
 
@@ -239,7 +239,7 @@ The geographic visualizer is built using \texttt{Leaflet.js} mapped to a dark ti
 \begin{itemize}
   \item \textbf{Basemap URL}: \texttt{https://{s}.basemaps.cartocdn.com/dark\_all/{z}/{x}/{y}{r}.png}
   \item \textbf{Pulsing SVG Markers}: Created using custom HTML \texttt{divIcon} elements. The pulsing animation uses CSS keyframes to expand concentric rings around each marker:
-    \texttt{}`css
+\begin{verbatim}
     .pulsing-marker {
         width: 12px;
         height: 12px;
@@ -260,13 +260,13 @@ The geographic visualizer is built using \texttt{Leaflet.js} mapped to a dark ti
         0\% { transform: scale(0.5); opacity: 1; }
         100\% { transform: scale(2.0); opacity: 0; }
     }
-    \texttt{}`
+\end{verbatim}
 
 \end{itemize}
 \subsection{Dual-Canvas Image Split Slider}
 To allow users to visually inspect spatial changes without downloading large GIS files, the dashboard uses a dual-canvas layout. Two HTML5 \texttt{<canvas>} elements are stacked inside a relative container. The baseline image is rendered on the bottom canvas, while the anomaly image is drawn on the top canvas. A vertical slider bar captures mouse and touch interactions, computing the horizontal division percentage. This split boundary is then applied as a CSS \texttt{clip-path} inset boundary on the top canvas, dynamically revealing the baseline underneath. This hardware-accelerated clipping bypasses heavy raster recalculations, ensuring a smooth 60 frames per second (FPS) rendering speed even on lower-end mobile devices.
 
-\texttt{}`javascript
+\begin{verbatim}
 function applyClipEffect() {
     const containerWidth = container.clientWidth;
     const splitX = containerWidth * sliderSplitPercent;
@@ -277,7 +277,7 @@ function applyClipEffect() {
     // Clip top canvas (anomaly image) on the left side to reveal the baseline image
     anomalyCanvas.style.clipPath = \texttt{inset(0 0 0 ${splitX}px)};
 }
-\texttt{}`
+\end{verbatim}
 
 \subsection{Chart.js Spectral Radar Chart}
 A radar chart displays the multi-spectral signature of the selected anomaly:
@@ -295,7 +295,7 @@ To support different stakeholders—ranging from academic reviewers to venture c
 \end{itemize}
 \begin{enumerate}
   \item \textit{Interactive SVG Pipeline Diagram}: A dynamic, hover-active SVG flow chart showing live telemetry data packets moving from raw sensors, through the Isolation Forest engine, to the portfolio allocator.
-  \item \textit{Vanguard Screener \& CRO Warning Dashboard}: Evaluates Vanguard mutual funds and ETFs using the four core principles of Goals, Balance, Costs (flagging ratios > 0.20\%), and Discipline. It implements an interactive simulator that triggers a blinking Chief Risk Officer (CRO) escalation warning if any simulated holding size exceeds the institutional limit of $50M.
+  \item \textit{Vanguard Screener \& CRO Warning Dashboard}: Evaluates Vanguard mutual funds and ETFs using the four core principles of Goals, Balance, Costs (flagging ratios > 0.20\%), and Discipline. It implements an interactive simulator that triggers a blinking Chief Risk Officer (CRO) escalation warning if any simulated holding size exceeds the institutional limit of \$50M.
   \item \textit{Compliance Exporter Terminal}: Generates standard-compliant \texttt{<fund\_analysis>} structured JSON outputs with automated risk-flag compiling (e.g., \texttt{OVER\_LIMIT\_50M}, \texttt{INSUFFICIENT\_HISTORY}, \texttt{HIGH\_EXPENSE\_RATIO}).
   \item \textit{Equity Indicator Linkage}: Maps geospatial anomaly polygons directly to active corporate stock symbols (e.g. Salar de Atacama coordinates correlate directly to SQM/Albemarle holdings) to demonstrate down-market financial arbitrage.
 

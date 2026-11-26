@@ -81,14 +81,14 @@ const academicChapters = {
     "6": {
         title: "Chapter 6: Discussion & Conclusion",
         sections: [
-            { name: "6.1 Research Contributions", text: "This thesis demonstrates that open-access satellite APIs, in conjunction with unsupervised Isolation Forests, can detect hidden mining and industrial anomalies with high accuracy, establishing a framework for real-time supply chain auditing." },
+            { name: "6.1 Research Contributions", text: "The Alentejo pair measures optical differences. Field detection accuracy remains unevaluated." },
             { name: "6.2 Study Limitations", text: "Primary constraints include cloud obstruction in optical channels and spatial resolutions (10m) missing micro-scale operations, which can be mitigated in future work via Sentinel-1 SAR and atmospheric sensor fusion." }
         ]
     },
     "7": {
         title: "Chapter 7: Conclusion",
         sections: [
-            { name: "7.1 Summary of Contributions", text: "This research demonstrator combines provider-client scaffolding with synthetic satellite features and reproducible unit tests. Real scene-level raster ingestion and independent scientific validation remain future work." }
+            { name: "7.1 Summary of Contributions", text: "This research demonstrator combines provider-client scaffolding with synthetic satellite features and reproducible unit tests. The separate Alentejo case uses observed rasters and has no independent field labels." }
         ]
     }
 };

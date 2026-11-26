@@ -56,3 +56,8 @@ The key unresolved requirement is empirical evidence: authenticated provider acc
 **Submission note:** The compiled PDF and LaTeX sources must be regenerated from these revised and subsequently verified sections. Existing precompiled artifacts may still contain obsolete draft claims and are not declared submission-ready.
 
 **Conclusion:** The implemented pipeline and visualization provide a verifiable software basis for a thesis; scientific validation of real satellite and economic observations remains the principal outstanding research milestone.
+
+
+## Portuguese case study
+
+Two public Sentinel-2 Level-2A observations near Évora provide a traceable test of catalogue search, raster alignment and optical change analysis. Between 12 July 2024 and 27 June 2025, the median paired NDVI difference was +0.01874 across 9,216 valid grid cells. At an absolute difference above 0.15, 162 cells were flagged. No independent field labels were available. The ten dashboard anomaly examples are synthetic demonstrations.

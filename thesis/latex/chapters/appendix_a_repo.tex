@@ -1,13 +1,13 @@
 
 This appendix illustrates the structured layout of the thesis software repository, mapping out data modules, dashboard components, and deployment pipelines. The repository is organized to enforce the decoupled architecture described in Chapter 4, separating the Python geospatial ingestion and modeling pipeline (\texttt{/pipeline}) from the static frontend visualization files (\texttt{/docs}).
 
-\texttt{}`
+\begin{verbatim}
 space-economic-intelligence/
 │
 ├── .github/                       # GitHub configurations
-│   ├── ISSUE\_TEMPLATE/            # Standardized project issue forms
-│   │   ├── bug\_report.md          # Technical pipeline bug logger
-│   │   └── feature\_request.md     # Extension request template
+│   ├── ISSUE_TEMPLATE/            # Standardized project issue forms
+│   │   ├── bug_report.md          # Technical pipeline bug logger
+│   │   └── feature_request.md     # Extension request template
 │   └── workflows/                 # CI/CD automated actions
 │   │   ├── deploy.yml             # Automatic push-to-deploy for Pages
 │   │   ├── test.yml               # Automated pytest runner
@@ -27,15 +27,15 @@ space-economic-intelligence/
 ├── pipeline/                      # Geospatial processing pipeline
 │   ├── notebooks/                 # Jupyter Notebook workflows (01 - 07)
 │   ├── src/                       # Production Python package source
-│   │   ├── \_\_init\_\_.py            # Module initialization file
+│   │   ├── __init__.py            # Module initialization file
 │   │   ├── utils.py               # Calculation formulas (NDVI, Z-score)
 │   │   ├── ingestion.py           # GEE \& CDSE satellite query interface
 │   │   ├── preprocessing.py       # Cloud-masking and band scaling
 │   │   ├── models.py              # Isolation Forest ML classifiers
 │   │   └── exporter.py            # Serializers for GeoJSON outputs
 │   ├── tests/
-│   │   └── test\_pipeline.py       # Unit test suite verifying logic
-│   └── run\_pipeline.py            # Headless command-line orchestrator
+│   │   └── test_pipeline.py       # Unit test suite verifying logic
+│   └── run_pipeline.py            # Headless command-line orchestrator
 │
 ├── thesis/                        # LaTeX thesis sources
 │   ├── chapters/                  # Chapter drafts (1-7) \& Appendices
@@ -47,4 +47,8 @@ space-economic-intelligence/
 ├── CONTRIBUTING.md                # Development and branching standards
 ├── CHANGELOG.md                   # Project semver release logs
 └── LICENSE                        # MIT Open License
-\texttt{}`
+\end{verbatim}
+
+
+\section{Reproducing the Portuguese case}
+From the repository root install pipeline/requirements.txt and matplotlib. Run python research/prototypes/alentejo\_change.py with internet access. The report and figure are docs/data/alentejo-change.json and docs/data/alentejo-change.png. Both input scene identifiers, XML hashes, coverage, software versions and the analytical array hash are in the report.

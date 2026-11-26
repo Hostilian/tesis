@@ -45,7 +45,7 @@ def compile_pdf():
     
     pdf.ln(60)
     pdf.set_font("Arial", "B", 12)
-    pdf.cell(0, 8, "Author: Eren Ozturk (XOZTE001@studenti.czu.cz)", 0, new_x="LMARGIN", new_y="NEXT", align="L")
+    pdf.cell(0, 8, "Author: Eren Ozturk", 0, new_x="LMARGIN", new_y="NEXT", align="L")
     pdf.cell(0, 8, "Supervisor: Dr. Jirí Brožek", 0, new_x="LMARGIN", new_y="NEXT", align="L")
     pdf.cell(0, 8, "Academic Year: 2025–2026", 0, new_x="LMARGIN", new_y="NEXT", align="L")
     
@@ -58,19 +58,11 @@ def compile_pdf():
     pdf.cell(0, 12, "Abstract", 0, new_x="LMARGIN", new_y="NEXT", align="L")
     pdf.ln(5)
     pdf.set_font("Arial", "", 11)
-    abstract_text = (
-        "This thesis investigates the implementation of space-based economic intelligence systems "
-        "using civilian satellite APIs. By constructing an automated pipeline querying Google Earth Engine "
-        "and Copernicus Data Space Ecosystem collections, spectral anomalies are extracted and analyzed "
-        "via unsupervised Isolation Forests and temporal Z-scores. The resulting dashboard provides a "
-        "practical Decision Support System (DSS) demonstrating real-world applications in monitoring "
-        "lithium brine evaporation ponds in Chile, informal gold mining deforestation in Peru, and "
-        "industrial night-light changes in the Czech Republic."
-    )
+    abstract_text = 'Two public Sentinel-2 Level-2A observations near Evora provide a traceable test of catalogue search, raster alignment and optical change analysis. Between 12 July 2024 and 27 June 2025, the median paired NDVI difference was +0.01874 across 9,216 valid grid cells. At an absolute difference above 0.15, 162 cells were flagged. No independent field labels were available. The ten dashboard anomaly examples are synthetic demonstrations.'
     pdf.multi_cell(0, 6, abstract_text, new_x="LMARGIN", new_y="NEXT")
     
     # ── CHAPTERS ──
-    chapters_dir = r"d:\CODING\tesis\thesis\chapters"
+    chapters_dir = os.path.join(os.path.dirname(__file__), "chapters")
     files = [
         "01_introduction.md",
         "02_literature_review.md",
@@ -121,6 +113,10 @@ def compile_pdf():
                 pdf.ln(3)
                 continue
                 
+            if line_stripped.startswith("![Paired NDVI difference]"):
+                pdf.image(os.path.join(chapters_dir, "../../docs/data/alentejo-change.png"), w=145)
+                continue
+
             # Headers
             if line_stripped.startswith("# "):
                 title = line_stripped[2:]
@@ -162,7 +158,7 @@ def compile_pdf():
         if in_table:
             render_pdf_table(pdf, table_lines)
             
-    output_path = r"d:\CODING\tesis\thesis\thesis.pdf"
+    output_path = os.path.join(os.path.dirname(__file__), "thesis.pdf")
     pdf.output(output_path)
     print(f"Thesis PDF compiled successfully at: {output_path}")
 

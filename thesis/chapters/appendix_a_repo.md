@@ -49,3 +49,8 @@ space-economic-intelligence/
 ├── CHANGELOG.md                   # Project semver release logs
 └── LICENSE                        # MIT Open License
 ```
+
+
+## Reproducing the Portuguese case
+
+From the repository root install pipeline/requirements.txt and matplotlib. Run python research/prototypes/alentejo_change.py with internet access. The report and figure are docs/data/alentejo-change.json and docs/data/alentejo-change.png. Both input scene identifiers, XML hashes, coverage, software versions and the analytical array hash are in the report.

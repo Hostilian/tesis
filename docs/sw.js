@@ -5,7 +5,7 @@
 // Network-first for dynamic API/data endpoints.
 // ============================================================
 
-const CACHE_VERSION = 'orbital-intel-v4-evidence-disclosure-20261119';
+const CACHE_VERSION = 'orbital-intel-alentejo-20261126';
 const OFFLINE_URL = 'offline.html';
 
 const STATIC_ASSETS = [
@@ -14,6 +14,7 @@ const STATIC_ASSETS = [
   'index3.html',
   'index4.html',
   'evidence.html',
+  'assets/vendor/chart.umd.min.js',
   'app3.js',
   'app4.js',
   'index.css',

@@ -5,7 +5,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{hyperref}
-\usepackage{booktabs}
+\usepackage{booktabs,tabularx}
 \usepackage{geometry}
 \geometry{left=3.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
 
@@ -35,14 +35,16 @@
     \textbf{Author:} Eren Ozturk\\
     \textbf{Supervisor:} Dr. J\v{r}\'{i} Bro\v{z}ek\\
     \vspace{2cm}
-    Prague, 2026
+    Working research draft, November 2026
 \end{center}
 \end{titlepage}
 
 \frontmatter
 
 \chapter*{Abstract}
-This thesis investigates the implementation of space-based economic intelligence systems using civilian satellite APIs. By constructing an automated pipeline querying GEE and CDSE collections, spectral anomalies are extracted and analyzed via unsupervised Isolation Forests and temporal Z-scores.
+Two public Sentinel-2 Level-2A observations near Evora provide a traceable test of catalogue search, raster alignment and optical change analysis. Between 12 July 2024 and 27 June 2025, the median paired NDVI difference was +0.01874 across 9,216 valid grid cells. At an absolute difference above 0.15, 162 cells were flagged. No independent field labels were available. The ten dashboard anomaly examples are synthetic demonstrations.
+
+\paragraph{Review status.} The Alentejo case has a live replay receipt. The legacy literature and engineering chapters remain under source review. A citation-level discrepancy ledger accompanies this draft in the research directory.
 
 \tableofcontents
 \listoffigures
@@ -91,7 +93,7 @@ This thesis investigates the implementation of space-based economic intelligence
 \input{chapters/appendix_f_acronyms}
 
 \backmatter
-\bibliographystyle{iso690}
+\bibliographystyle{plain}
 \bibliography{references}
 
 \end{document}

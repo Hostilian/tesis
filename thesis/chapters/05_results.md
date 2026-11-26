@@ -89,3 +89,17 @@ The next evidence release requires an observed source-asset inventory, immutable
 For detailed implementation steps, see `THESIS_VALIDATION_GAPS.md`, `REAL_OBSERVATION.md` and `docs/evidence.html` in the repository.
 
 **Chapter conclusion:** The primary reproducible results at this stage concern the demonstrator's software architecture, transformations, API structure and deployment, not validated geographical discoveries or confirmed hypotheses.
+
+
+## Alentejo paired-image results
+
+All 9,216 grid cells passed the joint mask. The archived digital-number calculation yielded 21 cells above 0.15 and its array hash was reproduced live. Applying the product offsets yielded 162 at that threshold. Both masks retained the full grid, so changing the accepted classification list did not remove cells here.
+
+| Absolute NDVI threshold | Cells exceeding threshold |
+|---|---|
+| 0.05 | 1897 |
+| 0.1 | 486 |
+| 0.15 | 162 |
+| 0.2 | 61 |
+
+![Paired NDVI difference](../../docs/data/alentejo-change.png)

@@ -3,18 +3,18 @@ This appendix details the operational interface elements and chart rendering str
 
 \section{D.1 Anomaly Mapping Canvas}
 The geographic visualizer utilizes CartoDB Dark Matter tiles (\texttt{https://{s}.basemaps.cartocdn.com/dark\_all/{z}/{x}/{y}{r}.png}) as the basemap layer. This dark color scheme reduces visual clutter, maximizing the contrast of the highlighted fluorescent anomaly indicators. The spatial coordinates of anomalies are rendered using custom Leaflet \texttt{divIcon} marker objects. The markers include concentric pulsing rings styled using CSS keyframe animations:
-\texttt{}`css
+\begin{verbatim}
 @keyframes markerPulse {
     0\% { transform: scale(0.5); opacity: 1; }
     100\% { transform: scale(2.5); opacity: 0; }
 }
-\texttt{}`
+\end{verbatim}
 
 \section{D.2 Dual-Canvas Image Split Slider}
 To permit detailed visual comparison of before-and-after satellite tiles without loading heavy GIS software libraries, the dashboard implements a dual-canvas clipping slider. Two HTML5 \texttt{<canvas>} elements are loaded dynamically. The baseline historical tile is drawn to the lower canvas, and the anomalous tile is drawn to the upper canvas. An absolute-positioned vertical divider handle monitors horizontal pointer drag events (\texttt{mousemove} and \texttt{touchmove}) to compute the division percentage. The upper canvas is cropped using the hardware-accelerated CSS \texttt{clip-path} property:
-\texttt{}`css
+\begin{verbatim}
 clip-path: inset(0 0 0 splitXpx);
-\texttt{}`
+\end{verbatim}
 This dynamic crop displays the baseline image on the left side of the divider and the anomaly image on the right side.
 
 \section{D.3 Spectral Profile Radar Chart}
