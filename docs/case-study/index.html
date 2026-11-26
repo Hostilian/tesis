@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portugal case study: Sentinel-2 change, 2018–2025 | Eren Öztürk thesis</title>
+  <meta name="description" content="Reproducible Sentinel-2 L2A change analysis for two public Portuguese study areas (Alqueva irrigation area, Neves-Corvo mine), with provenance and an independent land-use reference.">
+  <link rel="icon" href="../favicon.ico">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" integrity="sha512-Zcn6bjR/8RZbLEpLIeOwNtzREBAJnUKESxces60Mpoj+2okopSAcSUIUOseddDm0cxnGQzxIR7vJgsLZbdLE3w==" crossorigin="anonymous">
+  <style>
+    :root { --bg:#0f1419; --panel:#161d24; --line:#2a3540; --text:#e6edf3; --muted:#9fb0bf; --accent:#4fb3bf; --warn:#e0a84f; }
+    * { box-sizing: border-box; }
+    body { margin:0; font:14px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; background:var(--bg); color:var(--text); }
+    header { padding:12px 18px; border-bottom:1px solid var(--line); display:flex; flex-wrap:wrap; gap:10px 18px; align-items:center; }
+    header h1 { font-size:16px; margin:0; font-weight:600; }
+    header a { color:var(--accent); text-decoration:none; font-size:13px; }
+    header .spacer { flex:1; }
+    main { display:grid; grid-template-columns: 1fr 380px; height: calc(100vh - 53px); }
+    #map { height:100%; min-height:420px; }
+    aside { overflow-y:auto; border-left:1px solid var(--line); background:var(--panel); padding:14px 16px 40px; }
+    h2 { font-size:14px; margin:18px 0 6px; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; font-weight:600; }
+    select, input[type=range] { width:100%; }
+    select { background:#0f1419; color:var(--text); border:1px solid var(--line); border-radius:6px; padding:6px; font-size:14px; }
+    label.layer { display:flex; gap:8px; align-items:center; padding:3px 0; cursor:pointer; }
+    .badge { display:inline-block; font-size:11px; padding:1px 7px; border-radius:10px; border:1px solid; white-space:nowrap; }
+    .b-obs { color:#8fd18f; border-color:#3d6b3d; }
+    .b-der { color:#7fc4ff; border-color:#2e5778; }
+    .b-int { color:var(--warn); border-color:#7a5a24; }
+    .b-syn { color:#d48fd4; border-color:#6b3d6b; }
+    table { width:100%; border-collapse:collapse; font-size:13px; }
+    td, th { padding:4px 4px; border-bottom:1px solid var(--line); vertical-align:top; text-align:left; }
+    td.n { text-align:right; font-variant-numeric: tabular-nums; white-space:nowrap; }
+    .legend span.sw { display:inline-block; width:12px; height:12px; border-radius:2px; margin-right:6px; vertical-align:-1px; }
+    .muted { color:var(--muted); font-size:12.5px; }
+    .note { background:#1d252d; border-left:3px solid var(--warn); padding:8px 10px; font-size:12.5px; margin:10px 0; }
+    .err { background:#3a1d1d; border-left:3px solid #e06060; padding:8px 10px; }
+    code { font-size:12px; color:#c9d1d9; word-break:break-all; }
+    a { color:var(--accent); }
+    figure { margin:8px 0; } figure img { width:100%; border:1px solid var(--line); border-radius:4px; }
+    @media (max-width: 860px) {
+      main { grid-template-columns: 1fr; height:auto; }
+      #map { height:60vh; }
+      aside { border-left:none; border-top:1px solid var(--line); }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Portugal case study · Sentinel-2 change 2018 → 2025</h1>
+  <span class="spacer"></span>
+  <a href="../">← Main dashboard</a>
+  <a href="https://github.com/Hostilian/tesis/tree/main/pipeline" rel="noopener">Pipeline code</a>
+</header>
+<main>
+  <div id="map" role="region" aria-label="Satellite map of the selected study area"></div>
+  <aside>
+    <label for="case" class="muted">Study area</label>
+    <select id="case" aria-label="Select study area"></select>
+    <p id="case-desc" class="muted"></p>
+
+    <h2>Layers</h2>
+    <div id="layers"></div>
+    <label class="muted" for="opacity">Overlay opacity</label>
+    <input id="opacity" type="range" min="0" max="1" step="0.05" value="0.85">
+    <div id="legend" class="legend"></div>
+
+    <h2>Data status</h2>
+    <p class="muted">
+      <span class="badge b-obs">public observation</span> imagery and catalogue metadata ·
+      <span class="badge b-der">observation-derived result</span> numbers computed from them ·
+      <span class="badge b-int">unverified interpretation</span> a reading whose cause is not confirmed ·
+      <span class="badge b-syn">synthetic demonstration</span> mock data, never evidence (not used on this page).
+    </p>
+
+    <h2>Key numbers</h2>
+    <div id="numbers"><p class="muted">Loading…</p></div>
+
+    <h2>Independent reference (DGT COS)</h2>
+    <div id="reference"><p class="muted">Loading…</p></div>
+
+    <h2>Provenance</h2>
+    <div id="provenance"></div>
+
+    <h2>Figures</h2>
+    <div id="figures"></div>
+
+    <div class="note">Flags mark where the surface signal changed. They do not say why. COS agreement is agreement with an official photo-interpreted map, not ground-truth accuracy. Areas were chosen as change hotspots and are not representative of Alentejo.</div>
+  </aside>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js" integrity="sha512-BwHfrr4c9kmRkLw6iXFdzcdWV/PGkVgiIyIWLLlTSXzWQzxuSg4DiQUCpauz/EWjgk5TYQqX/kvn9pG1NpYfqg==" crossorigin="anonymous"></script>
+<script>
+"use strict";
+const DATA = "data/";
+const fmt = (x, d = 0) => (x === null || x === undefined || Number.isNaN(x)) ? "–" : Number(x).toLocaleString("en-GB", { minimumFractionDigits: d, maximumFractionDigits: d });
+const pct = (x, d = 1) => (x === null || x === undefined) ? "–" : fmt(100 * x, d) + " %";
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const badge = s => ({ public_observation: '<span class="badge b-obs">public observation</span>', observation_derived_result: '<span class="badge b-der">derived</span>', unverified_interpretation: '<span class="badge b-int">interpretation</span>', synthetic_demonstration: '<span class="badge b-syn">synthetic</span>' }[s] || "");
+
+const map = L.map("map", { zoomControl: true, maxZoom: 18 });
+const satellite = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
+  maxZoom: 18, attribution: "Basemap © Esri, Maxar, Earthstar Geographics · Overlays: contains modified Copernicus Sentinel data 2018, 2025 · COS © DGT (CC-BY)"
+}).addTo(map);
+const osm = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 18, attribution: "© OpenStreetMap contributors" });
+L.control.layers({ "Satellite (Esri World Imagery)": satellite, "OpenStreetMap": osm }, null, { position: "topleft" }).addTo(map);
+L.control.scale({ imperial: false }).addTo(map);
+
+let current = { layers: {}, aoi: null };
+const layerDefs = [
+  { key: "after",  label: "Sentinel-2 true colour, after", status: "public_observation", on: false },
+  { key: "before", label: "Sentinel-2 true colour, before", status: "public_observation", on: false },
+  { key: "delta",  label: "Index difference (continuous)", status: "observation_derived_result", on: false },
+  { key: "change", label: "Candidate change (thresholded, ≥ 1 ha)", status: "observation_derived_result", on: true },
+  { key: "patches", label: "Change patches (click for details)", status: "observation_derived_result", on: false },
+  { key: "cos",    label: "COS 2025 permanent crops / mines (reference)", status: "public_observation", on: false },
+];
+
+function clearCase() {
+  Object.values(current.layers).forEach(l => l && map.removeLayer(l));
+  if (current.aoi) map.removeLayer(current.aoi);
+  current = { layers: {}, aoi: null };
+}
+
+function setOpacity(v) {
+  Object.entries(current.layers).forEach(([k, l]) => {
+    if (!l) return;
+    if (l.setOpacity) l.setOpacity(v);
+    else if (l.setStyle) l.setStyle({ fillOpacity: 0.35 * v, opacity: v });
+  });
+}
+
+async function getJSON(path, optional = false) {
+  const r = await fetch(path, { cache: "no-cache" });
+  if (!r.ok) { if (optional) return null; throw new Error(`${path}: HTTP ${r.status}`); }
+  return r.json();
+}
+
+function renderLayers(caseId) {
+  const box = document.getElementById("layers");
+  box.innerHTML = "";
+  layerDefs.forEach(def => {
+    if (!current.layers[def.key]) return;
+    const id = `ly-${def.key}`;
+    const row = document.createElement("label");
+    row.className = "layer";
+    row.innerHTML = `<input type="checkbox" id="${id}" ${map.hasLayer(current.layers[def.key]) ? "checked" : ""}> ${esc(def.label)} ${badge(def.status)}`;
+    row.querySelector("input").addEventListener("change", e => {
+      const l = current.layers[def.key];
+      e.target.checked ? l.addTo(map) : map.removeLayer(l);
+    });
+    box.appendChild(row);
+  });
+}
+
+async function loadCase(caseId, index) {
+  clearCase();
+  const meta = index.cases[caseId];
+  const base = DATA + caseId + "/";
+  document.getElementById("case-desc").textContent = meta.description || "";
+  ["numbers", "reference", "provenance", "figures", "legend"].forEach(id => document.getElementById(id).innerHTML = '<p class="muted">Loading…</p>');
+  let results, manifest, ref;
+  try {
+    [results, manifest, ref] = await Promise.all([getJSON(base + "results.json"), getJSON(base + "manifest.json"), getJSON(base + "reference_cos.json", true)]);
+  } catch (e) {
+    document.getElementById("numbers").innerHTML = `<p class="err">Results for this area could not be loaded (${esc(e.message)}). No change layer is shown.</p>`;
+    const b = meta.bbox; map.fitBounds([[b[1], b[0]], [b[3], b[2]]]);
+    return;
+  }
+  if (results.status !== "ok") {
+    document.getElementById("numbers").innerHTML = `<p class="err">Run status: ${esc(results.status)}. Valid coverage was too low to report change.</p>`;
+  }
+  const b = results.aoi.bbox_wgs84;
+  current.aoi = L.rectangle([[b[1], b[0]], [b[3], b[2]]], { color: "#ffffff", weight: 1.5, fill: false, dashArray: "5 4", interactive: false }).addTo(map);
+  map.invalidateSize();
+  map.fitBounds(current.aoi.getBounds(), { padding: [20, 20], maxZoom: 14 });
+
+  const op = Number(document.getElementById("opacity").value);
+  const ob = results.web.overlay_bounds_latlng; // [south, west, north, east]
+  const bnds = k => [[ob[k][0], ob[k][1]], [ob[k][2], ob[k][3]]];
+  const d0 = results.dates.before.slice(0, 10), d1 = results.dates.after.slice(0, 10);
+  layerDefs[0].label = `Sentinel-2 true colour, ${d1}`;
+  layerDefs[1].label = `Sentinel-2 true colour, ${d0}`;
+  layerDefs[2].label = `${results.web.index_label} difference (${d1} − ${d0})`;
+  current.layers.after = L.imageOverlay(base + "overlay_after.jpg", bnds("after"), { opacity: op, alt: "Sentinel-2 true colour after" });
+  current.layers.before = L.imageOverlay(base + "overlay_before.jpg", bnds("before"), { opacity: op, alt: "Sentinel-2 true colour before" });
+  current.layers.delta = L.imageOverlay(base + "overlay_delta.png", bnds("delta"), { opacity: op, alt: "Index difference" });
+  current.layers.change = L.imageOverlay(base + "overlay_change.png", bnds("change"), { opacity: op, alt: "Candidate change" }).addTo(map);
+
+  getJSON(base + "patches.geojson", true).then(gj => {
+    if (!gj) return;
+    const lg = results.web.legend;
+    current.layers.patches = L.geoJSON(gj, {
+      style: f => ({ color: f.properties.change_class === "increase" ? lg.increase.color : lg.decrease.color, weight: 1, fillOpacity: 0.25 }),
+      onEachFeature: (f, l) => {
+        const p = f.properties;
+        let html = `<b>${esc(p.change_class)} patch</b> ${badge(p.data_status)}<br>Area: ${fmt(p.area_ha, 1)} ha<br>Mean ${esc(results.web.index_label)} difference: ${fmt(p.mean_delta, 3)}`;
+        if (p.seasonal_amplitude !== undefined && p.seasonal_amplitude !== null) html += `<br>After-year Aug − May NDVI: ${fmt(p.seasonal_amplitude, 3)} ${badge("unverified_interpretation")}`;
+        l.bindPopup(html + `<br><span class="muted">Cause not verified.</span>`);
+      }
+    });
+    renderLayers(caseId);
+  });
+  if (ref) {
+    getJSON(base + "reference_cos2025v1.geojson", true).then(gj => {
+      if (!gj) return;
+      const pick = f => { const c = f.properties.cos25v1_n4_c || ""; return c.startsWith("2.2.") || c.startsWith("1.6."); };
+      current.layers.cos = L.geoJSON({ type: "FeatureCollection", features: gj.features.filter(pick) }, {
+        style: f => ({ color: (f.properties.cos25v1_n4_c || "").startsWith("1.6.") ? "#ffcc00" : "#b8f2b8", weight: 1.2, fill: false, dashArray: "3 3" }),
+        onEachFeature: (f, l) => l.bindPopup(`<b>COS 2025v1</b> ${badge("public_observation")}<br>${esc(f.properties.cos25v1_n4_c)} – ${esc(f.properties.cos25v1_n4_l)}<br><span class="muted">© DGT, CC-BY</span>`)
+      });
+      renderLayers(caseId);
+    });
+  }
+  renderLayers(caseId);
+
+  const lg = results.web.legend;
+  document.getElementById("legend").innerHTML = `<p style="margin:8px 0 0"><span class="sw" style="background:${lg.increase.color}"></span>${esc(lg.increase.label)}<br><span class="sw" style="background:${lg.decrease.color}"></span>${esc(lg.decrease.label)}</p>`;
+
+  const c = results.change, cov = results.coverage, th = results.threshold;
+  let rows = `
+    <tr><td>Dates compared</td><td class="n">${d0} → ${d1}</td></tr>
+    <tr><td>Index</td><td class="n">${esc(results.web.index_label)}</td></tr>
+    <tr><td>Area of interest</td><td class="n">${fmt(results.aoi.area_km2, 1)} km²</td></tr>
+    <tr><td>Pixels valid on both dates</td><td class="n">${fmt(cov.joint_valid_pixels_main)} (${pct(cov.joint_valid_fraction_main)})</td></tr>
+    <tr><td>Threshold |Δ| ${badge("observation_derived_result")}<div class="muted">${esc(th.rule)}</div></td><td class="n">${fmt(th.value, 3)}</td></tr>
+    <tr><td>Control pair flagged at threshold <div class="muted">20 days apart, same summer: false-alarm proxy</div></td><td class="n">${pct(c.control_flagged_share_at_threshold, 2)}</td></tr>
+    <tr><td>Increase, patches ≥ ${fmt(c.min_patch_ha)} ha</td><td class="n">${fmt(c.increase_area_ha, 0)} ha (${pct(c.increase_share_of_valid)})</td></tr>
+    <tr><td>Decrease, patches ≥ ${fmt(c.min_patch_ha)} ha</td><td class="n">${fmt(c.decrease_area_ha, 0)} ha (${pct(c.decrease_share_of_valid)})</td></tr>
+    <tr><td>Increase patches (median / max area)</td><td class="n">${fmt(c.increase_patches.patches_ge_min)} (${fmt(c.increase_patches.patch_area_ha_median, 1)} / ${fmt(c.increase_patches.patch_area_ha_max, 0)} ha)</td></tr>`;
+  if (results.delta_centering && results.delta_centering.method !== "none") {
+    rows += `<tr><td>Difference centred on AOI median <div class="muted">scene-wide inter-annual shift removed</div></td><td class="n">${fmt(results.delta_centering.raw_median_delta_main, 3)}</td></tr>`;
+  }
+  if (results.seasonal_split) {
+    const s = results.seasonal_split;
+    rows += `<tr><td>Increase pixels stable May→Aug ${badge("unverified_interpretation")}<div class="muted">consistent with evergreen permanent crops</div></td><td class="n">${pct(s.stable_within_year / s.with_valid_second_date)}</td></tr>`;
+  }
+  document.getElementById("numbers").innerHTML = `<table>${rows}</table>`;
+
+  if (ref) {
+    let html = `<p class="muted">${esc(ref.reference.name)} · ${esc(ref.reference.license)}. Not used to tune the method.</p><table><tr><th>COS category (2018 → 2025)</th><th class="n">area</th><th class="n">flagged ↑</th><th class="n">flagged ↓</th></tr>`;
+    ref.agreement_matrix.filter(r => r.pixels > 0).forEach(r => {
+      html += `<tr><td>${esc(r.reference_category)}</td><td class="n">${fmt(r.area_ha, 0)} ha</td><td class="n">${pct(r.share_flagged_increase)}</td><td class="n">${pct(r.share_flagged_decrease)}</td></tr>`;
+    });
+    html += "</table>";
+    const a = ref.new_permanent_crop_vs_ndvi_increase;
+    if (a) {
+      html += `<p style="margin-top:8px">NDVI increase vs COS “new permanent crop”: pixel precision <b>${fmt(a.pixel_level.precision, 2)}</b>, recall <b>${fmt(a.pixel_level.recall, 2)}</b>; polygon level (${a.polygon_level.units_evaluated} COS polygons) precision ${fmt(a.polygon_level.precision, 2)}, recall ${fmt(a.polygon_level.recall, 2)}.</p>`;
+    }
+    if (ref.stability_split_vs_cos) {
+      const s = ref.stability_split_vs_cos;
+      html += `<p>Share inside COS 2025 permanent crops: stable-within-year increase ${pct(s.stable_within_year.share_in_permanent_crop_2025)} vs strongly seasonal ${pct(s.strongly_seasonal.share_in_permanent_crop_2025)}.</p>`;
+    }
+    document.getElementById("reference").innerHTML = html;
+  } else {
+    document.getElementById("reference").innerHTML = '<p class="muted">No reference comparison for this area.</p>';
+  }
+
+  const inputs = manifest.inputs.map(i => `<li>${badge(i.data_status)} <code>${esc(i.id)}</code><br><span class="muted">${esc(i.datetime)} · tile ${esc(i.mgrs_tile)} · orbit R${esc(i.relative_orbit)} · baseline ${esc(i.processing_baseline)} · cloud ${fmt(i.eo_cloud_cover, 2)} % · role: ${esc(i.role.join(", "))}</span> · <a href="${esc(i.stac_item_url)}" rel="noopener">STAC item</a></li>`).join("");
+  document.getElementById("provenance").innerHTML = `
+    <p class="muted">Run <code>${esc(manifest.run_id)}</code> · ${esc(manifest.completed_at)} · ${fmt(manifest.runtime_seconds, 0)} s · code ${esc((manifest.code.commit || "").slice(0, 10))}${manifest.code.case_study_code_dirty ? " (uncommitted changes)" : ""}</p>
+    <p class="muted">Catalogue: <code>${esc(manifest.catalogue.url)}</code> (${esc(manifest.catalogue.collection)}), retrieved ${esc(manifest.catalogue.retrieved_at)}, ${esc(manifest.catalogue.access)}. <a href="${esc(manifest.catalogue.license)}" rel="noopener">Sentinel data legal notice</a>.</p>
+    <ul style="padding-left:18px;margin:6px 0">${inputs}</ul>
+    <p class="muted">Rerun: <code>${esc(manifest.command)}</code></p>
+    <p><a href="${base}manifest.json">manifest.json</a> · <a href="${base}results.json">results.json</a> · <a href="${base}sensitivity.csv">sensitivity.csv</a> · <a href="${base}patches.geojson">patches.geojson</a>${ref ? ` · <a href="${base}reference_cos.json">reference_cos.json</a>` : ""}</p>`;
+
+  const figs = [["fig_overview.png", "Before/after imagery, difference and candidate change"], ["fig_sensitivity.png", "Threshold sensitivity: main vs control pair"], ["fig_histogram.png", "Distribution of differences"]];
+  if (ref) figs.push(["fig_reference_cos.png", "Sentinel-2 flags vs COS reference"]);
+  document.getElementById("figures").innerHTML = figs.map(([f, cap]) => `<figure><a href="${base}${f}"><img src="${base}${f}" alt="${esc(cap)}" loading="lazy"></a><figcaption class="muted">${esc(cap)}</figcaption></figure>`).join("");
+}
+
+(async () => {
+  let index;
+  try { index = await getJSON(DATA + "index.json"); }
+  catch (e) {
+    document.getElementById("numbers").innerHTML = `<p class="err">Case-study index could not be loaded (${esc(e.message)}).</p>`;
+    map.setView([38.0, -8.0], 8);
+    return;
+  }
+  const sel = document.getElementById("case");
+  const order = ["alqueva_olive", "neves_corvo_mine"].filter(k => index.cases[k]).concat(Object.keys(index.cases).filter(k => !["alqueva_olive", "neves_corvo_mine"].includes(k)));
+  order.forEach(k => { const o = document.createElement("option"); o.value = k; o.textContent = index.cases[k].title; sel.appendChild(o); });
+  const fromHash = decodeURIComponent(location.hash.slice(1));
+  sel.value = index.cases[fromHash] ? fromHash : order[0];
+  sel.addEventListener("change", () => { history.replaceState(null, "", "#" + sel.value); loadCase(sel.value, index); });
+  document.getElementById("opacity").addEventListener("input", e => setOpacity(Number(e.target.value)));
+  window.addEventListener("hashchange", () => { const h = decodeURIComponent(location.hash.slice(1)); if (index.cases[h] && h !== sel.value) { sel.value = h; loadCase(h, index); } });
+  loadCase(sel.value, index);
+})();
+</script>
+</body>
+</html>

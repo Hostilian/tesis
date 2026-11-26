@@ -1,0 +1,57 @@
+{
+  "schema": "tesis.case_study.index.v1",
+  "cases": {
+    "alqueva_olive": {
+      "title": "Alqueva irrigation area, Beja - Ferreira do Alentejo (Portugal): summer NDVI change 2018-2025",
+      "description": "10 x 10 km public study area inside the Alqueva multipurpose irrigation scheme, south-west of Beja. Bounding box only; no farm or parcel boundaries are used.",
+      "selection_rationale": "AOI = 10 km block with the largest share of summer NDVI increase > 0.2 in a coarse (160 m) tile-wide screening of 29SNC, 2018-08-18 vs 2024-08-21 (see screening_29SNC.json). It is a change hotspot chosen on purpose and is not representative of Alentejo. Dates: peak-summer window, relative orbit 037, scene cloud < 1 %, processing baseline 05.xx on both dates, date closest to mid-August.",
+      "run_id": "alqueva_olive-20261126T132226Z",
+      "completed_at": "2026-11-26T13:24:29Z",
+      "status": "ok",
+      "bbox": [
+        -8.042,
+        37.907,
+        -7.928,
+        37.997
+      ],
+      "center": [
+        37.952,
+        -7.984999999999999
+      ],
+      "dates": {
+        "before": "2018-08-18T11:30:42.942000Z",
+        "after": "2025-08-21T11:31:03.493000Z",
+        "control_before": "2025-08-01T11:31:04.794000Z",
+        "control_after": "2025-08-21T11:31:03.493000Z"
+      },
+      "index": "ndvi",
+      "path": "data/alqueva_olive/"
+    },
+    "neves_corvo_mine": {
+      "title": "Neves-Corvo mine area, Castro Verde / Almodovar (Portugal): summer bare-soil index change 2018-2025",
+      "description": "Public bounding box (about 7.5 x 6.1 km) around the Neves-Corvo copper-zinc mine (37.573 N, 7.971 W per Mindat/Wikidata), its deposits (Lombador, Zambujal, Graca) and surrounding land in Baixo Alentejo. Bounding box only; no operator or concession boundaries are used.",
+      "selection_rationale": "Chosen a priori as the best-known active metal mine in Alentejo, to match the registered thesis theme (resource-extraction anomalies). Same date rule as alqueva_olive (relative orbit 037, scene cloud < 1 %, baseline 05.xx, mid-August), tile 29SNB. A first run with a box ~17 km too far west (no mine in view) was discarded on 2026-11-26. Delta is median-centred because the first run showed a scene-wide BSI decrease over unchanged pasture.",
+      "run_id": "neves_corvo_mine-20261126T132438Z",
+      "completed_at": "2026-11-26T13:26:42Z",
+      "status": "ok",
+      "bbox": [
+        -8.01,
+        37.545,
+        -7.925,
+        37.6
+      ],
+      "center": [
+        37.572500000000005,
+        -7.967499999999999
+      ],
+      "dates": {
+        "before": "2018-08-18T11:30:57.426000Z",
+        "after": "2025-08-21T11:31:17.972000Z",
+        "control_before": "2025-08-01T11:31:19.275000Z",
+        "control_after": "2025-08-21T11:31:17.972000Z"
+      },
+      "index": "bsi",
+      "path": "data/neves_corvo_mine/"
+    }
+  }
+}

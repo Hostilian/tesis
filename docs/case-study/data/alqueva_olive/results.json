@@ -1,0 +1,341 @@
+{
+  "schema": "tesis.case_study.results.v1",
+  "run_id": "alqueva_olive-20261126T132226Z",
+  "case_id": "alqueva_olive",
+  "title": "Alqueva irrigation area, Beja - Ferreira do Alentejo (Portugal): summer NDVI change 2018-2025",
+  "status": "ok",
+  "index": "ndvi",
+  "dates": {
+    "before": "2018-08-18T11:30:42.942000Z",
+    "after": "2025-08-21T11:31:03.493000Z",
+    "control_before": "2025-08-01T11:31:04.794000Z",
+    "control_after": "2025-08-21T11:31:03.493000Z"
+  },
+  "aoi": {
+    "bbox_wgs84": [
+      -8.042,
+      37.907,
+      -7.928,
+      37.997
+    ],
+    "grid": {
+      "crs": "EPSG:32629",
+      "transform": [
+        10.0,
+        0.0,
+        584100.0,
+        0.0,
+        -10.0,
+        4206040.0
+      ],
+      "width": 1014,
+      "height": 1012,
+      "pixel_size_m": 10.0,
+      "bounds": [
+        584100.0,
+        4195920.0,
+        594240.0,
+        4206040.0
+      ]
+    },
+    "area_km2": 102.6168
+  },
+  "coverage": {
+    "data_status": "observation_derived_result",
+    "grid_pixels": 1026168,
+    "valid_pixels_per_item": {
+      "S2A_29SNC_20180818_1_L2A": 1025191,
+      "S2C_29SNC_20250821_0_L2A": 1025116,
+      "S2C_29SNC_20250801_0_L2A": 1024368,
+      "S2C_29SNC_20250523_0_L2A": 1017848
+    },
+    "scl_class_counts_per_item": {
+      "S2A_29SNC_20180818_1_L2A": {
+        "dark_area_pixels": 224,
+        "vegetation": 168532,
+        "not_vegetated": 846232,
+        "water": 10432,
+        "unclassified": 748
+      },
+      "S2C_29SNC_20250821_0_L2A": {
+        "dark_area_pixels": 296,
+        "vegetation": 456536,
+        "not_vegetated": 557780,
+        "water": 10800,
+        "unclassified": 756
+      },
+      "S2C_29SNC_20250801_0_L2A": {
+        "dark_area_pixels": 344,
+        "vegetation": 464476,
+        "not_vegetated": 548588,
+        "water": 11304,
+        "unclassified": 1456
+      },
+      "S2C_29SNC_20250523_0_L2A": {
+        "dark_area_pixels": 768,
+        "vegetation": 629336,
+        "not_vegetated": 375284,
+        "water": 13228,
+        "unclassified": 7552
+      }
+    },
+    "joint_valid_pixels_main": 1024579,
+    "joint_valid_fraction_main": 0.9984515206087112,
+    "joint_valid_pixels_control": 1023948,
+    "excluded_pixels_main": 1589
+  },
+  "index_summary": {
+    "data_status": "observation_derived_result",
+    "before": {
+      "n": 1025191,
+      "mean": 0.27054908871650696,
+      "std": 0.23169854283332825,
+      "p01": -0.3333333432674408,
+      "p05": 0.092276681214571,
+      "p25": 0.142857164144516,
+      "median": 0.20137301087379456,
+      "p75": 0.3497164845466614,
+      "p95": 0.7828718721866608,
+      "p99": 0.9407823443412779
+    },
+    "after": {
+      "n": 1025116,
+      "mean": 0.38694122433662415,
+      "std": 0.20626087486743927,
+      "p01": -0.15285041928291332,
+      "p05": 0.13227206468582153,
+      "p25": 0.21190044283866882,
+      "median": 0.38856837153434753,
+      "p75": 0.5378347933292389,
+      "p95": 0.7206385731697083,
+      "p99": 0.8512222617864607
+    },
+    "delta_main": {
+      "n": 1024579,
+      "mean": 0.1164526715874672,
+      "std": 0.23817704617977142,
+      "p01": -0.7083205020427704,
+      "p05": -0.2121938109397888,
+      "p25": -0.00016191601753234863,
+      "median": 0.06926247477531433,
+      "p75": 0.28709374368190765,
+      "p95": 0.5008581936359405,
+      "p99": 0.6132636523246763
+    },
+    "delta_control": {
+      "n": 1023948,
+      "mean": -0.006480531767010689,
+      "std": 0.06286381185054779,
+      "p01": -0.21656701773405077,
+      "p05": -0.07788310050964356,
+      "p25": -0.02397976815700531,
+      "median": -0.000856250524520874,
+      "p75": 0.015582475811243057,
+      "p95": 0.041936047375202165,
+      "p99": 0.1293678808212282
+    },
+    "abs_delta_control_p95": 0.0976673886179924,
+    "abs_delta_control_p99": 0.28028517961502075
+  },
+  "threshold": {
+    "value": 0.3,
+    "rule": "control_p99: smallest grid value >= p99(|control delta|) = 0.2803"
+  },
+  "delta_centering": {
+    "method": "none",
+    "raw_median_delta_main": 0.06926247477531433
+  },
+  "sensitivity": [
+    {
+      "threshold": 0.05,
+      "main_valid_pixels": 1024579,
+      "main_increase_pixels": 574447,
+      "main_decrease_pixels": 139395,
+      "main_flagged_share": 0.6967173834326099,
+      "control_valid_pixels": 1023948,
+      "control_flagged_pixels": 147890,
+      "control_flagged_share": 0.1444311625199717
+    },
+    {
+      "threshold": 0.1,
+      "main_valid_pixels": 1024579,
+      "main_increase_pixels": 442565,
+      "main_decrease_pixels": 87094,
+      "main_flagged_share": 0.516952816717891,
+      "control_valid_pixels": 1023948,
+      "control_flagged_pixels": 49600,
+      "control_flagged_share": 0.04843995984171071
+    },
+    {
+      "threshold": 0.15,
+      "main_valid_pixels": 1024579,
+      "main_increase_pixels": 374438,
+      "main_decrease_pixels": 64211,
+      "main_flagged_share": 0.42812608886186426,
+      "control_valid_pixels": 1023948,
+      "control_flagged_pixels": 27116,
+      "control_flagged_share": 0.0264818135295933
+    },
+    {
+      "threshold": 0.2,
+      "main_valid_pixels": 1024579,
+      "main_increase_pixels": 329499,
+      "main_decrease_pixels": 53135,
+      "main_flagged_share": 0.37345485316408006,
+      "control_valid_pixels": 1023948,
+      "control_flagged_pixels": 18293,
+      "control_flagged_share": 0.017865165027911575
+    },
+    {
+      "threshold": 0.25,
+      "main_valid_pixels": 1024579,
+      "main_increase_pixels": 289577,
+      "main_decrease_pixels": 45689,
+      "main_flagged_share": 0.3272231814237848,
+      "control_valid_pixels": 1023948,
+      "control_flagged_pixels": 13338,
+      "control_flagged_share": 0.013026052104208416
+    },
+    {
+      "threshold": 0.3,
+      "main_valid_pixels": 1024579,
+      "main_increase_pixels": 243423,
+      "main_decrease_pixels": 39757,
+      "main_flagged_share": 0.2763866915093907,
+      "control_valid_pixels": 1023948,
+      "control_flagged_pixels": 8787,
+      "control_flagged_share": 0.008581490466312743
+    },
+    {
+      "threshold": 0.4,
+      "main_valid_pixels": 1024579,
+      "main_increase_pixels": 130043,
+      "main_decrease_pixels": 32591,
+      "main_flagged_share": 0.15873251354946763,
+      "control_valid_pixels": 1023948,
+      "control_flagged_pixels": 5449,
+      "control_flagged_share": 0.005321559297933098
+    }
+  ],
+  "change": {
+    "data_status": "observation_derived_result",
+    "min_patch_ha": 1.0,
+    "min_patch_pixels": 100,
+    "increase_pixels_raw": 234722,
+    "decrease_pixels_raw": 39665,
+    "increase_pixels_in_patches": 226019,
+    "decrease_pixels_in_patches": 37239,
+    "increase_area_ha": 2260.19,
+    "decrease_area_ha": 372.39,
+    "increase_share_of_valid": 0.22059694762434132,
+    "decrease_share_of_valid": 0.036345660022311606,
+    "increase_patches": {
+      "patches_total": 1239,
+      "min_patch_pixels": 100,
+      "patches_ge_min": 182,
+      "flagged_pixels": 234722,
+      "share_of_flagged_in_patches_ge_min": 0.9629220950741728,
+      "area_ge_min_ha": 2260.19,
+      "patch_area_ha_median": 5.245,
+      "patch_area_ha_p90": 26.143000000000004,
+      "patch_area_ha_max": 208.5
+    },
+    "decrease_patches": {
+      "patches_total": 335,
+      "min_patch_pixels": 100,
+      "patches_ge_min": 26,
+      "flagged_pixels": 39665,
+      "share_of_flagged_in_patches_ge_min": 0.9388377662927013,
+      "area_ge_min_ha": 372.39000000000004,
+      "patch_area_ha_median": 2.8200000000000003,
+      "patch_area_ha_p90": 39.935,
+      "patch_area_ha_max": 76.88
+    },
+    "water_pixels_either_date": 11235,
+    "water_pixels_flagged_before_exclusion": 8793,
+    "water_excluded_from_change": true,
+    "control_flagged_share_at_threshold": 0.008581490466312743
+  },
+  "seasonal_split": {
+    "data_status": "unverified_interpretation",
+    "second_date": "2025-05-23T11:31:02.820000Z",
+    "item": "S2C_29SNC_20250523_0_L2A",
+    "amplitude_threshold": 0.15,
+    "note": "Within-year NDVI stability of increase pixels in the after year (late May vs August). Stable pixels are consistent with evergreen permanent crops (e.g. olive, almond) and strongly seasonal ones with irrigated annual crops; this is not a land-use label.",
+    "increase_pixels": 226019,
+    "with_valid_second_date": 225906,
+    "stable_within_year": 164322,
+    "strongly_seasonal": 61584
+  },
+  "resolution": {
+    "data_status": "observation_derived_result",
+    "target_area_ha": 5.245,
+    "target_source": "median area of increase patches >= min_patch_ha in this run",
+    "rows": [
+      {
+        "resolution_m": 3.0,
+        "pixels_total": 5827.777777777777,
+        "pixels_interior": 5526.418244695143
+      },
+      {
+        "resolution_m": 10.0,
+        "pixels_total": 524.4999999999999,
+        "pixels_interior": 436.8921400752096
+      },
+      {
+        "resolution_m": 20.0,
+        "pixels_total": 131.12499999999997,
+        "pixels_interior": 89.32107003760484
+      },
+      {
+        "resolution_m": 30.0,
+        "pixels_total": 58.277777777777786,
+        "pixels_interior": 31.74182446951435
+      },
+      {
+        "resolution_m": 60.0,
+        "pixels_total": 14.569444444444446,
+        "pixels_interior": 3.301467790312729
+      }
+    ]
+  },
+  "web": {
+    "overlay_bounds_latlng": {
+      "before": [
+        37.9059492941942,
+        -8.043330907609922,
+        37.9981269259128,
+        -7.926674993690498
+      ],
+      "after": [
+        37.9059492941942,
+        -8.043330907609922,
+        37.9981269259128,
+        -7.926674993690498
+      ],
+      "delta": [
+        37.9059492941942,
+        -8.043330907609922,
+        37.9981269259128,
+        -7.926674993690498
+      ],
+      "change": [
+        37.9059492941942,
+        -8.043330907609922,
+        37.9981269259128,
+        -7.926674993690498
+      ]
+    },
+    "legend": {
+      "increase": {
+        "color": "#1a9850",
+        "label": "NDVI increase (greener in after date)"
+      },
+      "decrease": {
+        "color": "#d95f02",
+        "label": "NDVI decrease (less green in after date)"
+      }
+    },
+    "index_label": "NDVI"
+  }
+}

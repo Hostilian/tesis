@@ -573,7 +573,8 @@ function initMap() {
         attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
     });
     
-    darkBasemapLayer.addTo(map);
+    // Satellite imagery is the default basemap; "Dark" remains available via the HUD toggle.
+    satelliteBasemapLayer.addTo(map);
 }
 
 // 2.1 SYNCED MINI-MAP SYSTEM

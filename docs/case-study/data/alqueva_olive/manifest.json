@@ -1,0 +1,447 @@
+{
+  "schema": "tesis.case_study.manifest.v1",
+  "run_id": "alqueva_olive-20261126T132226Z",
+  "case_id": "alqueva_olive",
+  "status": "ok",
+  "started_at": "2026-11-26T13:22:26Z",
+  "completed_at": "2026-11-26T13:24:29Z",
+  "runtime_seconds": 122.6,
+  "command": "python pipeline/run_case_study.py run pipeline/case_studies/alqueva_olive.json",
+  "config_path": "pipeline/case_studies/alqueva_olive.json",
+  "config_sha256": "f975ee083627ea088d748b822ab92eb647b5eceefa557eb016545e1c39dec1aa",
+  "config": {
+    "case_id": "alqueva_olive",
+    "title": "Alqueva irrigation area, Beja - Ferreira do Alentejo (Portugal): summer NDVI change 2018-2025",
+    "description": "10 x 10 km public study area inside the Alqueva multipurpose irrigation scheme, south-west of Beja. Bounding box only; no farm or parcel boundaries are used.",
+    "selection_rationale": "AOI = 10 km block with the largest share of summer NDVI increase > 0.2 in a coarse (160 m) tile-wide screening of 29SNC, 2018-08-18 vs 2024-08-21 (see screening_29SNC.json). It is a change hotspot chosen on purpose and is not representative of Alentejo. Dates: peak-summer window, relative orbit 037, scene cloud < 1 %, processing baseline 05.xx on both dates, date closest to mid-August.",
+    "bbox": [
+      -8.042,
+      37.907,
+      -7.928,
+      37.997
+    ],
+    "index": "ndvi",
+    "before_item": "S2A_29SNC_20180818_1_L2A",
+    "after_item": "S2C_29SNC_20250821_0_L2A",
+    "control_before_item": "S2C_29SNC_20250801_0_L2A",
+    "control_after_item": "S2C_29SNC_20250821_0_L2A",
+    "seasonal_item": "S2C_29SNC_20250523_0_L2A",
+    "seasonal_amplitude_threshold": 0.15,
+    "primary_threshold": "control_p99",
+    "thresholds": [
+      0.05,
+      0.1,
+      0.15,
+      0.2,
+      0.25,
+      0.3,
+      0.4
+    ],
+    "min_patch_ha": 1.0,
+    "min_joint_valid_fraction": 0.8,
+    "valid_scl": [
+      4,
+      5,
+      6
+    ],
+    "exclude_water_from_change": true
+  },
+  "code": {
+    "commit": "d7500580f0bf0cd3f85905ecd51c50a25ddc35c8",
+    "branch": "case-study/portugal-sentinel2",
+    "case_study_code_dirty": true
+  },
+  "environment": {
+    "python": "3.12.5",
+    "platform": "Windows-11-10.0.22631-SP0",
+    "numpy": "2.2.2",
+    "scipy": "1.15.3",
+    "rasterio": "1.5.0",
+    "pystac-client": "0.8.6",
+    "pyproj": "3.7.2",
+    "matplotlib": "3.11.0",
+    "gdal": "3.12.1"
+  },
+  "catalogue": {
+    "url": "https://earth-search.aws.element84.com/v1",
+    "collection": "sentinel-2-l2a",
+    "retrieved_at": "2026-11-26T13:22:32Z",
+    "access": "live, anonymous HTTPS range reads of public COGs (no credentials, no signed URLs)",
+    "license": "https://sentinel.esa.int/documents/247904/690755/Sentinel_Data_Legal_Notice",
+    "attribution": "Contains modified Copernicus Sentinel data 2018, 2025"
+  },
+  "inputs": [
+    {
+      "id": "S2A_29SNC_20180818_1_L2A",
+      "datetime": "2018-08-18T11:30:42.942000Z",
+      "platform": "sentinel-2a",
+      "mgrs_tile": "29SNC",
+      "relative_orbit": "037",
+      "processing_baseline": "05.00",
+      "product_uri": "S2A_MSIL2A_20180818T112111_N0500_R037_T29SNC_20230810T181646.SAFE",
+      "eo_cloud_cover": 0.007409,
+      "earthsearch_boa_offset_applied": true,
+      "epsg": 32629,
+      "assets": {
+        "blue": {
+          "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/29/S/NC/2018/8/S2A_29SNC_20180818_1_L2A/B02.tif",
+          "scale": 0.0001,
+          "offset": 0.0,
+          "offset_in_stac_metadata": -0.1,
+          "nodata": 0,
+          "gsd_m": 10
+        },
+        "green": {
+          "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/29/S/NC/2018/8/S2A_29SNC_20180818_1_L2A/B03.tif",
+          "scale": 0.0001,
+          "offset": 0.0,
+          "offset_in_stac_metadata": -0.1,
+          "nodata": 0,
+          "gsd_m": 10
+        },
+        "red": {
+          "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/29/S/NC/2018/8/S2A_29SNC_20180818_1_L2A/B04.tif",
+          "scale": 0.0001,
+          "offset": 0.0,
+          "offset_in_stac_metadata": -0.1,
+          "nodata": 0,
+          "gsd_m": 10
+        },
+        "nir": {
+          "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/29/S/NC/2018/8/S2A_29SNC_20180818_1_L2A/B08.tif",
+          "scale": 0.0001,
+          "offset": 0.0,
+          "offset_in_stac_metadata": -0.1,
+          "nodata": 0,
+          "gsd_m": 10
+        },
+        "swir16": {
+          "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/29/S/NC/2018/8/S2A_29SNC_20180818_1_L2A/B11.tif",
+          "scale": 0.0001,
+          "offset": 0.0,
+          "offset_in_stac_metadata": -0.1,
+          "nodata": 0,
+          "gsd_m": 20
+        },
+        "scl": {
+          "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/29/S/NC/2018/8/S2A_29SNC_20180818_1_L2A/SCL.tif",
+          "scale": 1.0,
+          "offset": 0.0,
+          "offset_in_stac_metadata": 0.0,
+          "nodata": 0,
+          "gsd_m": 20
+        }
+      },
+      "stac_item_url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2A_29SNC_20180818_1_L2A",
+      "license": "https://sentinel.esa.int/documents/247904/690755/Sentinel_Data_Legal_Notice",
+      "data_status": "public_observation",
+      "role": [
+        "before"
+      ]
+    },
+    {
+      "id": "S2C_29SNC_20250821_0_L2A",
+      "datetime": "2025-08-21T11:31:03.493000Z",
+      "platform": "sentinel-2c",
+      "mgrs_tile": "29SNC",
+      "relative_orbit": "037",
+      "processing_baseline": "05.11",
+      "product_uri": "S2C_MSIL2A_20250821T112131_N0511_R037_T29SNC_20250821T150517.SAFE",
+      "eo_cloud_cover": 0.006082,
+      "earthsearch_boa_offset_applied": true,
+      "epsg": 32629,
+      "assets": {
+        "blue": {
+          "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/29/S/NC/2025/8/S2C_29SNC_20250821_0_L2A/B02.tif",
+          "scale": 0.0001,
+          "offset": 0.0,
+          "offset_in_stac_metadata": -0.1,
+          "nodata": 0,
+          "gsd_m": 10
+        },
+        "green": {
+          "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/29/S/NC/2025/8/S2C_29SNC_20250821_0_L2A/B03.tif",
+          "scale": 0.0001,
+          "offset": 0.0,
+          "offset_in_stac_metadata": -0.1,
+          "nodata": 0,
+          "gsd_m": 10
+        },
+        "red": {
+          "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/29/S/NC/2025/8/S2C_29SNC_20250821_0_L2A/B04.tif",
+          "scale": 0.0001,
+          "offset": 0.0,
+          "offset_in_stac_metadata": -0.1,
+          "nodata": 0,
+          "gsd_m": 10
+        },
+        "nir": {
+          "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/29/S/NC/2025/8/S2C_29SNC_20250821_0_L2A/B08.tif",
+          "scale": 0.0001,
+          "offset": 0.0,
+          "offset_in_stac_metadata": -0.1,
+          "nodata": 0,
+          "gsd_m": 10
+        },
+        "swir16": {
+          "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/29/S/NC/2025/8/S2C_29SNC_20250821_0_L2A/B11.tif",
+          "scale": 0.0001,
+          "offset": 0.0,
+          "offset_in_stac_metadata": -0.1,
+          "nodata": 0,
+          "gsd_m": 20
+        },
+        "scl": {
+          "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/29/S/NC/2025/8/S2C_29SNC_20250821_0_L2A/SCL.tif",
+          "scale": 1.0,
+          "offset": 0.0,
+          "offset_in_stac_metadata": 0.0,
+          "nodata": 0,
+          "gsd_m": 20
+        }
+      },
+      "stac_item_url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2C_29SNC_20250821_0_L2A",
+      "license": "https://sentinel.esa.int/documents/247904/690755/Sentinel_Data_Legal_Notice",
+      "data_status": "public_observation",
+      "role": [
+        "after",
+        "control_after"
+      ]
+    },
+    {
+      "id": "S2C_29SNC_20250801_0_L2A",
+      "datetime": "2025-08-01T11:31:04.794000Z",
+      "platform": "sentinel-2c",
+      "mgrs_tile": "29SNC",
+      "relative_orbit": "037",
+      "processing_baseline": "05.11",
+      "product_uri": "S2C_MSIL2A_20250801T112131_N0511_R037_T29SNC_20250801T154406.SAFE",
+      "eo_cloud_cover": 0.006858,
+      "earthsearch_boa_offset_applied": true,
+      "epsg": 32629,
+      "assets": {
+        "blue": {
+          "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/29/S/NC/2025/8/S2C_29SNC_20250801_0_L2A/B02.tif",
+          "scale": 0.0001,
+          "offset": 0.0,
+          "offset_in_stac_metadata": -0.1,
+          "nodata": 0,
+          "gsd_m": 10
+        },
+        "green": {
+          "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/29/S/NC/2025/8/S2C_29SNC_20250801_0_L2A/B03.tif",
+          "scale": 0.0001,
+          "offset": 0.0,
+          "offset_in_stac_metadata": -0.1,
+          "nodata": 0,
+          "gsd_m": 10
+        },
+        "red": {
+          "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/29/S/NC/2025/8/S2C_29SNC_20250801_0_L2A/B04.tif",
+          "scale": 0.0001,
+          "offset": 0.0,
+          "offset_in_stac_metadata": -0.1,
+          "nodata": 0,
+          "gsd_m": 10
+        },
+        "nir": {
+          "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/29/S/NC/2025/8/S2C_29SNC_20250801_0_L2A/B08.tif",
+          "scale": 0.0001,
+          "offset": 0.0,
+          "offset_in_stac_metadata": -0.1,
+          "nodata": 0,
+          "gsd_m": 10
+        },
+        "swir16": {
+          "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/29/S/NC/2025/8/S2C_29SNC_20250801_0_L2A/B11.tif",
+          "scale": 0.0001,
+          "offset": 0.0,
+          "offset_in_stac_metadata": -0.1,
+          "nodata": 0,
+          "gsd_m": 20
+        },
+        "scl": {
+          "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/29/S/NC/2025/8/S2C_29SNC_20250801_0_L2A/SCL.tif",
+          "scale": 1.0,
+          "offset": 0.0,
+          "offset_in_stac_metadata": 0.0,
+          "nodata": 0,
+          "gsd_m": 20
+        }
+      },
+      "stac_item_url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2C_29SNC_20250801_0_L2A",
+      "license": "https://sentinel.esa.int/documents/247904/690755/Sentinel_Data_Legal_Notice",
+      "data_status": "public_observation",
+      "role": [
+        "control_before"
+      ]
+    },
+    {
+      "id": "S2C_29SNC_20250523_0_L2A",
+      "datetime": "2025-05-23T11:31:02.820000Z",
+      "platform": "sentinel-2c",
+      "mgrs_tile": "29SNC",
+      "relative_orbit": "037",
+      "processing_baseline": "05.11",
+      "product_uri": "S2C_MSIL2A_20250523T112131_N0511_R037_T29SNC_20250523T134256.SAFE",
+      "eo_cloud_cover": 0.011772,
+      "earthsearch_boa_offset_applied": true,
+      "epsg": 32629,
+      "assets": {
+        "blue": {
+          "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/29/S/NC/2025/5/S2C_29SNC_20250523_0_L2A/B02.tif",
+          "scale": 0.0001,
+          "offset": 0.0,
+          "offset_in_stac_metadata": -0.1,
+          "nodata": 0,
+          "gsd_m": 10
+        },
+        "green": {
+          "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/29/S/NC/2025/5/S2C_29SNC_20250523_0_L2A/B03.tif",
+          "scale": 0.0001,
+          "offset": 0.0,
+          "offset_in_stac_metadata": -0.1,
+          "nodata": 0,
+          "gsd_m": 10
+        },
+        "red": {
+          "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/29/S/NC/2025/5/S2C_29SNC_20250523_0_L2A/B04.tif",
+          "scale": 0.0001,
+          "offset": 0.0,
+          "offset_in_stac_metadata": -0.1,
+          "nodata": 0,
+          "gsd_m": 10
+        },
+        "nir": {
+          "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/29/S/NC/2025/5/S2C_29SNC_20250523_0_L2A/B08.tif",
+          "scale": 0.0001,
+          "offset": 0.0,
+          "offset_in_stac_metadata": -0.1,
+          "nodata": 0,
+          "gsd_m": 10
+        },
+        "swir16": {
+          "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/29/S/NC/2025/5/S2C_29SNC_20250523_0_L2A/B11.tif",
+          "scale": 0.0001,
+          "offset": 0.0,
+          "offset_in_stac_metadata": -0.1,
+          "nodata": 0,
+          "gsd_m": 20
+        },
+        "scl": {
+          "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/29/S/NC/2025/5/S2C_29SNC_20250523_0_L2A/SCL.tif",
+          "scale": 1.0,
+          "offset": 0.0,
+          "offset_in_stac_metadata": 0.0,
+          "nodata": 0,
+          "gsd_m": 20
+        }
+      },
+      "stac_item_url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2C_29SNC_20250523_0_L2A",
+      "license": "https://sentinel.esa.int/documents/247904/690755/Sentinel_Data_Legal_Notice",
+      "data_status": "public_observation",
+      "role": [
+        "seasonal"
+      ]
+    }
+  ],
+  "processing": {
+    "grid": {
+      "crs": "EPSG:32629",
+      "transform": [
+        10.0,
+        0.0,
+        584100.0,
+        0.0,
+        -10.0,
+        4206040.0
+      ],
+      "width": 1014,
+      "height": 1012,
+      "pixel_size_m": 10.0,
+      "bounds": [
+        584100.0,
+        4195920.0,
+        594240.0,
+        4206040.0
+      ]
+    },
+    "reflectance": "DN * raster:bands.scale + raster:bands.offset (per asset); DN 0 = nodata",
+    "resampling_20m": "nearest (SCL, SWIR16) onto the 10 m grid of the same tile",
+    "mask": {
+      "valid_scl_classes": {
+        "4": "vegetation",
+        "5": "not_vegetated",
+        "6": "water"
+      }
+    },
+    "index": "ndvi",
+    "threshold": {
+      "value": 0.3,
+      "rule": "control_p99: smallest grid value >= p99(|control delta|) = 0.2803"
+    },
+    "min_patch": {
+      "ha": 1.0,
+      "pixels": 100,
+      "connectivity": 8
+    },
+    "random_seed": null
+  },
+  "outputs": {
+    "overview_png": {
+      "path": "docs/case-study/data/alqueva_olive/fig_overview.png",
+      "sha256": "9683628b2069fcd1f0f1beb96627fef691e86b6db5d988482d8a33264eed008a",
+      "data_status": "observation_derived_result"
+    },
+    "histogram_png": {
+      "path": "docs/case-study/data/alqueva_olive/fig_histogram.png",
+      "sha256": "a7037408572e0a520c867858e20ccf3c7e7c58b2602c44a4f88d006be3964dee",
+      "data_status": "observation_derived_result"
+    },
+    "sensitivity_png": {
+      "path": "docs/case-study/data/alqueva_olive/fig_sensitivity.png",
+      "sha256": "838d73d247b61b18b55a34746395b22be69403dcdd27a72c2bbac619c7523c25",
+      "data_status": "observation_derived_result"
+    },
+    "overlay_before_jpg": {
+      "path": "docs/case-study/data/alqueva_olive/overlay_before.jpg",
+      "sha256": "8a42b3607b9d7aab481ac02bb60efa9ea9a732fd7937ab5e3e4acf6bf7cfbe0c",
+      "data_status": "public_observation"
+    },
+    "overlay_after_jpg": {
+      "path": "docs/case-study/data/alqueva_olive/overlay_after.jpg",
+      "sha256": "04e8bfcd53e0c8953e5c9e762b4def6eec4c10067864093fb4313b28af7b0b20",
+      "data_status": "public_observation"
+    },
+    "overlay_delta_png": {
+      "path": "docs/case-study/data/alqueva_olive/overlay_delta.png",
+      "sha256": "75152f9b6e74d77b16d7d866dff9edf40dba5facf3a2eac291501ca2c45d8e2d",
+      "data_status": "observation_derived_result"
+    },
+    "overlay_change_png": {
+      "path": "docs/case-study/data/alqueva_olive/overlay_change.png",
+      "sha256": "d23955db4f521d922a57b919591069a9524561ae6ac17017ee300b33ff538261",
+      "data_status": "observation_derived_result"
+    },
+    "patches_geojson": {
+      "path": "docs/case-study/data/alqueva_olive/patches.geojson",
+      "sha256": "b26751b5a6e4392bcb5d09b20ef1f41d32e4b7eefcf771ec40a26287c0dcb444",
+      "data_status": "observation_derived_result"
+    },
+    "sensitivity_csv": {
+      "path": "docs/case-study/data/alqueva_olive/sensitivity.csv",
+      "sha256": "d72a457b74a3f3749a06c105ac53ad18a0f612c0caf6efe0ea51097859046853",
+      "data_status": "observation_derived_result"
+    },
+    "results_json": {
+      "path": "docs/case-study/data/alqueva_olive/results.json",
+      "sha256": "d1322d2eb7d0e7f4003c1486af190067c9409c223d9da6f215d6378f33789fb6",
+      "data_status": "observation_derived_result"
+    }
+  },
+  "local_outputs_not_in_git": [
+    "pipeline/data/case_studies/alqueva_olive/alqueva_olive-20261126T132226Z/change_classes.tif",
+    "pipeline/data/case_studies/alqueva_olive/alqueva_olive-20261126T132226Z/delta_ndvi.tif",
+    "pipeline/data/case_studies/alqueva_olive/alqueva_olive-20261126T132226Z/increase_stability.tif"
+  ]
+}
