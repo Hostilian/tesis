@@ -88,6 +88,8 @@
             <a href="#indices" class="hover:text-neoncyan transition-colors">Spectral Explorer</a>
             <a href="#pipeline" class="hover:text-neoncyan transition-colors">Architecture</a>
             <a href="#academic" class="hover:text-neoncyan transition-colors">Thesis Draft</a>
+            
+            <a href="soil5.html" class="hover:text-neoncyan transition-colors">SOIL-5</a>
         </div>
         <div class="flex items-center space-x-4">
             <!-- Dashboard Version Selector -->
@@ -105,9 +107,17 @@
             <a href="https://github.com/hostilian/tesis" target="_blank" rel="noopener noreferrer" aria-label="View source code on GitHub" class="text-slate-400 hover:text-neoncyan transition-colors text-lg">
                 <i class="fa-brands fa-github"></i>
             </a>
-            <span class="bg-neoncyan/10 border border-neoncyan/30 text-neoncyan text-[10px] font-code px-2 py-0.5 rounded-full uppercase animate-pulse">Live Dashboard</span>
+            <span class="bg-neoncyan/10 border border-neoncyan/30 text-neoncyan text-[10px] font-code px-2 py-0.5 rounded-full uppercase animate-pulse">Live UI · Demo Data</span>
         </div>
     </nav>
+    <!-- Explicit evidence disclaimer; independent of JS or cached anomaly data. -->
+    <aside role="note" aria-label="Research data provenance" class="relative z-40 px-4 py-2 text-center text-[11px] font-code border-b border-amber-500/20 bg-amber-950/30 text-amber-200">
+        <strong class="uppercase tracking-widest">Research demonstrator · Synthetic data</strong>
+        <span class="ml-1">These anomaly records and performance figures are illustrative, not independently validated satellite detections.</span>
+        <a class="ml-2 underline underline-offset-2 hover:text-white" href="evidence.html">Evidence status</a>
+        
+    </aside>
+
 
     <!-- LIVE STATS TICKER BAR -->
     <div class="relative z-10 w-full bg-spacemid/40 border-b border-neoncyan/5 py-2 px-6 overflow-hidden flex items-center whitespace-nowrap">
@@ -117,7 +127,7 @@
             <span>📡 CDSE RESOLUTION: 10m Optical, 20m SAR</span>
             <span class="text-safe">● LATEST REVISIT: 5-Day Temporal Cycle</span>
             <span>⚡ ANOMALIES LOGGED: 8 High-Confidence Detections</span>
-            <span class="text-warning">● GDP CORRELATION (VIIRS): r = 0.724 (p = 0.0002)</span>
+            <span class="text-warning">● GDP CORRELATION (VIIRS): DEMO r = 0.724 (unverified)</span>
         </div>
     </div>
 
@@ -614,12 +624,6 @@
                     <p class="font-semibold text-white">1.1 Background & Motivation</p>
                     <p>In the modern digital economy, information engineering has expanded beyond terrestrial borders. The rise of Earth Observation (EO) satellite constellations, coupled with cloud-based geospatial computing platforms, has birthed a new domain: Space-Based Economic Intelligence.</p>
                     <p>Satellite remote sensing offers a continuous, independent, and spatially explicit alternative. Civilian constellations funded by the European Space Agency (ESA Copernicus) and the United States Geological Survey (USGS/NASA) capture high-resolution multi-spectral, radar, and atmospheric data daily.</p>
-                    <p class="font-semibold text-white">1.2 Research Questions</p>
-                    <ul class="list-disc pl-5 space-y-1">
-                        <li><strong>RQ1</strong>: How reliably can open satellite spectral APIs identify localized industrial and mining resource anomalies compared to ground truth records?</li>
-                        <li><strong>RQ2</strong>: What is the correlation between VIIRS night-time light fluctuations and macroeconomic indicators in the target regions?</li>
-                        <li><strong>RQ3</strong>: What pipeline latency and processing constraints limit the scalability of free satellite APIs?</li>
-                    </ul>
                 </div>
             </div>
         </section>

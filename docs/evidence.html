@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Evidence &amp; Validation Status | Space-Based Economic Intelligence</title>
+  <meta name="description" content="Transparent provenance and scientific validation status for the SBEI public thesis demonstration.">
+  <style>
+    :root { color-scheme: dark; font-family: system-ui, -apple-system, Segoe UI, sans-serif; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #060c18; color: #e2e8f0; line-height: 1.65; }
+    a { color: #73d7ff; } a:hover { color: #e0f6ff; }
+    .wrap { max-width: 980px; margin: auto; padding: 36px 22px 70px; }
+    nav { display: flex; gap: 20px; flex-wrap: wrap; padding-bottom: 30px; font-size: 14px; }
+    h1 { font-size: clamp(30px, 5vw, 48px); line-height: 1.13; margin: 20px 0; letter-spacing: -.02em; }
+    h2 { margin-top: 44px; font-size: 22px; color: #e6f5ff; }
+    .eyebrow { text-transform: uppercase; letter-spacing: .18em; color: #7dd3fc; font-size: 12px; font-weight: 700; }
+    .intro { max-width: 770px; font-size: 18px; color: #cbd5e1; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(185px, 1fr)); gap: 14px; margin: 32px 0; }
+    .tile { background: #101d2f; border: 1px solid #273750; border-radius: 12px; padding: 22px; }
+    .number { display: block; font-size: 29px; font-weight: 800; }
+    .small { display: block; font-size: 12px; color: #a5b4c6; }
+    .warning { border-left: 3px solid #fbbf24; padding: 12px 18px; background: #302614; border-radius: 4px; }
+    table { width: 100%; border-collapse: collapse; background: #0e1a2a; font-size: 14px; }
+    th, td { padding: 15px 12px; border-bottom: 1px solid #26364b; text-align: left; vertical-align: top; }
+    th { color: #9fdafa; }
+    code { font-size: .9em; color: #ffdda4; }
+    footer { margin-top: 52px; padding-top: 24px; border-top: 1px solid #28374a; color: #94a3b8; font-size: 13px; }
+  </style>
+</head>
+<body>
+<main class="wrap">
+  <nav aria-label="Dashboard versions"><a href="index.html">V2 Dashboard</a><a href="index3.html">V3 Sci-Fi HUD</a><a href="index4.html">V4 Console</a><a href="https://github.com/Hostilian/tesis">Source repository</a></nav>
+  <p class="eyebrow">Research integrity · 19 November 2026</p>
+  <h1>Evidence &amp; Validation Status</h1>
+  <p class="intro">The visualization is a functioning thesis demonstrator. Its published detection events are <strong>synthetic scenarios</strong>, not independently verified discoveries from real satellite pixels.</p>
+  <div class="grid">
+    <div class="tile"><span class="number">10</span><span class="small">Synthetic anomaly records</span></div>
+    <div class="tile"><span class="number">0</span><span class="small">Independently validated scene detections</span></div>
+    <div class="tile"><span class="number">3</span><span class="small">Demonstration study regions</span></div>
+    <div class="tile"><span class="number">Review only</span><span class="small">Weekly data rehearsal publication policy</span></div>
+  </div>
+  <p class="warning"><strong>Interpretation:</strong> Chart values, detection confidence indicators, economic narratives, apparent satellite-scene IDs and earlier performance metrics are illustrative. They must not be presented as independently validated thesis findings, production trading signals or real-time monitoring results.</p>
+  <h2>What has been checked?</h2>
+  <table>
+    <thead><tr><th>System</th><th>Evidence available</th><th>What it does not establish</th></tr></thead>
+    <tbody>
+      <tr><td>GitHub Actions CI</td><td>Unit tests, static checks, dependency/security scans and site deployment</td><td>That anomalies represent observed real-world events</td></tr>
+      <tr><td>Satellite ingestion</td><td>Provider clients and deterministic mock data generation</td><td>Scene-level pixel retrieval or real VIIRS monthly analysis</td></tr>
+      <tr><td>Anomaly JSON</td><td>Structured demo records and input hashes</td><td>Independently labeled ground truth, calibrated confidence or a genuine satellite scene ID</td></tr>
+      <tr><td>External provider health</td><td>Opt-in connectivity checks; missing credentials reported as skipped</td><td>Successful data ingestion or validation merely because an endpoint is reachable</td></tr>
+    </tbody>
+  </table>
+  <h2>Criteria for a validated research result</h2>
+  <p>For each case study, obtain traceable source product IDs, acquisition windows, raster checksums and coordinate reference systems; process real optical/radar/VIIRS pixel values with documented atmospheric, cloud and temporal handling; record the ground-truth source and its independent spatial/temporal alignment; evaluate separate training and test regions; and publish reproducible score calculations with uncertainty and limitations.</p>
+  <p>Earlier draft figures such as F1 = 0.907 and Pearson r = 0.724 are <strong>not accepted as measured results</strong> until their original labeled sample, calculations and evaluation protocol are available and reviewed.</p>
+  <h2>Observed Sentinel-2 pixels in all three study regions</h2>
+  <p>On 19 November 2026 a <a href="https://github.com/Hostilian/tesis/actions/runs/44639562734">successful public-data three-region experiment</a> downloaded and resampled actual Sentinel-2 L2A COG assets through Microsoft Planetary Computer. Six source assets per scene (five bands plus SCL) yielded <strong>9,216 valid pixels in Chile, 2,821 in Peru and 9,216 in Czechia</strong> after masking. This is <strong>21,253 usable observed pixels</strong> across three bounded grids. See the <a href="data/observed_three_region_proof_20261119.json">source-scene and checksum record</a>. No model performance or mining event was independently validated.</p>
+  <h2>Observed red-edge calculation in Alentejo (23 November 2026)</h2>
+  <p>A separate, repeatable public-raster proof used a <strong>Sentinel-2B L2A</strong> scene from <strong>27 June 2025</strong> to calculate actual NDRE (B8A and B05) and NDVI (B08 and B04), with B06/B07 and SCL retrieved for the same aligned public window. The test yielded <strong>9,216 QA-masked analysis-grid pixels</strong>, median NDRE <strong>0.213</strong> and NDVI <strong>0.262</strong>. The source-raster checksum was reproduced on the connected test machine. <a href="data/observed_alentejo_rededge_20261123.json">Read the provenance JSON</a>. This is <strong>not a plant chlorophyll, foliar nitrogen, soil chemistry or anomaly detection validation</strong>: no independent laboratory measurement was involved, and nominal grid dimensions do not improve native 20-m red-edge resolution.</p>
+  <h2>Observed two-year optical comparison: SOIL-5 (23 November 2026)</h2>
+  <p>The same bounded public Alentejo window was read from two <strong>real Sentinel-2B L2A</strong> scenes acquired <strong>12 July 2024</strong> and <strong>27 June 2025</strong>, using B02, B04, B08, B11 and SCL. There were <strong>9,216 overlapping quality-masked analysis-grid cells</strong>. Median <em>per-pixel change</em> was NDVI <strong>+0.0250</strong> and Bare Soil Index <strong>−0.0252</strong>. <a href="data/observed_alentejo_soil5_pair_20261123.json">Inspect scene IDs, masking, checksum and test receipt</a> and <a href="https://github.com/Hostilian/tesis/blob/main/research/prototypes/soil_surface_pair_public_preview.py">source code</a>. The threshold marked 21 candidate optical grid differences but <strong>not verified sealing, erosion, soil degradation or biochemical measurements</strong>; no field labels or lab samples were used. The year-to-year acquisitions differ by about 15 calendar days, and resampled cells are spatially correlated.</p>
+  <h2>Earlier first-scene acquisition</h2>
+  <p>On 19 November 2026, a <a href="https://github.com/Hostilian/tesis/actions/runs/44638768694">successful public-data acquisition run</a> read a Sentinel-2B Level-2A source scene from 4 October 2024 through Microsoft Planetary Computer. Five spectral bands and the SCL mask yielded <strong>9,216 usable actual pixels</strong> on a 96×96 grid. <a href="data/observed_preview_proof_20261119.json">View the reproducibility record</a>. This proves real pixel acquisition only, <strong>not independently validated anomaly detection</strong>.</p>
+  <h2>Real public Sentinel-2 catalogue references</h2>
+  <p>On 19 November 2026, live searches of the Copernicus STAC catalogue returned nine identifiable Level-2A products for three public study areas. The <a href="data/public_stac_scene_inventory.json">catalogue inventory</a> records their IDs, acquisition dates and search windows. These are <strong>real catalogue metadata, not retrieved pixels or independently validated anomalies</strong>.</p>
+  <h2>Trace the published records</h2>
+  <p>Read the <a href="data/anomalies.json">demonstration dataset</a>, <a href="data/anomalies.provenance.json">source-input hash manifest</a>, and <a href="api/v1/status/index.json">static run status</a>. The status record identifies the original run as <code>mock_mode: true</code>.</p>
+  <footer>Space-Based Economic Intelligence · Bachelor thesis research prototype · No private Rota Única data is published here.</footer>
+</main>
+</body>
+</html>

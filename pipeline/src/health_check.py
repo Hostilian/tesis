@@ -12,7 +12,7 @@ Usage:
 Exit codes:
     0 - all checked providers healthy or intentionally skipped
     1 - one or more providers degraded or unavailable
-    2 - authentication failure (secret missing or expired)
+    2 - authentication failure (configured credentials rejected or expired)
 """
 
 from __future__ import annotations
@@ -30,11 +30,12 @@ from typing import Callable, Optional
 import requests
 
 try:
-    import ee  # type: ignore
+    import ee
+
     EE_AVAILABLE = True
 except Exception:  # pragma: no cover - optional dependency
     EE_AVAILABLE = False
-    ee = None  # type: ignore[assignment]
+    ee = None
 
 
 @dataclass
@@ -52,7 +53,14 @@ def _now_iso() -> str:
     return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
 
-def _result(provider: str, status: str, latency_ms: float, http_status: Optional[int], error: Optional[str], endpoint: str) -> HealthResult:
+def _result(
+    provider: str,
+    status: str,
+    latency_ms: float,
+    http_status: Optional[int],
+    error: Optional[str],
+    endpoint: str,
+) -> HealthResult:
     return HealthResult(
         provider=provider,
         status=status,
@@ -71,8 +79,17 @@ def check_worldbank() -> HealthResult:
         response = requests.get(endpoint, timeout=20)
         latency_ms = (time.perf_counter() - start) * 1000
         if response.ok:
-            return _result("worldbank", "ok", latency_ms, response.status_code, None, endpoint)
-        return _result("worldbank", "unavailable", latency_ms, response.status_code, response.text[:200], endpoint)
+            return _result(
+                "worldbank", "ok", latency_ms, response.status_code, None, endpoint
+            )
+        return _result(
+            "worldbank",
+            "unavailable",
+            latency_ms,
+            response.status_code,
+            response.text[:200],
+            endpoint,
+        )
     except Exception as exc:
         latency_ms = (time.perf_counter() - start) * 1000
         return _result("worldbank", "unavailable", latency_ms, None, str(exc), endpoint)
@@ -83,20 +100,44 @@ def check_gee() -> HealthResult:
     start = time.perf_counter()
     if not EE_AVAILABLE:
         latency_ms = (time.perf_counter() - start) * 1000
-        return _result("gee", "unavailable", latency_ms, None, "earthengine-api not installed", endpoint)
+        return _result(
+            "gee",
+            "unavailable",
+            latency_ms,
+            None,
+            "earthengine-api not installed",
+            endpoint,
+        )
 
     project = os.getenv("GCP_PROJECT")
     key_file = os.getenv("GEE_KEY_FILE") or os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+    # On ephemeral GitHub runners there is no implicit browser-based ADC login.
+    # Missing optional secrets make this check unconfigured, not a failed login.
+    if os.getenv("GITHUB_ACTIONS") == "true" and not (
+        (key_file and Path(key_file).is_file()) or os.getenv("GEE_SERVICE_ACCOUNT_KEY")
+    ):
+        return _result(
+            "gee", "skipped", 0.0, None, "GEE credentials not configured", endpoint
+        )
     try:
         if key_file and Path(key_file).exists():
             ee.Initialize(project=project)
         else:
             ee.Initialize(project=project)
-        collection_size = ee.ImageCollection("COPERNICUS/S2_SR_HARMONIZED").limit(1).size().getInfo()
+        collection_size = (
+            ee.ImageCollection("COPERNICUS/S2_SR_HARMONIZED").limit(1).size().getInfo()
+        )
         latency_ms = (time.perf_counter() - start) * 1000
         if collection_size >= 0:
             return _result("gee", "ok", latency_ms, 200, None, endpoint)
-        return _result("gee", "unavailable", latency_ms, None, "Empty response from Earth Engine", endpoint)
+        return _result(
+            "gee",
+            "unavailable",
+            latency_ms,
+            None,
+            "Empty response from Earth Engine",
+            endpoint,
+        )
     except Exception as exc:
         latency_ms = (time.perf_counter() - start) * 1000
         return _result("gee", "auth_failed", latency_ms, None, str(exc), endpoint)
@@ -109,7 +150,14 @@ def check_cdse() -> HealthResult:
     client_secret = os.getenv("CDSE_CLIENT_SECRET")
     if not client_id or not client_secret:
         latency_ms = (time.perf_counter() - start) * 1000
-        return _result("cdse", "auth_failed", latency_ms, None, "CDSE_CLIENT_ID or CDSE_CLIENT_SECRET missing", endpoint)
+        return _result(
+            "cdse",
+            "skipped",
+            latency_ms,
+            None,
+            "CDSE credentials not configured",
+            endpoint,
+        )
 
     payload = {
         "grant_type": "client_credentials",
@@ -120,8 +168,17 @@ def check_cdse() -> HealthResult:
         response = requests.post(endpoint, data=payload, timeout=20)
         latency_ms = (time.perf_counter() - start) * 1000
         if response.ok and response.json().get("access_token"):
-            return _result("cdse", "ok", latency_ms, response.status_code, None, endpoint)
-        return _result("cdse", "auth_failed", latency_ms, response.status_code, response.text[:200], endpoint)
+            return _result(
+                "cdse", "ok", latency_ms, response.status_code, None, endpoint
+            )
+        return _result(
+            "cdse",
+            "auth_failed",
+            latency_ms,
+            response.status_code,
+            response.text[:200],
+            endpoint,
+        )
     except Exception as exc:
         latency_ms = (time.perf_counter() - start) * 1000
         return _result("cdse", "unavailable", latency_ms, None, str(exc), endpoint)
@@ -137,28 +194,62 @@ def check_nasa_earthdata() -> HealthResult:
     auth = None if token else (username, password) if username and password else None
     if not headers and auth is None:
         latency_ms = (time.perf_counter() - start) * 1000
-        return _result("nasa", "auth_failed", latency_ms, None, "NASA_EARTHDATA_TOKEN or username/password missing", endpoint)
+        return _result(
+            "nasa",
+            "skipped",
+            latency_ms,
+            None,
+            "NASA EarthData credentials not configured",
+            endpoint,
+        )
 
     try:
         response = requests.get(endpoint, headers=headers, auth=auth, timeout=20)
         latency_ms = (time.perf_counter() - start) * 1000
         if response.ok:
-            return _result("nasa", "ok", latency_ms, response.status_code, None, endpoint)
-        return _result("nasa", "unavailable", latency_ms, response.status_code, response.text[:200], endpoint)
+            return _result(
+                "nasa", "ok", latency_ms, response.status_code, None, endpoint
+            )
+        return _result(
+            "nasa",
+            "unavailable",
+            latency_ms,
+            response.status_code,
+            response.text[:200],
+            endpoint,
+        )
     except Exception as exc:
         latency_ms = (time.perf_counter() - start) * 1000
         return _result("nasa", "unavailable", latency_ms, None, str(exc), endpoint)
 
 
 def check_imf() -> HealthResult:
-    endpoint = "https://www.imf.org/external/datamapper/api/v1/NGDP_RPCH/CZ/2024"
+    # Verified live on a GitHub runner: 2026-11-19, HTTP 200 with observations.
+    endpoint = (
+        "https://api.imf.org/external/sdmx/2.1/data/"
+        "IMF.RES,WEO,9.0.0/CZE.NGDP_RPCH?startPeriod=2023&endPeriod=2024"
+    )
     start = time.perf_counter()
     try:
-        response = requests.get(endpoint, timeout=20)
+        response = requests.get(
+            endpoint, headers={"Accept": "application/json"}, timeout=20
+        )
         latency_ms = (time.perf_counter() - start) * 1000
         if response.ok:
-            return _result("imf", "ok", latency_ms, response.status_code, None, endpoint)
-        return _result("imf", "unavailable", latency_ms, response.status_code, response.text[:200], endpoint)
+            raw = response.json()
+            series = raw.get("dataSets", [{}])[0].get("series", {})
+            if series and any(value.get("observations") for value in series.values()):
+                return _result(
+                    "imf", "ok", latency_ms, response.status_code, None, endpoint
+                )
+        return _result(
+            "imf",
+            "unavailable",
+            latency_ms,
+            response.status_code,
+            response.text[:200],
+            endpoint,
+        )
     except Exception as exc:
         latency_ms = (time.perf_counter() - start) * 1000
         return _result("imf", "unavailable", latency_ms, None, str(exc), endpoint)
@@ -170,14 +261,32 @@ def check_comtrade() -> HealthResult:
     api_key = os.getenv("COMTRADE_API_KEY")
     if not api_key:
         latency_ms = (time.perf_counter() - start) * 1000
-        return _result("comtrade", "auth_failed", latency_ms, None, "COMTRADE_API_KEY missing", endpoint)
+        return _result(
+            "comtrade",
+            "skipped",
+            latency_ms,
+            None,
+            "COMTRADE credentials not configured",
+            endpoint,
+        )
 
     try:
-        response = requests.get(endpoint, headers={"Ocp-Apim-Subscription-Key": api_key}, timeout=20)
+        response = requests.get(
+            endpoint, headers={"Ocp-Apim-Subscription-Key": api_key}, timeout=20
+        )
         latency_ms = (time.perf_counter() - start) * 1000
         if response.ok:
-            return _result("comtrade", "ok", latency_ms, response.status_code, None, endpoint)
-        return _result("comtrade", "unavailable", latency_ms, response.status_code, response.text[:200], endpoint)
+            return _result(
+                "comtrade", "ok", latency_ms, response.status_code, None, endpoint
+            )
+        return _result(
+            "comtrade",
+            "unavailable",
+            latency_ms,
+            response.status_code,
+            response.text[:200],
+            endpoint,
+        )
     except Exception as exc:
         latency_ms = (time.perf_counter() - start) * 1000
         return _result("comtrade", "unavailable", latency_ms, None, str(exc), endpoint)
@@ -190,8 +299,17 @@ def check_fred() -> HealthResult:
         response = requests.get(endpoint, timeout=20)
         latency_ms = (time.perf_counter() - start) * 1000
         if response.ok:
-            return _result("fred", "ok", latency_ms, response.status_code, None, endpoint)
-        return _result("fred", "unavailable", latency_ms, response.status_code, response.text[:200], endpoint)
+            return _result(
+                "fred", "ok", latency_ms, response.status_code, None, endpoint
+            )
+        return _result(
+            "fred",
+            "unavailable",
+            latency_ms,
+            response.status_code,
+            response.text[:200],
+            endpoint,
+        )
     except Exception as exc:
         latency_ms = (time.perf_counter() - start) * 1000
         return _result("fred", "unavailable", latency_ms, None, str(exc), endpoint)
@@ -211,7 +329,11 @@ def _providers() -> dict[str, Callable[[], HealthResult]]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="API health checker")
-    parser.add_argument("--provider", default="all", choices=["all", "gee", "cdse", "nasa", "worldbank", "imf", "comtrade", "fred"])
+    parser.add_argument(
+        "--provider",
+        default="all",
+        choices=["all", "gee", "cdse", "nasa", "worldbank", "imf", "comtrade", "fred"],
+    )
     parser.add_argument("--output", default="health_report.json")
     args = parser.parse_args()
 

@@ -16,7 +16,7 @@ Author: Eren Ozturk — CZU Prague PEF KII Bachelor Thesis 2026
 import logging
 import numpy as np
 from datetime import datetime, timezone
-from typing import Optional
+from typing import Any, Optional
 
 from pipeline.src.utils import (
     calculate_ndvi,
@@ -30,9 +30,9 @@ from pipeline.src.models import AnomalyDetector
 logger = logging.getLogger(__name__)
 
 # ── Thresholds (documented in Chapter 3 §3.4) ─────────────────────────────────
-CLOUD_COVER_SKIP_THRESHOLD = 0.80   # Skip tile if > 80 % cloudy
-TEMPORAL_ANOMALY_THRESHOLD  = 2.5   # |Z| > 2.5 → flag temporal anomaly
-MIN_VALID_PIXELS            = 50    # Minimum unmasked pixels before aborting
+CLOUD_COVER_SKIP_THRESHOLD = 0.80  # Skip tile if > 80 % cloudy
+TEMPORAL_ANOMALY_THRESHOLD = 2.5  # |Z| > 2.5 → flag temporal anomaly
+MIN_VALID_PIXELS = 50  # Minimum unmasked pixels before aborting
 
 
 class SatelliteAnomalyOrchestrator:
@@ -72,10 +72,10 @@ class SatelliteAnomalyOrchestrator:
 
     def run_spatial_detection(
         self,
-        bands: dict,
+        bands: dict[str, np.ndarray],
         region_id: str,
         date_acquired: Optional[str] = None,
-    ) -> dict:
+    ) -> dict[str, Any]:
         """
         Full spatial anomaly detection pipeline on a single satellite scene.
 
@@ -100,17 +100,21 @@ class SatelliteAnomalyOrchestrator:
         if cloud_fraction > CLOUD_COVER_SKIP_THRESHOLD:
             logger.warning(
                 "Tile %s on %s has %.0f%% cloud cover — skipping.",
-                region_id, date_acquired, cloud_fraction * 100,
+                region_id,
+                date_acquired,
+                cloud_fraction * 100,
             )
             return self._skipped_result(
-                region_id, date_acquired, f"Cloud cover {cloud_fraction:.0%} > {CLOUD_COVER_SKIP_THRESHOLD:.0%}"
+                region_id,
+                date_acquired,
+                f"Cloud cover {cloud_fraction:.0%} > {CLOUD_COVER_SKIP_THRESHOLD:.0%}",
             )
 
         # 2. Extract clear-pixel arrays ────────────────────────────────────────
-        b2  = bands["B2"][clear_mask]
-        b3  = bands["B3"][clear_mask]
-        b4  = bands["B4"][clear_mask]
-        b8  = bands["B8"][clear_mask]
+        b2 = bands["B2"][clear_mask]
+        b3 = bands["B3"][clear_mask]
+        b4 = bands["B4"][clear_mask]
+        b8 = bands["B8"][clear_mask]
         b11 = bands["B11"][clear_mask]
 
         if len(b4) < MIN_VALID_PIXELS:
@@ -122,12 +126,16 @@ class SatelliteAnomalyOrchestrator:
         # 3. Spectral index computation ────────────────────────────────────────
         ndvi = calculate_ndvi(b8, b4)
         ndwi = calculate_ndwi(b3, b8)
-        bsi  = calculate_bsi(b11, b4, b8, b2)
+        bsi = calculate_bsi(b11, b4, b8, b2)
 
         # Check for NaN / Inf after computation
         nan_pct = np.isnan(np.stack([ndvi, ndwi, bsi], axis=1)).mean()
         if nan_pct > 0:
-            logger.warning("%.1f%% NaN/Inf in indices for %s — masking before model.", nan_pct * 100, region_id)
+            logger.warning(
+                "%.1f%% NaN/Inf in indices for %s — masking before model.",
+                nan_pct * 100,
+                region_id,
+            )
 
         feature_matrix = np.column_stack([ndvi, ndwi, bsi])
         valid_rows = np.isfinite(feature_matrix).all(axis=1)
@@ -135,44 +143,59 @@ class SatelliteAnomalyOrchestrator:
 
         if len(feature_matrix) < MIN_VALID_PIXELS:
             return self._skipped_result(
-                region_id, date_acquired, "Insufficient finite feature rows after NaN mask"
+                region_id,
+                date_acquired,
+                "Insufficient finite feature rows after NaN mask",
             )
 
         # 4. Isolation Forest + bootstrap uncertainty ──────────────────────────
         predictions, scores = self._detector.fit_predict_spatial(feature_matrix)
 
         ci_low, ci_high = self._bootstrap_confidence_interval(feature_matrix)
-        confidence_mean = float(scores[predictions == -1].mean()) if (predictions == -1).any() else 0.0
+        confidence_mean = (
+            float(scores[predictions == -1].mean())
+            if (predictions == -1).any()
+            else 0.0
+        )
 
         # 5. Spectral statistics of anomalous pixels ───────────────────────────
         anom_idx = predictions == -1
         spectral_stats = {
-            "ndvi_mean_anomaly": float(np.mean(ndvi[valid_rows][anom_idx])) if anom_idx.any() else None,
-            "ndwi_mean_anomaly": float(np.mean(ndwi[valid_rows][anom_idx])) if anom_idx.any() else None,
-            "bsi_mean_anomaly":  float(np.mean(bsi[valid_rows][anom_idx])) if anom_idx.any() else None,
-            "ndvi_std":          float(np.std(ndvi)),
-            "ndwi_std":          float(np.std(ndwi)),
-            "bsi_std":           float(np.std(bsi)),
+            "ndvi_mean_anomaly": (
+                float(np.mean(ndvi[valid_rows][anom_idx])) if anom_idx.any() else None
+            ),
+            "ndwi_mean_anomaly": (
+                float(np.mean(ndwi[valid_rows][anom_idx])) if anom_idx.any() else None
+            ),
+            "bsi_mean_anomaly": (
+                float(np.mean(bsi[valid_rows][anom_idx])) if anom_idx.any() else None
+            ),
+            "ndvi_std": float(np.std(ndvi)),
+            "ndwi_std": float(np.std(ndwi)),
+            "bsi_std": float(np.std(bsi)),
         }
 
         logger.info(
             "Spatial detection complete for %s: %d anomalous / %d valid pixels (confidence=%.3f)",
-            region_id, int(anom_idx.sum()), len(feature_matrix), confidence_mean,
+            region_id,
+            int(anom_idx.sum()),
+            len(feature_matrix),
+            confidence_mean,
         )
 
         return {
-            "region_id":            region_id,
-            "date":                 date_acquired,
-            "anomaly_mask":         predictions,
-            "scores":               scores,
-            "confidence_mean":      confidence_mean,
-            "confidence_ci_low":    ci_low,
-            "confidence_ci_high":   ci_high,
+            "region_id": region_id,
+            "date": date_acquired,
+            "anomaly_mask": predictions,
+            "scores": scores,
+            "confidence_mean": confidence_mean,
+            "confidence_ci_low": ci_low,
+            "confidence_ci_high": ci_high,
             "anomalous_pixel_count": int(anom_idx.sum()),
-            "valid_pixel_count":    int(len(feature_matrix)),
-            "cloud_fraction":       float(cloud_fraction),
-            "spectral_stats":       spectral_stats,
-            "skipped_reason":       None,
+            "valid_pixel_count": int(len(feature_matrix)),
+            "cloud_fraction": float(cloud_fraction),
+            "spectral_stats": spectral_stats,
+            "skipped_reason": None,
         }
 
     # ─────────────────────────────────────────────────────────────────────────
@@ -181,11 +204,11 @@ class SatelliteAnomalyOrchestrator:
 
     def run_temporal_detection(
         self,
-        radiance_series: list,
-        dates: list,
+        radiance_series: list[float],
+        dates: list[str],
         region_id: str,
         rolling_window: int = 12,
-    ) -> dict:
+    ) -> dict[str, Any]:
         """
         Detect economic shocks in VIIRS night-time lights time series.
 
@@ -214,31 +237,35 @@ class SatelliteAnomalyOrchestrator:
         for i, (z, d) in enumerate(zip(z_scores, dates)):
             if abs(z) > TEMPORAL_ANOMALY_THRESHOLD:
                 direction = "POSITIVE" if z > 0 else "NEGATIVE"
-                flagged_events.append({
-                    "date":        d,
-                    "index":       i,
-                    "z_score":     float(z),
-                    "radiance":    float(values[i]),
-                    "direction":   direction,
-                    "description": (
-                        f"{direction} NTL anomaly (Z={z:.2f}): "
-                        f"{'Industrial expansion or infrastructure surge' if direction == 'POSITIVE' else 'Factory shutdown, power outage, or economic contraction'}"
-                    ),
-                })
+                flagged_events.append(
+                    {
+                        "date": d,
+                        "index": i,
+                        "z_score": float(z),
+                        "radiance": float(values[i]),
+                        "direction": direction,
+                        "description": (
+                            f"{direction} NTL anomaly (Z={z:.2f}): "
+                            f"{'Industrial expansion or infrastructure surge' if direction == 'POSITIVE' else 'Factory shutdown, power outage, or economic contraction'}"
+                        ),
+                    }
+                )
 
         logger.info(
             "Temporal detection complete for %s: %d anomalies flagged over %d months.",
-            region_id, len(flagged_events), len(dates),
+            region_id,
+            len(flagged_events),
+            len(dates),
         )
 
         return {
-            "region_id":      region_id,
-            "z_scores":       z_scores,
-            "dates":          dates,
-            "radiance":       values.tolist(),
+            "region_id": region_id,
+            "z_scores": z_scores,
+            "dates": dates,
+            "radiance": values.tolist(),
             "flagged_events": flagged_events,
             "rolling_window": rolling_window,
-            "threshold":      TEMPORAL_ANOMALY_THRESHOLD,
+            "threshold": TEMPORAL_ANOMALY_THRESHOLD,
         }
 
     # ─────────────────────────────────────────────────────────────────────────
@@ -247,7 +274,7 @@ class SatelliteAnomalyOrchestrator:
 
     def _bootstrap_confidence_interval(
         self, feature_matrix: np.ndarray, alpha: float = 0.05
-    ) -> tuple:
+    ) -> tuple[float, float]:
         """
         Estimate confidence interval for anomaly detection via bootstrap resampling.
 
@@ -280,7 +307,7 @@ class SatelliteAnomalyOrchestrator:
         if not ci_scores:
             return 0.0, 0.0
 
-        ci_low  = float(np.percentile(ci_scores, (alpha / 2) * 100))
+        ci_low = float(np.percentile(ci_scores, (alpha / 2) * 100))
         ci_high = float(np.percentile(ci_scores, (1 - alpha / 2) * 100))
         return ci_low, ci_high
 
@@ -290,22 +317,24 @@ class SatelliteAnomalyOrchestrator:
         try:
             datetime.strptime(date_str, "%Y-%m-%d")
         except ValueError as exc:
-            raise ValueError(f"Invalid ISO-8601 date: '{date_str}'. Expected YYYY-MM-DD.") from exc
+            raise ValueError(
+                f"Invalid ISO-8601 date: '{date_str}'. Expected YYYY-MM-DD."
+            ) from exc
 
     @staticmethod
-    def _skipped_result(region_id: str, date: str, reason: str) -> dict:
+    def _skipped_result(region_id: str, date: str, reason: str) -> dict[str, Any]:
         """Return a standardized skipped-tile result record."""
         return {
-            "region_id":             region_id,
-            "date":                  date,
-            "anomaly_mask":          None,
-            "scores":                None,
-            "confidence_mean":       0.0,
-            "confidence_ci_low":     0.0,
-            "confidence_ci_high":    0.0,
+            "region_id": region_id,
+            "date": date,
+            "anomaly_mask": None,
+            "scores": None,
+            "confidence_mean": 0.0,
+            "confidence_ci_low": 0.0,
+            "confidence_ci_high": 0.0,
             "anomalous_pixel_count": 0,
-            "valid_pixel_count":     0,
-            "cloud_fraction":        None,
-            "spectral_stats":        None,
-            "skipped_reason":        reason,
+            "valid_pixel_count": 0,
+            "cloud_fraction": None,
+            "spectral_stats": None,
+            "skipped_reason": reason,
         }

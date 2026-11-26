@@ -50,7 +50,9 @@ def build_provenance_record(
     metadata: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     raw_tile_hash = stable_json_hash(_normalize_payload(raw_tile_inputs))
-    processing_parameters_hash = stable_json_hash(_normalize_payload(processing_parameters))
+    processing_parameters_hash = stable_json_hash(
+        _normalize_payload(processing_parameters)
+    )
     combined_hash = hashlib.sha256(
         f"{raw_tile_hash}:{processing_parameters_hash}".encode("utf-8")
     ).hexdigest()

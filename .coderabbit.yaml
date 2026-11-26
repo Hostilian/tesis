@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+# CodeRabbit GitHub App must be explicitly authorized for this repository.
+# Private repositories default to manual-only to avoid unintended paid reviews.
+language: "en-US"
+reviews:
+  profile: "assertive"
+  auto_review:
+    enabled: true
+    drafts: false
+  path_instructions:
+    - path: "**/*"
+      instructions: |
+        Follow repository AGENTS.md and existing workflows. Do not infer successful builds, exams, deployments, field measurements, submissions or scientific findings without evidence.
+        Flag secrets, personal/private records, unauthorized disclosure, paid API requests, outbound communications and privacy hazards.
+        Favor documented upstream open-source implementations and license checks over reinventing algorithms.
+        Review diffs conservatively: maintain behavior, tests, reproducibility and provenance. Never auto-merge or auto-submit.

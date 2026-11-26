@@ -5,8 +5,7 @@
 [![Security Scan](https://github.com/hostilian/tesis/actions/workflows/security.yml/badge.svg)](https://github.com/hostilian/tesis/actions/workflows/security.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python Version](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/)
-[![F1-Score](https://img.shields.io/badge/F1--Score-0.907-brightgreen.svg)](#-key-results)
-[![Pearson r](https://img.shields.io/badge/Pearson%20r-0.724-cyan.svg)](#-key-results)
+[![Evidence](https://img.shields.io/badge/Evidence-Synthetic%20Demo%20%7C%20Unverified-orange.svg)](docs/evidence.html)
 
 **Bachelor Thesis Artifact: "Space-Based Economic Intelligence: Detecting Hidden Resource Anomalies Using Open Satellite APIs"**
 
@@ -23,23 +22,45 @@
 
 👉 **[View the Live Satellite Anomaly Explorer](https://hostilian.github.io/tesis/)**
 
-A futuristic, dark-space GIS monitoring console acting as the Decision Support System (DSS) and thesis presentation artifact, showcasing localized lithium, deforestation, and industrial night-light anomalies across 9 verified anomaly events in 3 study regions.
+A futuristic, dark-space GIS monitoring console acting as the Decision Support System (DSS) and thesis presentation artifact, visualizing 10 synthetic demonstration anomaly records across 3 study regions. These records are not independent satellite detections or field-verified findings.
 
 ---
 
-## 📊 Key Results
+## Archived Research Planning
 
-| Metric | Value | Threshold | Status |
-|---|---|---|---|
-| F1-Score (Isolation Forest, Madre de Dios) | **0.907** | > 0.80 | ✅ H₁ Supported |
-| Precision | 0.936 | — | ✅ |
-| Recall | 0.880 | — | ✅ |
-| Pearson r (VIIRS NTL vs Czech GDP) | **0.724** | ≥ 0.65 | ✅ H₂ Supported |
-| p-value (t = 4.58, df = 19) | **0.0002** | < 0.05 | ✅ Significant |
-| Moran's I (Spatial Clustering) | **+0.648** | > 0 | ✅ Clustered |
-| Pipeline ETL Runtime | 9.0 ± 1.2 s | — | ✅ |
-| Satellite Tiles Ingested | **184** | — | — |
-| Test Suite | **47 / 47 PASSING** | All | ✅ |
+The [archived website source](research/archive/research-questions-page-2026-11-23.html) and [consultation research note](research/STATISTICS_CONSULTATION_2026-11-23.md) record the three **existing** thesis research questions, eight actionable questions for statistical advice, an optional Portugal/Alentejo research extension, a decision checklist, and the scientific evidence limits. These are planning documents: the public anomalies remain synthetic and no thesis-scope change is claimed to have been approved.
+
+The [independently sourced satellite biochemistry and market-validation screening](research/BIOCHEM_EO_MARKET_AND_VALIDATION_2026-11-23.md) compares orchard pigment/nitrogen proxies, soil carbon, aquatic pigments, ecosystem phenology, atmospheric chemistry and a strictly hypothetical financial-data angle using the existing VenturaAtlas/OMEGA evidence gates. It is not a paid-market or scientific validation claim.
+
+The [mobile SOIL-5 project and evidence page](https://hostilian.github.io/tesis/soil5.html) provides one place to check all five experiments, the actual two-date image calculations, scientific limits, and the eight reserved ideas. The [re-ranked, source-checked 13-idea soil venture feasibility report](research/RANKED_SOIL_VENTURE_REVIEW_2026-11-23.md) uses an existing MIT-licensed open-source decision ranker (PyMCDM), audits named incumbent competitors, and ranks solo-laptop market candidates. Its ranks are explicit analyst judgments, not scientific or paid-market validation. The [future research and falsification backlog](research/RESEARCH_QUERY_BACKLOG_2026-11-23.md) preserves every plant-pigment, foliar nitrogen, soil chemistry, public-water, environmental-economics and buyer-verification query as an **unapproved open experiment**. A [public Alentejo Sentinel-2 red-edge sample](docs/data/observed_alentejo_rededge_20261123.json) and [reproducible index-only probe](research/prototypes/rededge_real_pixel_preview.py) now demonstrate **real optical pixel ingestion**, not chemical prediction or biological validation.
+
+---
+
+## SOIL-5 coordinated experimental programme (23 November 2026)
+
+Five linked but independently falsifiable tracks are now active: **(1) Soil Evidence Pack, (2) Surface Sealing/Removal Audit, (3) Soil Sampling Priority, (4) Bare Soil/Erosion Exposure, (5) Analyte-specific pH/N/P/K laboratory-equivalence challenge**. Track 5 is explicitly an *unsupported chemical equivalence hypothesis* until lawfully acquired independent lab labels and outside-region testing exist. All eight other ranked candidates remain in the [original 13-idea review](research/RANKED_SOIL_VENTURE_REVIEW_2026-11-23.md), not discarded. See [SOIL-5 programme](research/SOIL_FIVE_TRACK_PROGRAM_2026-11-23.md) and [15 reusable execution/review prompts](research/SOIL_FIVE_EXECUTION_PROMPTS_2026-11-23.md).
+
+A [real public Sentinel-2 paired-scene preview](docs/data/observed_alentejo_soil5_pair_20261123.json) now compares 12 July 2024 and 27 June 2025 optical source scenes in a bounded Alentejo region, with **9,216 QA-masked analysis-grid cells**, median pixel-level ΔNDVI **+0.0250** and ΔBSI **−0.0252**. [Reproduce](research/prototypes/soil_surface_pair_public_preview.py). These values mean observable optical difference **only**; there is no ground-truth sealing, erosion, sample reduction, chemical prediction or government buyer validation.
+
+---
+
+## 📊 Evidence Status (19 November 2026)
+
+**This is an exploratory thesis demonstrator, not a validated satellite detection product.** The published JSON and run record explicitly identify a `mock_mode: true` execution. Sentinel-2 feature arrays remain synthetic even when the Earth Engine metadata request authenticates; monthly VIIRS values are also mock-generated.
+
+| Evidence item | Current status |
+|---|---|
+| Published anomaly records | **10 synthetic scenarios**; 0 field-verified satellite detections |
+| Separate observed-pixel previews | **21,253 actual Sentinel-2 pixels** in Chile, Peru and Czechia from three public scenes; no event validation or model score |
+| Original F1 = 0.907 and precision/recall figures | **Prior draft claims only**; not accepted as empirical results without labeled evaluation data |
+| Original Pearson r = 0.724, p = 0.0002 | **Prior draft claims only**; not independently reproducible from linked real observation pairs |
+| Original spatial clustering and runtime figures | **Unverified**; require documented inputs and repeatable measurement |
+| Unit tests, lint, security and Pages | Software quality checks; **not** scientific validation |
+| Automated weekly pipeline | **Review-only rehearsal**; does not publish new anomaly claims |
+
+See the **[Evidence and Validation Status](docs/evidence.html)** and [three-region real-pixel acquisition record](docs/data/observed_three_region_proof_20261119.json) for the distinction between source imagery, synthetic dashboard records and scientific validation.
+
+**Submission safeguard:** Markdown Chapters 5–7 have now been revised to distinguish software results from unverified empirical claims, with the earlier drafts preserved at `shelf/manuscript-pre-validation-20261119`. The checked-in LaTeX and PDF have **not** yet been regenerated and may still contain superseded claims. See **[THESIS_VALIDATION_GAPS.md](THESIS_VALIDATION_GAPS.md)** before academic submission.
 
 ---
 
@@ -100,7 +121,7 @@ tesis/
 │   ├── locales/en.json         # English i18n strings
 │   ├── locales/cs.json         # Czech i18n strings
 │   ├── data/
-│   │   ├── anomalies.json      # 9 verified anomaly events
+│   │   ├── anomalies.json      # 10 synthetic demo records (unverified)
 │   │   └── regions.geojson     # Study area polygons
 │   └── api/v1/                 # Static REST API endpoints
 │       ├── anomalies/index.json
@@ -133,7 +154,9 @@ tesis/
 │       └── chapters/*.tex
 │
 ├── README.md                   # This file
-├── REPRODUCE.md                # Step-by-step reproducibility guide
+├── REPRODUCE.md                # Synthetic-demo reproduction and research limits
+├── REAL_OBSERVATION.md         # Bounded, private actual Sentinel-2 pixel preview
+├── THESIS_VALIDATION_GAPS.md   # Audit of unverified manuscript results
 ├── SECURITY.md                 # Security policy
 ├── CONTRIBUTING.md             # Contribution guidelines
 ├── CHANGELOG.md                # Keep-a-Changelog format
@@ -177,7 +200,9 @@ earthengine authenticate
 echo "GCP_PROJECT=your-google-cloud-project-id" > .env
 ```
 
-For CI/CD and live provider access, configure these GitHub Actions secrets:
+**Important:** Setting API credentials does not turn the original demo pipeline into a real observation detector. The [GEE preview](REAL_OBSERVATION.md) is fail-closed and private; the separate [Planetary Computer preview](PLANETARY_PIXEL_PREVIEW.md) successfully sampled real public imagery in all three study regions without altering the mock anomaly feed. Independent labels and scientific validation remain future work.
+
+For credentialed provider checks, configure the appropriate GitHub Actions secrets (never commit private credentials):
 
 | Secret | Purpose |
 |---|---|
@@ -203,7 +228,7 @@ python pipeline/run_pipeline.py
 
 ```bash
 pytest pipeline/tests/ -v
-# Expected: 47 passed in ~25s
+# Run the actual test suite; the test count may change as coverage expands.
 ```
 
 ### Docker (Full Reproducibility)

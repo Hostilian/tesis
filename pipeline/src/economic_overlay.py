@@ -20,7 +20,7 @@ Author: Eren Ozturk — CZU Prague PEF KII Bachelor Thesis 2026
 import json
 import logging
 import math
-from typing import Optional
+from typing import Any, Optional
 from datetime import datetime, timezone
 
 import numpy as np
@@ -30,9 +30,9 @@ from pipeline.src.http_resilience import ResilientHTTPClient
 logger = logging.getLogger(__name__)
 
 # ── World Bank API config ──────────────────────────────────────────────────────
-WB_API_BASE    = "https://api.worldbank.org/v2"
-GDP_INDICATOR  = "NY.GDP.MKTP.KD.ZG"   # GDP annual growth rate (constant prices)
-API_MAX_ROWS   = 100
+WB_API_BASE = "https://api.worldbank.org/v2"
+GDP_INDICATOR = "NY.GDP.MKTP.KD.ZG"  # GDP annual growth rate (constant prices)
+API_MAX_ROWS = 100
 REQUEST_TIMEOUT = 10  # seconds
 
 
@@ -46,7 +46,7 @@ class EconomicOverlay:
     """
 
     def __init__(self, use_cache: bool = True) -> None:
-        self._cache: dict = {}
+        self._cache: dict[str, list[dict[str, Any]]] = {}
         self.use_cache = use_cache
         self.http = ResilientHTTPClient()
 
@@ -59,7 +59,7 @@ class EconomicOverlay:
         country_code: str,
         start_year: int,
         end_year: int,
-    ) -> list:
+    ) -> list[dict[str, Any]]:
         """
         Fetch annual GDP growth rate (%) from the World Bank API.
 
@@ -82,7 +82,7 @@ class EconomicOverlay:
             f"?format=json&mrv={API_MAX_ROWS}&date={start_year}:{end_year}"
         )
 
-        def _fallback() -> list:
+        def _fallback() -> list[dict[str, Any]]:
             logger.warning("World Bank API unreachable. Using mock GDP data.")
             return self._mock_gdp_growth(country_code, start_year, end_year)
 
@@ -100,19 +100,24 @@ class EconomicOverlay:
             result = []
             for rec in records:
                 if rec.get("value") is not None:
-                    result.append({
-                        "year":            int(rec["date"]),
-                        "gdp_growth_pct":  float(rec["value"]),
-                        "country":         rec["country"]["value"],
-                        "indicator":       GDP_INDICATOR,
-                    })
+                    result.append(
+                        {
+                            "year": int(rec["date"]),
+                            "gdp_growth_pct": float(rec["value"]),
+                            "country": rec["country"]["value"],
+                            "indicator": GDP_INDICATOR,
+                        }
+                    )
             result.sort(key=lambda x: x["year"])
 
             if self.use_cache:
                 self._cache[cache_key] = result
             logger.info(
                 "Fetched %d GDP growth records for %s (%d–%d).",
-                len(result), country_code, start_year, end_year,
+                len(result),
+                country_code,
+                start_year,
+                end_year,
             )
             return result
 
@@ -126,9 +131,9 @@ class EconomicOverlay:
 
     def compute_ntl_gdp_correlation(
         self,
-        z_scores: list,
-        gdp_growth_rates: list,
-    ) -> dict:
+        z_scores: list[float],
+        gdp_growth_rates: list[float],
+    ) -> dict[str, Any]:
         """
         Compute Pearson correlation between NTL Z-score anomalies and GDP growth.
 
@@ -165,7 +170,7 @@ class EconomicOverlay:
         else:
             r = ss_xy / math.sqrt(ss_xx * ss_yy)
 
-        r_squared = r ** 2
+        r_squared = r**2
 
         # Two-tailed Student's t-test, df = n - 2
         df = n - 2
@@ -184,19 +189,24 @@ class EconomicOverlay:
             + ("H₂ SUPPORTED ✓" if h2_supported else "H₂ NOT supported ✗")
         )
 
-        logger.info("Pearson r = %.3f, p = %.4f, H₂ %s.", r, p_value, "supported" if h2_supported else "not supported")
+        logger.info(
+            "Pearson r = %.3f, p = %.4f, H₂ %s.",
+            r,
+            p_value,
+            "supported" if h2_supported else "not supported",
+        )
 
         return {
-            "r":            round(r, 4),
-            "r_squared":    round(r_squared, 4),
-            "t_statistic":  round(t_stat, 3),
-            "p_value":      round(p_value, 4),
-            "n":            n,
-            "ss_xx":        round(ss_xx, 4),
-            "ss_yy":        round(ss_yy, 4),
-            "ss_xy":        round(ss_xy, 4),
-            "x_mean":       round(float(x_mean), 4),
-            "y_mean":       round(float(y_mean), 4),
+            "r": round(r, 4),
+            "r_squared": round(r_squared, 4),
+            "t_statistic": round(t_stat, 3),
+            "p_value": round(p_value, 4),
+            "n": n,
+            "ss_xx": round(ss_xx, 4),
+            "ss_yy": round(ss_yy, 4),
+            "ss_xy": round(ss_xy, 4),
+            "x_mean": round(float(x_mean), 4),
+            "y_mean": round(float(y_mean), 4),
             "h2_supported": h2_supported,
             "interpretation": interpretation,
         }
@@ -207,9 +217,9 @@ class EconomicOverlay:
 
     def build_intelligence_assessment(
         self,
-        anomaly: dict,
-        correlation_result: Optional[dict] = None,
-    ) -> dict:
+        anomaly: dict[str, Any],
+        correlation_result: Optional[dict[str, Any]] = None,
+    ) -> dict[str, Any]:
         """
         Build the 8-point 'So What?' intelligence assessment for a detected anomaly.
 
@@ -225,7 +235,7 @@ class EconomicOverlay:
 
         ndvi_val = spec.get("ndvi_mean_anomaly") or spec.get("ndvi")
         ndwi_val = spec.get("ndwi_mean_anomaly") or spec.get("ndwi")
-        bsi_val  = spec.get("bsi_mean_anomaly") or spec.get("bsi")
+        bsi_val = spec.get("bsi_mean_anomaly") or spec.get("bsi")
 
         # Determine dominant signal
         what = "Unclassified land-cover change"
@@ -241,12 +251,13 @@ class EconomicOverlay:
             eco_signal = "Open-pit mining, quarrying, or large-scale construction"
 
         confidence = anomaly.get("confidence_mean") or anomaly.get("confidence") or 0.0
-        ci_low  = anomaly.get("confidence_ci_low", 0.0)
+        ci_low = anomaly.get("confidence_ci_low", 0.0)
         ci_high = anomaly.get("confidence_ci_high", 0.0)
 
         return {
             "WHAT": what,
-            "WHERE": anomaly.get("region_id") or anomaly.get("region", "Unknown region"),
+            "WHERE": anomaly.get("region_id")
+            or anomaly.get("region", "Unknown region"),
             "WHEN": anomaly.get("date", "Unknown date"),
             "HOW_UNUSUAL": (
                 f"Anomaly confidence = {confidence:.2%} "
@@ -256,12 +267,13 @@ class EconomicOverlay:
             "CROSS_REFERENCE": (
                 f"Pearson r = {correlation_result['r']:.3f} vs GDP growth, "
                 f"p = {correlation_result['p_value']:.4f}"
-                if correlation_result else "GDP correlation not computed for this anomaly."
+                if correlation_result
+                else "GDP correlation not computed for this anomaly."
             ),
             "CONFIDENCE": (
-                "HIGH" if confidence >= 0.85
-                else "MEDIUM" if confidence >= 0.65
-                else "LOW"
+                "HIGH"
+                if confidence >= 0.85
+                else "MEDIUM" if confidence >= 0.65 else "LOW"
             ),
             "LIMITATION": (
                 "Cloud-penetrating SAR fusion recommended for overcast regions. "
@@ -282,7 +294,7 @@ class EconomicOverlay:
         Accurate to ~4 decimal places for df >= 2.
         """
         # Use regularized incomplete beta function via math.lgamma
-        x = df / (df + t ** 2)
+        x = df / (df + t**2)
         try:
             log_beta = (
                 math.lgamma((df + 1) / 2)
@@ -293,12 +305,13 @@ class EconomicOverlay:
             # Simplified Pearson approximation via erfc for large df
             # For moderate df, use t-distribution CDF approximation
             import math as _m
+
             # Wilson-Hilferty approximation for t → normal
             if df >= 30:
                 p_one_tail = 0.5 * math.erfc(abs(t) / math.sqrt(2))
             else:
                 # Approximation from "Handbook of Mathematical Functions" §26.7
-                a = df / (df + t ** 2)
+                a = df / (df + t**2)
                 p_one_tail = 0.5 * a ** (df / 2) if abs(t) > 0 else 0.5
                 # Clamp to valid range
                 p_one_tail = max(0.0, min(0.5, p_one_tail))
@@ -307,7 +320,9 @@ class EconomicOverlay:
             return 0.5  # Safe fallback
 
     @staticmethod
-    def _mock_gdp_growth(country_code: str, start_year: int, end_year: int) -> list:
+    def _mock_gdp_growth(
+        country_code: str, start_year: int, end_year: int
+    ) -> list[dict[str, Any]]:
         """Mock GDP growth data for offline / demo mode."""
         mock_rates = {
             "CZE": {2021: -2.4, 2022: 2.5, 2023: -0.4, 2024: 1.3, 2025: 2.8},
@@ -318,10 +333,12 @@ class EconomicOverlay:
         result = []
         for year in range(start_year, end_year + 1):
             if year in country_data:
-                result.append({
-                    "year":           year,
-                    "gdp_growth_pct": country_data[year],
-                    "country":        country_code,
-                    "indicator":      GDP_INDICATOR,
-                })
+                result.append(
+                    {
+                        "year": year,
+                        "gdp_growth_pct": country_data[year],
+                        "country": country_code,
+                        "indicator": GDP_INDICATOR,
+                    }
+                )
         return result

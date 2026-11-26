@@ -1,0 +1,83 @@
+{
+  "schema": "sbei.soil5.surface_pair_public_preview.v1",
+  "status": "observed_optical_change_candidate_only",
+  "source": "https://planetarycomputer.microsoft.com/api/stac/v1",
+  "collection": "sentinel-2-l2a",
+  "bbox": [
+    -8.01,
+    38.59,
+    -8,
+    38.6
+  ],
+  "requested_date_ranges": [
+    "2024-06-15/2024-07-15",
+    "2025-06-15/2025-07-15"
+  ],
+  "scenes": [
+    {
+      "scene_id": "S2B_MSIL2A_20240712T112119_R037_T29SNC_20240712T160847",
+      "acquired_utc": "2024-07-12T11:21:19.024000Z",
+      "catalog_cloud_pct": 0.012896
+    },
+    {
+      "scene_id": "S2B_MSIL2A_20250627T112119_R037_T29SNC_20250627T133415",
+      "acquired_utc": "2025-06-27T11:21:19.024000Z",
+      "catalog_cloud_pct": 0.008208
+    }
+  ],
+  "band_assets": [
+    "B02",
+    "B04",
+    "B08",
+    "B11",
+    "SCL"
+  ],
+  "grid_shape": [
+    96,
+    96
+  ],
+  "qa_valid_overlap_grid_pixels": 9216,
+  "ndvi_before": {
+    "min": 0.0889706815585734,
+    "median": 0.23327571881328024,
+    "max": 0.6155836250190231
+  },
+  "ndvi_after": {
+    "min": 0.09627659574468088,
+    "median": 0.26209649789825007,
+    "max": 0.632470524461309
+  },
+  "ndvi_change": {
+    "min": -0.07481623719854652,
+    "median": 0.025033575048636222,
+    "max": 0.19920698707980888
+  },
+  "bsi_before": {
+    "min": -0.1890515595162318,
+    "median": 0.12798874497625423,
+    "max": 0.2170806949180062
+  },
+  "bsi_after": {
+    "min": -0.2054168132254661,
+    "median": 0.09975728129668174,
+    "max": 0.20450053215751865
+  },
+  "bsi_change": {
+    "min": -0.15788001386538295,
+    "median": -0.02519949296396272,
+    "max": 0.035559847083468175
+  },
+  "abs_ndvi_delta_over_0_15_grid_count": 21,
+  "analytical_array_sha256": "ae8b3932bdb229e671646f900c2b4ffff438f8d37e190352ab737785fc58ca08",
+  "native_resolution_note": "Aligned interpolation, not independent site labels; B11 originally 20 m",
+  "independent_reference_samples": 0,
+  "verified_soil_sealing_cases": 0,
+  "verified_erosion_cases": 0,
+  "chemical_laboratory_equivalence": false,
+  "scientific_validation": "not_performed",
+  "note": "Two real optical source scenes. Change threshold is arbitrary exploration and NOT soil sealing, soil removal, erosion or measured chemistry.",
+  "run_date": "2026-11-23",
+  "execution_environment": "User-authorized laptop, Python 3.12, PySTAC Client 0.9.1, Planetary Computer 1.0.0, rasterio 1.5.2, numpy",
+  "code_path": "research/prototypes/soil_surface_pair_public_preview.py",
+  "verified_raster_pair_not_field_change": true
+}

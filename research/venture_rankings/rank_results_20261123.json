@@ -1,0 +1,263 @@
+{
+  "schema": "sbei.venture_rank_analyst_v1",
+  "date": "2026-11-23",
+  "library": "PyMCDM 1.4.0 (MIT), TOPSIS and Weighted Sum Model (WSM)",
+  "score_kind": "subjective decision utility, NOT outcome probability, accuracy, buyer revenue, measured market share, or commercial validation",
+  "criteria": [
+    "Scientific defensibility",
+    "Solo laptop feasibility",
+    "Buyer trigger evidence",
+    "Potential differentiated control",
+    "No-lab-data start",
+    "Career/portfolio fit",
+    "Speed to proof"
+  ],
+  "weights": [
+    0.23,
+    0.16,
+    0.2,
+    0.13,
+    0.12,
+    0.1,
+    0.06
+  ],
+  "higher_is_better": true,
+  "sensitivity": {
+    "runs": 200,
+    "seed": 20261123,
+    "weights_dirichlet_concentration": 120,
+    "note": "Weight robustness is conditional on input scores; independent analyst-score jitter 400 trials (SD=1 point, clipped) separately shows rank sensitivity.",
+    "score_jitter_runs": 400,
+    "score_jitter_sd": 1
+  },
+  "rows": [
+    {
+      "name": "EU Soil Evidence Pack",
+      "scores": [
+        9,
+        8,
+        8,
+        5,
+        8,
+        9,
+        7
+      ],
+      "topsis_preference": 0.888744,
+      "wsm_preference": 0.094281,
+      "top_under_weight_variation": 189,
+      "top_under_score_uncertainty": 177,
+      "rank": 1
+    },
+    {
+      "name": "Surface Sealing/Removal Change Audit",
+      "scores": [
+        9,
+        9,
+        8,
+        4,
+        9,
+        8,
+        9
+      ],
+      "topsis_preference": 0.821903,
+      "wsm_preference": 0.095252,
+      "top_under_weight_variation": 11,
+      "top_under_score_uncertainty": 142,
+      "rank": 2
+    },
+    {
+      "name": "Soil Sampling Priority Map",
+      "scores": [
+        8,
+        9,
+        7,
+        4,
+        7,
+        9,
+        8
+      ],
+      "topsis_preference": 0.759947,
+      "wsm_preference": 0.087409,
+      "top_under_weight_variation": 0,
+      "top_under_score_uncertainty": 35,
+      "rank": 3
+    },
+    {
+      "name": "Bare Soil / Erosion Exposure Alert",
+      "scores": [
+        8,
+        9,
+        7,
+        4,
+        8,
+        8,
+        9
+      ],
+      "topsis_preference": 0.744894,
+      "wsm_preference": 0.088655,
+      "top_under_weight_variation": 0,
+      "top_under_score_uncertainty": 29,
+      "rank": 4
+    },
+    {
+      "name": "Water Pigments / Bloom QA",
+      "scores": [
+        7,
+        8,
+        7,
+        4,
+        7,
+        8,
+        7
+      ],
+      "topsis_preference": 0.677088,
+      "wsm_preference": 0.081421,
+      "top_under_weight_variation": 0,
+      "top_under_score_uncertainty": 7,
+      "rank": 5
+    },
+    {
+      "name": "Habitat / Phenology Change Watch",
+      "scores": [
+        8,
+        9,
+        6,
+        4,
+        9,
+        8,
+        9
+      ],
+      "topsis_preference": 0.659795,
+      "wsm_preference": 0.08783,
+      "top_under_weight_variation": 0,
+      "top_under_score_uncertainty": 6,
+      "rank": 6
+    },
+    {
+      "name": "Lab Sample Provenance + Satellite QA",
+      "scores": [
+        9,
+        9,
+        6,
+        4,
+        5,
+        8,
+        7
+      ],
+      "topsis_preference": 0.640428,
+      "wsm_preference": 0.083222,
+      "top_under_weight_variation": 0,
+      "top_under_score_uncertainty": 4,
+      "rank": 7
+    },
+    {
+      "name": "Orchard Pigment / Lab Calibration",
+      "scores": [
+        6,
+        8,
+        7,
+        4,
+        4,
+        9,
+        6
+      ],
+      "topsis_preference": 0.620081,
+      "wsm_preference": 0.074403,
+      "top_under_weight_variation": 0,
+      "top_under_score_uncertainty": 0,
+      "rank": 8
+    },
+    {
+      "name": "Satellite Surface Moisture Triage",
+      "scores": [
+        6,
+        8,
+        6,
+        4,
+        8,
+        7,
+        7
+      ],
+      "topsis_preference": 0.53649,
+      "wsm_preference": 0.076881,
+      "top_under_weight_variation": 0,
+      "top_under_score_uncertainty": 0,
+      "rank": 9
+    },
+    {
+      "name": "Surface Salinity Risk Screening",
+      "scores": [
+        5,
+        7,
+        6,
+        5,
+        6,
+        8,
+        6
+      ],
+      "topsis_preference": 0.51521,
+      "wsm_preference": 0.072328,
+      "top_under_weight_variation": 0,
+      "top_under_score_uncertainty": 0,
+      "rank": 10
+    },
+    {
+      "name": "Carbon Maps for Unsampled Land",
+      "scores": [
+        4,
+        7,
+        7,
+        3,
+        3,
+        9,
+        5
+      ],
+      "topsis_preference": 0.455238,
+      "wsm_preference": 0.062538,
+      "top_under_weight_variation": 0,
+      "top_under_score_uncertainty": 0,
+      "rank": 11
+    },
+    {
+      "name": "Bio-chemical Economic Forecasting",
+      "scores": [
+        3,
+        5,
+        5,
+        3,
+        4,
+        8,
+        4
+      ],
+      "topsis_preference": 0.192506,
+      "wsm_preference": 0.051815,
+      "top_under_weight_variation": 0,
+      "top_under_score_uncertainty": 0,
+      "rank": 12
+    },
+    {
+      "name": "Lab Nutrients and pH Replacement",
+      "scores": [
+        1,
+        5,
+        6,
+        3,
+        2,
+        7,
+        3
+      ],
+      "topsis_preference": 0.150692,
+      "wsm_preference": 0.043965,
+      "top_under_weight_variation": 0,
+      "top_under_score_uncertainty": 0,
+      "rank": 13
+    }
+  ],
+  "hard_gates": {
+    "paid_customer_evidence": false,
+    "external_competitor_gap_confirmed": false,
+    "validated_90_percent_lab_agreement": false,
+    "supervisor_approved_scope_change": false,
+    "no_send_external_outreach": true
+  }
+}

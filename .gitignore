@@ -40,3 +40,7 @@ dist/
 *.njsproj
 *.sln
 *.swp
+
+# Local observational acquisitions and raw sensor results: never publish
+research_private/
+*.npz

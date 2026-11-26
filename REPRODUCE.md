@@ -1,6 +1,6 @@
 # Reproducibility Guide (REPRODUCE.md)
 
-This project is built under strict reproducibility guidelines. Follow these instructions to execute the satellite data pipeline and regenerate the economic anomaly datasets.
+This guide distinguishes **reproducible synthetic demonstrations** from research workflows that retrieve real observed pixels. Passing the demo pipeline or tests does not validate economic or environmental events. The current public anomaly records are unverified examples; see [Evidence status](docs/evidence.html) and [Validation gaps](THESIS_VALIDATION_GAPS.md).
 
 ---
 
@@ -19,11 +19,11 @@ pip install -r pipeline/requirements.txt
 ```
 
 ### 3. Run Pipeline Orchestrator
-Execute the entry script to query APIs, compute spectral indices, run Isolation Forest models, and write results back to the frontend:
+Execute the **synthetic demonstration** pipeline to exercise spectral indices, Isolation Forest and JSON output. It writes to the local `docs/` directory, so review changes before committing or publishing:
 ```bash
 python pipeline/run_pipeline.py
 ```
-*   **GEE Fallback**: If Earth Engine is not authenticated via `earthengine authenticate`, the pipeline automatically falls back to intelligent mock data generation, allowing successful execution and map rendering.
+*   **Source caveat:** The Sentinel-2 pixel arrays and monthly VIIRS values in this path are synthetic even when a metadata-only Earth Engine request is authenticated. The published site must not treat this run as a verified satellite observation.
 
 ### 4. Run Test Suite
 Confirm the mathematical equations and index clipping routines are correct:
@@ -31,11 +31,25 @@ Confirm the mathematical equations and index clipping routines are correct:
 python -m pytest pipeline/tests/
 ```
 
+### 5. Experimental observed-pixel acquisition (not published)
+
+The fail-closed real-data preview is separate from the demonstrator:
+
+```bash
+earthengine authenticate
+export GCP_PROJECT="your-authorized-project"
+python -m pipeline.real_observation \
+  --bbox -68.250 -23.480 -68.238 -23.468 \
+  --start 2024-10-01 --end 2024-10-15
+```
+
+See [REAL_OBSERVATION.md](REAL_OBSERVATION.md). This command requires provider credentials and does not claim scientific verification or publish data. Raw pixel arrays and manifests are written under git-ignored `research_private/`.
+
 ---
 
 ## 🐳 Option B: Running with Docker (Isolated Container)
 
-This option encapsulates all system libraries (`gdal`, `proj`, `geos`) and locked dependency versions inside a single container image.
+This option describes a containerized **demonstration**, not real observed-data validation. Confirm the Docker build and bundled system libraries in the target environment; CI test success alone does not verify local container reproducibility.
 
 ### 1. Build Docker Image
 Run this command from the root directory:
@@ -71,5 +85,5 @@ bibtex main
 pdflatex main.tex
 pdflatex main.tex
 ```
-This generates the final compiled bachelor thesis paper `main.pdf`.
+This generates a LaTeX PDF artifact, **not automatically a submission-ready thesis**. The existing checked-in PDF and LaTeX may contain older, unsupported benchmark claims. Reconcile them with the revised Markdown Chapters 5–7, confirm references, and verify the generated PDF before academic submission.
 

@@ -1,0 +1,52 @@
+{
+  "schema": "sbei.rededge_public_preview.v1",
+  "status": "real_optical_pixels_unvalidated",
+  "observation_tested_utc_date": "2026-11-23",
+  "source": "Microsoft Planetary Computer Sentinel-2 L2A COG assets",
+  "source_item": "S2B_MSIL2A_20250627T112119_R037_T29SNC_20250627T133415",
+  "acquired_utc": "2025-06-27T11:21:19.024000Z",
+  "bbox": [
+    -8.01,
+    38.59,
+    -8,
+    38.6
+  ],
+  "site_note": "Generic public Alentejo test window, not a Rota Unica farm",
+  "bands": [
+    "B04",
+    "B05",
+    "B06",
+    "B07",
+    "B08",
+    "B8A",
+    "SCL"
+  ],
+  "valid_grid_pixels": 9216,
+  "grid": [
+    96,
+    96
+  ],
+  "index": {
+    "ndre": {
+      "min": 0.08451072736787021,
+      "median": 0.21269733183565287,
+      "max": 0.4688042752171009
+    },
+    "ndvi": {
+      "min": 0.09627659574468088,
+      "median": 0.26209649789825007,
+      "max": 0.632470524461309
+    }
+  },
+  "input_array_sha256": "7fedb4e2c0b5bbf2a0c678f6c5821b1ee4e55b56b36f8556e18b4745296959ab",
+  "source_access": "STAC discovery and signed COG source arrays, actual rasterio WarpedVRT sampling",
+  "native_red_edge_resolution_m": 20,
+  "note": "96x96 analysis grid is interpolated; pixel count is not a set of independent observations",
+  "biological_validation": "not_performed",
+  "independent_laboratory_samples": 0,
+  "model_accuracy": "not_evaluated",
+  "no_private_farm_data": true,
+  "meaning": "Demonstrates remote optical raster access and index computation, not chlorophyll, foliar nitrogen, soil chemistry or crop-health accuracy.",
+  "code_path": "research/prototypes/rededge_real_pixel_preview.py",
+  "environment_note": "Observed on connected Windows computer with installed isolated rasterio 1.5.2, PySTAC Client 0.9.1, Planetary Computer 1.0.0 and numpy; repository pinned versions may differ and need reproducibility confirmation."
+}

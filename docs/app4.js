@@ -30,8 +30,7 @@ const academicChapters = {
         title: "Chapter 1: Introduction",
         sections: [
             { name: "1.1 Background & Motivation", text: "In the modern digital economy, information engineering has expanded beyond terrestrial borders. The rise of Earth Observation (EO) satellite constellations, coupled with cloud-based geospatial computing platforms, has birthed a new domain: Space-Based Economic Intelligence. Remote sensing offers continuous, independent, and spatially explicit alternatives to legacy statistical indicators." },
-            { name: "1.2 Problem Statement", text: "Translating raw, noisy, multi-spectral raster feeds into structured, actionable economic intelligence remains a critical engineering gap. Traditional geospatial analysis relies on localized human photo-interpretation which fails to scale to national or continental monitoring." },
-            { name: "1.3 Research Questions", text: "RQ1: How reliably can open satellite spectral APIs identify localized industrial and mining resource anomalies compared to ground truth records?<br>RQ2: What is the correlation between VIIRS night-time light fluctuations and macro/microeconomic indicators in the target regions?<br>RQ3: What pipeline latency and processing constraints limit the scalability of free satellite APIs for real-time economic monitoring?" }
+            { name: "1.2 Problem Statement", text: "Translating raw, noisy, multi-spectral raster feeds into structured, actionable economic intelligence remains a critical engineering gap. Traditional geospatial analysis relies on localized human photo-interpretation which fails to scale to national or continental monitoring." }
         ]
     },
     "2": {
@@ -60,7 +59,7 @@ const academicChapters = {
         title: "Chapter 5: Results & Analysis",
         sections: [
             { name: "5.1 Case Study Highlights", text: "Salar de Atacama (Chile) showed lithium evaporation pond extensions (NDWI surge to 0.58). Madre de Dios (Peru) flagged illegal mining clearings (NDVI drop to -0.52). Czechia industrial nodes showed quarterly GDP correlation (r = 0.724)." },
-            { name: "5.2 Hypothesis Validation", text: "Hypothesis H1 (F1-score > 0.80) was validated with F1 = 0.907. Hypothesis H2 (NTL radiance correlation r >= 0.65) was validated with r = 0.724 (p = 0.0002)." }
+            { name: "5.2 Hypothesis Validation", text: "Earlier illustrative thesis drafts reported F1 = 0.907 and r = 0.724. These figures have not been independently validated against real scene-level satellite pixels and labeled ground truth." }
         ]
     },
     "6": {
@@ -74,7 +73,7 @@ const academicChapters = {
     "7": {
         title: "Chapter 7: Summary",
         sections: [
-            { name: "7.1 Summary of Contributions", text: "We have built an end-to-end reproducible economic pipeline joining GEE, CDSE, and World Bank indicators. Anomaly models are fully integrated and verified via unit tests and automated github page deployments." }
+            { name: "7.1 Summary of Contributions", text: "This research demonstrator combines provider-client scaffolding with synthetic satellite features and reproducible unit tests. Real scene-level raster ingestion and independent scientific validation remain future work." }
         ]
     }
 };
@@ -163,7 +162,7 @@ const academicChaptersES = {
         title: "Capítulo 5: Resultados y Análisis",
         sections: [
             { name: "5.1 Aspectos Destacados de los Casos de Estudio", text: "El Salar de Atacama (Chile) mostró extensiones de estanques de evaporación de litio (aumento de NDWI a 0.58). Madre de Dios (Perú) detectó claros de minería ilegal (caída de NDVI a -0.52). Los nodos industriales en Chequia mostraron una correlación trimestral del PIB (r = 0.724)." },
-            { name: "5.2 Validación de Hipótesis", text: "La hipótesis H1 (puntuación F1 > 0.80) se validó con un F1 = 0.907. La hipótesis H2 (correlación de radiancia NTL r >= 0.65) se validó con r = 0.724 (p = 0.0002)." }
+            { name: "5.2 Validación de Hipótesis", text: "Los valores F1 = 0.907 y r = 0.724 provienen de un borrador ilustrativo y no están validados de manera independiente con escenas satelitales reales y datos de referencia." }
         ]
     },
     "6": {
@@ -1010,11 +1009,11 @@ function initMap() {
     
     darkBasemapLayer = L.tileLayer(darkMatterTilesUrl, {
         maxZoom: 18
-    }).addTo(map);
+    });
     
     satelliteBasemapLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
         maxZoom: 18
-    });
+    }).addTo(map);
 }
 
 function initMinimap() {
@@ -1381,30 +1380,14 @@ function updateUILanguage() {
 }
 
 function checkLiveAPIHealth() {
-    const apis = {
-        "gee": "https://earthengine.googleapis.com/",
-        "cdse": "https://catalogue.dataspace.copernicus.eu/odata/v1/",
-        "nasa": "https://cmr.earthdata.nasa.gov/search/",
-        "wb": "https://api.worldbank.org/v2/country/CZE?format=json",
-        "com": "https://comtradeapi.un.org/data/v1/get/C/A/282520?period=2024"
-    };
-
-    Object.entries(apis).forEach(([name, url]) => {
+    // A browser no-cors request returns an opaque response even without
+    // application authentication. Do NOT color it green as a healthy API.
+    // Live provider auth status is reported only by server-side CI probes.
+    ["gee", "cdse", "nasa", "wb", "com"].forEach(name => {
         const dot = document.getElementById(`api-status-${name}`);
         if (!dot) return;
-
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 6000);
-
-        fetch(url, { method: "GET", mode: "no-cors", signal: controller.signal })
-            .then(() => {
-                clearTimeout(timeoutId);
-                dot.className = "w-2 h-2 rounded-full bg-safe status-dot-pulse"; // green (success/active)
-            })
-            .catch((err) => {
-                clearTimeout(timeoutId);
-                console.warn(`API live status check failed for ${name}:`, err);
-                dot.className = "w-2 h-2 rounded-full bg-critical status-dot-pulse"; // red (offline/timeout)
-            });
+        dot.className = "w-2 h-2 rounded-full bg-slate-500";
+        dot.title = "Unknown from browser; consult the API Connection Health Check report";
+        dot.setAttribute("aria-label", `${name}: not verified from browser`);
     });
 }

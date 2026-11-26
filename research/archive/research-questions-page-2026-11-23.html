@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="The three thesis research questions and eight statistical validation consultation questions for the Space-Based Economic Intelligence demonstrator.">
+  <link rel="canonical" href="https://hostilian.github.io/tesis/research-questions.html">
+  <title>Research Questions & Statistical Validation | Space-Based Economic Intelligence</title>
+  <style>
+    :root {color-scheme:dark;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}
+    body{margin:0;color:#e3eaf4;background:#080e18;line-height:1.65}
+    .wrap{max-width:960px;margin:0 auto;padding:28px 22px 96px}
+    nav{display:flex;flex-wrap:wrap;gap:12px 24px;padding-bottom:24px;border-bottom:1px solid #293443}
+    a{color:#8ac8ed;text-underline-offset:3px}a:hover{color:#e1f3ff}
+    .eyebrow{font-size:12px;letter-spacing:.12em;color:#97a9bf;text-transform:uppercase;font-weight:650;margin-top:40px}
+    h1{font-size:clamp(30px,5vw,48px);font-weight:650;letter-spacing:-.035em;line-height:1.16;margin:14px 0}
+    .lead{max-width:810px;font-size:18px;color:#b6c5d7}
+    h2{font-size:22px;letter-spacing:-.015em;margin:48px 0 14px;padding-top:14px;border-top:1px solid #273442}
+    h3{font-size:17px;margin:0 0 8px}p{margin:0 0 12px}
+    .note{padding:18px 20px;border-left:3px solid #b0a0ec;background:#15192b;border-radius:4px;color:#cad4e4}
+    .row{display:grid;grid-template-columns:34px 1fr;gap:16px;padding:20px 0;border-bottom:1px solid #293442}
+    .number{font-variant-numeric:tabular-nums;color:#a6b7cc;font-size:13px;font-weight:700;margin-top:2px}
+    .muted{color:#aebdd0}.small{font-size:14px}
+    .rq{padding:18px 0;border-bottom:1px solid #293442}
+    .rq strong{display:block;color:#ddeafa;margin-bottom:5px}
+    .tag{display:inline-block;border:1px solid #375266;color:#a9c8e0;font-size:12px;border-radius:30px;padding:3px 10px;margin-bottom:12px}
+    ul{padding-left:21px}li{margin-bottom:9px}footer{margin-top:50px;padding-top:20px;border-top:1px solid #293442;color:#a8b6c8;font-size:13px}
+    @media(max-width:540px){.wrap{padding:20px 16px 72px}.row{grid-template-columns:28px 1fr;gap:10px}.lead{font-size:16px}}
+  </style>
+</head>
+<body>
+<main class="wrap">
+  <nav aria-label="Site navigation"><a href="index.html">Dashboard</a><a href="evidence.html">Evidence status</a><a href="soil5.html">SOIL-5</a><a href="api.html">API documentation</a><a href="https://github.com/Hostilian/tesis/blob/main/research/STATISTICS_CONSULTATION_2026-11-23.md">Full methods note</a></nav>
+  <div class="eyebrow">Research design · 23 November 2026</div>
+  <h1>Research questions &amp; statistical validation</h1>
+  <p class="lead">A focused consultation agenda connecting three existing thesis research questions with eight decisions needed before making empirical claims.</p>
+  <div class="note"><strong>Research integrity:</strong> This project currently displays synthetic anomaly scenarios. Three public Sentinel-2 source previews demonstrate data acquisition, but <strong>no independently validated anomaly detections</strong> have been established. Historical model scores and economic correlations remain unverified.</div>
+  <h2 id="research-questions">The three research questions</h2>
+  <div class="rq"><strong>RQ1 — Spatial anomalies</strong>How reliably can open satellite spectral APIs identify localized industrial and mining resource anomalies compared to ground truth records?</div>
+  <div class="rq"><strong>RQ2 — VIIRS and economics</strong>What is the correlation between VIIRS night-time light fluctuations and macro/microeconomic indicators in the target regions?</div>
+  <div class="rq"><strong>RQ3 — Pipeline performance</strong>What pipeline latency and processing constraints limit the scalability of free satellite APIs for real-time economic monitoring?</div>
+  <p class="small muted" style="margin-top:16px">Current assessment: RQ1 and RQ2 remain empirically open; RQ3 is partially addressed by the software demonstrator but needs controlled workload measurements.</p>
+  <h2 id="statistics-consultation">Eight questions for the statistics consultation</h2>
+  <article class="row"><div class="number">01</div><div><h3>Ground-truth validation</h3><p>How should I validate an unsupervised anomaly-detection model when independently verified real anomalies are scarce?</p><p class="muted small">Compare independent field records, licensed reference datasets and blinded/manual labels. Agree on what counts as a true positive.</p></div></article>
+  <article class="row"><div class="number">02</div><div><h3>Sample size & independence</h3><p>How many independent satellite observations, scenes, dates or field samples would support a defensible statistical claim?</p><p class="muted small">Pixels in the same scene are spatially correlated; count independent sampling units and uncertainty.</p></div></article>
+  <article class="row"><div class="number">03</div><div><h3>Leakage-safe evaluation</h3><p>How should I divide nearby pixels and consecutive dates into training, tuning and held-out testing sets?</p><p class="muted small">Consider spatial block cross-validation, temporal holdout and leakage checks.</p></div></article>
+  <article class="row"><div class="number">04</div><div><h3>Simple baselines</h3><p>Which simpler methods should Isolation Forest be compared with: seasonal Z-scores, change-point detection or threshold rules?</p><p class="muted small">Specify baselines, parameters and selection criteria before inspecting test results.</p></div></article>
+  <article class="row"><div class="number">05</div><div><h3>VIIRS and economic trends</h3><p>Is Pearson correlation appropriate for VIIRS night-time lights versus regional GDP, or should I adjust for trend, seasonality, autocorrelation and lag?</p><p class="muted small">Define compatible temporal units, missing-data rules, lag selection and meaningful uncertainty.</p></div></article>
+  <article class="row"><div class="number">06</div><div><h3>Measurement artefacts</h3><p>How can I distinguish genuine land-condition changes from clouds, seasonal vegetation, irrigation patterns, sensor calibration and measurement noise?</p><p class="muted small">Request quality-control rules, sensitivity analyses and uncertainty representation.</p></div></article>
+  <article class="row"><div class="number">07</div><div><h3>Cross-resolution Portugal study</h3><p>How should I compare Sentinel-1/2 observations with drone or aircraft imagery and field measurements when spatial resolutions and acquisition dates differ?</p><p class="muted small">Select unit of analysis, aggregation, time windows and permissible cross-source comparison.</p></div></article>
+  <article class="row"><div class="number">08</div><div><h3>Minimum viable experiment</h3><p>Given limited time and real ground truth, what is the smallest statistically credible empirical study for an Informatics bachelor's thesis?</p><p class="muted small">Choose one region, one outcome, an independent benchmark, a simple baseline and reproducible holdout evaluation.</p></div></article>
+  <h2 id="portugal">Potential Portugal / Alentejo application</h2>
+  <span class="tag">Candidate — subject to supervisor approval</span>
+  <p><strong>Could publicly available Sentinel-1/2 time series detect meaningful changes in agricultural land conditions in Alentejo, and does combining them with independent field measurements improve detection reliability?</strong></p>
+  <p class="muted small">Ground conditions, data licensing, field-to-device mapping, temporal alignment and spatial resolution must be checked before committing. Operational farm records, coordinates and private sensor data remain outside the public site.</p>
+  <h2 id="biochemistry">Biology and chemistry research directions</h2>
+  <p>The existing satellite/API/anomaly system also supports investigation of biological and chemical <em>proxies</em>, rather than direct laboratory assays. Candidate tracks include plant chlorophyll indicators paired with field measurements, water phytoplankton pigments, and appropriately sampled bare-soil carbon models. These remain provisional, and the evidence does not establish a commercially validated product or a thesis-topic change.</p>
+  <p><a href="https://github.com/Hostilian/tesis/blob/main/research/BIOCHEM_EO_MARKET_AND_VALIDATION_2026-11-23.md">Read the full scientific sources, source-code gaps, competitor checks, risk register and OMEGA market-validation report</a></p>
+  <h2 id="observed-rededge">Observed red-edge feasibility test — Alentejo</h2>
+  <p>A real Sentinel-2B Level-2A source scene acquired 27 June 2025 was sampled using public signed cloud-optimized GeoTIFF assets. B05/B06/B07/B8A red-edge/near-IR images, B04/B08 and SCL provided <strong>9,216 QA-masked analysis-grid pixels</strong>. The median red-edge NDRE index was <strong>0.213</strong> and NDVI was <strong>0.262</strong>. Values were reproduced from the same public source inputs and checksum.</p>
+  <p class="muted small">These are <strong>measured optical indices</strong> only, not laboratory chlorophyll, leaf nitrogen, plant health, or soil chemistry. The analysis grid interpolates native band resolution; it does not create independent 10m red-edge information or 9,216 independent experimental samples.</p>
+  <p><a href="data/observed_alentejo_rededge_20261123.json">See public source/provenance record</a> · <a href="https://github.com/Hostilian/tesis/blob/main/research/prototypes/rededge_real_pixel_preview.py">Inspect reproducible open-source reader</a> · <a href="https://github.com/Hostilian/tesis/blob/main/research/RESEARCH_QUERY_BACKLOG_2026-11-23.md">View future validation query backlog</a></p>
+  <h2 id="venture-screen">Solo-laptop soil venture opportunities</h2>
+  <p>Thirteen candidate applications have been ranked with the existing MIT-licensed PyMCDM TOPSIS method, using explicit weights for scientific defensibility, buyer need, competitor substitutes, accessible data, solo-laptop feasibility and career relevance. The leading exploration is a <strong>soil evidence and sampling-triage workflow</strong>, not a claim to replace soil laboratory testing. No named buyer or paid pilot is verified.</p>
+  <p><a href="https://github.com/Hostilian/tesis/blob/main/research/RANKED_SOIL_VENTURE_REVIEW_2026-11-23.md">Read all 13 scores, named competitors, laws, feasibility gates and next validation decisions</a> · <a href="https://github.com/Hostilian/tesis/blob/main/research/venture_rankings/rank_soil_opportunities.py">Reproduce the ranking</a></p>
+  <h2 id="soil-five">SOIL-5: five linked soil investigations</h2>
+  <p><a href="soil5.html">Open the dedicated five-track progress and evidence webpage</a>.</p>
+  <p>A coordinated set of laptop-scale trials now covers: <strong>EU Soil Evidence Pack</strong>; <strong>surface sealing and removal review</strong>; <strong>lab sampling priorities</strong>; <strong>bare-soil and erosion-exposure screening</strong>; and <strong>pH/N/P/K laboratory-equivalence falsification</strong>. The fifth track is an open scientific challenge, <em>not</em> a validated chemical-measurement substitute. The eight other ranked ideas remain recorded for future research.</p>
+  <p>One real two-date Sentinel-2 experiment compared <strong>12 July 2024</strong> with <strong>27 June 2025</strong> over a generic public Alentejo test area. Across <strong>9,216 QA-masked resampled grid pixels</strong>, median per-pixel NDVI difference was <strong>+0.025</strong> and Bare Soil Index difference was <strong>−0.025</strong>. No sealing, erosion or laboratory soil chemistry was independently verified; dates are approximately two weeks apart across years.</p>
+  <p><a href="data/observed_alentejo_soil5_pair_20261123.json">Source-scene IDs, dates and optical-change provenance</a> · <a href="https://github.com/Hostilian/tesis/blob/main/research/SOIL_FIVE_TRACK_PROGRAM_2026-11-23.md">Five-track programme</a> · <a href="https://github.com/Hostilian/tesis/blob/main/research/SOIL_FIVE_EXECUTION_PROMPTS_2026-11-23.md">Execution and review prompts</a> · <a href="https://github.com/Hostilian/tesis/blob/main/research/prototypes/soil_surface_pair_public_preview.py">Reproduce pair calculation</a></p>
+  <h2 id="decisions">Minimum decisions before claiming results</h2>
+  <ul><li>Choose one primary outcome, unit of analysis and independently verifiable reference data.</li><li>Define a spatial/temporal holdout and simple comparison baselines.</li><li>Specify sampling, handling of correlated observations, uncertainty and missing data.</li><li>For VIIRS–GDP, account for trend, seasonality, temporal aggregation and possible lags.</li><li>Decide whether available evidence supports empirical validation or only an engineering feasibility study.</li><li>Seek explicit thesis-supervisor approval before changing the original research scope.</li></ul>
+  <p class="small"><a href="https://github.com/Hostilian/tesis/blob/main/THESIS_VALIDATION_GAPS.md">Evidence and validation gap register</a> · <a href="https://github.com/Hostilian/tesis/blob/main/thesis/chapters/01_introduction.md">Original thesis introduction</a></p>
+  <footer>Space-Based Economic Intelligence · CZU bachelor's thesis research planning · Consultation questions are not recorded professor responses or verified study outcomes.</footer>
+</main>
+</body>
+</html>
