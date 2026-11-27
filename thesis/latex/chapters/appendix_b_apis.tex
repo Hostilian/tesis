@@ -1,46 +1,46 @@
 
-This appendix documents the programmatic endpoints, parameters, and query structures utilized to interface with external geospatial and economic APIs.
+% AI-assisted factual update 2026-11-27: pending supervisor permission
 
-\section{B.1 Google Earth Engine REST API}
-Earth Engine operations are authenticated using OAuth 2.0 with credentials routed through Google Cloud Projects. The pipeline initializes a connection using the base URL \texttt{https://earthengine.googleapis.com/v1alpha}. The initialization method \texttt{ee.Initialize(project='tesis-500804')} specifies the billing quota and project boundaries. When querying reference image collections, the pipeline uses the endpoint \texttt{/projects/{project}/imageCollections/{imageCollectionId}/images}. For optical data retrieval, the harmonized Sentinel-2 collection is queried and filtered geographically and temporally:
-\texttt{}`python
-ee.ImageCollection("COPERNICUS/S2\_SR\_HARMONIZED")
-  .filterBounds(geometry)
-  .filterDate("2024-01-01", "2024-12-31")
-\texttt{}`
+This appendix lists the external services the code calls. It was checked by searching the \texttt{pipeline/\allowbreak{}} folder for URLs and client calls on 27 November 2026. Section B.1 covers the case study, which needs no account, key or token. Section B.2 lists the services that only the earlier demonstrator calls; none of them produced a number used in the results.
 
-\section{B.2 Copernicus CDSE Process API}
-The Copernicus Data Space Ecosystem (CDSE) requires generating a client token using keycloak OAuth endpoints, which is then passed as an Authorization header in subsequent Process API requests. The authentication endpoint is located at \texttt{https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token}. The request payload is dispatched as a POST request:
-\texttt{}`json
-{
-  "client\_id": "YOUR\_CLIENT\_ID",
-  "client\_secret": "YOUR\_CLIENT\_SECRET",
-  "grant\_type": "client\_credentials"
+\section{Case study (Chapters 3 and 5)}
+
+{\small
+\begin{longtable}{>{\raggedright\arraybackslash}p{1.99cm}>{\raggedright\arraybackslash}p{3.22cm}>{\raggedright\arraybackslash}p{3.22cm}>{\raggedright\arraybackslash}p{1.34cm}>{\raggedright\arraybackslash}p{3.22cm}}
+\toprule
+Service & Endpoint & What the code requests & Access & Code \\
+\midrule
+\endhead
+Earth Search STAC API (Element 84) & \texttt{https:/\allowbreak{}/\allowbreak{}earth-search.aws.element84.com/\allowbreak{}v1} & Collection \texttt{sentinel-2-l2a}: items by id (\texttt{/\allowbreak{}collections/\allowbreak{}sentinel-2-l2a/\allowbreak{}items/\allowbreak{}\{id\}}) and searches by area and date & Anonymous & \texttt{pipeline/\allowbreak{}src/\allowbreak{}case\_study.py} (\texttt{EARTH\_SEARCH\_URL}), \texttt{pipeline/\allowbreak{}verify\_independent.py} \\
+Sentinel-2 COGs on AWS & \texttt{https:/\allowbreak{}/\allowbreak{}sentinel-cogs.s3.us-west-2.amazonaws.com/\allowbreak{}sentinel-s2-l2a-cogs/\allowbreak{}...} & HTTP range reads of bands B02, B03, B04, B08, B11 and SCL for the study-area window & Anonymous & asset \texttt{href} values in \texttt{docs/\allowbreak{}case-study/\allowbreak{}data/\allowbreak{}<case>/\allowbreak{}manifest.json} \\
+DGT OGC API - Features & \texttt{https:/\allowbreak{}/\allowbreak{}ogcapi.dgterritorio.gov.pt/\allowbreak{}collections/\allowbreak{}\{collection\}/\allowbreak{}items} & COS polygons for the study-area bounding box (\texttt{f=json}, \texttt{limit}, \texttt{bbox}), collections \texttt{cos2018v4} and \texttt{cos2025v1} & Anonymous & \texttt{pipeline/\allowbreak{}src/\allowbreak{}reference\_cos.py} (\texttt{OGC\_API}, \texttt{fetch\_features}) \\
+Microsoft Planetary Computer STAC API & \texttt{https:/\allowbreak{}/\allowbreak{}planetarycomputer.microsoft.com/\allowbreak{}api/\allowbreak{}stac/\allowbreak{}v1} & Collection \texttt{sentinel-2-l2a}: search by MGRS tile and day & Anonymous & \texttt{pipeline/\allowbreak{}src/\allowbreak{}provider\_pc.py} (\texttt{PC\_STAC\_URL}) \\
+Planetary Computer SAS token & \texttt{https:/\allowbreak{}/\allowbreak{}planetarycomputer.microsoft.com/\allowbreak{}api/\allowbreak{}sas/\allowbreak{}v1/\allowbreak{}token/\allowbreak{}sentinel-2-l2a} & Short-lived read token, appended to each asset URL, not stored & Anonymous & \texttt{pipeline/\allowbreak{}src/\allowbreak{}provider\_pc.py} (\texttt{fetch\_sas\_token}) \\
+Planetary Computer assets & \texttt{https:/\allowbreak{}/\allowbreak{}sentinel2l2a01.blob.core.windows.net/\allowbreak{}...} & Range reads of B04, B08, SCL and the product metadata file \texttt{MTD\_MSIL2A.xml} & Signed with the SAS token & \texttt{pipeline/\allowbreak{}src/\allowbreak{}provider\_pc.py}, \texttt{docs/\allowbreak{}case-study/\allowbreak{}data/\allowbreak{}alqueva\_olive/\allowbreak{}interop\_planetary\_computer.json} \\
+\bottomrule
+\end{longtable}
 }
-\texttt{}`
-Once the bearer token is acquired, requests are directed to the Sentinel Hub Process API at \texttt{https://sh.dataspace.copernicus.eu/api/v1/process}. The request bands format specifies the required multi-spectral channels: \texttt{["B02", "B03", "B04", "B08", "B11", "QA60"]}.
 
-\section{B.3 World Bank Open Data API}
-Socioeconomic indicator datasets are downloaded using direct HTTP requests, querying the country three-letter codes:
-\begin{itemize}
-  \item \textbf{Query URL}: \texttt{http://api.worldbank.org/v2/country/{country}/indicator/{indicator}}
-  \item \textbf{GDP Indicator Code}: \texttt{NY.GDP.MKTP.KD.ZG} (GDP growth, annual \%)
-  \item \textbf{Default Output Format}: \texttt{json}
+Licences: Copernicus Sentinel data legal notice (\texttt{https:/\allowbreak{}/\allowbreak{}sentinel.esa.int/\allowbreak{}documents/\allowbreak{}247904/\allowbreak{}690755/\allowbreak{}Sentinel\_Data\_Legal\_Notice}); COS Série 2, CC-BY, dataset page \texttt{https:/\allowbreak{}/\allowbreak{}dados.gov.pt/\allowbreak{}datasets/\allowbreak{}carta-de-uso-e-ocupacao-do-solo-cos-serie-2-2018v4-2025v1}.
 
-\end{itemize}
-\section{B.4 NASA Earthdata Search \& Common Metadata Repository (CMR) API}
-The pipeline queries NASA's Common Metadata Repository (CMR) API to identify and locate Suomi-NPP VIIRS Day/Night Band (DNB) monthly composites.
-\begin{itemize}
-  \item \textbf{Base Query URL}: \texttt{https://cmr.earthdata.nasa.gov/search/granules.json}
-  \item \textbf{Parameters}: \texttt{short\_name=VNP46A1}, \texttt{temporal=2021-01-01T00:00:00Z,2026-05-31T23:59:59Z}, and bounding box filters.
-  \item \textbf{Authentication}: Requires a Bearer token generated using NASA Earthdata login credentials.
+\section{Earlier demonstrator only (not used for results)}
 
-\end{itemize}
-\section{B.5 UN COMTRADE API}
-The pipeline queries the UN COMTRADE database to fetch bilateral trade volumes for mineral commodity codes.
-\begin{itemize}
-  \item \textbf{Base Query URL}: \texttt{https://comtradeapi.un.org/data/v1/get/C/A/HS}
-  \item \textbf{Commodity Codes}: \texttt{282520} (Lithium Oxide and Hydroxide), \texttt{7108} (Gold).
-  \item \textbf{Authentication}: Requires a subscription key passed in the \texttt{Ocp-Apim-Subscription-Key} HTTP header.
-
-\end{itemize}
+{\small
+\begin{longtable}{>{\raggedright\arraybackslash}p{3.45cm}>{\raggedright\arraybackslash}p{5.17cm}>{\raggedright\arraybackslash}p{5.17cm}}
+\toprule
+Service & Endpoint in code & Code \\
+\midrule
+\endhead
+Google Earth Engine & Python \texttt{earthengine-api} (\texttt{ee.Initialize}), host \texttt{earthengine.googleapis.com} & \texttt{pipeline/\allowbreak{}src/\allowbreak{}ingestion.py}, \texttt{pipeline/\allowbreak{}src/\allowbreak{}health\_check.py}, \texttt{pipeline/\allowbreak{}real\_observation.py} \\
+Copernicus Data Space Ecosystem & \texttt{https:/\allowbreak{}/\allowbreak{}identity.dataspace.copernicus.eu/\allowbreak{}auth/\allowbreak{}realms/\allowbreak{}CDSE/\allowbreak{}...} (token), \texttt{https:/\allowbreak{}/\allowbreak{}catalogue.dataspace.copernicus.eu/\allowbreak{}odata/\allowbreak{}v1/\allowbreak{}}, \texttt{https:/\allowbreak{}/\allowbreak{}stac.dataspace.copernicus.eu/\allowbreak{}v1} & \texttt{pipeline/\allowbreak{}src/\allowbreak{}ingestion.py}, \texttt{pipeline/\allowbreak{}src/\allowbreak{}health\_check.py} \\
+Sentinel Hub & \texttt{https:/\allowbreak{}/\allowbreak{}services.sentinel-hub.com/\allowbreak{}api/\allowbreak{}v1/\allowbreak{}process}, \texttt{https:/\allowbreak{}/\allowbreak{}services.sentinel-hub.com/\allowbreak{}auth/\allowbreak{}realms/\allowbreak{}main/\allowbreak{}protocol/\allowbreak{}openid-connect/\allowbreak{}token} & \texttt{pipeline/\allowbreak{}src/\allowbreak{}ingestion.py} \\
+NASA CMR & \texttt{https:/\allowbreak{}/\allowbreak{}cmr.earthdata.nasa.gov/\allowbreak{}search/\allowbreak{}granules.json} & \texttt{pipeline/\allowbreak{}src/\allowbreak{}ingestion.py}, \texttt{pipeline/\allowbreak{}src/\allowbreak{}health\_check.py} \\
+World Bank Indicators API & \texttt{https:/\allowbreak{}/\allowbreak{}api.worldbank.org/\allowbreak{}v2/\allowbreak{}country/\allowbreak{}\{country\}/\allowbreak{}indicator/\allowbreak{}\{indicator\}} & \texttt{pipeline/\allowbreak{}src/\allowbreak{}ingestion.py}, \texttt{pipeline/\allowbreak{}src/\allowbreak{}economic\_overlay.py}, \texttt{pipeline/\allowbreak{}src/\allowbreak{}health\_check.py} \\
+IMF SDMX API & \texttt{https:/\allowbreak{}/\allowbreak{}api.imf.org/\allowbreak{}external/\allowbreak{}sdmx/\allowbreak{}2.1/\allowbreak{}data/\allowbreak{}} & \texttt{pipeline/\allowbreak{}src/\allowbreak{}ingestion.py}, \texttt{pipeline/\allowbreak{}src/\allowbreak{}health\_check.py} \\
+UN Comtrade & \texttt{https:/\allowbreak{}/\allowbreak{}comtradeapi.un.org/\allowbreak{}data/\allowbreak{}v1/\allowbreak{}get/\allowbreak{}C/\allowbreak{}A/\allowbreak{}\{commodity\}} & \texttt{pipeline/\allowbreak{}src/\allowbreak{}ingestion.py}, \texttt{pipeline/\allowbreak{}src/\allowbreak{}health\_check.py} \\
+FRED (St. Louis Fed) & \texttt{https:/\allowbreak{}/\allowbreak{}api.stlouisfed.org/\allowbreak{}fred/\allowbreak{}series/\allowbreak{}observations} (ingestion), \texttt{https:/\allowbreak{}/\allowbreak{}fred.stlouisfed.org/\allowbreak{}graph/\allowbreak{}fredgraph.json} (health check) & \texttt{pipeline/\allowbreak{}src/\allowbreak{}ingestion.py}, \texttt{pipeline/\allowbreak{}src/\allowbreak{}health\_check.py} \\
+OpenStreetMap Overpass API & \texttt{https:/\allowbreak{}/\allowbreak{}overpass-api.de/\allowbreak{}api/\allowbreak{}interpreter} & \texttt{pipeline/\allowbreak{}src/\allowbreak{}ingestion.py} \\
+Planetary Computer STAC (coverage check) & \texttt{https:/\allowbreak{}/\allowbreak{}planetarycomputer.microsoft.com/\allowbreak{}api/\allowbreak{}stac/\allowbreak{}v1} & \texttt{pipeline/\allowbreak{}planetary\_observation.py} \\
+\bottomrule
+\end{longtable}
+}
