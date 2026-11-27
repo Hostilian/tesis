@@ -6,6 +6,8 @@
 \usepackage{amssymb}
 \usepackage{hyperref}
 \usepackage{booktabs}
+\usepackage{array}      % p{} columns with \raggedright in the appendix tables
+\usepackage{longtable}  % appendix tables longer than one page
 \usepackage{geometry}
 \geometry{left=3.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
 
@@ -71,10 +73,10 @@
 \input{chapters/07_conclusion}
 
 \appendix
-\chapter{Full Code Repository Structure}
+\chapter{Repository Structure}
 \input{chapters/appendix_a_repo}
 
-\chapter{API Documentation References}
+\chapter{External Endpoints}
 \input{chapters/appendix_b_apis}
 
 \chapter{Dataset Metadata}

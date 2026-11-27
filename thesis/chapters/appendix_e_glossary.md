@@ -1,17 +1,35 @@
 # Appendix E: Glossary of Terms
 
-This appendix provides definitions for the key geospatial, economic, and machine learning terms utilized throughout this thesis.
+<!-- AI-assisted factual update 2026-11-27: pending supervisor permission -->
+
+This appendix defines the terms used in the thesis. Terms of the case study come first; terms that only the earlier demonstrator uses are in the second table.
+
+## E.1 Case-study terms
 
 | Term | Definition |
 |---|---|
-| **Albedo** | The measure of the diffuse reflection of solar radiation out of the total solar radiation received by an object or surface (e.g., snow and salt flats exhibit high albedo). |
-| **Backscatter** | The portion of the microwave signal reflected back to the radar antenna from objects on the ground (critical for Sentinel-1 SAR analysis). |
-| **Bands** | Discrete intervals of the electromagnetic spectrum captured by satellite sensors (e.g., Red, Green, Blue, NIR). |
-| **Cloud Mask** | A binary classification raster marking which pixels are obstructed by clouds or cloud shadows, permitting cleaner analysis. |
-| **Contamination Rate** | The expected proportion of outliers/anomalies in a dataset, used as a threshold parameter in Isolation Forests. |
-| **Granule** | A single tile or scene of satellite imagery packaged for distribution by data portals. |
-| **Isolation Forest** | An unsupervised machine learning algorithm that isolates anomalies by partitioning features using random decision trees. |
-| **Radiance** | The measure of the quantity of electromagnetic radiation that leaves or passes through a particular point, measured in $\text{nW}\cdot\text{cm}^{-2}\cdot\text{sr}^{-1}$. |
-| **SWIR (Shortwave-Infrared)** | Electromagnetic bands in the range of 1.4 to 3.0 microns, highly sensitive to moisture levels and soil exposure. |
-| **Volume Scattering** | The reflection of radar waves in multiple directions due to structural objects like tree branches, which drops dramatically during deforestation. |
-| **Z-Score** | A statistical metric representing the number of standard deviations an observation is from the mean of a baseline dataset. |
+| **Agreement with COS** | How far the candidate-change flags coincide with land-use change recorded in the COS map, given as precision, recall and F1. It compares two maps; it is not accuracy against field observations. |
+| **Band** | One wavelength interval recorded by a sensor, for example red (Sentinel-2 B04) or near infrared (B08). |
+| **Bootstrap (spatial block)** | Repeated resampling of whole blocks of pixels or whole COS polygons, with replacement, to estimate a range for precision and recall. Blocks are used because neighbouring pixels are not independent. |
+| **Candidate change** | A pixel whose index difference exceeds the threshold and that lies in a connected patch of at least 1 ha. It says where the surface changed, not why. |
+| **Cloud masking** | Removing pixels covered by cloud, cloud shadow or other unusable conditions. The case study keeps only SCL classes 4 (vegetation), 5 (not vegetated) and 6 (water). |
+| **Control pair** | Two images of the same place taken 20 days apart in the same summer. Their difference estimates how much the index varies without land-use change. |
+| **Data status** | The label every published number carries: public observation, observation-derived result, unverified interpretation or synthetic demonstration. |
+| **Index difference (Δ)** | The index value on the later date minus the value on the earlier date, per pixel. |
+| **Manifest** | A JSON file written with each run that records the input item ids, code commit, software versions, settings and a SHA-256 hash of every output. |
+| **Patch** | A group of flagged pixels that touch each other, including diagonally (8-connected). |
+| **Processing baseline** | The version of the ESA processing software that produced a Sentinel-2 product, for example 05.00 or 05.11. Products from baseline 04.00 onward carry a reflectance offset. |
+| **Surface reflectance** | The share of sunlight reflected by the ground after correction for the atmosphere; the content of a Sentinel-2 Level-2A product. |
+| **Threshold rule** | The case-study rule for choosing the threshold before looking at the change map: the smallest value on the configured grid that is at or above the 99th percentile of the control pair's absolute difference. |
+| **Tile** | One 100 × 100 km square of the MGRS grid in which Sentinel-2 products are delivered, for example 29SNC. |
+
+## E.2 Earlier demonstrator terms
+
+| Term | Definition |
+|---|---|
+| **Backscatter** | The part of a radar signal reflected back to the antenna (Sentinel-1). |
+| **Contamination rate** | The share of observations that an Isolation Forest is told to treat as outliers. |
+| **Isolation Forest** | An unsupervised method that scores how easily an observation is separated from the rest by random splits. Used only in the earlier demonstrator, on synthetic data. |
+| **Radiance** | Light energy leaving a surface per unit area, angle and wavelength; night-time light products report it in nanowatts per square centimetre per steradian. |
+| **SWIR** | Short-wave infrared, about 1.4 to 3.0 micrometres. Sentinel-2 band B11 (about 1.6 micrometres) is used for BSI. |
+| **Z-score** | The number of standard deviations an observation lies from the mean of a reference period. |
