@@ -32,6 +32,10 @@
             cfvo: ['Coarse fragments', 'Stored value / 10 = volume %'],
             cec: ['Cation exchange capacity', 'Stored value / 10 = cmol(c)/kg']
         };
+        const landCover = {
+            'cos2018v4-s2': 'Portugal land use 2018 (COS Serie 2, v4)',
+            'cos2025v1-s2': 'Portugal land use 2025 (COS Serie 2, v1)'
+        };
         const select = document.getElementById('soil-layer');
         const opacity = document.getElementById('soil-opacity');
         const legend = document.getElementById('soil-legend');
@@ -42,28 +46,33 @@
         for (const [key, info] of Object.entries(properties)) {
             select.add(new Option(info[0], key));
         }
+        for (const [key, name] of Object.entries(landCover)) {
+            select.add(new Option(name, key));
+        }
         select.addEventListener('change', () => {
             if (overlay) map.removeLayer(overlay);
             overlay = null;
             legend.hidden = true;
             const key = select.value;
-            if (!Object.hasOwn(properties, key)) {
+            const isCOS = Object.hasOwn(landCover, key);
+            if (!Object.hasOwn(properties, key) && !isCOS) {
                 status.textContent = 'Observed study bounds (west, south, east, north): ' + coords;
                 return;
             }
-            const endpoint = 'https://maps.isric.org/mapserv?map=/map/' + key + '.map';
-            const layer = key + '_0-5cm_mean';
-            const active = L.tileLayer.wms(endpoint, { layers: layer, format: 'image/png', transparent: true, version: '1.1.1', opacity: Number(opacity.value) / 100, attribution: 'ISRIC SoilGrids (CC BY 4.0)', maxZoom: 18 });
+            const endpoint = isCOS ? 'https://geo2.dgterritorio.gov.pt/geoserver/COS-S2/wms' : 'https://maps.isric.org/mapserv?map=/map/' + key + '.map';
+            const separator = endpoint.includes('?') ? '&' : '?';
+            const layer = isCOS ? key : key + '_0-5cm_mean';
+            const active = L.tileLayer.wms(endpoint, { layers: layer, format: 'image/png', transparent: true, version: '1.1.1', opacity: Number(opacity.value) / 100, attribution: isCOS ? 'Direcao-Geral do Territorio (DGT) - COS Serie 2' : 'ISRIC SoilGrids (CC BY 4.0)', maxZoom: 18 });
             overlay = active;
             let errors = 0;
-            status.textContent = 'Loading modeled SoilGrids overlay...';
-            active.on('tileerror', () => { if (overlay === active) { errors++; status.textContent = 'Some SoilGrids tiles failed; this layer may be incomplete.'; } });
-            active.on('load', () => { if (overlay === active && errors === 0) status.textContent = 'SoilGrids modeled layer loaded; no independent laboratory validation.'; });
+            status.textContent = 'Loading reference overlay...';
+            active.on('tileerror', () => { if (overlay === active) { errors++; status.textContent = 'Some reference tiles failed; this layer may be incomplete.'; } });
+            active.on('load', () => { if (overlay === active && errors === 0) status.textContent = isCOS ? 'DGT land-use map loaded; reference classification, not a measured change event.' : 'SoilGrids modeled layer loaded; no independent laboratory validation.'; });
             active.addTo(map);
             legend.hidden = false;
-            meta.textContent = properties[key][0] + ' | 0-5 cm | mean prediction | 250 m native grid. ' + properties[key][1] + '. See provider legend.';
-            source.href = endpoint + '&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetCapabilities';
-            legendImage.src = endpoint + '&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=' + layer;
+            meta.textContent = isCOS ? landCover[key] + ' | Official photo-interpreted land-use reference; not independent field truth. See provider legend.' : properties[key][0] + ' | 0-5 cm | mean prediction | 250 m native grid. ' + properties[key][1] + '. See provider legend.';
+            source.href = endpoint + separator + 'SERVICE=WMS&VERSION=1.1.1&REQUEST=GetCapabilities';
+            legendImage.src = endpoint + separator + 'SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=' + layer;
         });
         opacity.addEventListener('input', () => { if (overlay) overlay.setOpacity(Number(opacity.value) / 100); });
         for (const layer of [imagery, streets]) layer.on('tileerror', () => { status.textContent = 'Some contextual tiles failed to load. Study bounds: ' + coords; });

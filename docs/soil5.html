@@ -63,12 +63,13 @@ footer{border-top:1px solid #344052;margin-top:45px;padding-top:20px;color:#a7b8
 <p>This rectangle locates the actual paired-scene sampling window. Basemap imagery is contextual and is not either dated Sentinel-2 observation. No per-pixel NDVI, BSI or soil chemistry layer is provided by this summary record.</p>
 <div class="grid" aria-label="Soil map controls">
 <label>Basemap<br><select id="soil-basemap" style="max-width:100%;padding:8px"><option value="satellite">Satellite context</option><option value="street">Street reference</option></select></label>
-<label>SoilGrids model layer (0-5 cm, mean)<br><select id="soil-layer" style="max-width:100%;padding:8px"><option value="">None - satellite context</option></select></label>
+<label>Reference overlay<br><select id="soil-layer" style="max-width:100%;padding:8px"><option value="">None - satellite context</option></select></label>
 <label>Overlay opacity<br><input id="soil-opacity" type="range" min="0" max="100" value="65"></label>
 </div>
 <p class="tiny">ISRIC SoilGrids predictions have a native resolution of 250 m; they are not laboratory samples or direct satellite measurements. <a href="https://docs.isric.org/globaldata/soilgrids/SoilGrids_faqs_01.html">Properties, units and uncertainty</a> | <a href="https://docs.isric.org/globaldata/soilgrids/SoilGrids_faqs_02.html">Access and license (CC BY 4.0)</a>. <a href="data/soilgrids_layer_registry.json">Map source and verification registry</a>.</p>
+<p class="tiny">Portuguese land-use references: <a href="https://snig.dgterritorio.gov.pt/rndg/srv/api/records/2034ca91-1752-44e6-b1b0-74146640fcfc">DGT COS 2018v4 / 2025v1 metadata</a> | <a href="data/dgt_cos_layer_registry.json">Source verification registry</a>. These are interpreted map classes, not field samples.</p>
 <div id="soil-map" role="region" aria-label="Public Alentejo study area"></div>
-<div id="soil-legend" hidden><p id="soil-layer-meta" class="tiny"></p><img id="soil-legend-image" alt="Provider legend for selected soil property" style="background:white;max-width:100%;height:auto"><p class="tiny"><a id="soil-layer-source" href="https://maps.isric.org/">Original WMS source</a></p></div>
+<div id="soil-legend" hidden><p id="soil-layer-meta" class="tiny"></p><div style="max-height:450px;overflow:auto"><img id="soil-legend-image" alt="Provider legend for selected reference layer" style="background:white;max-width:100%;height:auto"></div><p class="tiny"><a id="soil-layer-source" href="https://maps.isric.org/">Original WMS source</a></p></div>
 <p id="soil-map-status" class="tiny muted" role="status">Loading source footprint...</p>
 <p class="tiny">Sources: <a href="data/observed_alentejo_soil5_pair_20261123.json">Observation record</a> | <a href="https://planetarycomputer.microsoft.com/">Planetary Computer</a> | <a href="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer">Esri World Imagery</a> | <a href="https://www.openstreetmap.org/copyright">OpenStreetMap attribution</a>.</p>
 <h2 id="next">Scientific and business validation gates</h2>
