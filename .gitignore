@@ -44,3 +44,11 @@ dist/
 # Local observational acquisitions and raw sensor results: never publish
 research_private/
 *.npz
+
+# JARVIS runtime-generated files (do not commit)
+docs/data/thesis_reproducibility_ledger.jsonl
+
+brag-output/
+
+# Private thesis working notes (never published)
+docs/thesis_audit/
