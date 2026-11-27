@@ -37,3 +37,14 @@ def test_structure_changes_are_reported():
 
 def test_committed_outputs_currently_reproduce():
     assert cr.main() == 0
+
+
+def test_independent_check_bookkeeping_is_ignored():
+    # Real case: GitHub full rerun 46066431470 (27 Nov 2026) flagged only these.
+    a = {"checked_at": "2026-11-26T18:58:11Z", "checked_run_id": "x-20261126T184505Z",
+         "code_commit": "d1709f4", "increase_ha": 2260.19}
+    b = {"checked_at": "2026-11-27T20:58:11Z", "checked_run_id": "x-20261127T205706Z",
+         "code_commit": "3366552", "increase_ha": 2260.19}
+    assert list(cr.walk(a, b)) == []
+    b["increase_ha"] = 2261.0
+    assert list(cr.walk(a, b)) == ["/increase_ha: 2260.19 -> 2261.0"]

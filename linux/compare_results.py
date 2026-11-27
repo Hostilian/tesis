@@ -38,6 +38,9 @@ IGNORED_KEYS = {
     "python",
     "platform",
     "versions",
+    "checked_at",
+    "checked_run_id",
+    "code_commit",
 }
 REL_TOL = 1e-9
 ABS_TOL = 1e-12
@@ -46,7 +49,7 @@ ABS_TOL = 1e-12
 def walk(a: Any, b: Any, path: str = "") -> Iterator[str]:
     if isinstance(a, dict) and isinstance(b, dict):
         for k in sorted(set(a) | set(b)):
-            if k in IGNORED_KEYS or k.endswith("_utc"):
+            if k in IGNORED_KEYS or k.endswith(("_utc", "_at", "_run_id", "_commit")):
                 continue
             if k not in a or k not in b:
                 yield f"{path}/{k}: present only in {'new' if k in b else 'committed'} file"
