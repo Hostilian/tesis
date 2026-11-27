@@ -45,9 +45,8 @@ if command -v python3 >/dev/null 2>&1; then
   v=$(python3 -c 'import sys; print("%d.%d" % sys.version_info[:2])')
   echo "  python3 $v"
   case "$v" in
-    3.1[0-1]) note "Python $v works for most parts; the published runs used 3.12" ;;
     3.1[2-9]) pass "Python $v" ;;
-    *) bad "Python $v is too old; need 3.10+ (3.12 recommended), or use Docker" ;;
+    *) bad "Python $v is too old; the pinned rasterio 1.5.0 needs 3.12+, or use Docker (or set PYTHON=python3.12 for setup.sh)" ;;
   esac
   if python3 -c 'import venv, ensurepip' 2>/dev/null; then pass "python3 venv module"
   else bad "python3-venv missing (admin: apt install python3-venv), or use Docker"; fi

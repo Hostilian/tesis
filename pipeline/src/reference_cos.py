@@ -16,6 +16,7 @@ from __future__ import annotations
 from typing import Any, Iterable, Mapping, Sequence
 
 import numpy as np
+from numpy.typing import NDArray
 
 OGC_API = "https://ogcapi.dgterritorio.gov.pt"
 COS_LICENSE = "CC-BY (dados.gov.pt: 'Carta de Uso e Ocupação do Solo (COS) - Série 2 - (2018v4 - 2025v1)')"
@@ -62,7 +63,7 @@ def class_codes(features: Iterable[Mapping[str, Any]], prefix: str) -> list[str]
 
 def rasterize_classes(
     features: Sequence[Mapping[str, Any]], prefix: str, grid: Any
-) -> tuple[np.ndarray, list[str]]:
+) -> tuple[NDArray[Any], list[str]]:
     """Burn level-4 class codes onto the case-study grid; returns (index raster, code list)."""
     from pyproj import Transformer
     from rasterio import features as rfeatures
@@ -87,15 +88,17 @@ def rasterize_classes(
     return raster, codes
 
 
-def code_mask(raster: np.ndarray, codes: Sequence[str], predicate: Any) -> np.ndarray:
+def code_mask(
+    raster: NDArray[Any], codes: Sequence[str], predicate: Any
+) -> NDArray[Any]:
     hits = [i + 1 for i, c in enumerate(codes) if predicate(c)]
     return np.isin(raster, hits)
 
 
 def agreement_matrix(
-    flags: np.ndarray,
-    reference: Mapping[str, np.ndarray],
-    valid: np.ndarray,
+    flags: NDArray[Any],
+    reference: Mapping[str, NDArray[Any]],
+    valid: NDArray[Any],
     pixel_area_m2: float,
 ) -> list[dict[str, Any]]:
     """Share of each reference category flagged as increase (1) / decrease (2) / none (0)."""
@@ -126,7 +129,7 @@ def agreement_matrix(
     return rows
 
 
-def binary_agreement(pred: np.ndarray, ref: np.ndarray) -> dict[str, Any]:
+def binary_agreement(pred: NDArray[Any], ref: NDArray[Any]) -> dict[str, Any]:
     tp = int((pred & ref).sum())
     fp = int((pred & ~ref).sum())
     fn = int((~pred & ref).sum())
@@ -147,7 +150,7 @@ def binary_agreement(pred: np.ndarray, ref: np.ndarray) -> dict[str, Any]:
 
 def polygon_units(
     features_2025: Sequence[Mapping[str, Any]], prefix: str, grid: Any
-) -> np.ndarray:
+) -> NDArray[Any]:
     """Raster of 2025 COS polygon ids (1..n) used as the evaluation unit."""
     from pyproj import Transformer
     from rasterio import features as rfeatures
@@ -170,10 +173,10 @@ def polygon_units(
 
 
 def polygon_agreement(
-    units: np.ndarray,
-    pred_pixels: np.ndarray,
-    ref_pixels: np.ndarray,
-    valid: np.ndarray,
+    units: NDArray[Any],
+    pred_pixels: NDArray[Any],
+    ref_pixels: NDArray[Any],
+    valid: NDArray[Any],
     min_pixels: int,
     share: float = 0.5,
 ) -> dict[str, Any]:

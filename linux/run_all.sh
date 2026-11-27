@@ -40,6 +40,7 @@ step tests python -m pytest -q -p no:cacheprovider \
   pipeline/tests/test_case_study.py pipeline/tests/test_case_study_properties.py \
   pipeline/tests/test_robustness.py pipeline/tests/test_provider_pc.py \
   pipeline/tests/test_threshold_simulation.py pipeline/tests/test_formal_spec.py \
+  pipeline/tests/test_published_writers.py \
   pipeline/tests/test_soil_link.py
 step soil_demo python pipeline/run_soil_link.py demo --out "$OUT/soil_demo.json"
 step soil_power python pipeline/run_soil_link.py power

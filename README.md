@@ -12,7 +12,7 @@
 | Field | Value |
 |---|---|
 | **Student** | Eren Ozturk (XOZTE001@studenti.czu.cz) |
-| **Institution** | Czech University of Life Sciences Prague (CZU), PEF — Department of Informatics (KII) |
+| **Institution** | Czech University of Life Sciences Prague (CZU), PEF — Department of Information Engineering (KII) |
 | **Supervisor** | Dr. Jiří Brožek (brozekj@pef.czu.cz) |
 | **Academic Year** | 2025–2026 |
 
@@ -109,9 +109,9 @@ tesis/
 ├── .github/
 │   ├── workflows/
 │   │   ├── deploy.yml          # GitHub Pages CI/CD
-│   │   ├── test.yml            # Pytest (47 tests)
+│   │   ├── test.yml            # Pytest (full pipeline/tests suite)
 │   │   ├── security.yml        # CodeQL + pip-audit + Gitleaks + SBOM
-│   │   ├── lint.yml            # Black + Flake8
+│   │   ├── lint.yml            # Black + Flake8 + mypy --strict
 │   │   └── data-refresh.yml    # Weekly satellite data update
 │   ├── ISSUE_TEMPLATE/
 │   ├── dependabot.yml          # Automated dependency updates
@@ -134,7 +134,7 @@ tesis/
 │   │   └── regions.geojson     # Study area polygons
 │   └── api/v1/                 # Static REST API endpoints
 │       ├── anomalies/index.json
-│       ├── anomalies/{id}/index.json (×9)
+│       ├── anomalies/{id}/index.json (×10, one per record)
 │       ├── datasets/index.json
 │       └── status/index.json
 │
@@ -149,7 +149,7 @@ tesis/
 │   │   ├── economic_overlay.py # Pearson r, 8-point assessment
 │   │   └── exporter.py         # GeoJSON / JSON export
 │   ├── tests/
-│   │   └── test_pipeline.py    # 47 tests across 12 test classes
+│   │   └── test_pipeline.py    # 54 tests in 14 test classes (one of several test files)
 │   ├── requirements.txt        # Production dependencies (pinned)
 │   ├── requirements-dev.txt    # Development-only (pytest, black, flake8)
 │   ├── Dockerfile              # Full pipeline reproducibility
@@ -272,7 +272,7 @@ Interactive API documentation: **[View API Docs](https://hostilian.github.io/tes
   title   = {Space-Based Economic Intelligence: Detecting Hidden Resource
              Anomalies Using Open Satellite APIs},
   school  = {Czech University of Life Sciences Prague (CZU PEF),
-             Department of Informatics (KII)},
+             Department of Information Engineering (KII)},
   year    = {2026},
   type    = {Bachelor Thesis},
   advisor = {Bro{\v{z}}ek, Ji{\v{r}}{\'\i}}
@@ -284,10 +284,10 @@ Interactive API documentation: **[View API Docs](https://hostilian.github.io/tes
 ## 🔒 Security
 
 This project implements a full security pipeline:
-- **Dependency auditing**: `pip-audit` on every push
+- **Dependency auditing**: `pip-audit` on pushes to main/develop, on pull requests and weekly
 - **Static analysis**: GitHub CodeQL (Python)
 - **Secrets scanning**: Gitleaks on full git history
-- **SBOM**: CycloneDX Software Bill of Materials generated per release
+- **SBOM**: CycloneDX Software Bill of Materials generated on each security-workflow run
 - **DAST and API fuzzing**: OWASP ZAP baseline plus OpenAPI fuzz tests in CI
 - **Dependabot**: Automated weekly dependency updates
 
@@ -299,6 +299,7 @@ See [SECURITY.md](SECURITY.md) for the responsible disclosure policy.
 
 Code: [MIT License](LICENSE)  
 Satellite data: Used under respective open licenses (Copernicus Open Licence, NASA/USGS Public Domain)  
+Case study: contains modified Copernicus Sentinel data 2018, 2025; land-use reference COS 2018v4 / 2025v1 © Direção-Geral do Território (DGT), CC-BY  
 Thesis text: © Eren Ozturk 2026 — All rights reserved pending submission
 
 ---
