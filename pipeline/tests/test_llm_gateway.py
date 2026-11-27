@@ -18,11 +18,28 @@ def test_missing_openrouter_key_is_refused():
         gw.load_provider("openrouter", env={})
 
 
-def test_omniroute_needs_its_own_url_and_key():
-    with pytest.raises(gw.GatewayError, match="OMNIROUTE_BASE_URL"):
-        gw.load_provider("omniroute", env={"OMNIROUTE_API_KEY": "x"})
+def test_omniroute_falls_back_to_public_openrouter_endpoint():
+    # Matches the owner's own va_orchestrator.py fallback when no local proxy is set.
+    p = gw.load_provider("omniroute", env={"OMNIROUTE_API_KEY": "x"})
+    assert p.base_url == gw.OPENROUTER_BASE
+
+
+def test_omniroute_uses_its_own_url_when_set():
+    p = gw.load_provider(
+        "omniroute",
+        env={
+            "OMNIROUTE_API_KEY": "x",
+            "OMNIROUTE_BASE_URL": "http://localhost:20128/api/v1",
+        },
+    )
+    assert p.base_url == "http://localhost:20128/api/v1"
+
+
+def test_omniroute_still_needs_its_own_key():
     with pytest.raises(gw.GatewayError, match="OMNIROUTE_API_KEY"):
-        gw.load_provider("omniroute", env={"OMNIROUTE_BASE_URL": "https://r.example/v1"})
+        gw.load_provider(
+            "omniroute", env={"OMNIROUTE_BASE_URL": "https://r.example/v1"}
+        )
 
 
 def test_unknown_provider_refused():

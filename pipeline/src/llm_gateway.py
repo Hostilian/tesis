@@ -10,7 +10,10 @@ Standard library only. Chat requests use the OpenAI-compatible
 
 Environment variables (set by the owner, never committed):
   OPENROUTER_API_KEY     required for provider "openrouter"
-  OMNIROUTE_BASE_URL     required for provider "omniroute" (their router URL)
+  OMNIROUTE_BASE_URL     optional for provider "omniroute"; defaults to the
+                         public OpenRouter endpoint if no local proxy is set
+                         (same fallback as the owner's va_orchestrator.py)
+  OMNIROUTE_MODEL        optional model override for provider "omniroute"
   OMNIROUTE_API_KEY      required for provider "omniroute"
   GATEWAY_MODEL          optional, default "anthropic/claude-opus-4.6"
 
@@ -62,12 +65,16 @@ def load_provider(name: str, env: Mapping[str, str] | None = None) -> ProviderCo
         var = "OPENROUTER_API_KEY"
     elif name == "omniroute":
         key = env.get("OMNIROUTE_API_KEY", "")
-        base = env.get("OMNIROUTE_BASE_URL", "")
-        if not base:
-            raise GatewayError("OMNIROUTE_BASE_URL is not set")
+        # Matches the owner's own eushop/va_orchestrator.py: when no local
+        # OmniRoute proxy is configured, it falls back to the public OpenRouter
+        # endpoint. That fallback is documented in their public config
+        # (config/providers.json: baseUrlEnv "OMNIROUTE_BASE_URL"), not a secret.
+        base = env.get("OMNIROUTE_BASE_URL", OPENROUTER_BASE)
         var = "OMNIROUTE_API_KEY"
     else:
-        raise GatewayError(f"unknown provider {name!r}; use 'openrouter' or 'omniroute'")
+        raise GatewayError(
+            f"unknown provider {name!r}; use 'openrouter' or 'omniroute'"
+        )
     if not key:
         raise GatewayError(f"{var} is not set; add your own key to the environment")
     return ProviderConfig(name=name, base_url=base.rstrip("/"), api_key=key)
@@ -78,7 +85,9 @@ Transport = Callable[[urllib.request.Request, float], tuple[int, bytes]]
 
 def _urlopen(req: urllib.request.Request, timeout: float) -> tuple[int, bytes]:
     try:
-        with urllib.request.urlopen(req, timeout=timeout) as r:  # noqa: S310 (https endpoints only)
+        with urllib.request.urlopen(
+            req, timeout=timeout
+        ) as r:  # noqa: S310 (https endpoints only)
             return r.status, r.read()
     except urllib.error.HTTPError as e:
         return e.code, e.read()
@@ -117,6 +126,14 @@ def chat(
     if provider.name == "openrouter":
         headers["X-Title"] = "thesis-case-study"
     last = ""
+    if (
+        model is None
+        and provider.name == "omniroute"
+        and os.environ.get("OMNIROUTE_MODEL")
+    ):
+        body = json.dumps(
+            {**json.loads(body), "model": os.environ["OMNIROUTE_MODEL"]}
+        ).encode("utf-8")
     for i in range(1, attempts + 1):
         req = urllib.request.Request(url, data=body, headers=headers, method="POST")
         status, raw = transport(req, timeout)
