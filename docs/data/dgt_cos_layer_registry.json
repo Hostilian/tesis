@@ -1,0 +1,84 @@
+{
+  "source": "https://geo2.dgterritorio.gov.pt/geoserver/COS-S2/wms",
+  "metadata": "https://snig.dgterritorio.gov.pt/rndg/srv/api/records/2034ca91-1752-44e6-b1b0-74146640fcfc",
+  "verified_date": "2026-11-27",
+  "evidence_class": "third-party interpreted land use, not field ground truth",
+  "layers": [
+    {
+      "layer": "cos2018v4-s2",
+      "bbox_wgs84": [
+        -8.05,
+        38.55,
+        -7.96,
+        38.64
+      ],
+      "status": 200,
+      "dimensions": [
+        512,
+        512
+      ],
+      "nontransparent": 262144,
+      "unique_colors": 16363,
+      "legend_status": 200,
+      "legend_dimensions": [
+        463,
+        2040
+      ],
+      "local_browser_checks": [
+        {
+          "viewport": 1440,
+          "layer": "cos2018v4-s2",
+          "tiles_loaded": 12,
+          "legend_width": 463,
+          "source_href": "https://geo2.dgterritorio.gov.pt/geoserver/COS-S2/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetCapabilities"
+        },
+        {
+          "viewport": 390,
+          "layer": "cos2018v4-s2",
+          "tiles_loaded": 6,
+          "legend_width": 463,
+          "source_href": "https://geo2.dgterritorio.gov.pt/geoserver/COS-S2/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetCapabilities"
+        }
+      ],
+      "browser_integration": "local desktop and mobile verified; production verification pending"
+    },
+    {
+      "layer": "cos2025v1-s2",
+      "bbox_wgs84": [
+        -8.05,
+        38.55,
+        -7.96,
+        38.64
+      ],
+      "status": 200,
+      "dimensions": [
+        512,
+        512
+      ],
+      "nontransparent": 262144,
+      "unique_colors": 16524,
+      "legend_status": 200,
+      "legend_dimensions": [
+        463,
+        2040
+      ],
+      "local_browser_checks": [
+        {
+          "viewport": 1440,
+          "layer": "cos2025v1-s2",
+          "tiles_loaded": 12,
+          "legend_width": 463,
+          "source_href": "https://geo2.dgterritorio.gov.pt/geoserver/COS-S2/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetCapabilities"
+        },
+        {
+          "viewport": 390,
+          "layer": "cos2025v1-s2",
+          "tiles_loaded": 6,
+          "legend_width": 463,
+          "source_href": "https://geo2.dgterritorio.gov.pt/geoserver/COS-S2/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetCapabilities"
+        }
+      ],
+      "browser_integration": "local desktop and mobile verified; production verification pending"
+    }
+  ]
+}

@@ -52,7 +52,9 @@ def compile_pdf():
     pdf.ln(20)
     pdf.cell(0, 10, "Prague, 2026", 0, new_x="LMARGIN", new_y="NEXT", align="C")
     
-    # Declaration, AI-use note, abstract and keywords come from chapters/00_front_matter.md.
+    # Declaration, AI-use note, abstract and keywords come from chapters/00_front_matter.md
+    # (included in the files list below), so no separate hardcoded abstract block here —
+    # one used to live here but would now print a second, stale abstract.
 
     # ── CHAPTERS ──
     # Paths relative to this script, so a build in any checkout or worktree writes only there.
@@ -77,7 +79,7 @@ def compile_pdf():
     for filename in files:
         filepath = os.path.join(chapters_dir, filename)
         if not os.path.exists(filepath):
-            continue
+            raise FileNotFoundError(f"Required manuscript chapter missing: {filepath}")
             
         print(f"Processing chapter file: {filename}")
         with open(filepath, "r", encoding="utf-8") as f:
@@ -151,9 +153,15 @@ def compile_pdf():
         if in_table:
             render_pdf_table(pdf, table_lines)
             
+    # Canonical file (what every commit and the PDF readers reference) and a
+    # separately-named draft copy for in-progress/automated review, so neither
+    # side's output path is silently dropped.
     output_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "thesis.pdf")
+    review_draft_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "thesis-review-draft.pdf")
     pdf.output(output_path)
+    pdf.output(review_draft_path)
     print(f"Thesis PDF compiled successfully at: {output_path}")
+    print(f"Review draft copy written to: {review_draft_path}")
 
 def parse_markdown_style(text):
     text = re.sub(r"\*\*(.*?)\*\*", r"\1", text)
