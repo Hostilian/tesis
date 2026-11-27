@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; img-src 'self' data: blob: https://server.arcgisonline.com; connect-src 'self' https://server.arcgisonline.com; worker-src blob:; child-src blob:; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <title>Portugal from orbit: Sentinel-2 change 2018–2025 (version 6) | Eren Öztürk thesis</title>
+  <meta name="description" content="3D globe view of the Portugal Sentinel-2 case study: Alqueva irrigation area and Neves-Corvo mine, 2018 vs 2025. Every number is read from the published results files and carries a data-status label.">
+  <link rel="icon" href="favicon.ico">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.1/dist/maplibre-gl.css" integrity="sha384-uTttxo/aOKbdE5RlD/SPzSDoDmNvGlUYPjONi2MN/b7c9HPSvW07OIuyP7uL6jxK" crossorigin="anonymous">
+  <link rel="stylesheet" href="v6/v6.css">
+</head>
+<body>
+<a class="skip" href="#panel">Skip to study area, layers and numbers</a>
+<header class="bar">
+  <p class="brand"><span class="tag">V6</span> <span class="brand-text">Portugal from orbit</span></p>
+  <h1>Sentinel-2 change, 2018 → 2025</h1>
+  <span class="spacer"></span>
+  <nav aria-label="Site">
+    <a href="case-study/index.html">Case study (2D map)</a>
+    <a href="v6/SOURCES.md">Sources and licences</a>
+  </nav>
+</header>
+<main class="layout">
+  <section class="stage" aria-label="Globe">
+    <div id="map" role="region" aria-label="3D globe with the selected study area. Use arrow keys to pan and plus or minus to zoom when focused." aria-describedby="map-words" tabindex="0"></div>
+    <div class="hud hud-tl" aria-hidden="true">
+      <div class="hud-row"><span class="hud-k">SENSOR</span> <span>Sentinel-2 L2A · 10 m</span></div>
+      <div class="hud-row"><span class="hud-k">TARGET</span> <span id="hud-target">–</span></div>
+      <div class="hud-row"><span class="hud-k">PASS A</span> <span id="hud-before">–</span></div>
+      <div class="hud-row"><span class="hud-k">PASS B</span> <span id="hud-after">–</span></div>
+    </div>
+    <div class="hud hud-bl" aria-hidden="true">
+      <div class="hud-row"><span class="hud-k">VIEW</span> <span id="hud-latlon">–</span></div>
+      <div class="hud-row"><span class="hud-k">ZOOM</span> <span id="hud-zoom">–</span> <span class="hud-k">PITCH</span> <span id="hud-pitch">–</span></div>
+      <div class="hud-note">camera readout, not data</div>
+    </div>
+    <div class="reticle" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+    <div class="tour" role="group" aria-label="Camera">
+      <button type="button" id="btn-globe">Globe</button>
+      <button type="button" id="btn-portugal">Portugal</button>
+      <button type="button" id="btn-area">Study area</button>
+      <button type="button" id="btn-tour">Replay fly-in</button>
+    </div>
+  </section>
+
+  <aside id="panel" class="panel" tabindex="-1" aria-label="Study area, layers and numbers">
+    <p id="live" class="sr-only" aria-live="polite"></p>
+
+    <h2 id="case-h">Study area</h2>
+    <div class="cases" role="group" aria-labelledby="case-h" id="cases"></div>
+    <p id="case-desc" class="muted"></p>
+
+    <h2 id="numbers-h">Key numbers</h2>
+    <div id="numbers"><p class="muted">Loading results.json…</p></div>
+
+    <h2 id="sure-h">How sure are we?</h2>
+    <div id="sure" class="sure"><p class="muted">Loading robustness.json…</p></div>
+
+    <h2 id="layers-h">Layers</h2>
+    <div id="layers" role="group" aria-labelledby="layers-h"></div>
+    <label class="muted" for="opacity">Overlay opacity</label>
+    <input id="opacity" type="range" min="0" max="1" step="0.05" value="0.85" aria-valuetext="85 %">
+    <div id="legend" class="legend"></div>
+
+    <h2>Map in words</h2>
+    <p id="map-words">Loading the study area.</p>
+
+    <h2>Data-status labels</h2>
+    <ul class="statuses">
+      <li><span class="badge b-obs">public observation</span> satellite imagery, catalogue dates and the official COS land-use map.</li>
+      <li><span class="badge b-der">observation-derived result</span> a number or layer computed from those observations.</li>
+      <li><span class="badge b-int">unverified interpretation</span> a reading whose cause is not confirmed.</li>
+      <li><span class="badge b-syn">synthetic demonstration</span> mock data. None is used on this page.</li>
+    </ul>
+
+    <div class="note">The map shows where the surface signal changed between two summer images. It does not say why. Agreement with COS is agreement with an official photo-interpreted map, not ground-truth accuracy. Both areas were chosen as change hotspots and do not represent Alentejo. The globe, flight path and readouts are display only.</div>
+
+    <h2>Files</h2>
+    <p id="files" class="muted"></p>
+    <p class="muted">Code reuse: the coordinate formatter in the readout is copied from God's Eye View (MIT). The globe uses MapLibre GL JS 5.24.1 (BSD-3-Clause). Details in <a href="v6/SOURCES.md">v6/SOURCES.md</a>.</p>
+  </aside>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.1/dist/maplibre-gl.js" integrity="sha384-nXMl9YiLoSG5KBPTFgvxVuIqQQcqIvo0bFrvoEaGJC6r7IibIzF1S36Zbf/sKBtL" crossorigin="anonymous"></script>
+<script src="v6/vendor/gev-dms.js"></script>
+<script src="v6/app.js"></script>
+</body>
+</html>
