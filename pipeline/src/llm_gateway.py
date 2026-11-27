@@ -140,7 +140,7 @@ def _local_omniroute_up(base: str, timeout: float = 20.0) -> bool:
     )
     try:
         with urllib.request.urlopen(req, timeout=timeout) as r:  # noqa: S310
-            return r.status == 200
+            return bool(r.status == 200)
     except (urllib.error.URLError, OSError, ValueError):
         return False
 

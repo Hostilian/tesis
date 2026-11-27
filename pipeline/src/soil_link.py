@@ -54,7 +54,7 @@ import re
 from dataclasses import dataclass, field
 from datetime import date, timedelta
 from pathlib import Path
-from typing import Any, Callable, Iterable, Mapping, Sequence
+from typing import Any, Callable, Iterable, Mapping, Sequence, cast
 
 import numpy as np
 
@@ -585,7 +585,9 @@ def extract_features(
 # ---------------------------------------------------------------------------
 
 
-def to_km(lat: Sequence[float], lon: Sequence[float]) -> np.ndarray:
+def to_km(
+    lat: Sequence[float] | np.ndarray, lon: Sequence[float] | np.ndarray
+) -> np.ndarray:
     """Local equirectangular projection to km (fine for study areas < ~500 km)."""
     lat_a, lon_a = np.asarray(lat, float), np.asarray(lon, float)
     lat0 = float(np.mean(lat_a))
@@ -629,7 +631,10 @@ def permutation_strata(
 
 
 def empirical_range_km(
-    lat: Sequence[float], lon: Sequence[float], y: Sequence[float], n_bins: int = 15
+    lat: Sequence[float] | np.ndarray,
+    lon: Sequence[float] | np.ndarray,
+    y: Sequence[float] | np.ndarray,
+    n_bins: int = 15,
 ) -> float:
     """Distance at which the empirical semivariogram of y first reaches 95 % of
     the sample variance: a rough, model-free estimate of how far spatial
@@ -731,9 +736,11 @@ def make_models(seed: int = 0, fast: bool = False) -> dict[str, Any]:
     from sklearn.pipeline import make_pipeline
     from sklearn.preprocessing import StandardScaler
 
-    class _PLS(PLSRegression):
-        def predict(self, X, copy=True):  # 1-D output like the others
-            return np.ravel(super().predict(X, copy=copy))
+    class _PLS(PLSRegression):  # type: ignore[misc]  # PLSRegression has no type stubs
+        def predict(
+            self, X: Any, copy: bool = True
+        ) -> np.ndarray:  # 1-D output like the others
+            return cast(np.ndarray, np.ravel(super().predict(X, copy=copy)))
 
     trees = 100 if fast else 300
     # Four different families, so the result does not hinge on one model:
@@ -802,7 +809,7 @@ def detrend(v: np.ndarray, xy_km: np.ndarray) -> np.ndarray:
     V = v.reshape(len(c), -1)
     coef, *_ = np.linalg.lstsq(D, V, rcond=None)
     out = V - D @ coef
-    return out.ravel() if v.ndim == 1 else out
+    return cast(np.ndarray, out.ravel() if v.ndim == 1 else out)
 
 
 class SpectralSurrogates:

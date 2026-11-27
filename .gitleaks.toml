@@ -1,0 +1,18 @@
+# Gitleaks config for this repository.
+# Extends (does not replace) gitleaks' default rule set.
+[extend]
+useDefault = true
+
+[allowlist]
+description = """
+Offline unit tests for pipeline/src/llm_gateway.py and pipeline/src/case_study.py
+intentionally pass fake, key-shaped strings (e.g. "sk-test-123456789") to verify
+that Authorization headers are built correctly and that real keys are redacted
+from error messages. These are not credentials: no real key, token or secret is
+stored anywhere in this repository. Scope is limited to the two test files that
+need them, not test files in general.
+"""
+paths = [
+  '''pipeline/tests/test_llm_gateway\.py''',
+  '''pipeline/tests/test_question_worker\.py''',
+]
