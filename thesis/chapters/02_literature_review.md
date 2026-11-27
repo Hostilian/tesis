@@ -1,6 +1,7 @@
 # Chapter 2: Literature Review
 
 <!-- AI-assisted rewording, 26 Nov 2026 (Claude). CZU Rector's Directive 7/2026, Art. 8(4) allows AI help with style, structure, rewording and source search in the literature review only. Declare this in the thesis declaration and the AI-use note. -->
+<!-- AI-assisted draft: pending supervisor permission (27 Nov 2026: slop_check fix, line on map agreement) -->
 
 This chapter covers the background the thesis builds on. It explains how satellites measure the surface and how their data have served as evidence of economic activity. It then covers open data access, change detection and evaluation, and earlier studies of the Alentejo region. It ends with the gap this thesis addresses.
 
@@ -81,7 +82,7 @@ Olofsson and co-authors set out good practice for checking land-change maps [R26
 - compare it with reference data of higher quality than the map;
 - report the error matrix and the uncertainty of the mapped area.
 
-Where no field data exist, an independent map from a national agency can serve as the reference. Agreement with that map is then agreement with another map, not ground truth.
+Where no field data exist, an independent map from a national agency can serve as the reference. Agreement with that map is then agreement with another map, not with conditions checked in the field.
 
 Two further issues matter for pixel data:
 

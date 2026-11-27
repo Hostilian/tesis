@@ -42,9 +42,10 @@ import platform
 import re
 import subprocess
 import sys
-from typing import Any, Iterable, Mapping, Sequence
+from typing import Any, Callable, Iterable, Mapping, Sequence
 
 import numpy as np
+from numpy.typing import NDArray
 
 EARTH_SEARCH_URL = "https://earth-search.aws.element84.com/v1"
 COLLECTION = "sentinel-2-l2a"
@@ -68,11 +69,22 @@ SCL_LABELS: dict[int, str] = {
     11: "snow_or_ice",
 }
 DEFAULT_VALID_SCL: tuple[int, ...] = (4, 5, 6)
+# Cloud shadow, cloud medium/high probability, thin cirrus: classes that an
+# optional buffer grows outwards (sensitivity check only; off by default).
+CLOUD_BUFFER_SCL: tuple[int, ...] = (3, 8, 9, 10)
 
 INDEX_BANDS: dict[str, tuple[str, ...]] = {
     "ndvi": ("red", "nir"),
     "bsi": ("blue", "red", "nir", "swir16"),
 }
+# Sensitivity-check indices: computed only when a caller opts in
+# (``CaseStudyConfig.from_mapping(..., allow_sensitivity_index=True)``); a
+# published case config cannot select them.
+SENSITIVITY_INDEX_BANDS: dict[str, tuple[str, ...]] = {
+    "evi": ("blue", "red", "nir"),
+    "ndmi": ("nir", "swir16"),
+}
+ALL_INDEX_BANDS: dict[str, tuple[str, ...]] = {**INDEX_BANDS, **SENSITIVITY_INDEX_BANDS}
 
 DATA_STATUS = (
     "public_observation",
@@ -115,13 +127,16 @@ class CaseStudyConfig:
     extra: dict[str, Any] = field(default_factory=dict)
 
     @classmethod
-    def from_mapping(cls, raw: Mapping[str, Any]) -> "CaseStudyConfig":
+    def from_mapping(
+        cls, raw: Mapping[str, Any], allow_sensitivity_index: bool = False
+    ) -> "CaseStudyConfig":
         bbox = tuple(float(v) for v in raw["bbox"])
         validate_bbox(bbox)
         index = str(raw["index"]).lower()
-        if index not in INDEX_BANDS:
+        allowed = ALL_INDEX_BANDS if allow_sensitivity_index else INDEX_BANDS
+        if index not in allowed:
             raise ValueError(
-                f"Unsupported index {index!r}; choose one of {sorted(INDEX_BANDS)}"
+                f"Unsupported index {index!r}; choose one of {sorted(allowed)}"
             )
         thresholds = tuple(sorted(float(t) for t in raw["thresholds"]))
         primary_raw = raw["primary_threshold"]
@@ -193,8 +208,8 @@ def validate_bbox(bbox: Sequence[float]) -> None:
 
 
 def to_reflectance(
-    dn: np.ndarray, scale: float, offset: float, nodata: int | None = 0
-) -> np.ndarray:
+    dn: NDArray[Any], scale: float, offset: float, nodata: int | None = 0
+) -> NDArray[Any]:
     """Convert L2A digital numbers to surface reflectance; nodata -> NaN."""
     out = dn.astype("float32") * np.float32(scale) + np.float32(offset)
     if nodata is not None:
@@ -202,7 +217,7 @@ def to_reflectance(
     return out
 
 
-def normalized_difference(a: np.ndarray, b: np.ndarray) -> np.ndarray:
+def normalized_difference(a: NDArray[Any], b: NDArray[Any]) -> NDArray[Any]:
     """(a - b) / (a + b) with NaN where the denominator is ~0 or inputs are NaN."""
     num = a - b
     den = a + b
@@ -211,7 +226,7 @@ def normalized_difference(a: np.ndarray, b: np.ndarray) -> np.ndarray:
     return np.clip(out, -1.0, 1.0).astype("float32")
 
 
-def compute_index(index: str, bands: Mapping[str, np.ndarray]) -> np.ndarray:
+def compute_index(index: str, bands: Mapping[str, NDArray[Any]]) -> NDArray[Any]:
     if index == "ndvi":
         return normalized_difference(bands["nir"], bands["red"])
     if index == "bsi":
@@ -219,16 +234,52 @@ def compute_index(index: str, bands: Mapping[str, np.ndarray]) -> np.ndarray:
         return normalized_difference(
             bands["swir16"] + bands["red"], bands["nir"] + bands["blue"]
         )
+    if index == "ndmi":
+        # Normalised Difference Moisture Index (Gao 1996 NDWI form): (NIR - SWIR1) / (NIR + SWIR1),
+        # here with B08 (10 m) as NIR and B11 (20 m, nearest to 10 m) as SWIR1.
+        return normalized_difference(bands["nir"], bands["swir16"])
+    if index == "evi":
+        # Enhanced Vegetation Index (Huete et al. 2002), MODIS coefficients:
+        # 2.5 (NIR - Red) / (NIR + 6 Red - 7.5 Blue + 1). Not clipped; NaN where the denominator ~0.
+        nir, red, blue = bands["nir"], bands["red"], bands["blue"]
+        den = nir + 6.0 * red - 7.5 * blue + 1.0
+        with np.errstate(divide="ignore", invalid="ignore"):
+            out = np.where(np.abs(den) > 1e-6, 2.5 * (nir - red) / den, np.nan)
+        return out.astype("float32")
     raise ValueError(f"Unsupported index {index!r}")
 
 
 def scl_valid_mask(
-    scl: np.ndarray, valid_classes: Iterable[int] = DEFAULT_VALID_SCL
-) -> np.ndarray:
+    scl: NDArray[Any], valid_classes: Iterable[int] = DEFAULT_VALID_SCL
+) -> NDArray[Any]:
     return np.isin(scl, np.asarray(list(valid_classes), dtype=scl.dtype))
 
 
-def scl_class_counts(scl: np.ndarray) -> dict[str, int]:
+def buffered_valid_mask(
+    scl: NDArray[Any],
+    valid_classes: Iterable[int] = DEFAULT_VALID_SCL,
+    buffer_classes: Iterable[int] = CLOUD_BUFFER_SCL,
+    buffer_px: int = 0,
+) -> NDArray[Any]:
+    """SCL validity mask with an optional square buffer around cloud/shadow classes.
+
+    ``buffer_px`` pixels of 8-connected dilation (a (2n+1) x (2n+1) square) are
+    grown around every pixel in ``buffer_classes`` and removed from the valid
+    mask. ``buffer_px = 0`` returns exactly ``scl_valid_mask``.
+    """
+    valid = scl_valid_mask(scl, valid_classes)
+    if buffer_px <= 0:
+        return valid
+    from scipy import ndimage
+
+    cloud = np.isin(scl, np.asarray(list(buffer_classes), dtype=scl.dtype))
+    grown = ndimage.binary_dilation(
+        cloud, structure=np.ones((3, 3), dtype=bool), iterations=int(buffer_px)
+    )
+    return np.asarray(valid & ~np.asarray(grown, dtype=bool), dtype=bool)
+
+
+def scl_class_counts(scl: NDArray[Any]) -> dict[str, int]:
     values, counts = np.unique(scl, return_counts=True)
     return {
         SCL_LABELS.get(int(v), f"class_{int(v)}"): int(c)
@@ -237,11 +288,11 @@ def scl_class_counts(scl: np.ndarray) -> dict[str, int]:
 
 
 def difference(
-    before: np.ndarray,
-    after: np.ndarray,
-    valid_before: np.ndarray,
-    valid_after: np.ndarray,
-) -> tuple[np.ndarray, np.ndarray]:
+    before: NDArray[Any],
+    after: NDArray[Any],
+    valid_before: NDArray[Any],
+    valid_after: NDArray[Any],
+) -> tuple[NDArray[Any], NDArray[Any]]:
     """Return (after - before, joint-valid mask). Invalid pixels are NaN."""
     joint = valid_before & valid_after & np.isfinite(before) & np.isfinite(after)
     delta = np.full(before.shape, np.nan, dtype="float32")
@@ -249,7 +300,7 @@ def difference(
     return delta, joint
 
 
-def summarize(values: np.ndarray) -> dict[str, float | int]:
+def summarize(values: NDArray[Any]) -> dict[str, float | int]:
     v = values[np.isfinite(values)]
     if v.size == 0:
         return {"n": 0}
@@ -269,7 +320,7 @@ def summarize(values: np.ndarray) -> dict[str, float | int]:
 
 
 def threshold_table(
-    main_delta: np.ndarray, control_delta: np.ndarray, thresholds: Iterable[float]
+    main_delta: NDArray[Any], control_delta: NDArray[Any], thresholds: Iterable[float]
 ) -> list[dict[str, float | int]]:
     """Flagged share of the main pair vs the no-change control pair per threshold.
 
@@ -302,7 +353,7 @@ def threshold_table(
 
 
 def resolve_threshold(
-    rule: float | str, thresholds: Sequence[float], control_delta: np.ndarray
+    rule: float | str, thresholds: Sequence[float], control_delta: NDArray[Any]
 ) -> tuple[float, str]:
     """Pick the change threshold.
 
@@ -328,7 +379,19 @@ def resolve_threshold(
     )
 
 
-def label_patches(mask: np.ndarray) -> tuple[np.ndarray, int]:
+def flag_changes(
+    delta: NDArray[Any], threshold: float
+) -> tuple[NDArray[Any], NDArray[Any]]:
+    """Raw (increase, decrease) flags: delta > t and delta < -t, before any patch filter.
+
+    Strict inequalities, as in ``threshold_table``; NaN (no joint-valid pair) is
+    never flagged. Shared by ``run_case_study.py run`` and ``robustness.change_mask``.
+    """
+    d = np.nan_to_num(delta, nan=0.0)
+    return d > threshold, d < -threshold
+
+
+def label_patches(mask: NDArray[Any]) -> tuple[NDArray[Any], int]:
     from scipy import ndimage
 
     structure = np.ones((3, 3), dtype=bool)  # 8-connectivity
@@ -337,7 +400,7 @@ def label_patches(mask: np.ndarray) -> tuple[np.ndarray, int]:
 
 
 def patch_statistics(
-    mask: np.ndarray, pixel_area_m2: float, min_patch_ha: float
+    mask: NDArray[Any], pixel_area_m2: float, min_patch_ha: float
 ) -> dict[str, Any]:
     """Connected-patch summary of a boolean change mask."""
     labels, n = label_patches(mask)
@@ -369,7 +432,7 @@ def patch_statistics(
     }
 
 
-def keep_patches_ge(mask: np.ndarray, min_pixels: int) -> np.ndarray:
+def keep_patches_ge(mask: NDArray[Any], min_pixels: int) -> NDArray[Any]:
     labels, n = label_patches(mask)
     if n == 0:
         return np.zeros_like(mask, dtype=bool)
@@ -403,10 +466,10 @@ def resolution_table(
 
 
 def seasonal_split(
-    increase_mask: np.ndarray,
-    after_summer: np.ndarray,
-    after_other_season: np.ndarray,
-    other_valid: np.ndarray,
+    increase_mask: NDArray[Any],
+    after_summer: NDArray[Any],
+    after_other_season: NDArray[Any],
+    other_valid: NDArray[Any],
     amplitude_threshold: float,
 ) -> dict[str, int]:
     """Split NDVI-increase pixels by within-year stability of the after year.
@@ -608,7 +671,7 @@ def reference_grid(item_meta: Mapping[str, Any], bbox: Sequence[float]) -> Grid:
 
 def read_band(
     asset: Mapping[str, Any], grid: Grid, resampling: str = "nearest", attempts: int = 3
-) -> np.ndarray:
+) -> NDArray[Any]:
     """Read one asset on the reference grid, retrying transient HTTP short reads."""
     import time
 
@@ -626,7 +689,7 @@ def read_band(
 
 def _read_band_once(
     asset: Mapping[str, Any], grid: Grid, resampling: str
-) -> np.ndarray:
+) -> NDArray[Any]:
     """Read one asset on the reference grid; asserts CRS/grid compatibility."""
     import rasterio
     from rasterio.enums import Resampling
@@ -656,10 +719,10 @@ def _read_band_once(
 @dataclass
 class Observation:
     meta: dict[str, Any]
-    bands: dict[str, np.ndarray]
-    scl: np.ndarray
-    valid: np.ndarray
-    index: np.ndarray
+    bands: dict[str, NDArray[Any]]
+    scl: NDArray[Any]
+    valid: NDArray[Any]
+    index: NDArray[Any]
 
 
 def load_observation(
@@ -668,15 +731,25 @@ def load_observation(
     index: str,
     valid_scl: Sequence[int],
     rgb: bool = False,
+    scl_resampling: str = "nearest",
+    cloud_buffer_px: int = 0,
+    reader: Callable[[Mapping[str, Any], Grid, str], np.ndarray] | None = None,
 ) -> Observation:
-    needed = set(INDEX_BANDS[index]) | ({"red", "green", "blue"} if rgb else set())
+    """Read bands + SCL on ``grid`` and build the index and validity mask.
+
+    The defaults reproduce the published case-study runs. ``scl_resampling``,
+    ``cloud_buffer_px`` and ``reader`` exist for sensitivity checks (a
+    different SCL resampling, a cloud/shadow buffer, a caching reader).
+    """
+    read = reader or read_band
+    needed = set(ALL_INDEX_BANDS[index]) | ({"red", "green", "blue"} if rgb else set())
     bands = {}
     for key in sorted(needed):
         a = item_meta["assets"][key]
-        dn = read_band(a, grid)
+        dn = read(a, grid, "nearest")
         bands[key] = to_reflectance(dn, a["scale"], a["offset"], a.get("nodata", 0))
-    scl = read_band(item_meta["assets"]["scl"], grid)
-    valid = scl_valid_mask(scl, valid_scl)
+    scl = read(item_meta["assets"]["scl"], grid, scl_resampling)
+    valid = buffered_valid_mask(scl, valid_scl, CLOUD_BUFFER_SCL, cloud_buffer_px)
     for arr in bands.values():
         valid &= np.isfinite(arr)
     idx = compute_index(index, bands)

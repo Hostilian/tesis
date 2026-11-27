@@ -503,8 +503,261 @@ def terrain_at(lat: float, lon: float, half_m: float = 60.0) -> dict[str, float]
     return out
 
 
+# ---------------------------------------------------------------------------
+# SoilGrids 250 m: a public baseline to beat (not training data, not truth)
+# ---------------------------------------------------------------------------
+
+SOILGRIDS_URL = "https://rest.isric.org/soilgrids/v2.0/properties/query"
+SOILGRIDS_LICENCE = (
+    "SoilGrids 2.0, ISRIC - World Soil Information, licence CC-BY 4.0 "
+    "(attribution required). Poggio et al. (2021) SOIL 7, 217-240, "
+    "doi:10.5194/soil-7-217-2021."
+)
+
+
+def _http_json(url: str, params: Sequence[tuple[str, str]], timeout: float) -> Any:
+    import json
+    import urllib.parse
+    import urllib.request
+
+    req = urllib.request.Request(
+        f"{url}?{urllib.parse.urlencode(list(params))}",
+        headers={
+            "User-Agent": "soil-link-research-client",
+            "Accept": "application/json",
+        },
+    )
+    with urllib.request.urlopen(req, timeout=timeout) as resp:  # noqa: S310
+        return json.loads(resp.read().decode("utf-8"))
+
+
+def soilgrids_point(
+    lat: float,
+    lon: float,
+    properties: Sequence[str] = ("soc", "clay"),
+    depth: str = "0-5cm",
+    value: str = "mean",
+    transport: Callable[[str, Sequence[tuple[str, str]], float], Any] | None = None,
+    timeout: float = 60.0,
+) -> dict[str, Any]:
+    """SoilGrids v2.0 values at one point (public REST API, no key).
+
+    Returns ``{prop: {"value", "unit", "mapped_value", "mapped_unit"}}`` plus
+    provenance. Values are converted from SoilGrids' integer "mapped units"
+    with the ``d_factor`` that the API returns (soc: dg/kg -> g/kg, clay:
+    g/kg -> %), never with a hard-coded factor. Missing cells (sea, towns,
+    gaps) come back as NaN.
+
+    SoilGrids values are themselves model predictions at 250 m, not
+    measurements: use them as a baseline that the satellite link must beat at
+    lab-sampled points, never as ground truth. The query sends the exact
+    coordinate to ISRIC; do not send private sample locations without the
+    data owner's permission.
+    """
+    params: list[tuple[str, str]] = [("lon", f"{lon:.6f}"), ("lat", f"{lat:.6f}")]
+    params += [("property", p) for p in properties]
+    params += [("depth", depth), ("value", value)]
+    get = transport or _http_json
+    raw = get(SOILGRIDS_URL, params, timeout)
+    layers = {
+        layer.get("name"): layer
+        for layer in (raw.get("properties", {}) or {}).get("layers", []) or []
+    }
+    out: dict[str, Any] = {
+        "data_status": "public_observation",
+        "source": "SoilGrids v2.0 REST API (" + SOILGRIDS_URL + ")",
+        "licence": SOILGRIDS_LICENCE,
+        "depth": depth,
+        "statistic": value,
+        "values": {},
+    }
+    for p in properties:
+        layer = layers.get(p)
+        rec: dict[str, Any] = {
+            "value": math.nan,
+            "unit": None,
+            "mapped_value": None,
+            "mapped_unit": None,
+        }
+        if layer is not None:
+            um = layer.get("unit_measure", {}) or {}
+            d_factor = float(um.get("d_factor") or 1.0)
+            rec["unit"] = um.get("target_units")
+            rec["mapped_unit"] = um.get("mapped_units")
+            for d in layer.get("depths", []) or []:
+                if d.get("label") == depth:
+                    v = (d.get("values") or {}).get(value)
+                    rec["mapped_value"] = v
+                    if v is not None:
+                        rec["value"] = float(v) / d_factor
+        out["values"][p] = rec
+    return out
+
+
 SceneSearch = Callable[[Sample], list[Any]]
 SceneReader = Callable[[Any, Sample], tuple[dict[str, np.ndarray], np.ndarray]]
+
+
+# ---------------------------------------------------------------------------
+# Scene cache: keep the small per-sample band windows, so that the bare-soil
+# rule can be re-run offline with other thresholds without downloading again.
+# ---------------------------------------------------------------------------
+
+
+def _safe_name(text: str) -> str:
+    return re.sub(r"[^A-Za-z0-9._-]", "_", str(text))[:120] or "_"
+
+
+def scene_cache_path(cache_dir: Path, sample_id: str, item_id: str) -> Path:
+    return Path(cache_dir) / _safe_name(sample_id) / f"{_safe_name(item_id)}.npz"
+
+
+def save_scene_cache(
+    path: Path,
+    bands: Mapping[str, np.ndarray],
+    scl: np.ndarray,
+    item_id: str,
+    when: str,
+) -> None:
+    """Write one window as .npz (atomic: temp file, then rename)."""
+    import os
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_name(path.name + f".{os.getpid()}.tmp.npz")
+    payload: dict[str, Any] = {f"band_{k}": np.asarray(v) for k, v in bands.items()}
+    payload.update(
+        scl=np.asarray(scl),
+        item_id=np.asarray(str(item_id)),
+        datetime=np.asarray(str(when)),
+    )
+    np.savez_compressed(tmp, **payload)
+    os.replace(tmp, path)
+
+
+def load_scene_cache(path: Path) -> dict[str, Any]:
+    """Read one cached window: {item_id, datetime, bands, scl}."""
+    with np.load(path, allow_pickle=False) as z:
+        bands = {k[5:]: z[k] for k in z.files if k.startswith("band_")}
+        return {
+            "item_id": str(z["item_id"]),
+            "datetime": str(z["datetime"]),
+            "bands": bands,
+            "scl": z["scl"],
+        }
+
+
+def cached_reader(reader: SceneReader, cache_dir: Path) -> SceneReader:
+    """Wrap a scene reader: return the cached window if present, else read and store.
+
+    Cache files hold pixel windows around the sample point. For private samples
+    they reveal where the samples are, so keep the cache next to the private
+    data, never in the repository.
+    """
+
+    def read(item: Any, s: Sample) -> tuple[dict[str, np.ndarray], np.ndarray]:
+        item_id = getattr(item, "id", str(item))
+        path = scene_cache_path(cache_dir, s.sample_id, item_id)
+        if path.exists():
+            c = load_scene_cache(path)
+            return c["bands"], c["scl"]
+        bands, scl = reader(item, s)
+        props = getattr(item, "properties", {}) or {}
+        save_scene_cache(path, bands, scl, item_id, str(props.get("datetime", "")))
+        return bands, scl
+
+    return read
+
+
+def load_cache_dir(
+    cache_dir: Path, only: Mapping[str, Iterable[str]] | None = None
+) -> dict[str, list[dict[str, Any]]]:
+    """All cached windows per sample id (sorted by date).
+
+    ``only`` optionally restricts each sample to a set of item ids (e.g. the
+    ``scene_ids`` column of one ``features`` run).
+    """
+    out: dict[str, list[dict[str, Any]]] = {}
+    root = Path(cache_dir)
+    wanted = (
+        None
+        if only is None
+        else {_safe_name(k): {_safe_name(i) for i in v} for k, v in only.items()}
+    )
+    for sdir in sorted(p for p in root.iterdir() if p.is_dir()):
+        if wanted is not None and sdir.name not in wanted:
+            continue
+        scenes = []
+        for f in sorted(sdir.glob("*.npz")):
+            if ".tmp." in f.name:
+                continue
+            if wanted is not None and f.stem not in wanted[sdir.name]:
+                continue
+            scenes.append(load_scene_cache(f))
+        out[sdir.name] = sorted(scenes, key=lambda c: c["datetime"])
+    return out
+
+
+def bare_availability(
+    cache: Mapping[str, Sequence[Mapping[str, Any]]],
+    ndvi_max: float = NDVI_MAX,
+    nbr2_max: float = NBR2_MAX,
+    min_pixels: int = MIN_BARE_PIXELS,
+) -> dict[str, Any]:
+    """Offline bare-soil availability from cached windows for one threshold pair.
+
+    Per sample: distinct acquisition dates with at least one bare pixel
+    ("bare dates"; two tiles on the same day count once) and whether the
+    composite reaches ``min_pixels`` bare pixels ("usable"). By month: how
+    many sample-dates were read and how many were bare.
+    """
+    per: dict[str, dict[str, Any]] = {}
+    month_read: dict[str, int] = {}
+    month_bare: dict[str, int] = {}
+    for sid, scenes in cache.items():
+        bare_days: set[str] = set()
+        read_days: set[str] = set()
+        n_px = 0
+        for c in scenes:
+            day = str(c["datetime"])[:10]
+            read_days.add(day)
+            m = bare_soil_mask(c["bands"], c["scl"], ndvi_max, nbr2_max)
+            k = int(m.sum())
+            n_px += k
+            if k:
+                bare_days.add(day)
+        for day in read_days:
+            month_read[day[5:7]] = month_read.get(day[5:7], 0) + 1
+        for day in bare_days:
+            month_bare[day[5:7]] = month_bare.get(day[5:7], 0) + 1
+        per[sid] = {
+            "dates_read": len(read_days),
+            "bare_dates": len(bare_days),
+            "bare_pixels": n_px,
+            "usable": n_px >= min_pixels,
+            "bare_days": sorted(bare_days),
+        }
+    n = len(per)
+    bare_counts = [p["bare_dates"] for p in per.values()]
+    read_counts = [p["dates_read"] for p in per.values()]
+    n_any = sum(b > 0 for b in bare_counts)
+    n_usable = sum(p["usable"] for p in per.values())
+    nan = math.nan
+    return {
+        "ndvi_max": ndvi_max,
+        "nbr2_max": nbr2_max,
+        "min_pixels": min_pixels,
+        "n_samples": n,
+        "share_any_bare_date": n_any / n if n else nan,
+        "share_usable": n_usable / n if n else nan,
+        "median_bare_dates": float(np.median(bare_counts)) if n else nan,
+        "mean_bare_dates": float(np.mean(bare_counts)) if n else nan,
+        "median_dates_read": float(np.median(read_counts)) if n else nan,
+        "by_month": {
+            m: {"dates_read": month_read.get(m, 0), "bare": month_bare.get(m, 0)}
+            for m in sorted(month_read)
+        },
+        "per_sample": per,
+    }
 
 
 def extract_features(
@@ -520,12 +773,15 @@ def extract_features(
     workers: int = 1,
     ndvi_max: float = NDVI_MAX,
     nbr2_max: float = NBR2_MAX,
+    cache_dir: Path | None = None,
 ) -> list[dict[str, Any]]:
     """One row per sample: features + provenance (scene ids). Never raises per sample.
 
     The work is network-bound (small windows read from cloud-optimised
     GeoTIFFs), so ``workers`` > 1 runs several samples at once in threads.
-    Output order always follows the input order.
+    Output order always follows the input order. With ``cache_dir`` every
+    window read is stored as .npz (and reused), so the bare-soil rule can be
+    re-run offline (``bare_availability``).
     """
     if search is None:
 
@@ -540,6 +796,9 @@ def extract_features(
             item: Any, s: Sample
         ) -> tuple[dict[str, np.ndarray], np.ndarray]:  # noqa: E306
             return read_point_scene(soil_item_meta(item), s.lat, s.lon, half_m)
+
+    if cache_dir is not None:
+        reader = cached_reader(reader, Path(cache_dir))
 
     def one(s: Sample) -> dict[str, Any]:
         scenes, ids, errors = [], [], []
@@ -782,6 +1041,53 @@ def cross_validated_predictions(
     return pred
 
 
+def nested_cv_predictions(
+    models: Mapping[str, Any],
+    candidates: Sequence[str],
+    X: np.ndarray,
+    y: np.ndarray,
+    groups: np.ndarray,
+    n_splits: int,
+    inner_splits: int = 4,
+) -> tuple[np.ndarray, list[str]]:
+    """Spatial-block CV in which the model choice is part of the training.
+
+    In every outer fold the candidate models are compared by an inner spatial
+    block CV on the training blocks only; the winner is refitted on all
+    training blocks and predicts the held-out block. The held-out data never
+    influence which model is chosen, so the resulting R2 is not inflated by
+    picking the best of several models (unlike the maximum of per-model CV R2).
+    Returns (predictions, model chosen in each outer fold).
+    """
+    from sklearn.base import clone
+    from sklearn.model_selection import GroupKFold
+
+    pred = np.full(len(y), np.nan)
+    chosen: list[str] = []
+    k = min(n_splits, len(np.unique(groups)))
+    for tr, te in GroupKFold(n_splits=k).split(X, y, groups):
+        g_tr = groups[tr]
+        k_in = min(inner_splits, len(np.unique(g_tr)))
+        if k_in >= 2 and len(candidates) > 1:
+            scores = {
+                c: _metrics(
+                    y[tr],
+                    cross_validated_predictions(models[c], X[tr], y[tr], g_tr, k_in),
+                )["r2"]
+                for c in candidates
+            }
+            pick = max(
+                candidates,
+                key=lambda c: scores[c] if np.isfinite(scores[c]) else -np.inf,
+            )
+        else:  # too few training blocks to compare: first candidate, recorded
+            pick = candidates[0]
+        chosen.append(pick)
+        m = clone(models[pick]).fit(X[tr], y[tr])
+        pred[te] = np.ravel(m.predict(X[te]))
+    return pred, chosen
+
+
 def _permute_within(
     y: np.ndarray, strata: np.ndarray, rng: np.random.Generator
 ) -> np.ndarray:
@@ -861,7 +1167,8 @@ def evaluate_property(
     """Spatial-block CV and a spatial null model.
 
     Verdict "signal_above_chance" requires ALL of:
-      - the best model beats the mean baseline (CV R2 > 0 and > baseline);
+      - the best model beats the mean baseline (nested CV R2 > 0 and > the
+        baseline's CV R2; the model choice is made inside each training set);
       - with coordinates (always use them): after removing a quadratic trend
         in the coordinates from soil values and features, the best model still
         reaches CV R2 >= ``min_added_r2``, and beats >= 95 % of spectral
@@ -898,7 +1205,14 @@ def evaluate_property(
     }
     results = {name: _metrics(y, pr) for name, pr in preds.items()}
     best = max(candidates, key=lambda n: results[n]["r2"])
-    real = results[best]["r2"]
+    # Plain CV R2 of the best of several models is biased upwards (the choice
+    # saw the test blocks). The R2 reported for "the best model" therefore
+    # comes from nested CV, where the choice is made inside each training set.
+    nested_pred, chosen = nested_cv_predictions(
+        models, candidates, X, y, groups, k, inner_splits=max(2, k - 1)
+    )
+    nested = _metrics(y, nested_pred)
+    real = nested["r2"]
 
     rng = np.random.default_rng(seed)
 
@@ -982,11 +1296,14 @@ def evaluate_property(
         null_a = np.asarray(
             [best_r2(X, _permute_within(y, strata, rng)) for _ in range(n_permutations)]
         )
-        p_val = (int(np.sum(null_a >= real)) + 1) / (n_permutations + 1)
+        # Unchanged test: the best plain CV R2, compared with the best plain CV
+        # R2 of every permutation (the choice is repeated on both sides).
+        plain_best = results[best]["r2"]
+        p_val = (int(np.sum(null_a >= plain_best)) + 1) / (n_permutations + 1)
         test = {
             "kind": "permutation within blocks (no coordinates given: weaker)",
-            "statistic": "CV R2",
-            "statistic_value": real,
+            "statistic": "best plain CV R2 (model choice repeated per permutation)",
+            "statistic_value": plain_best,
         }
         signal_ok = p_val <= 0.05
         inconclusive = False
@@ -1003,11 +1320,19 @@ def evaluate_property(
         "n_blocks": int(n_groups),
         "cv_folds": int(k),
         "models": results,
+        "models_note": "Per-model spatial-block CV. The maximum over models is "
+        "optimistic; use best_model_cv (nested CV) as the skill of the best model.",
         "best_model": best,
+        "best_model_cv": {
+            **nested,
+            "method": "nested spatial-block CV: model chosen by inner CV on the "
+            "training blocks of each outer fold",
+            "chosen_per_fold": chosen,
+        },
         "models_beating_baseline": sorted(
             c for c in candidates if results[c]["r2"] > results["baseline_mean"]["r2"]
         ),
-        "interval_80_halfwidth": prediction_interval_halfwidth(y, preds[best], 0.8),
+        "interval_80_halfwidth": prediction_interval_halfwidth(y, nested_pred, 0.8),
         "permutation": {
             **test,
             "n_permutations": n_permutations,

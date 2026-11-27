@@ -55,3 +55,6 @@ docs/thesis_audit/
 
 # Local-only review build; thesis.pdf is the tracked canonical artifact
 thesis/thesis-review-draft.pdf
+
+# Local run outputs (soil runs, Linux kit summaries)
+out/

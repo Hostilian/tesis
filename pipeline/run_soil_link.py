@@ -130,6 +130,7 @@ def cmd_features(args: argparse.Namespace) -> int:
         workers=args.workers,
         ndvi_max=args.ndvi_max,
         nbr2_max=args.nbr2_max,
+        cache_dir=Path(args.cache_dir) if args.cache_dir else None,
     )
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -144,6 +145,109 @@ def cmd_features(args: argparse.Namespace) -> int:
     print(
         f"{have}/{len(rows)} samples have bare-soil features; {time.time() - t0:.0f} s -> {out}"
     )
+    return 0
+
+
+def cmd_availability(args: argparse.Namespace) -> int:
+    only = None
+    if args.features:
+        with open(args.features, newline="", encoding="utf-8") as fh:
+            only = {
+                r["sample_id"]: [i for i in (r.get("scene_ids") or "").split(";") if i]
+                for r in csv.DictReader(fh)
+            }
+    cache = sl.load_cache_dir(Path(args.cache_dir), only)
+    runs = []
+    for nd in args.ndvi_max:
+        for nb in args.nbr2_max:
+            r = sl.bare_availability(cache, nd, nb, args.min_pixels)
+            runs.append(r)
+            print(
+                f"NDVI<={nd:.3f} NBR2<={nb:.3f}: {r['n_samples']} points, "
+                f"any bare date {r['share_any_bare_date']:.0%}, "
+                f"usable {r['share_usable']:.0%}, "
+                f"median bare dates {r['median_bare_dates']:g}"
+            )
+    _write_json(
+        Path(args.out),
+        {
+            "data_status": "observation_derived_result",
+            "note": "Bare-soil availability recomputed offline from cached "
+            "Sentinel-2 L2A windows. Says how often the surface was bare, "
+            "nothing about soil properties.",
+            "cache_dir": str(args.cache_dir),
+            "runs": runs,
+        },
+    )
+    return 0
+
+
+def _read_feature_rows(path: str) -> list[dict]:
+    with open(path, newline="", encoding="utf-8") as fh:
+        return list(csv.DictReader(fh))
+
+
+def cmd_aoa(args: argparse.Namespace) -> int:
+    """Which new places look like the training data (area of applicability)."""
+    train = _read_feature_rows(args.features)
+    new = _read_feature_rows(args.new)
+    if not train or not new:
+        print("empty features file")
+        return 1
+    names = [
+        k
+        for k in list(sl.FEATURE_NAMES) + list(sl.TERRAIN_NAMES)
+        if k in train[0] and k in new[0]
+    ]
+    if not names:
+        print("no shared feature columns")
+        return 1
+    Xt = np.asarray([[_f(r.get(k)) for k in names] for r in train])
+    Xn = np.asarray([[_f(r.get(k)) for k in names] for r in new])
+    keep = np.isfinite(Xt).all(axis=1)
+    groups = None
+    if args.samples:
+        coords = {s.sample_id: s for s in sl.read_samples(Path(args.samples))}
+        ids = [r["sample_id"] for r in train]
+        if all(i in coords for i in np.asarray(ids)[keep]):
+            lat = np.asarray([coords[i].lat for i in np.asarray(ids)[keep]])
+            lon = np.asarray([coords[i].lon for i in np.asarray(ids)[keep]])
+            groups = sl.spatial_blocks(lat, lon, args.block_km)
+    if keep.sum() < 5:
+        print(f"only {int(keep.sum())} training rows with all features; need >= 5")
+        return 1
+    # A place without bare-soil spectra cannot be judged; terrain alone (or a
+    # median fill of missing spectra) would wrongly make it look familiar.
+    spectral = [i for i, k in enumerate(names) if k in sl.FEATURE_NAMES]
+    has = np.isfinite(Xn[:, spectral]).all(axis=1)
+    res = sl.area_of_applicability(Xt[keep], Xn[has], groups)
+    rows = []
+    j = 0
+    for r, h in zip(new, has):
+        if h:
+            di, inside = float(res["di_new"][j]), bool(res["inside"][j])
+            j += 1
+            status = "inside" if inside else "outside"
+        else:
+            di, status = math.nan, "no_features"
+        rows.append({"sample_id": r.get("sample_id", ""), "di": di, "aoa": status})
+    n_in = sum(r["aoa"] == "inside" for r in rows)
+    n_out = sum(r["aoa"] == "outside" for r in rows)
+    print(
+        f"{len(rows)} new places: {n_in} inside, {n_out} outside, "
+        f"{len(rows) - n_in - n_out} without features; "
+        f"DI threshold {res['threshold']:.3f} from {int(keep.sum())} training rows "
+        f"({len(names)} features)"
+    )
+    for r in rows:
+        print(f"  {r['sample_id']}: {r['aoa']} (DI {r['di']:.3f})")
+    if args.out:
+        out = Path(args.out)
+        out.parent.mkdir(parents=True, exist_ok=True)
+        with open(out, "w", newline="", encoding="utf-8") as fh:
+            w = csv.DictWriter(fh, ["sample_id", "di", "aoa"], lineterminator="\n")
+            w.writeheader()
+            w.writerows(rows)
     return 0
 
 
@@ -217,7 +321,8 @@ def cmd_evaluate(args: argparse.Namespace) -> int:
             pvals[t] = res["permutation"]["p_value"]
             b = res["best_model"]
             print(
-                f"{t}: n={res['n']} block {block_km:.1f} km, {b} R2={res['models'][b]['r2']:.3f}, "
+                f"{t}: n={res['n']} block {block_km:.1f} km, best model ({b}) "
+                f"nested-CV R2={res['best_model_cv']['r2']:.3f}, "
                 f"beyond trend R2={loc.get('detrended_r2_from_spectra', float('nan')):.3f}, "
                 f"p={pvals[t]:.3f} -> {res['verdict']}"
             )
@@ -294,7 +399,40 @@ def main(argv: list[str] | None = None) -> int:
     )
     f.add_argument("--ndvi-max", type=float, default=sl.NDVI_MAX)
     f.add_argument("--nbr2-max", type=float, default=sl.NBR2_MAX)
+    f.add_argument(
+        "--cache-dir",
+        help="store every read window as .npz here (reused; enables `availability`)",
+    )
     f.set_defaults(fn=cmd_features)
+
+    av = sub.add_parser(
+        "availability",
+        help="offline: bare-soil availability from a scene cache, per threshold pair",
+    )
+    av.add_argument("--cache-dir", required=True)
+    av.add_argument("--out", required=True)
+    av.add_argument(
+        "--features",
+        help="features CSV: use only the scenes listed in its scene_ids column",
+    )
+    av.add_argument("--ndvi-max", type=float, nargs="+", default=[sl.NDVI_MAX])
+    av.add_argument("--nbr2-max", type=float, nargs="+", default=[sl.NBR2_MAX])
+    av.add_argument("--min-pixels", type=int, default=sl.MIN_BARE_PIXELS)
+    av.set_defaults(fn=cmd_availability)
+
+    a = sub.add_parser(
+        "aoa", help="which new places are inside the area of applicability"
+    )
+    a.add_argument("--features", required=True, help="training features CSV")
+    a.add_argument("--new", required=True, help="features CSV of the new places")
+    a.add_argument(
+        "--samples",
+        help="training samples CSV (coordinates): DI is then computed against "
+        "other spatial blocks, as in the evaluation",
+    )
+    a.add_argument("--block-km", type=float, default=10.0)
+    a.add_argument("--out", help="optional CSV: sample_id, di, aoa")
+    a.set_defaults(fn=cmd_aoa)
 
     e = sub.add_parser("evaluate", help="test each lab property against the features")
     e.add_argument("--samples", required=True)

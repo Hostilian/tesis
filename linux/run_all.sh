@@ -40,6 +40,7 @@ step tests python -m pytest -q -p no:cacheprovider \
   pipeline/tests/test_case_study.py pipeline/tests/test_case_study_properties.py \
   pipeline/tests/test_robustness.py pipeline/tests/test_provider_pc.py \
   pipeline/tests/test_threshold_simulation.py pipeline/tests/test_formal_spec.py \
+  pipeline/tests/test_published_writers.py \
   pipeline/tests/test_soil_link.py
 step soil_demo python pipeline/run_soil_link.py demo --out "$OUT/soil_demo.json"
 step soil_power python pipeline/run_soil_link.py power
@@ -60,6 +61,9 @@ if [ "${1:-}" = "--full" ]; then
   for c in alqueva_olive neves_corvo_mine; do
     step "independent_$c" python pipeline/verify_independent.py "pipeline/case_studies/$c.json"
   done
+  # Fails if any published number differs from the committed files
+  # (relative tolerance 1e-9; ids, times and versions ignored).
+  step reproduced_numbers python linux/compare_results.py
   {
     echo
     echo "Check: \`git diff --stat docs/case-study/data\` should show only run ids, timestamps and environment fields."

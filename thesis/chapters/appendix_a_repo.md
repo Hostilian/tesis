@@ -1,51 +1,71 @@
-# Appendix A: Full Code Repository Structure
+# Appendix A: Repository Structure
 
-This appendix illustrates the structured layout of the thesis software repository, mapping out data modules, dashboard components, and deployment pipelines. The repository is organized to enforce the decoupled architecture described in Chapter 4, separating the Python geospatial ingestion and modeling pipeline (`/pipeline`) from the static frontend visualization files (`/docs`).
+<!-- AI-assisted factual update 2026-11-27: pending supervisor permission -->
+
+This appendix lists the main folders of the thesis repository (https://github.com/Hostilian/tesis). It was generated from `git ls-files` at commit `57e2a2a` (313 tracked files) and shows key folders only. The case study described in Chapters 3 and 5 uses the files marked "case study". Files marked "earlier demonstrator" belong to the first version of the project; they run on synthetic data and are not evidence for the results.
 
 ```
-space-economic-intelligence/
-│
-├── .github/                       # GitHub configurations
-│   ├── ISSUE_TEMPLATE/            # Standardized project issue forms
-│   │   ├── bug_report.md          # Technical pipeline bug logger
-│   │   └── feature_request.md     # Extension request template
-│   └── workflows/                 # CI/CD automated actions
-│   │   ├── deploy.yml             # Automatic push-to-deploy for Pages
-│   │   ├── test.yml               # Automated pytest runner
-│   │   ├── lint.yml               # Flake8 and Black code format checks
-│   │   └── data-refresh.yml       # Weekly cron automated pipeline
-│   
-├── docs/                          # Web visualization dashboard
-│   ├── index.html                 # Semantic structure of the dashboard
-│   ├── index.css                  # Animations and custom layout rules
-│   ├── app.js                     # Maps, split-sliders, and radar logic
-│   ├── assets/
-│   │   └── images/                # Dual canvas before/after image files
-│   └── data/
-│       ├── anomalies.json         # Serialized ML outlier dataset
-│       └── regions.geojson        # Study boundary polygon coordinates
-│
-├── pipeline/                      # Geospatial processing pipeline
-│   ├── notebooks/                 # Jupyter Notebook workflows (01 - 07)
-│   ├── src/                       # Production Python package source
-│   │   ├── __init__.py            # Module initialization file
-│   │   ├── utils.py               # Calculation formulas (NDVI, Z-score)
-│   │   ├── ingestion.py           # GEE & CDSE satellite query interface
-│   │   ├── preprocessing.py       # Cloud-masking and band scaling
-│   │   ├── models.py              # Isolation Forest ML classifiers
-│   │   └── exporter.py            # Serializers for GeoJSON outputs
-│   ├── tests/
-│   │   └── test_pipeline.py       # Unit test suite verifying logic
-│   └── run_pipeline.py            # Headless command-line orchestrator
-│
-├── thesis/                        # LaTeX thesis sources
-│   ├── chapters/                  # Chapter drafts (1-7) & Appendices
-│   └── latex/
-│       ├── main.tex               # Master typesetting document
-│       └── references.bib         # BibTeX citation collection
-│
-├── SECURITY.md                    # Key protection and disclosure policy
-├── CONTRIBUTING.md                # Development and branching standards
-├── CHANGELOG.md                   # Project semver release logs
-└── LICENSE                        # MIT Open License
+tesis/
+|-- .github/workflows/              GitHub Actions (9 workflows)
+|   |-- test.yml                    Python test suite
+|   |-- lint.yml                    black, flake8 and mypy on pipeline/src
+|   |-- security.yml                pip-audit, Bandit, CodeQL, Gitleaks, npm audit, fuzzing
+|   |-- formal.yml                  builds the Lean proofs in formal/
+|   |-- linux-run-kit.yml           reruns the case study on Ubuntu
+|   |-- deploy.yml                  publishes docs/ to GitHub Pages
+|   |-- data-refresh.yml            earlier demonstrator rehearsal (results not published)
+|   |-- connection-health.yml       earlier demonstrator: checks GEE, CDSE, NASA, World Bank, IMF
+|   `-- toolchain-smoke.yml         validates agent tool configs (MCP, Node adapters)
+|
+|-- pipeline/                       Python code
+|   |-- case_studies/               case study: one JSON config per study area
+|   |   |-- alqueva_olive.json      Alqueva: bounding box, pinned STAC item ids, thresholds
+|   |   `-- neves_corvo_mine.json   Neves-Corvo: same fields
+|   |-- run_case_study.py           case study: main run (STAC -> change map -> outputs)
+|   |-- run_robustness.py           case study: threshold curve, bootstrap, second date pair
+|   |-- run_interop_check.py        case study: same scenes from Planetary Computer
+|   |-- verify_independent.py       case study: second implementation, shares no code
+|   |-- run_soil_link.py            soil-laboratory link (pilot, not in the results)
+|   |-- src/
+|   |   |-- case_study.py           case study: reading, masking, indices, threshold, patches
+|   |   |-- reference_cos.py        case study: DGT COS download and agreement tables
+|   |   |-- robustness.py           case study: bootstrap and threshold-curve functions
+|   |   |-- provider_pc.py          case study: Planetary Computer adapter
+|   |   |-- soil_link.py            soil-laboratory link (pilot)
+|   |   |-- ingestion.py            earlier demonstrator: GEE, CDSE, World Bank and other clients
+|   |   |-- models.py               earlier demonstrator: Isolation Forest and z-score models
+|   |   |-- api_server.py           earlier demonstrator: FastAPI server
+|   |   `-- ...                     other earlier-demonstrator modules
+|   |-- tests/                      pytest suite (18 files, incl. property tests)
+|   |-- notebooks/                  earlier demonstrator notebooks 00-07
+|   `-- run_pipeline.py             earlier demonstrator command line
+|
+|-- docs/                           GitHub Pages site
+|   |-- case-study/
+|   |   |-- index.html              case-study web page
+|   |   |-- REPRODUCE.md            rerun instructions
+|   |   `-- data/<case>/            published outputs: manifest.json, results.json,
+|   |                               reference_cos.json, robustness.json,
+|   |                               independent_check.json, figures, GeoJSON
+|   |-- index.html, index3.html,    earlier demonstrator dashboards (V2, V3, V4)
+|   |   index4.html
+|   |-- index6.html, v6/            globe view of the case study (version 6)
+|   |-- evidence.html               public statement of what is and is not evidence
+|   |-- data/                       earlier demonstrator data (labelled synthetic) and
+|   |                               coverage checks
+|   `-- api/v1/                     static JSON API of the earlier demonstrator
+|
+|-- formal/                         Lean 4 proofs of the decision rules
+|   `-- Formal/                     Indices, Threshold, Flags, Patches, Confusion, Count, Audit
+|
+|-- linux/                          scripts and Dockerfile to rerun everything on Linux
+|-- research/                       background notes, benchmark and prototype scripts
+|-- thesis/
+|   |-- chapters/                   Markdown chapters and appendices
+|   |-- latex/                      LaTeX copy (main.tex, chapters/, references.bib)
+|   `-- tools/                      check_dois.py, slop_check.py and helpers
+|
+|-- AGENTS.md, CLAUDE.md            rules for AI agents working in the repository
+|-- REPRODUCE.md                    how to reproduce the published results
+`-- LICENSE                         MIT licence
 ```
