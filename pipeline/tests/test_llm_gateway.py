@@ -100,3 +100,87 @@ def test_gives_up_after_attempts_on_persistent_server_error():
     with pytest.raises(gw.GatewayError, match="503"):
         gw.chat(p, [], transport=transport, attempts=3, sleep=lambda s: None)
     assert len(calls) == 3
+
+
+# ---- key-free providers: local OmniRoute and the owner's Claude CLI ----
+
+
+def test_auto_prefers_openrouter_key_when_present():
+    p = gw.auto_provider({"OPENROUTER_API_KEY": "k"}, probe=lambda _: True)
+    assert p.name == "openrouter"
+
+
+def test_auto_uses_local_omniroute_only_if_it_answers():
+    p = gw.auto_provider({"CLAUDE_CLI_PATH": "claude"}, probe=lambda _: True)
+    assert p.name == "omniroute-local" and p.base_url == gw.OMNIROUTE_LOCAL_BASE
+    p = gw.auto_provider({"CLAUDE_CLI_PATH": "claude"}, probe=lambda _: False)
+    assert p.name == "claude-cli"
+
+
+def test_auto_can_skip_local_omniroute():
+    env = {"CLAUDE_CLI_PATH": "claude", "GATEWAY_TRY_OMNIROUTE_LOCAL": "0"}
+    assert gw.auto_provider(env, probe=lambda _: True).name == "claude-cli"
+
+
+def test_local_probe_refuses_non_local_urls():
+    assert gw._local_omniroute_up("https://openrouter.ai/api/v1") is False
+
+
+def test_omniroute_local_sends_no_auth_header_without_key():
+    seen = {}
+
+    def transport(req, timeout):
+        seen["auth"] = req.get_header("Authorization")
+        seen["body"] = json.loads(req.data)
+        return 200, ok_body("ok")
+
+    p = gw.load_provider("omniroute-local", env={})
+    assert gw.chat(p, [{"role": "user", "content": "q"}], transport=transport) == "ok"
+    assert seen["auth"] is None
+    assert seen["body"]["model"] == gw.OMNIROUTE_LOCAL_MODEL
+
+
+def test_claude_cli_runs_with_tools_disabled_and_cheap_model():
+    seen = {}
+
+    def runner(argv, stdin, timeout):
+        seen["argv"], seen["stdin"] = argv, stdin
+        return 0, " answer \n", ""
+
+    p = gw.ProviderConfig("claude-cli", "claude", "")
+    out = gw.chat_cli(
+        p,
+        [{"role": "system", "content": "S"}, {"role": "user", "content": "Q"}],
+        runner=runner,
+    )
+    assert out == "answer"
+    a = seen["argv"]
+    assert a[a.index("--tools") + 1] == ""
+    assert a[a.index("--model") + 1] == "haiku"
+    assert a[a.index("--system-prompt") + 1] == "S"
+    assert seen["stdin"] == "Q"
+
+
+def test_claude_cli_maps_openrouter_slugs_to_aliases():
+    assert gw._cli_alias("anthropic/claude-sonnet-4.5") == "sonnet"
+    assert gw._cli_alias("anthropic/claude-opus-4.6") == "opus"
+    assert gw._cli_alias("something-else") == "haiku"
+
+
+def test_claude_cli_retries_then_raises_clean_error():
+    calls = []
+
+    def runner(argv, stdin, timeout):
+        calls.append(1)
+        return 1, "", "boom sk-abcdefghijklmnop"
+
+    p = gw.ProviderConfig("claude-cli", "claude", "")
+    with pytest.raises(gw.GatewayError) as e:
+        gw.chat_cli(p, [{"role": "user", "content": "q"}], runner=runner, sleep=lambda s: None)
+    assert len(calls) == 2
+    assert "sk-abcdefghijklmnop" not in str(e.value)
+
+
+def test_fallback_models_differ_per_provider():
+    assert gw.fallback_model(gw.ProviderConfig("claude-cli", "c", "")) == "sonnet"
+    assert gw.fallback_model(gw.ProviderConfig("openrouter", "u", "k")) == gw.DEFAULT_MODEL

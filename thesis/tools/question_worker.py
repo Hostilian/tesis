@@ -28,6 +28,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import json
 import re
 import sys
 import traceback
@@ -111,10 +112,74 @@ DEFAULT_PROMPT = (
 
 SYSTEM = (
     "You help a non-technical bachelor student check a remote-sensing thesis. "
-    "Plain English, under 220 words. Never invent sources, numbers or commands. "
+    "Plain English, under 260 words. Never invent sources, numbers or commands; "
+    "use only numbers from the project context. "
     "Use exactly the section headers you are given, in that order, each on its own line "
     "starting with '## '. Do not add other headers."
 )
+
+
+CONTEXT_FILES = {
+    "alqueva_olive": "NDVI change, main case",
+    "neves_corvo_mine": "bare-soil index change, second case",
+}
+REPO_MAP = """Repository facts (do not invent other files):
+- pipeline/src/case_study.py: change method (index, delta, threshold, patches)
+- pipeline/run_case_study.py: CLI, `python pipeline/run_case_study.py run pipeline/case_studies/<case>.json`
+- pipeline/case_studies/<case>.json: pinned config per case
+- pipeline/src/robustness.py + pipeline/run_robustness.py: bootstrap, threshold curve, second date pair
+- pipeline/src/reference_cos.py: comparison with the official DGT land-use map (COS 2018v4 / 2025v1)
+- pipeline/src/provider_pc.py + pipeline/run_interop_check.py: second data provider (Planetary Computer)
+- pipeline/verify_independent.py: independent re-implementation check
+- pipeline/tests/: pytest suite (`python -m pytest pipeline/tests -q`)
+- docs/case-study/data/<case>/results.json, robustness.json, reference_cos.json: published outputs
+- docs/case-study/index.html: public case-study page
+- formal/: Lean 4 proofs of the threshold and flag rules"""
+
+
+def _short(v: object, n: int = 400) -> str:
+    s = json.dumps(v, separators=(",", ":"))
+    return s if len(s) <= n else s[:n] + "...(cut)"
+
+
+def build_context(repo: Path = REPO) -> str:
+    """Compact, factual project context for every prompt (about 3-4k chars).
+
+    Only reads public files from this repository. Missing files are skipped.
+    """
+    parts = [REPO_MAP]
+    for case, label in CONTEXT_FILES.items():
+        cfg_p = repo / "pipeline" / "case_studies" / f"{case}.json"
+        res_p = repo / "docs" / "case-study" / "data" / case / "results.json"
+        try:
+            cfg = json.loads(cfg_p.read_text(encoding="utf-8"))
+            cfg.pop("description", None)
+            cfg.pop("selection_rationale", None)
+            parts.append(f"\nCase {case} ({label}) config: {_short(cfg, 900)}")
+        except (OSError, ValueError):
+            continue
+        try:
+            r = json.loads(res_p.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        ch = r.get("change", {})
+        keep = {
+            k: ch.get(k)
+            for k in (
+                "increase_area_ha",
+                "decrease_area_ha",
+                "increase_pixels_in_patches",
+                "decrease_pixels_in_patches",
+                "min_patch_ha",
+            )
+            if k in ch
+        }
+        parts.append(
+            f"Published run {r.get('run_id')}: threshold {_short(r.get('threshold'))}; "
+            f"dates {_short(r.get('dates'))}; area_km2 {r.get('aoi', {}).get('area_km2')}; "
+            f"change {_short(keep)}"
+        )
+    return "\n".join(parts)
 
 
 def open_ai_items(text: str) -> list[tuple[str, str]]:
@@ -130,14 +195,24 @@ def open_ai_items(text: str) -> list[tuple[str, str]]:
     return items
 
 
-def prompt_for(item_id: str, question: str) -> tuple[str, list[str]]:
+def prompt_for(
+    item_id: str, question: str, context: str = ""
+) -> tuple[str, list[str]]:
     category = re.match(r"[A-Z]", item_id)
     brief, headers = CATEGORY_PROMPTS.get(
         category.group(0) if category else "", DEFAULT_PROMPT
     )
     header_list = "\n".join(headers)
+    ctx = (
+        f"PROJECT CONTEXT (facts from the repository; use them, do not ask for them):\n"
+        f"{context}\n\n"
+        if context
+        else ""
+    )
     return (
-        f"{brief}\n\nItem {item_id}: {question}\n\n"
+        f"{ctx}{brief}\n\nItem {item_id}: {question}\n\n"
+        "If something is not in the context, say exactly which file to open and "
+        "what to look for in it; do not ask the student questions.\n\n"
         f"Reply using exactly these headers, in this order, nothing else:\n{header_list}",
         headers,
     )
@@ -154,9 +229,10 @@ def run_item(
     model: str,
     transport: gw.Transport | None = None,
     sleep=None,
+    context: str = "",
 ) -> tuple[str, bool, list[str]]:
     """Returns (text_to_write, used_fallback_model, warnings). Never raises."""
-    text_prompt, headers = prompt_for(item_id, question)
+    text_prompt, headers = prompt_for(item_id, question, context)
     messages = [
         {"role": "system", "content": SYSTEM},
         {"role": "user", "content": text_prompt},
@@ -176,10 +252,11 @@ def run_item(
             warnings.append(f"gateway error with model {use_model}: {exc}")
             return None
 
+    fallback = gw.fallback_model(provider)
     reply = ask(model)
-    if reply is None and model != gw.DEFAULT_MODEL:
+    if reply is None and model != fallback:
         used_fallback = True
-        reply = ask(gw.DEFAULT_MODEL)
+        reply = ask(fallback)
     if reply is None:
         return (
             f"**FAILED — no reply from either model.**\n\nWarnings:\n"
@@ -202,7 +279,7 @@ def run_item(
             retry = gw.chat(
                 provider,
                 stricter,
-                model=gw.DEFAULT_MODEL if used_fallback else model,
+                model=fallback if used_fallback else model,
                 **kw,
             )
         except gw.GatewayError as exc:
@@ -224,12 +301,21 @@ def main(argv: list[str] | None = None) -> int:
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
     ap.add_argument(
-        "--provider", choices=["openrouter", "omniroute"], default="openrouter"
+        "--provider",
+        choices=["auto", "openrouter", "omniroute", "omniroute-local", "claude-cli"],
+        default="auto",
+        help="auto: OpenRouter key, OmniRoute key, local OmniRoute, then Claude CLI",
     )
     ap.add_argument(
         "--model",
-        default=CHEAP_MODEL,
-        help=f"default: {CHEAP_MODEL} (falls back to {gw.DEFAULT_MODEL} if rejected)",
+        default=None,
+        help=f"default: {CHEAP_MODEL} on OpenRouter/OmniRoute, 'haiku' on the "
+        "Claude CLI, 'auto/cheap' on local OmniRoute; one fallback if rejected",
+    )
+    ap.add_argument(
+        "--skip-done-today",
+        action="store_true",
+        help="skip items that already have a note dated today",
     )
     ap.add_argument("--max-items", type=int, default=2)
     ap.add_argument(
@@ -237,7 +323,11 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = ap.parse_args(argv)
 
-    items = open_ai_items(BACKLOG.read_text(encoding="utf-8"))[: args.max_items]
+    items = open_ai_items(BACKLOG.read_text(encoding="utf-8"))
+    if args.skip_done_today:
+        today = dt.date.today().isoformat()
+        items = [i for i in items if not (NOTES / f"{i[0]}-{today}.md").exists()]
+    items = items[: args.max_items]
     if args.dry_run:
         for iid, q in items:
             print(iid, q)
@@ -252,15 +342,23 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Not running: {exc}", file=sys.stderr)
         return 2
 
+    if args.model is None:
+        args.model = (
+            CHEAP_MODEL
+            if provider.name in ("openrouter", "omniroute")
+            else gw.default_model(provider)
+        )
+    args.provider = provider.name
     NOTES.mkdir(parents=True, exist_ok=True)
     stamp = dt.date.today().isoformat()
     log_lines = [
         f"\n## Run {dt.datetime.now().isoformat(timespec='seconds')} ({args.provider}, requested model {args.model})"
     ]
+    context = build_context()
     for iid, question in items:
         try:
             body, used_fallback, warnings = run_item(
-                provider, iid, question, args.model
+                provider, iid, question, args.model, context=context
             )
         except Exception:  # noqa: BLE001 - a worker must never crash the batch
             body = (

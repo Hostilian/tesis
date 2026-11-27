@@ -123,3 +123,22 @@ def test_run_item_never_raises_even_when_every_call_fails():
     )
     assert "FAILED" in text
     assert warnings
+
+
+def test_build_context_contains_published_numbers_and_no_secrets():
+    ctx = qw.build_context()
+    assert "alqueva_olive" in ctx and "increase_area_ha" in ctx
+    assert "run_case_study.py" in ctx
+    assert len(ctx) < 6000
+    assert "API_KEY" not in ctx
+
+
+def test_build_context_survives_missing_files(tmp_path):
+    ctx = qw.build_context(tmp_path)
+    assert ctx.startswith("Repository facts")
+
+
+def test_prompt_includes_context_and_forbids_questions_back():
+    text, _ = qw.prompt_for("B3", "Other summers?", "CTX-MARKER")
+    assert "CTX-MARKER" in text
+    assert "do not ask the student questions" in text
