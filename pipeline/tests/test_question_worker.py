@@ -142,3 +142,12 @@ def test_prompt_includes_context_and_forbids_questions_back():
     text, _ = qw.prompt_for("B3", "Other summers?", "CTX-MARKER")
     assert "CTX-MARKER" in text
     assert "do not ask the student questions" in text
+
+
+def test_failed_notes_are_retried_but_good_notes_are_skipped(tmp_path, monkeypatch):
+    monkeypatch.setattr(qw, "NOTES", tmp_path)
+    (tmp_path / "B1-2026-01-01.md").write_text("# ok\n## Checks\n", encoding="utf-8")
+    (tmp_path / "B2-2026-01-01.md").write_text("**FAILED — no reply**", encoding="utf-8")
+    assert qw._done_today("B1", "2026-01-01") is True
+    assert qw._done_today("B2", "2026-01-01") is False
+    assert qw._done_today("B3", "2026-01-01") is False

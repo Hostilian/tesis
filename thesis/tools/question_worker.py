@@ -296,6 +296,14 @@ def run_item(
     return reply, used_fallback, warnings
 
 
+def _done_today(item_id: str, today: str) -> bool:
+    """A note from today counts as done unless that attempt failed."""
+    note = NOTES / f"{item_id}-{today}.md"
+    if not note.exists():
+        return False
+    return "**FAILED" not in note.read_text(encoding="utf-8", errors="replace")
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
@@ -326,7 +334,7 @@ def main(argv: list[str] | None = None) -> int:
     items = open_ai_items(BACKLOG.read_text(encoding="utf-8"))
     if args.skip_done_today:
         today = dt.date.today().isoformat()
-        items = [i for i in items if not (NOTES / f"{i[0]}-{today}.md").exists()]
+        items = [i for i in items if not _done_today(i[0], today)]
     items = items[: args.max_items]
     if args.dry_run:
         for iid, q in items:

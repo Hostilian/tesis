@@ -116,18 +116,32 @@ def load_provider(name: str, env: Mapping[str, str] | None = None) -> ProviderCo
 Transport = Callable[[urllib.request.Request, float], tuple[int, bytes]]
 
 
-def _local_omniroute_up(base: str, timeout: float = 3.0) -> bool:
-    """True if a local OmniRoute answers at all (any HTTP status)."""
+def _local_omniroute_up(base: str, timeout: float = 20.0) -> bool:
+    """True only if a local OmniRoute actually answers a one-token chat.
+
+    Checking that the server is up is not enough: on 2026-11-27 the local
+    OmniRoute was running but every upstream login was broken, so each
+    request returned HTTP 503 "Maximum combo retry limit reached".
+    """
     if not base.startswith(("http://localhost", "http://127.0.0.1")):
         return False
+    body = json.dumps(
+        {
+            "model": os.environ.get("OMNIROUTE_MODEL", OMNIROUTE_LOCAL_MODEL),
+            "messages": [{"role": "user", "content": "ping"}],
+            "max_tokens": 1,
+        }
+    ).encode("utf-8")
+    req = urllib.request.Request(
+        base.rstrip("/") + "/chat/completions",
+        data=body,
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
     try:
-        urllib.request.urlopen(  # noqa: S310 - localhost only
-            base.rsplit("/v1", 1)[0] + "/", timeout=timeout
-        ).close()
-        return True
-    except urllib.error.HTTPError:
-        return True
-    except (urllib.error.URLError, OSError):
+        with urllib.request.urlopen(req, timeout=timeout) as r:  # noqa: S310
+            return r.status == 200
+    except (urllib.error.URLError, OSError, ValueError):
         return False
 
 
