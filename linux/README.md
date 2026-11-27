@@ -8,7 +8,7 @@ Every number below was measured on 27 November 2026 unless it says "estimate".
 
 | | Minimum | Comfortable | Why |
 |---|---|---|---|
-| Operating system | any 64-bit Linux with Python 3.10+, or Docker | Ubuntu 22.04/24.04, Python 3.12 | The published runs used Python 3.12.5 |
+| Operating system | any 64-bit Linux with Python 3.12+, or Docker (the pinned rasterio 1.5.0 needs 3.12) | Ubuntu 22.04/24.04, Python 3.12 | The published runs used Python 3.12.5 |
 | CPU | 2 cores | 8–16 cores | Model checks with many repetitions use every core |
 | RAM | 4 GB | 16–32 GB | Tests + soil checks peaked at 198 MB on GitHub's Ubuntu 24.04 machine (27 Nov). A full case-study rerun and large soil sets need more |
 | Free disk | 5 GB | 20–50 GB | Python environment 652 MB and case-study outputs 14 MB (both measured) |
@@ -31,7 +31,7 @@ The four servers it must reach (checked by `check_machine.sh`):
 
 ```bash
 bash linux/check_machine.sh      # 1. what this machine has; changes nothing
-bash linux/setup.sh              # 2. private Python environment in .venv-linux (about 5 min)
+bash linux/setup.sh              # 2. private Python environment in .venv-linux (about 5 min; versions locked by linux/requirements-linux.lock)
 bash linux/run_all.sh            # 3. tests + synthetic soil check (about 2 min)
 bash linux/run_all.sh --full     #    or: also redo both case studies from live satellite data
 ```

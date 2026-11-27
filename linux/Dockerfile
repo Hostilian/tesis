@@ -7,8 +7,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 RUN apt-get update && apt-get install -y --no-install-recommends git curl \
     && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
-COPY linux/requirements-linux.txt linux/requirements-linux.txt
+COPY linux/requirements-linux.txt linux/requirements-linux.lock linux/
 RUN python -m venv .venv-linux \
-    && .venv-linux/bin/pip install -q -r linux/requirements-linux.txt
+    && .venv-linux/bin/pip install -q -r linux/requirements-linux.txt -c linux/requirements-linux.lock
 COPY . .
 CMD ["bash", "linux/run_all.sh"]
