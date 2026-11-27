@@ -2,18 +2,22 @@ name: Linux run kit
 
 # Proves the project runs on a clean Linux machine exactly as the teacher's
 # machine would run it (linux/check_machine.sh -> setup.sh -> run_all.sh).
-# Default: tests + synthetic soil check. Manual "full" also re-downloads the
-# Sentinel-2 scenes and re-runs both case studies (about 10-15 minutes).
+# Default: tests + synthetic soil check. "full" (manual, and every Monday)
+# also re-downloads the Sentinel-2 scenes, re-runs both case studies and
+# fails if any published number changed (linux/compare_results.py).
 
 on:
   push:
     paths:
       - "linux/**"
+      - "pipeline/tests/test_compare_results.py"
       - "pipeline/src/case_study.py"
       - "pipeline/src/soil_link.py"
       - "pipeline/run_soil_link.py"
       - "pipeline/tests/test_soil_link.py"
       - ".github/workflows/linux-run-kit.yml"
+  schedule:
+    - cron: "17 5 * * 1"  # weekly full rerun, Monday 05:17 UTC (backlog G2)
   workflow_dispatch:
     inputs:
       full:
@@ -38,10 +42,10 @@ jobs:
       - name: Set up environment
         run: bash linux/setup.sh
       - name: Run (tests + soil check)
-        if: ${{ !inputs.full }}
+        if: ${{ github.event_name != 'schedule' && !inputs.full }}
         run: /usr/bin/time -v bash linux/run_all.sh 2> time.txt; s=$?; grep -E "Maximum resident|Elapsed" time.txt; exit $s
       - name: Run full chain (live satellite data)
-        if: ${{ inputs.full }}
+        if: ${{ github.event_name == 'schedule' || inputs.full }}
         run: /usr/bin/time -v bash linux/run_all.sh --full 2> time.txt; s=$?; grep -E "Maximum resident|Elapsed" time.txt; du -sh .venv-linux out; exit $s
       - uses: actions/upload-artifact@v4
         if: always()
