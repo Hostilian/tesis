@@ -42,7 +42,7 @@ import platform
 import re
 import subprocess
 import sys
-from typing import Any, Iterable, Mapping, Sequence
+from typing import Any, Callable, Iterable, Mapping, Sequence
 
 import numpy as np
 
@@ -68,11 +68,22 @@ SCL_LABELS: dict[int, str] = {
     11: "snow_or_ice",
 }
 DEFAULT_VALID_SCL: tuple[int, ...] = (4, 5, 6)
+# Cloud shadow, cloud medium/high probability, thin cirrus: classes that an
+# optional buffer grows outwards (sensitivity check only; off by default).
+CLOUD_BUFFER_SCL: tuple[int, ...] = (3, 8, 9, 10)
 
 INDEX_BANDS: dict[str, tuple[str, ...]] = {
     "ndvi": ("red", "nir"),
     "bsi": ("blue", "red", "nir", "swir16"),
 }
+# Sensitivity-check indices: computed only when a caller opts in
+# (``CaseStudyConfig.from_mapping(..., allow_sensitivity_index=True)``); a
+# published case config cannot select them.
+SENSITIVITY_INDEX_BANDS: dict[str, tuple[str, ...]] = {
+    "evi": ("blue", "red", "nir"),
+    "ndmi": ("nir", "swir16"),
+}
+ALL_INDEX_BANDS: dict[str, tuple[str, ...]] = {**INDEX_BANDS, **SENSITIVITY_INDEX_BANDS}
 
 DATA_STATUS = (
     "public_observation",
@@ -115,13 +126,16 @@ class CaseStudyConfig:
     extra: dict[str, Any] = field(default_factory=dict)
 
     @classmethod
-    def from_mapping(cls, raw: Mapping[str, Any]) -> "CaseStudyConfig":
+    def from_mapping(
+        cls, raw: Mapping[str, Any], allow_sensitivity_index: bool = False
+    ) -> "CaseStudyConfig":
         bbox = tuple(float(v) for v in raw["bbox"])
         validate_bbox(bbox)
         index = str(raw["index"]).lower()
-        if index not in INDEX_BANDS:
+        allowed = ALL_INDEX_BANDS if allow_sensitivity_index else INDEX_BANDS
+        if index not in allowed:
             raise ValueError(
-                f"Unsupported index {index!r}; choose one of {sorted(INDEX_BANDS)}"
+                f"Unsupported index {index!r}; choose one of {sorted(allowed)}"
             )
         thresholds = tuple(sorted(float(t) for t in raw["thresholds"]))
         primary_raw = raw["primary_threshold"]
@@ -219,6 +233,18 @@ def compute_index(index: str, bands: Mapping[str, np.ndarray]) -> np.ndarray:
         return normalized_difference(
             bands["swir16"] + bands["red"], bands["nir"] + bands["blue"]
         )
+    if index == "ndmi":
+        # Normalised Difference Moisture Index (Gao 1996 NDWI form): (NIR - SWIR1) / (NIR + SWIR1),
+        # here with B08 (10 m) as NIR and B11 (20 m, nearest to 10 m) as SWIR1.
+        return normalized_difference(bands["nir"], bands["swir16"])
+    if index == "evi":
+        # Enhanced Vegetation Index (Huete et al. 2002), MODIS coefficients:
+        # 2.5 (NIR - Red) / (NIR + 6 Red - 7.5 Blue + 1). Not clipped; NaN where the denominator ~0.
+        nir, red, blue = bands["nir"], bands["red"], bands["blue"]
+        den = nir + 6.0 * red - 7.5 * blue + 1.0
+        with np.errstate(divide="ignore", invalid="ignore"):
+            out = np.where(np.abs(den) > 1e-6, 2.5 * (nir - red) / den, np.nan)
+        return out.astype("float32")
     raise ValueError(f"Unsupported index {index!r}")
 
 
@@ -226,6 +252,30 @@ def scl_valid_mask(
     scl: np.ndarray, valid_classes: Iterable[int] = DEFAULT_VALID_SCL
 ) -> np.ndarray:
     return np.isin(scl, np.asarray(list(valid_classes), dtype=scl.dtype))
+
+
+def buffered_valid_mask(
+    scl: np.ndarray,
+    valid_classes: Iterable[int] = DEFAULT_VALID_SCL,
+    buffer_classes: Iterable[int] = CLOUD_BUFFER_SCL,
+    buffer_px: int = 0,
+) -> np.ndarray:
+    """SCL validity mask with an optional square buffer around cloud/shadow classes.
+
+    ``buffer_px`` pixels of 8-connected dilation (a (2n+1) x (2n+1) square) are
+    grown around every pixel in ``buffer_classes`` and removed from the valid
+    mask. ``buffer_px = 0`` returns exactly ``scl_valid_mask``.
+    """
+    valid = scl_valid_mask(scl, valid_classes)
+    if buffer_px <= 0:
+        return valid
+    from scipy import ndimage
+
+    cloud = np.isin(scl, np.asarray(list(buffer_classes), dtype=scl.dtype))
+    grown = ndimage.binary_dilation(
+        cloud, structure=np.ones((3, 3), dtype=bool), iterations=int(buffer_px)
+    )
+    return np.asarray(valid & ~np.asarray(grown, dtype=bool), dtype=bool)
 
 
 def scl_class_counts(scl: np.ndarray) -> dict[str, int]:
@@ -668,15 +718,25 @@ def load_observation(
     index: str,
     valid_scl: Sequence[int],
     rgb: bool = False,
+    scl_resampling: str = "nearest",
+    cloud_buffer_px: int = 0,
+    reader: Callable[[Mapping[str, Any], Grid, str], np.ndarray] | None = None,
 ) -> Observation:
-    needed = set(INDEX_BANDS[index]) | ({"red", "green", "blue"} if rgb else set())
+    """Read bands + SCL on ``grid`` and build the index and validity mask.
+
+    The defaults reproduce the published case-study runs. ``scl_resampling``,
+    ``cloud_buffer_px`` and ``reader`` exist for sensitivity checks (a
+    different SCL resampling, a cloud/shadow buffer, a caching reader).
+    """
+    read = reader or read_band
+    needed = set(ALL_INDEX_BANDS[index]) | ({"red", "green", "blue"} if rgb else set())
     bands = {}
     for key in sorted(needed):
         a = item_meta["assets"][key]
-        dn = read_band(a, grid)
+        dn = read(a, grid, "nearest")
         bands[key] = to_reflectance(dn, a["scale"], a["offset"], a.get("nodata", 0))
-    scl = read_band(item_meta["assets"]["scl"], grid)
-    valid = scl_valid_mask(scl, valid_scl)
+    scl = read(item_meta["assets"]["scl"], grid, scl_resampling)
+    valid = buffered_valid_mask(scl, valid_scl, CLOUD_BUFFER_SCL, cloud_buffer_px)
     for arr in bands.values():
         valid &= np.isfinite(arr)
     idx = compute_index(index, bands)
