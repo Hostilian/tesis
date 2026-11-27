@@ -10,7 +10,7 @@ Every number below was measured on 27 November 2026 unless it says "estimate".
 |---|---|---|---|
 | Operating system | any 64-bit Linux with Python 3.10+, or Docker | Ubuntu 22.04/24.04, Python 3.12 | The published runs used Python 3.12.5 |
 | CPU | 2 cores | 8–16 cores | Model checks with many repetitions use every core |
-| RAM | 8 GB | 16–32 GB | Estimate; GitHub's Linux job will record the real peak (`Maximum resident`) |
+| RAM | 4 GB | 16–32 GB | Tests + soil checks peaked at 198 MB on GitHub's Ubuntu 24.04 machine (27 Nov). A full case-study rerun and large soil sets need more |
 | Free disk | 5 GB | 20–50 GB | Python environment about 1.5 GB (estimate); case-study outputs 14 MB (measured) |
 | GPU | not needed | optional, only for later foundation-model tests | Nothing in the current pipeline uses a GPU |
 | Network | outbound HTTPS to 4 public servers | same | Satellite images are read from public cloud storage |
@@ -62,4 +62,8 @@ python pipeline/run_soil_link.py evaluate --samples /private/samples.csv --featu
 
 - `check_machine.sh`: run in Git Bash on the Windows laptop. It correctly reported 15 GB RAM, 15 GB free disk, an RTX 3060 GPU, all 4 servers reachable, and an old `python3` (3.9) on that path.
 - All three scripts pass `bash -n` (syntax check).
-- `.github/workflows/linux-run-kit.yml` runs the same three steps on a clean Ubuntu 24.04 machine at GitHub after each push. It has not run yet; check its result before relying on Linux.
+- `.github/workflows/linux-run-kit.yml` ran the same three steps on a clean Ubuntu 24.04 machine at GitHub on 27 Nov 2026 (run 46006335625):
+  - the machine check had 9 OK, 1 warning (RAM under 16 GB) and 0 failures;
+  - the whole job took 65 s, and the tests plus soil checks inside it took 17 s;
+  - peak memory was 198 MB.
+- The `--full` rerun on Linux has not been done yet. Start it from the Actions tab: "Linux run kit" → Run workflow → full.
