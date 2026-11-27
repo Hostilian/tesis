@@ -1,0 +1,18 @@
+# Minimal, pinned dependencies for the Portugal case study, the soil-lab link
+# and their tests. Same versions as the Windows run that produced the
+# published results (see docs/case-study/data/*/manifest.json).
+# rasterio and pyproj wheels bundle GDAL/PROJ, so no system GDAL is needed.
+numpy==2.2.2
+scipy==1.15.3
+rasterio==1.5.0
+pyproj==3.7.2
+shapely==2.1.2
+affine==2.4.0
+pystac-client==0.8.6
+planetary-computer==1.0.0
+matplotlib==3.11.0
+pillow==12.2.0
+requests==2.32.4
+scikit-learn==1.9.0
+pandas==3.0.3
+pytest==9.1.1

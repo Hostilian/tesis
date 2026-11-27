@@ -1,138 +1,189 @@
-# Chapter 2: Theoretical Framework & Literature Review
+# Chapter 2: Literature Review
 
-## 2.1 Remote Sensing and Satellite Technology Overview
-Remote sensing represents the foundational science and technological methodology of acquiring information regarding the physical, chemical, and biological attributes of the Earth's surface without direct in-situ physical contact [R201]. This objective collection of spatial information is achieved by measuring, recording, and analyzing electromagnetic radiation (EMR) that is reflected, emitted, or backscattered from terrestrial features and atmospheric components [R211]. The primary operational platforms for civilian remote sensing are spaceborne satellites orbiting the Earth in various configurations, including Sun-synchronous polar orbits and geostationary orbits. These spaceborne platforms house specialized payloads categorized into two principal sensor modalities: passive and active systems [R212].
+<!-- AI-assisted rewording, 26 Nov 2026 (Claude). CZU Rector's Directive 7/2026, Art. 8(4) allows AI help with style, structure, rewording and source search in the literature review only. Declare this in the thesis declaration and the AI-use note. -->
 
-### 2.1.1 Passive Sensors (Optical and Thermal)
-Passive remote sensing systems rely on external, natural sources of energy to illuminate the Earth's surface, utilizing solar radiation as the primary source of illumination. Sensors mounted on prominent Earth observation platforms, such as the Multi-Spectral Instrument (MSI) aboard the European Space Agency's Sentinel-2 constellation or the Operational Land Imager (OLI) aboard the NASA/USGS Landsat-8 and Landsat-9 satellites, capture and digitize this reflected solar energy across discrete, pre-defined bands of the electromagnetic spectrum [R203, R213]. 
+This chapter covers the background the thesis builds on. It explains how satellites measure the surface and how their data have served as evidence of economic activity. It then covers open data access, change detection and evaluation, and earlier studies of the Alentejo region. It ends with the gap this thesis addresses.
 
-The optical spectrum utilized in civil remote sensing spans several vital spectral regions. The visible spectrum, comprised of the Blue (450–515 nm), Green (525–600 nm), and Red (630–690 nm) channels, records the primary wavelengths of light, which are critical for natural color rendering, visual interpretation, and elementary land-cover classification [R214]. Beyond the visible range, the Near-Infrared (NIR) band (700–1100 nm) is highly sensitive to the internal cellular structure of healthy vegetation. Specifically, the spongy mesophyll layer of leaves exhibits a pronounced reflectance of NIR energy, creating a sharp spectral rise known as the "infrared shoulder," which serves as the physical basis for vegetative biomass estimation [R215]. Further along the spectrum, the Shortwave-Infrared (SWIR) bands (1400–3000 nm) respond dynamically to leaf water content, soil moisture dynamics, and the mineralogical composition of exposed rocks, making them essential for separating bare soil from artificial, man-made structures [R216]. Finally, the Thermal Infrared (TIR) region (8000–14000 nm) measures the longwave thermal energy emitted directly from the Earth's surface as a function of its temperature, facilitating urban heat island mapping, thermal plume detection from industrial installations, and surface temperature estimation [R217].
+## 2.1 How satellites measure the surface
 
-The physical interaction of solar radiation with surface materials is mathematically characterized by spectral reflectance curves, which represent the percentage of incident energy reflected by a target as a function of wavelength [R218]. Healthy vegetation absorbs red light via chlorophyll pigments and reflects NIR via cellular structures, whereas bare soil exhibits a monotonically increasing reflectance curve across the visible and infrared bands. Liquid water absorbs almost all NIR and SWIR radiation, showing high contrast against dry land. However, optical systems are heavily constrained by atmospheric scattering (Rayleigh and Mie scattering) and cloud cover, which completely obscure terrestrial features in the visible and infrared bands [R219].
+Remote sensing means collecting information about the Earth's surface without touching it, by measuring the electromagnetic radiation that the surface reflects or emits [R201]. Textbooks describe two kinds of sensor: passive sensors, which record reflected sunlight or emitted heat, and active sensors, which send out their own signal and record the echo [R212, R214].
 
-### 2.1.2 Active Sensors (Radar/SAR)
-Active remote sensing systems, most notably Synthetic Aperture Radar (SAR) systems aboard the Sentinel-1 constellation, mitigate the limitations of passive sensors by providing their own illumination source. These systems emit microwave pulses toward the Earth's surface and measure the intensity and phase of the backscattered echo [R220]. SAR systems operate at centimeter-scale wavelengths, such as the C-band (~5.6 cm), which can penetrate clouds, smoke, dust, and precipitation, enabling continuous day-and-night observation [R221].
+### 2.1.1 Optical sensors
 
-The intensity of the SAR backscatter is governed by two principal physical properties: the dielectric constant of the target material, which is highly sensitive to moisture content, and the surface roughness relative to the radar wavelength. Surface scatter can be categorized into three distinct scattering mechanisms. Specular reflection occurs when smooth surfaces, such as calm water bodies, asphalt, or concrete pavements, reflect the radar pulse away from the sensor, appearing dark in SAR imagery [R222]. Volume scattering arises when complex, multi-layered structures, such as dense forest canopies or crops, scatter the signal in multiple directions, returning a moderate response [R223]. Double-bounce scattering occurs when orthogonal surfaces, such as buildings, shipping containers, and metallic vessels, act as corner reflectors, returning a highly intense signal back to the sensor [R224]. By analyzing polarization configurations, such as VV (Vertical-Vertical) and VH (Vertical-Horizontal) backscatter, SAR pipelines can distinguish structural changes in land cover (e.g., deforestation or road construction) even in regions with persistent cloud cover [R225].
+Optical sensors record sunlight reflected in a set of wavelength bands. This thesis uses the MultiSpectral Instrument on Sentinel-2. It records 13 bands from visible light to short-wave infrared at 10, 20 or 60 m resolution, and with two satellites it revisits each place about every five days [R262]. Landsat 8, in orbit since 2013, records similar bands at 30 m [R238].
 
----
+Different surfaces reflect light differently, and this is what makes the bands useful [R201]:
 
-## 2.2 Economic Intelligence from Space: Historical Context and Proxies
-The use of Earth Observation (EO) data to analyze human economic activity, known as "Space-Based Economic Intelligence," has grown rapidly over the last two decades. Historically, remote sensing was restricted to military and national intelligence agencies. However, the democratization of open satellite data and cloud computing has allowed academic researchers and financial institutions to extract micro- and macroeconomic signals directly from orbital data [R226].
+- **Vegetation** absorbs red light for photosynthesis and reflects strongly in the near infrared (NIR).
+- **Bare soil** reflects more as the wavelength increases, with no sharp red–NIR contrast.
+- **Water** absorbs almost all NIR and short-wave infrared (SWIR) light.
 
-### 2.2.1 Night-time Lights (NTL) as a Macroeconomic Proxy
-The foundational milestone in satellite economics was established by Henderson, Storeygard, and Weil (2012), who demonstrated that changes in nocturnal light emissions (captured by DMSP-OLS and later Suomi-NPP VIIRS) correlate strongly with regional and national Gross Domestic Product (GDP) growth [R227]. NTL radiance serves as a powerful proxy for economic activity because light consumption is highly correlated with electricity use, urbanization, and industrial manufacturing [R228].
+Spectral indices turn these differences into a single number per pixel. The Normalised Difference Vegetation Index (NDVI) compares red and NIR reflectance. It was introduced in the 1970s [R219] and became the standard measure of green vegetation [R215]. Related indices reduce the influence of soil brightness [R217] or highlight open water [R216]. The bare soil index used in this thesis follows the same logic, combining SWIR, red, NIR and blue.
 
-Subsequent work by Chen and Nordhaus (2011) showed that in countries with weak statistical reporting agencies, NTL data can refine GDP estimates by eliminating administrative biases and reporting errors [R229]. The transition from DMSP-OLS to the Visible Infrared Imaging Radiometer Suite (VIIRS) Day/Night Band (DNB) in 2013 provided higher spatial resolution (500m vs 2.7km) and eliminated sensor saturation, permitting the quantitative assessment of local industrial parks and urban corridors [R230, R231].
+The main limits of optical data are clouds, haze and illumination. Clouds hide the surface completely, and the atmosphere changes the signal even on clear days [R201]. Data providers therefore deliver "surface reflectance" products with an atmospheric correction and a per-pixel cloud and scene classification. Sentinel-2 Level-2A is such a product [R262].
 
-### 2.2.2 Microeconomic and Supply Chain Proxies
-Beyond aggregate GDP estimation, researchers have developed spatial indicators to track specific economic sectors. Industrial tracking involves monitoring oil stockpiles by measuring the shadows cast inside floating-roof oil storage tanks [R232], and tracking shipping containers and vessel movements in deep-sea ports [R233]. Agricultural monitoring uses NDVI time series to estimate crop yields, map agricultural boundaries, and forecast supply disruptions [R234]. In extractive economies, remote sensing tracks mineral and fossil fuel extraction. Satellite remote sensing is particularly valuable for identifying informal or illegal mining, where operations are unmapped and hidden from official registries [R235].
+### 2.1.2 Radar sensors
 
----
+Synthetic Aperture Radar (SAR), for example on Sentinel-1, sends microwave pulses and measures the echo. Radar works through clouds and at night [R220, R221]. Smooth surfaces such as calm water look dark, vegetation scatters the signal in many directions, and buildings return strong echoes [R220]. Sentinel-1 time series have been used to detect deforestation under persistent cloud [R225]. This thesis does not use radar, but it is the obvious second source where clouds block optical images.
 
-## 2.3 Open Satellite Data Ecosystems
-The modern geospatial data pipeline relies on open-access platforms that distribute processed satellite data. The transition from manual file transfers to programmatic REST APIs has transformed the geospatial engineering domain:
+## 2.2 Satellite data as evidence of economic activity
 
-*   **Google Earth Engine (GEE)**: Launched in 2010, GEE revolutionized geospatial analytics by co-locating a petabyte-scale archive of public satellite data (Sentinel, Landsat, MODIS) with a planetary-scale parallel computing engine [R207]. GEE uses a map-reduce architecture to execute complex spatial queries on Google's cloud clusters, bypassing local RAM and storage constraints [R236].
-*   **Copernicus Data Space Ecosystem (CDSE)**: Deployed in 2023 by the European Commission and ESA, CDSE replaced the legacy Copernicus Open Access Hub (SciHub) [R202]. CDSE standardizes data distribution through OData, Sentinel Hub, and openEO APIs, providing advanced cloud-masking and processing-on-the-fly capabilities [R237].
-*   **NASA Earthdata & USGS EarthExplorer**: Provide access to American civilian satellite archives, distributing Landsat datasets and VIIRS low-light radiance products [R205, R238].
+Economists have used satellite data for about two decades. Donaldson and Storeygard review these uses and explain why they help: images cover places and periods that official statistics miss, at a fine spatial scale [R226].
 
----
+**Night-time lights.** Light at night is related to population, economic activity and electricity use [R228]. Henderson, Storeygard and Weil used changes in night lights to improve estimates of GDP growth, especially for countries with weak statistics [R227]. Chen and Nordhaus reached a similar conclusion: lights add the most value where official data are poor, and little where statistics are good [R229]. Newer VIIRS night-light data are sharper than the older DMSP data and do not saturate in bright city centres [R230].
 
-## 2.4 Anomaly Detection in Geospatial Data
-Geospatial anomaly detection involves isolating pixels or regions whose spectral or radar signatures deviate from historical baselines or spatial neighborhoods. These anomalies are classified into three types [R239]:
-1.  **Point Anomalies**: Single pixels with extreme values (e.g., thermal anomalies indicating gas flaring or volcanic activity) [R240].
-2.  **Contextual Anomalies**: Values that appear normal in isolation but are anomalous within their spatial or temporal context (e.g., low NDVI in a protected rainforest area) [R241].
-3.  **Collective/Temporal Anomalies**: Sequences of data points indicating a structural shift in land cover (e.g., a sharp increase in bare soil index marking a new mining pit) [R242].
+**Sector-level signals.** Optical images are used to detect and classify ships, which supports monitoring of shipping activity [R233]. Mining is directly visible from space: Maus and co-authors mapped mining areas worldwide from satellite images, which makes mining footprints comparable across countries [R235].
 
-Detecting these anomalies is complicated by seasonal vegetation changes (phenology), soil moisture shifts, and sensor degradation over time [R243]. Traditional thresholding methods (e.g., flagging pixels where an index drops more than two standard deviations below the mean) often suffer from high false-alarm rates, highlighting the need for multivariate statistical models [R244].
+These studies treat the satellite signal as a proxy. A proxy can show that something changed. It cannot say why without other evidence. The thesis keeps this distinction in every result.
 
----
+## 2.3 Open satellite data and how to access it
 
-## 2.5 Machine Learning for Earth Observation
-Machine learning algorithms have become central to analyzing Earth Observation datasets, falling into three primary approaches:
+Three developments made satellite analysis possible without commercial licences or a data centre.
 
-*   **Supervised Learning**: Random Forests, Support Vector Machines (SVM), and Convolutional Networks (CNNs) achieve high accuracy in land-cover classification when trained on large labeled datasets [R245]. However, acquiring high-quality ground-truth labels for anomalies (such as illegal mines or unmapped industrial expansions) is difficult, which limits the utility of supervised methods [R246].
-*   **Unsupervised Learning**: Unsupervised models, such as Isolation Forests (Liu et al., 2008), isolate outliers by randomly partitioning the feature space [R206]. Because anomalies require fewer splits to isolate, they exhibit shorter path lengths in the decision trees. This approach does not require labeled training data, making it highly effective for identifying unexpected land-use changes [R247].
-*   **Geospatial Foundation Models**: The recent introduction of models like IBM-NASA's **Prithvi-100M** leverages Vision Transformer (ViT) architectures pre-trained on massive Landsat and Sentinel-2 datasets [R204]. These foundation models can be fine-tuned with small training samples to perform complex segmentation and classification tasks, indicating a paradigm shift in spatial analytics [R248].
+1. **Free data.** The EU Space Programme makes Copernicus data, including Sentinel-1 and Sentinel-2, free and open to everyone [R256]. Landsat data are also free [R238].
+2. **Cloud platforms.** Google Earth Engine stores a multi-petabyte archive next to large-scale processing, so users run analyses without downloading data [R207]. The Copernicus Data Space Ecosystem has offered Sentinel data and processing services since 2023 [R202]. NASA Earthdata provides the US archives [R205].
+3. **Standard catalogues.** The SpatioTemporal Asset Catalog (STAC) specification describes satellite scenes in a common JSON format, so one program can search several archives the same way [R250]. Combined with cloud-optimised image files, a script can read just the small window it needs from a scene.
 
----
+The case study in this thesis uses the third route: a public STAC catalogue and windowed reads of public files, with no account and no platform lock-in.
 
-## 2.6 Programmatic API Designs and Decoupled System Architectures
-Modern data engineering separates high-intensity spatial processing from the client presentation layer. This decoupled architecture is essential for web-based GIS applications:
-*   **OGC Standards**: Web Map Services (WMS) and Web Feature Services (WFS) define standard interfaces for requesting geographic rasters and vector boundaries [R249].
-*   **SpatioTemporal Asset Catalog (STAC)**: The STAC specification standardizes geospatial metadata search, allowing pipelines to query diverse data archives ( Landsat, Sentinel, Planet) using a unified query format [R250].
-*   **RESTful JSON Exchanges**: By converting heavy spatial data into compressed JSON or GeoJSON vectors, systems can run heavy computations in the cloud (e.g., Earth Engine) and serve the results to lightweight web clients, reducing network bandwidth [R251].
+## 2.4 Detecting change and anomalies
 
----
+An anomaly is an observation that does not fit the expected pattern. A widely cited survey distinguishes three types [R239]:
 
-## 2.7 Information Engineering Principles (KII Department Alignment)
-This study applies core informatics principles from the Department of Informatics (KII) at the Czech University of Life Sciences Prague (CZU PEF):
-1.  **ETL Pipeline Orchestration**: Structuring automated Extract, Transform, Load (ETL) workflows to query APIs, clean raw pixels, run machine learning models, and serialize output datasets [R252].
-2.  **Decision Support Systems (DSS)**: Designing user-centric dashboards that compile complex multi-spectral time-series into clear visual indicators for economic analysts [R253].
-3.  **Data Quality & Standardization**: Enforcing data integrity standards, including metadata documentation (ISO 19115) and vector geometry validation (RFC 7946) [R254].
+- **point anomalies:** single unusual values;
+- **contextual anomalies:** values that are unusual only in their place or season;
+- **collective anomalies:** groups of values that together are unusual.
 
----
+General-purpose detectors include the local outlier factor [R244], one-class support vector machines [R246] and Isolation Forest, which isolates unusual points with random splits [R206, R247].
 
-## 2.8 Legal, Ethical, and Security Frameworks
-Satellite remote sensing is subject to international laws, security regulations, and ethical guidelines:
-*   **Export Control (ITAR & EAR)**: US export laws regulate spacecraft components and high-resolution imaging technology under ITAR and EAR. However, open-access datasets from civilian platforms (Landsat, Sentinel) are classified as public domain, enabling global academic cooperation [R255].
-*   **EU Space Programme (Regulation 2021/696)**: Governs the Copernicus program, establishing a "free, full and open" data policy to foster economic growth and scientific research [R256].
-*   **GDPR and Privacy**: High-resolution imagery (under 1 meter) can raise privacy concerns. Using medium-resolution open datasets (10m–30m) in this thesis monitors macro-level activity without tracking individual citizens [R257].
-*   **Dual-Use Ethics**: Spatial anomaly detection models can identify industrial or resource changes that have military implications. Researchers must document these dual-use risks and adhere to institutional research ethics [R258].
+For satellite images, the more specific field is change detection. Zhu reviews how Landsat time series are used to find change, and what affects the results: image frequency, preprocessing and the choice of algorithm [R240]. Two well-known approaches:
 
----
+- LandTrendr fits trends to yearly images to find disturbance and recovery [R242].
+- BFAST separates a time series into trend, seasonal and remaining parts, so that seasonal greening is not mistaken for change [R243].
 
-## 2.9 Gap Analysis and Research Positioning
-While existing literature covers remote sensing formulas or economic correlations in isolation, there is a lack of integrated pipelines that ingest, process, detect anomalies, and present results in a unified web-based system. Most academic models remain locked in offline Python environments. This thesis addresses this gap by building a fully automated, reproducible, open-API end-to-end architecture, delivering results through a futuristic web interface.
+The common lesson is that much apparent change is caused by season, weather, soil moisture or sensor differences. A method has to control for these before calling something a change.
 
----
+The simplest method compares an index between two dates and flags pixels whose difference passes a threshold. It is easy to explain and to check. Its weak points are the choice of threshold and the dates. The thesis therefore fixes the threshold with a short-interval control pair and compares images from the same season.
 
-## 2.10 Comprehensive Literature Citation Mapping (40+ Academic Sources)
-To verify the academic foundation of this thesis, the following peer-reviewed publications and official documentations are mapped:
+## 2.5 Machine learning for Earth observation
 
-1.  **HENDERSON, J. V., STOREYGARD, A. & WEIL, D. N.** (2012). Measuring Economic Growth from Outer Space. *American Economic Review*. [R227]
-2.  **LIU, F. T., TING, K. M. & ZHOU, Z.-H.** (2008). Isolation Forest. *IEEE International Conference on Data Mining*. [R206]
-3.  **ELVIDGE, C. D., et al.** (2013). Why VIIRS data are superior to DMSP for mapping nighttime lights. *APAN*. [R230]
-4.  **TUCKER, C. J.** (1979). Red and photographic infrared linear combinations for monitoring vegetation. *RSE*. [R215]
-5.  **MCFEETERS, S. K.** (1996). The use of the Normalized Difference Water Index (NDWI) in lake water mapping. *IJRS*. [R216]
-6.  **RIKIMARU, A., et al.** (2002). Development of forest canopy density model. *ASR*. [R218]
-7.  **GORELICK, N., et al.** (2017). Google Earth Engine: Planetary-scale geospatial analysis for everyone. *RSE*. [R207]
-8.  **CHANDER, G., et al.** (2009). Summary of Landsat calibration. *RSE*. [R208]
-9.  **CHEN, X. & NORDHAUS, W. D.** (2011). Using luminosity data as a proxy for GDP. *PNAS*. [R229]
-10. **BONTEMPS, S., et al.** (2021). Global land cover mapping from Sentinel-3. *Remote Sensing*. [R213]
-11. **LILLESAND, T., et al.** (2015). Remote Sensing and Image Interpretation. *Wiley*. [R211]
-12. **JENSEN, J. R.** (2015). Introductory Digital Image Processing: A Remote Sensing Perspective. *Pearson*. [R212]
-13. **CAMPBELL, J. B. & WYNNE, R. H.** (2011). Introduction to Remote Sensing. *Guilford Press*. [R214]
-14. **ROUSE, J. W., et al.** (1974). Monitoring vegetation systems in the Great Plains. *NASA GSFC*. [R219]
-15. **HUETE, A. R.** (1988). A Soil-Adjusted Vegetation Index (SAVI). *RSE*. [R217]
-16. **ZOLA, A.** (2019). Spatial and Temporal Mining footprint analysis in South America. *Geoforum*. [R235]
-17. **SCHOPFER, J., et al.** (2008). Scientific spatial API database performance. *Computers & Geosciences*. [R236]
-18. **SOUSA, D. & SMALL, C.** (2018). Global night light calibration and resolution comparison. *Sensors*. [R231]
-19. **BELDWARD, A. & SKØIEN, J.** (2015). The Copernicus programme: Europe's Earth observation. *IJRS*. [R237]
-20. **ROY, D. P., et al.** (2014). Landsat-8: Science and product vision. *RSE*. [R238]
-21. **CHANDOLA, V., et al.** (2009). Anomaly detection: A survey. *ACM Computing Surveys*. [R239]
-22. **VARUN, C., et al.** (2012). Spatial outlier detection algorithms and techniques. *Data Mining and Knowledge Discovery*. [R241]
-23. **VERBESSALT, J., et al.** (2010). Detecting trend and seasonal changes in satellite image time series. *RSE*. [R243]
-24. **KENNEDY, R. E., et al.** (2010). Detecting land cover change with Landsat time series. *RSE*. [R242]
-25. **BREUNIG, M. M., et al.** (2000). LOF: Identifying density-based local outliers. *ACM SIGMOD*. [R244]
-26. **SCHOLKOPF, B., et al.** (2001). Estimating the support of a high-dimensional distribution. *Neural Computation*. [R246]
-27. **ZHU, Z.** (2017). Change detection using Landsat time series: A review. *Geospatial Information Science*. [R240]
-28. **IBM & NASA** (2023). Prithvi-100M Geospatial Foundation Model. *Hugging Face Architecture*. [R204]
-29. **GERRARD, J.** (2020). Information architectures for national remote sensing platforms. *GIScience*. [R251]
-30. **OGC** (2022). OpenGIS Web Map Service Implementation Specification. *Open Geospatial Consortium*. [R249]
-31. **STAC Spec Group** (2023). SpatioTemporal Asset Catalog API specification version 1.0.0. *SpatioTemporal Asset Catalog*. [R250]
-32. **KOPP, G. & LEAN, J. L.** (2011). Total solar irradiance values. *Geophysical Research Letters*. [R210]
-33. **WHEELER, D.** (2018). Spatial databases and system integration strategies. *Information Systems Journal*. [R252]
-34. **DAVIS, C.** (2021). Decision Support Systems in Agriculture: A review of spatial frontends. *Computers in Agriculture*. [R253]
-35. **ISO** (2014). ISO 19115-1:2014 Geographic Information -- Metadata. *International Organization for Standardization*. [R254]
-36. **US CONGRESS** (1976). Arms Export Control Act (ITAR Regulations). *US Federal Register*. [R255]
-37. **EUROPEAN PARLIAMENT** (2021). Regulation (EU) 2021/696 of the European Space Programme. *Official Journal of the EU*. [R256]
-38. **EU COMMISSION** (2016). General Data Protection Regulation (GDPR) Guidelines on Spatial Data. *Official Journal of the EU*. [R257]
-39. **CZU PEF** (2025). Bachelor Thesis Format Guidelines. *Czech University of Life Sciences Prague*. [R258]
-40. **BOUVET, A., et al.** (2018). Use of Sentinel-1 radar backscatter for deforestation mapping. *RSE*. [R225]
-41. **WOODHOUSE, I. H.** (2006). Introduction to Microwave Remote Sensing. *CRC Press*. [R220]
-42. **MOREIRA, A., et al.** (2013). A tutorial on synthetic aperture radar. *IEEE Geoscience and Remote Sensing Magazine*. [R221]
-43. **ELVIDGE, C. D., et al.** (1997). Mapping city lights with nighttime data. *PE&RS*. [R228]
-44. **DEVEZEAUX, J.** (2015). Economic impact analysis using satellite proxies. *Journal of Economic Literature*. [R232]
-45. **WORLD BANK** (2024). World Development Indicators: Spatial economic proxies. *World Bank Publications*. [R234]
+Supervised classifiers such as random forests, support vector machines and neural networks are widely used to map land cover. Their quality depends on the quality and amount of training data [R245]. Unsupervised detectors need no labels, but they still need an interpretable input and an independent check [R247].
+
+Foundation models pre-trained on large satellite archives, such as Prithvi, can be adapted to new tasks with fewer labels [R204, R248]. They require more computing power and are harder to explain.
+
+This thesis has no independent field labels. It therefore uses a transparent index difference as its baseline and leaves trained models for future work.
+
+## 2.6 Evaluating a change map without field data
+
+Olofsson and co-authors set out good practice for checking land-change maps [R263]:
+
+- sample the map with a defined design;
+- compare it with reference data of higher quality than the map;
+- report the error matrix and the uncertainty of the mapped area.
+
+Where no field data exist, an independent map from a national agency can serve as the reference. Agreement with that map is then agreement with another map, not ground truth.
+
+Two further issues matter for pixel data:
+
+- **Neighbouring pixels are not independent**, so counting pixels overstates the evidence. Evaluating whole fields or polygons reduces this problem.
+- **Mixed pixels.** At 10 m, a pixel in a hedgerow orchard mixes tree canopy, bare soil between rows and irrigation lines. Small features are therefore hard to resolve [R201].
+
+## 2.7 Data engineering and web delivery
+
+The pipeline follows the extract–transform–load (ETL) pattern described in the data-warehousing literature [R252]:
+
+1. extract data from a source;
+2. transform it into a clean, consistent form;
+3. load it into a store that analysts use.
+
+For geographic data, standards make each step reusable:
+
+- The OGC Web Map Service defines how map images are requested [R249].
+- GeoJSON is the standard JSON format for geographic features [R251]. Serving pre-computed results as GeoJSON lets a light web page show them without processing raster data itself.
+- ISO 19115 defines what metadata should describe a dataset [R254].
+
+Dashboards that turn such data into clear indicators are a form of decision support system. A survey of agricultural decision support shows the same needs found here: clear indicators, honest uncertainty and data the user can trust [R253].
+
+## 2.8 Legal and ethical points
+
+- **Licensing.** Copernicus data are free and open under the EU Space Programme [R256]. The Portuguese land-use map used as a reference is published under an open licence.
+- **Privacy.** Data protection law applies when data can identify a person [R257]. At 10 m resolution, Sentinel-2 cannot show individuals. The thesis also avoids any private farm boundaries and uses public bounding boxes only.
+- **Over-interpretation.** A change flag can affect how a farm or mine is seen. Results therefore always state what was measured and what is only interpretation.
+
+## 2.9 The study region: irrigation and orchard expansion in Alentejo
+
+The main case study lies in the area served by the Alqueva irrigation scheme in Alentejo, southern Portugal. Over the past 30 years, water from the Alqueva irrigation network let olive groves in Alentejo expand and intensify fast, mainly on the most productive soils [R265]. In one region of southern Portugal, irrigated olive groves went from almost none in 1990 to about 6 % of the area in 2017 [R264]. They replaced mainly open rainfed annual crops (63 % of the expansion) and traditional rainfed olive groves (21 %). Public irrigation water and large farms were the main drivers [R264].
+
+Mapping these orchards from free satellite data works, but with limits:
+
+- Around the Alqueva reservoir, a classifier using Sentinel-1 and Sentinel-2 images reached 91 % overall accuracy. It identified almond groves with an F1 score of 0.90 and three olive-growing systems with F1 scores of at least 0.78. Its agreement with the official map COS 2018 was lower (F1 score 0.60) [R266].
+- Researchers at Portugal's Directorate-General for Territory (DGT) tested 2018 Sentinel-2 images over about 1.2 million ha of southern Portugal. Olive groves and orchards had the lowest producer's accuracy of all classes, 46 % and 35 %. The authors explain that a 10 m pixel mixes the trees with the soil around them [R269].
+- A Sentinel-2 study of olive planting systems reached about 80 % accuracy. The most frequent errors were intensive or super-intensive groves labelled as traditional ones, and the authors name the 10 m pixel size as a challenge [R267].
+
+The reference map in this thesis is COS, the land-use map of mainland Portugal made by DGT. Its 2018v4 and 2025v1 editions share one specification [R268]:
+
+- polygons drawn by visual interpretation of very high resolution orthophotos, helped by administrative databases;
+- a smallest mapped unit of 0.5 ha and 102 classes;
+- a specified thematic accuracy of at least 85 %;
+- separate classes for low-density, high-density and hedgerow olive groves and orchards.
+
+DGT states that only these two editions can be compared with each other [R268].
+
+## 2.10 Gap and position of this thesis
+
+The literature offers the building blocks: free imagery, standard catalogues, well-studied indices, change-detection methods and good-practice evaluation. Studies usually report a method and a result. They rarely publish a complete, rerunnable path from catalogue entry to web map that records exactly which scenes, settings and code produced each number.
+
+This thesis builds such a path for two public study areas in Portugal. It uses a deliberately simple and transparent change method, checks it against an official land-use map, and states what 10 m data can and cannot show.
+
+## References cited in this chapter
+
+<!-- Generated from thesis/latex/references.bib by thesis/tools/make_ch2_reflist.py. Do not edit by hand. -->
+
+1. **Bouvet et al.** (2018). Use of the SAR Shadowing Effect for Deforestation Detection with Sentinel-1 Time Series. *Remote Sensing*, 10, 1250. https://doi.org/10.3390/rs10081250 [R225]
+2. **Breunig et al.** (2000). LOF: identifying density-based local outliers. *Proceedings of the 2000 ACM SIGMOD International Conference on Management of Data*, 93–104. https://doi.org/10.1145/335191.335388 [R244]
+3. **Butler et al.** (2016). The GeoJSON Format. *RFC 7946, Internet Engineering Task Force*. https://doi.org/10.17487/RFC7946 [R251]
+4. **Campbell & Wynne** (2011). Introduction to Remote Sensing. *Guilford Press*. [R214]
+5. **Chandola et al.** (2009). Anomaly detection: A survey. *ACM Computing Surveys*, 41, 1–58. https://doi.org/10.1145/1541880.1541882 [R239]
+6. **Chen & Nordhaus** (2011). Using luminosity data as a proxy for economic statistics. *Proceedings of the National Academy of Sciences*, 108, 8589–8594. https://doi.org/10.1073/pnas.1017031108 [R229]
+7. **Direção-Geral do Território** (2026). Especificações técnicas da Série 2 da Carta de Uso e Ocupação do Solo (COS) de Portugal Continental. https://geo2.dgterritorio.gov.pt/cos/ET/COS-Serie2-EspecificacoesTecnicas.pdf [R268]
+8. **Donaldson & Storeygard** (2016). The View from Above: Applications of Satellite Data in Economics. *Journal of Economic Perspectives*, 30, 171–198. https://doi.org/10.1257/jep.30.4.171 [R226]
+9. **Drusch et al.** (2012). Sentinel-2: ESA's Optical High-Resolution Mission for GMES Operational Services. *Remote Sensing of Environment*, 120, 25–36. https://doi.org/10.1016/j.rse.2011.11.026 [R262]
+10. **Elvidge et al.** (1997). Relation between satellite observed visible-near infrared emissions, population, economic activity and electric power consumption. *International Journal of Remote Sensing*, 18, 1373–1379. https://doi.org/10.1080/014311697218485 [R228]
+11. **Elvidge et al.** (2013). Why VIIRS data are superior to DMSP for mapping nighttime lights. *Proceedings of the Asia-Pacific Advanced Network*, 35, 62–69. https://doi.org/10.7125/APAN.35.7 [R230]
+12. **European Parliament** (2021). Regulation (EU) 2021/696 of the European Space Programme. *Official Journal of the European Union*. [R256]
+13. **European Parliament and Council of the European Union** (2016). Regulation (EU) 2016/679 on the protection of natural persons with regard to the processing of personal data and on the free movement of such data (General Data Protection Regulation). *Official Journal of the European Union, L 119, 4 May 2016, pp. 1–88*. https://eur-lex.europa.eu/eli/reg/2016/679/oj [R257]
+14. **European Space Agency** (2023). Copernicus Data Space Ecosystem Portal. *https://dataspace.copernicus.eu/*. [R202]
+15. **Gorelick et al.** (2017). Google Earth Engine: Planetary-scale geospatial analysis for everyone. *Remote Sensing of Environment*, 202, 18–27. https://doi.org/10.1016/j.rse.2017.06.031 [R207]
+16. **Henderson et al.** (2012). Measuring Economic Growth from Outer Space. *American Economic Review*, 102, 994–1028. https://doi.org/10.1257/aer.102.2.994 [R227]
+17. **Hernandez et al.** (2020). Exploring Sentinel-2 for Land Cover and Crop Mapping in Portugal. *The International Archives of the Photogrammetry, Remote Sensing and Spatial Information Sciences*, XLIII-B3-2020, 83–89. https://doi.org/10.5194/isprs-archives-XLIII-B3-2020-83-2020 [R269]
+18. **Huete** (1988). A Soil-Adjusted Vegetation Index (SAVI). *Remote Sensing of Environment*, 25, 295–309. https://doi.org/10.1016/0034-4257(88)90106-X [R217]
+19. **IBM & NASA** (2023). Prithvi-100M Geospatial Foundation Model. *Hugging Face Architecture*. [R204]
+20. **ISO** (2014). ISO 19115-1:2014 Geographic Information – Metadata. *International Organization for Standardization*. https://www.iso.org/standard/53798.html [R254]
+21. **Jakubik et al.** (2023). Foundation Models for Generalist Geospatial Artificial Intelligence. *arXiv preprint arXiv:2310.18660*. https://arxiv.org/abs/2310.18660 [R248]
+22. **Jensen** (2015). Introductory Digital Image Processing: A Remote Sensing Perspective. *Pearson*. [R212]
+23. **Kanjir et al.** (2018). Vessel detection and classification from spaceborne optical images: A literature survey. *Remote Sensing of Environment*, 207, 1–26. https://doi.org/10.1016/j.rse.2017.12.033 [R233]
+24. **Kennedy et al.** (2010). Detecting trends in forest disturbance and recovery using yearly Landsat time series: 1. LandTrendr – Temporal segmentation algorithms. *Remote Sensing of Environment*, 114, 2897–2910. https://doi.org/10.1016/j.rse.2010.07.008 [R242]
+25. **Lillesand et al.** (2015). Remote Sensing and Image Interpretation. *John Wiley & Sons*. [R201]
+26. **Liu et al.** (2008). Isolation Forest. *2008 Eighth IEEE International Conference on Data Mining*, 413–422. https://doi.org/10.1109/ICDM.2008.17 [R206]
+27. **Liu et al.** (2012). Isolation-based anomaly detection. *ACM Transactions on Knowledge Discovery from Data*, 6, 3. https://doi.org/10.1145/2133360.2133363 [R247]
+28. **Martínez-Ruedas et al.** (2025). Assessment of CNN-based methods for discrimination of olive planting systems with Sentinel-2 images. *Computers and Electronics in Agriculture*, 234, 110311. https://doi.org/10.1016/j.compag.2025.110311 [R267]
+29. **Maus et al.** (2020). A global-scale data set of mining areas. *Scientific Data*, 7, 289. https://doi.org/10.1038/s41597-020-00624-w [R235]
+30. **Maxwell et al.** (2018). Implementation of machine-learning classification in remote sensing: an applied review. *International Journal of Remote Sensing*, 39, 2784–2817. https://doi.org/10.1080/01431161.2018.1433343 [R245]
+31. **McFeeters** (1996). The use of the Normalized Difference Water Index (NDWI) in lake water mapping. *International Journal of Remote Sensing*, 17, 1425–1432. https://doi.org/10.1080/01431169608948714 [R216]
+32. **Moreira & others** (2013). A tutorial on synthetic aperture radar. *IEEE Geoscience and Remote Sensing Magazine*, 1, 6–43. https://doi.org/10.1109/MGRS.2013.2248301 [R221]
+33. **Morgado et al.** (2022). Drivers of irrigated olive grove expansion in Mediterranean landscapes and associated biodiversity impacts. *Landscape and Urban Planning*, 225, 104429. https://doi.org/10.1016/j.landurbplan.2022.104429 [R264]
+34. **Muñoz-Rojas et al.** (2024). Pedoclimatic and Landscape Conditions of Olive Groves in Portugal and Alentejo. *The Olive Landscapes of the Mediterranean*, 36, 291–301. https://doi.org/10.1007/978-3-031-57956-1_28 [R265]
+35. **NASA Earthdata** (2024). NASA Earthdata Search Portal. *https://earthdata.nasa.gov/*. [R205]
+36. **Olofsson et al.** (2014). Good practices for estimating area and assessing accuracy of land change. *Remote Sensing of Environment*, 148, 42–57. https://doi.org/10.1016/j.rse.2014.02.015 [R263]
+37. **Open Geospatial Consortium** (2006). OpenGIS Web Map Server Implementation Specification, version 1.3.0. *OGC document 06-042*. https://www.ogc.org/standard/wms/ [R249]
+38. **Quintela et al.** (2025). Refining European Crop Mapping Classification Through the Integration of Permanent Crops: A Case Study in Rapidly Transitioning Irrigated Landscapes Induced by Dam Construction. *Remote Sensing*, 17, 3979. https://doi.org/10.3390/rs17243979 [R266]
+39. **Rouse et al.** (1974). Monitoring vegetation systems in the Great Plains with ERTS. [R219]
+40. **Roy et al.** (2014). Landsat-8: Science and product vision for terrestrial global change research. *Remote Sensing of Environment*, 145, 154–172. https://doi.org/10.1016/j.rse.2014.02.001 [R238]
+41. **Scholkopf et al.** (2001). Estimating the support of a high-dimensional distribution. *Neural Computation*, 13, 1443–1471. https://doi.org/10.1162/089976601750264965 [R246]
+42. **STAC Spec Group** (2023). SpatioTemporal Asset Catalog API specification version 1.0.0. *STAC Catalog GitHub*. https://stacspec.org [R250]
+43. **Tucker** (1979). Red and photographic infrared linear combinations for monitoring vegetation. *Remote Sensing of Environment*, 8, 127–150. https://doi.org/10.1016/0034-4257(79)90013-0 [R215]
+44. **Vassiliadis** (2009). A Survey of Extract–Transform–Load Technology. *International Journal of Data Warehousing and Mining*, 5, 1–27. https://doi.org/10.4018/jdwm.2009070101 [R252]
+45. **Verbesselt et al.** (2010). Detecting trend and seasonal changes in satellite image time series. *Remote Sensing of Environment*, 114, 106–115. https://doi.org/10.1016/j.rse.2009.08.014 [R243]
+46. **Woodhouse** (2006). Introduction to Microwave Remote Sensing. *CRC Press*. [R220]
+47. **Zhai et al.** (2020). Decision support systems for agriculture 4.0: Survey and challenges. *Computers and Electronics in Agriculture*, 170, 105256. https://doi.org/10.1016/j.compag.2020.105256 [R253]
+48. **Zhu** (2017). Change detection using Landsat time series: A review of frequencies, preprocessing, algorithms, and applications. *ISPRS Journal of Photogrammetry and Remote Sensing*, 130, 370–384. https://doi.org/10.1016/j.isprsjprs.2017.06.013 [R240]

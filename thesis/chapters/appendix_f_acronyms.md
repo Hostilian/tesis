@@ -21,7 +21,7 @@ This appendix lists the acronyms and abbreviations utilized throughout this thes
 | **GIS** | Geographic Information System |
 | **GDPR** | General Data Protection Regulation |
 | **ITAR** | International Traffic in Arms Regulations |
-| **KII** | Department of Informatics (Katedra informačního inženýrství) |
+| **KII** | Department of Information Engineering (Katedra informačního inženýrství) |
 | **ML** | Machine Learning |
 | **MSI** | Multi-Spectral Instrument (Sentinel-2) |
 | **NDVI** | Normalized Difference Vegetation Index |

@@ -1,0 +1,1017 @@
+{
+  "schema": "tesis.case_study.robustness.v1",
+  "data_status": "observation_derived_result",
+  "case_id": "alqueva_olive",
+  "main_run_id": "alqueva_olive-20261126T184505Z",
+  "reference": {
+    "flag": "NDVI increase in patches >= min_patch_ha",
+    "reference_positive": "COS new permanent crop: not 2.2.x in COS2018v4, 2.2.x in COS2025v1",
+    "domain": "pixels that are not permanent crop in COS2018v4, have a valid difference and are covered by both COS layers",
+    "reading": "agreement of a change flag with a mapped land-use change",
+    "source": "Carta de Uso e Ocupação do Solo (COS) 2018v4 / 2025v1, Direção-Geral do Território (DGT)",
+    "license": "CC-BY (dados.gov.pt: 'Carta de Uso e Ocupação do Solo (COS) - Série 2 - (2018v4 - 2025v1)')",
+    "collections": [
+      "cos2018v4",
+      "cos2025v1"
+    ]
+  },
+  "threshold_curve": {
+    "data_status": "observation_derived_result",
+    "thresholds": [
+      0.05,
+      0.075,
+      0.1,
+      0.125,
+      0.15,
+      0.175,
+      0.2,
+      0.225,
+      0.25,
+      0.275,
+      0.3,
+      0.325,
+      0.35,
+      0.375,
+      0.4,
+      0.425,
+      0.45,
+      0.475,
+      0.5
+    ],
+    "config_grid": [
+      0.05,
+      0.1,
+      0.15,
+      0.2,
+      0.25,
+      0.3,
+      0.4
+    ],
+    "fine_grid": {
+      "start": 0.05,
+      "stop": 0.5,
+      "step": 0.025
+    },
+    "min_patch_pixels": 100,
+    "water_excluded": true,
+    "note": "Flags are increase pixels in 8-connected patches >= min_patch_ha. control_flagged_share is the share of valid control-pair pixels with |delta| > threshold before the patch filter (same definition as sensitivity.csv).",
+    "main_pair": [
+      {
+        "threshold": 0.05,
+        "flagged_pixels": 546330,
+        "flagged_area_ha": 5463.3,
+        "tp": 196168,
+        "fp": 112304,
+        "fn": 43202,
+        "tn": 297856,
+        "precision": 0.6359345418708992,
+        "recall": 0.8195179011572044,
+        "f1": 0.7161480864920908,
+        "control_flagged_share": 0.1444311625199717
+      },
+      {
+        "threshold": 0.075,
+        "flagged_pixels": 468851,
+        "flagged_area_ha": 4688.51,
+        "tp": 184683,
+        "fp": 75182,
+        "fn": 54687,
+        "tn": 334978,
+        "precision": 0.710688241971793,
+        "recall": 0.7715377866900615,
+        "f1": 0.7398639919076186,
+        "control_flagged_share": 0.07232789165074789
+      },
+      {
+        "threshold": 0.1,
+        "flagged_pixels": 418272,
+        "flagged_area_ha": 4182.72,
+        "tp": 176014,
+        "fp": 55931,
+        "fn": 63356,
+        "tn": 354229,
+        "precision": 0.7588609368600314,
+        "recall": 0.7353218866190416,
+        "f1": 0.7469059970508046,
+        "control_flagged_share": 0.04843995984171071
+      },
+      {
+        "threshold": 0.125,
+        "flagged_pixels": 381772,
+        "flagged_area_ha": 3817.72,
+        "tp": 168992,
+        "fp": 45372,
+        "fn": 70378,
+        "tn": 364788,
+        "precision": 0.7883413259689127,
+        "recall": 0.7059865480218908,
+        "f1": 0.7448945858145962,
+        "control_flagged_share": 0.034898256552090536
+      },
+      {
+        "threshold": 0.15,
+        "flagged_pixels": 356006,
+        "flagged_area_ha": 3560.06,
+        "tp": 162044,
+        "fp": 39694,
+        "fn": 77326,
+        "tn": 370466,
+        "precision": 0.8032398457405149,
+        "recall": 0.6769603542632744,
+        "f1": 0.7347134942009667,
+        "control_flagged_share": 0.0264818135295933
+      },
+      {
+        "threshold": 0.175,
+        "flagged_pixels": 332252,
+        "flagged_area_ha": 3322.52,
+        "tp": 154519,
+        "fp": 35966,
+        "fn": 84851,
+        "tn": 374194,
+        "precision": 0.8111872325904926,
+        "recall": 0.6455236662906797,
+        "f1": 0.7189354549790046,
+        "control_flagged_share": 0.02124814932008266
+      },
+      {
+        "threshold": 0.2,
+        "flagged_pixels": 313106,
+        "flagged_area_ha": 3131.06,
+        "tp": 146523,
+        "fp": 33901,
+        "fn": 92847,
+        "tn": 376259,
+        "precision": 0.8121037112579258,
+        "recall": 0.6121193131971425,
+        "f1": 0.6980709586130341,
+        "control_flagged_share": 0.017865165027911575
+      },
+      {
+        "threshold": 0.225,
+        "flagged_pixels": 293862,
+        "flagged_area_ha": 2938.62,
+        "tp": 137656,
+        "fp": 31900,
+        "fn": 101714,
+        "tn": 378260,
+        "precision": 0.8118615678595862,
+        "recall": 0.5750762418013954,
+        "f1": 0.6732562859783923,
+        "control_flagged_share": 0.01545390976885545
+      },
+      {
+        "threshold": 0.25,
+        "flagged_pixels": 273199,
+        "flagged_area_ha": 2731.99,
+        "tp": 127599,
+        "fp": 29855,
+        "fn": 111771,
+        "tn": 380305,
+        "precision": 0.8103890660129308,
+        "recall": 0.5330617871913773,
+        "f1": 0.6431012237163075,
+        "control_flagged_share": 0.013026052104208416
+      },
+      {
+        "threshold": 0.275,
+        "flagged_pixels": 251037,
+        "flagged_area_ha": 2510.37,
+        "tp": 117240,
+        "fp": 27624,
+        "fn": 122130,
+        "tn": 382536,
+        "precision": 0.8093108018555335,
+        "recall": 0.48978568742950246,
+        "f1": 0.6102531270007339,
+        "control_flagged_share": 0.01046439858274053
+      },
+      {
+        "threshold": 0.3,
+        "flagged_pixels": 226019,
+        "flagged_area_ha": 2260.19,
+        "tp": 105497,
+        "fp": 25300,
+        "fn": 133873,
+        "tn": 384860,
+        "precision": 0.8065704870906825,
+        "recall": 0.440727743660442,
+        "f1": 0.5699967852347724,
+        "control_flagged_share": 0.008581490466312743
+      },
+      {
+        "threshold": 0.325,
+        "flagged_pixels": 199541,
+        "flagged_area_ha": 1995.41,
+        "tp": 93368,
+        "fp": 22697,
+        "fn": 146002,
+        "tn": 387463,
+        "precision": 0.8044457846896136,
+        "recall": 0.39005723357145844,
+        "f1": 0.5253731343283582,
+        "control_flagged_share": 0.007609761433197779
+      },
+      {
+        "threshold": 0.35,
+        "flagged_pixels": 170764,
+        "flagged_area_ha": 1707.64,
+        "tp": 80650,
+        "fp": 20203,
+        "fn": 158720,
+        "tn": 389957,
+        "precision": 0.7996787403448583,
+        "recall": 0.3369260976730584,
+        "f1": 0.474100810350858,
+        "control_flagged_share": 0.006804056455991906
+      },
+      {
+        "threshold": 0.375,
+        "flagged_pixels": 139821,
+        "flagged_area_ha": 1398.21,
+        "tp": 67048,
+        "fp": 18450,
+        "fn": 172322,
+        "tn": 391710,
+        "precision": 0.784205478490725,
+        "recall": 0.2801019342440573,
+        "f1": 0.4127707253407538,
+        "control_flagged_share": 0.00603155628996785
+      },
+      {
+        "threshold": 0.4,
+        "flagged_pixels": 109124,
+        "flagged_area_ha": 1091.24,
+        "tp": 53131,
+        "fp": 16235,
+        "fn": 186239,
+        "tn": 393925,
+        "precision": 0.7659516189487645,
+        "recall": 0.22196181643480803,
+        "f1": 0.34418402777777773,
+        "control_flagged_share": 0.005321559297933098
+      },
+      {
+        "threshold": 0.425,
+        "flagged_pixels": 83488,
+        "flagged_area_ha": 834.88,
+        "tp": 39802,
+        "fp": 14302,
+        "fn": 199568,
+        "tn": 395858,
+        "precision": 0.7356572526985066,
+        "recall": 0.16627814680202196,
+        "f1": 0.27124719736671726,
+        "control_flagged_share": 0.004624258263114924
+      },
+      {
+        "threshold": 0.45,
+        "flagged_pixels": 64269,
+        "flagged_area_ha": 642.69,
+        "tp": 31005,
+        "fp": 12168,
+        "fn": 208365,
+        "tn": 397992,
+        "precision": 0.7181571815718157,
+        "recall": 0.12952750971299662,
+        "f1": 0.21947101857062462,
+        "control_flagged_share": 0.003944536245981241
+      },
+      {
+        "threshold": 0.475,
+        "flagged_pixels": 50471,
+        "flagged_area_ha": 504.71,
+        "tp": 24841,
+        "fp": 10433,
+        "fn": 214529,
+        "tn": 399727,
+        "precision": 0.7042297442875772,
+        "recall": 0.10377658018966454,
+        "f1": 0.180895996271537,
+        "control_flagged_share": 0.003392750413106916
+      },
+      {
+        "threshold": 0.5,
+        "flagged_pixels": 38751,
+        "flagged_area_ha": 387.51,
+        "tp": 19178,
+        "fp": 8101,
+        "fn": 220192,
+        "tn": 402059,
+        "precision": 0.7030316360570402,
+        "recall": 0.08011864477587,
+        "f1": 0.14384452970009262,
+        "control_flagged_share": 0.0031153925785293783
+      }
+    ],
+    "second_pair": [
+      {
+        "threshold": 0.05,
+        "flagged_pixels": 545154,
+        "flagged_area_ha": 5451.54,
+        "tp": 194769,
+        "fp": 114844,
+        "fn": 44621,
+        "tn": 295315,
+        "precision": 0.6290724226695907,
+        "recall": 0.8136054137599733,
+        "f1": 0.7095371063546101,
+        "control_flagged_share": 0.21519031858483156
+      },
+      {
+        "threshold": 0.075,
+        "flagged_pixels": 465506,
+        "flagged_area_ha": 4655.06,
+        "tp": 183051,
+        "fp": 75004,
+        "fn": 56339,
+        "tn": 335155,
+        "precision": 0.709348782236345,
+        "recall": 0.7646560006683655,
+        "f1": 0.7359647800259326,
+        "control_flagged_share": 0.10607804214713594
+      },
+      {
+        "threshold": 0.1,
+        "flagged_pixels": 413548,
+        "flagged_area_ha": 4135.48,
+        "tp": 173555,
+        "fp": 55763,
+        "fn": 65835,
+        "tn": 354396,
+        "precision": 0.7568311253368685,
+        "recall": 0.7249885124691925,
+        "f1": 0.7405676881981959,
+        "control_flagged_share": 0.06677073849315979
+      },
+      {
+        "threshold": 0.125,
+        "flagged_pixels": 378851,
+        "flagged_area_ha": 3788.51,
+        "tp": 165263,
+        "fp": 45739,
+        "fn": 74127,
+        "tn": 364420,
+        "precision": 0.7832295428479351,
+        "recall": 0.690350474121726,
+        "f1": 0.7338629460558802,
+        "control_flagged_share": 0.0509724007768265
+      },
+      {
+        "threshold": 0.15,
+        "flagged_pixels": 351203,
+        "flagged_area_ha": 3512.03,
+        "tp": 157084,
+        "fp": 39845,
+        "fn": 82306,
+        "tn": 370314,
+        "precision": 0.7976681951363181,
+        "recall": 0.6561844688583482,
+        "f1": 0.7200419876283177,
+        "control_flagged_share": 0.04150531625982267
+      },
+      {
+        "threshold": 0.175,
+        "flagged_pixels": 327341,
+        "flagged_area_ha": 3273.41,
+        "tp": 149958,
+        "fp": 36087,
+        "fn": 89432,
+        "tn": 374072,
+        "precision": 0.8060307990002419,
+        "recall": 0.6264171435732486,
+        "f1": 0.7049631553586329,
+        "control_flagged_share": 0.03360712429614752
+      },
+      {
+        "threshold": 0.2,
+        "flagged_pixels": 307028,
+        "flagged_area_ha": 3070.28,
+        "tp": 142906,
+        "fp": 33802,
+        "fn": 96484,
+        "tn": 376357,
+        "precision": 0.8087126785431333,
+        "recall": 0.5969589372989682,
+        "f1": 0.6868862623708837,
+        "control_flagged_share": 0.02747418067858999
+      },
+      {
+        "threshold": 0.225,
+        "flagged_pixels": 287818,
+        "flagged_area_ha": 2878.18,
+        "tp": 134483,
+        "fp": 32041,
+        "fn": 104907,
+        "tn": 378118,
+        "precision": 0.8075892964377507,
+        "recall": 0.5617736747566732,
+        "f1": 0.6626181900599635,
+        "control_flagged_share": 0.022706935560131765
+      },
+      {
+        "threshold": 0.25,
+        "flagged_pixels": 267505,
+        "flagged_area_ha": 2675.05,
+        "tp": 125295,
+        "fp": 30119,
+        "fn": 114095,
+        "tn": 380040,
+        "precision": 0.8062015005083197,
+        "recall": 0.5233927900079368,
+        "f1": 0.6347200129684603,
+        "control_flagged_share": 0.018994736492479868
+      },
+      {
+        "threshold": 0.275,
+        "flagged_pixels": 246703,
+        "flagged_area_ha": 2467.03,
+        "tp": 115302,
+        "fp": 28561,
+        "fn": 124088,
+        "tn": 381598,
+        "precision": 0.8014708437888824,
+        "recall": 0.48164919169555953,
+        "f1": 0.6017017479315231,
+        "control_flagged_share": 0.015503315579904108
+      },
+      {
+        "threshold": 0.3,
+        "flagged_pixels": 223860,
+        "flagged_area_ha": 2238.6,
+        "tp": 104150,
+        "fp": 26614,
+        "fn": 135240,
+        "tn": 383545,
+        "precision": 0.7964730353920039,
+        "recall": 0.43506412130832534,
+        "f1": 0.5627387519789061,
+        "control_flagged_share": 0.012449543399514679
+      },
+      {
+        "threshold": 0.325,
+        "flagged_pixels": 198407,
+        "flagged_area_ha": 1984.07,
+        "tp": 92293,
+        "fp": 25048,
+        "fn": 147097,
+        "tn": 385111,
+        "precision": 0.7865366751604299,
+        "recall": 0.3855340657504491,
+        "f1": 0.5174375089353042,
+        "control_flagged_share": 0.010233946692821388
+      },
+      {
+        "threshold": 0.35,
+        "flagged_pixels": 172699,
+        "flagged_area_ha": 1726.99,
+        "tp": 80348,
+        "fp": 23800,
+        "fn": 159042,
+        "tn": 386359,
+        "precision": 0.771479049045589,
+        "recall": 0.33563640920673377,
+        "f1": 0.467767757860848,
+        "control_flagged_share": 0.008604486681020504
+      },
+      {
+        "threshold": 0.375,
+        "flagged_pixels": 146357,
+        "flagged_area_ha": 1463.57,
+        "tp": 68115,
+        "fp": 22477,
+        "fn": 171275,
+        "tn": 387682,
+        "precision": 0.7518875838926175,
+        "recall": 0.28453569489118175,
+        "f1": 0.41284070040184007,
+        "control_flagged_share": 0.0074273288187782565
+      },
+      {
+        "threshold": 0.4,
+        "flagged_pixels": 118124,
+        "flagged_area_ha": 1181.24,
+        "tp": 54324,
+        "fp": 20729,
+        "fn": 185066,
+        "tn": 389430,
+        "precision": 0.7238085086538846,
+        "recall": 0.2269267722127073,
+        "f1": 0.3455252621301794,
+        "control_flagged_share": 0.006434804015427118
+      },
+      {
+        "threshold": 0.425,
+        "flagged_pixels": 92980,
+        "flagged_area_ha": 929.8,
+        "tp": 41653,
+        "fp": 19358,
+        "fn": 197737,
+        "tn": 390801,
+        "precision": 0.6827129534018456,
+        "recall": 0.1739964075358202,
+        "f1": 0.2773159876298681,
+        "control_flagged_share": 0.005519453876903479
+      },
+      {
+        "threshold": 0.45,
+        "flagged_pixels": 72540,
+        "flagged_area_ha": 725.4,
+        "tp": 31290,
+        "fp": 18197,
+        "fn": 208100,
+        "tn": 391962,
+        "precision": 0.6322872673631459,
+        "recall": 0.13070721416934708,
+        "f1": 0.2166319921627544,
+        "control_flagged_share": 0.004524975284569365
+      },
+      {
+        "threshold": 0.475,
+        "flagged_pixels": 57155,
+        "flagged_area_ha": 571.55,
+        "tp": 23047,
+        "fp": 16521,
+        "fn": 216343,
+        "tn": 393638,
+        "precision": 0.5824656287909422,
+        "recall": 0.09627386273445006,
+        "f1": 0.16523634382236754,
+        "control_flagged_share": 0.0032491510786868973
+      },
+      {
+        "threshold": 0.5,
+        "flagged_pixels": 45373,
+        "flagged_area_ha": 453.73,
+        "tp": 17430,
+        "fp": 14481,
+        "fn": 221960,
+        "tn": 395678,
+        "precision": 0.5462066372097396,
+        "recall": 0.0728100588997034,
+        "f1": 0.1284919701733499,
+        "control_flagged_share": 0.0020251022808532586
+      }
+    ]
+  },
+  "bootstrap": {
+    "data_status": "observation_derived_result",
+    "threshold": 0.3,
+    "date_pair": "main_pair",
+    "method": "Percentile bootstrap. Pixel level: square blocks of the 10 m grid (only blocks with at least one domain pixel) are drawn with replacement, as many as there are, and their tp/fp/fn counts summed. Polygon level: COS2025v1 polygons drawn with replacement.",
+    "caveat": "Blocks and polygons are still spatially correlated with their neighbours, so the intervals are likely too narrow rather than too wide. They describe sampling variation over this AOI, not error in COS itself.",
+    "results": {
+      "pixel, 500 m blocks": {
+        "units": 386,
+        "iterations": 1000,
+        "seed": 20261126,
+        "ci_level": 0.95,
+        "ci_method": "percentile",
+        "totals": {
+          "tp": 105497,
+          "fp": 25300,
+          "fn": 133873
+        },
+        "precision": {
+          "estimate": 0.8065704870906825,
+          "ci_low": 0.7268596715595416,
+          "ci_high": 0.8785728063000965,
+          "bootstrap_sd": 0.038399100507776694,
+          "undefined_iterations": 0
+        },
+        "recall": {
+          "estimate": 0.440727743660442,
+          "ci_low": 0.38052803662051216,
+          "ci_high": 0.4981557940872263,
+          "bootstrap_sd": 0.030001795896391795,
+          "undefined_iterations": 0
+        },
+        "f1": {
+          "estimate": 0.5699967852347724,
+          "ci_low": 0.5111960714409997,
+          "ci_high": 0.622284899770997,
+          "bootstrap_sd": 0.029395263052694038,
+          "undefined_iterations": 0
+        },
+        "block_px": 50,
+        "block_m": 500.0
+      },
+      "pixel, 1000 m blocks": {
+        "units": 117,
+        "iterations": 1000,
+        "seed": 20261126,
+        "ci_level": 0.95,
+        "ci_method": "percentile",
+        "totals": {
+          "tp": 105497,
+          "fp": 25300,
+          "fn": 133873
+        },
+        "precision": {
+          "estimate": 0.8065704870906825,
+          "ci_low": 0.6765793584378198,
+          "ci_high": 0.919641037436554,
+          "bootstrap_sd": 0.06299249010677745,
+          "undefined_iterations": 0
+        },
+        "recall": {
+          "estimate": 0.440727743660442,
+          "ci_low": 0.3525657373565014,
+          "ci_high": 0.5269834080937222,
+          "bootstrap_sd": 0.046018225992732975,
+          "undefined_iterations": 0
+        },
+        "f1": {
+          "estimate": 0.5699967852347724,
+          "ci_low": 0.47571837537901196,
+          "ci_high": 0.6552218905316508,
+          "bootstrap_sd": 0.04660874380164721,
+          "undefined_iterations": 0
+        },
+        "block_px": 100,
+        "block_m": 1000.0
+      },
+      "polygon, COS units": {
+        "units": 147,
+        "iterations": 1000,
+        "seed": 20261126,
+        "ci_level": 0.95,
+        "ci_method": "percentile",
+        "totals": {
+          "tp": 6,
+          "fp": 1,
+          "fn": 18
+        },
+        "precision": {
+          "estimate": 0.8571428571428571,
+          "ci_low": 0.5,
+          "ci_high": 1.0,
+          "bootstrap_sd": 0.14838442978700653,
+          "undefined_iterations": 0
+        },
+        "recall": {
+          "estimate": 0.25,
+          "ci_low": 0.08325000000000007,
+          "ci_high": 0.4375,
+          "bootstrap_sd": 0.08970567954249058,
+          "undefined_iterations": 0
+        },
+        "f1": {
+          "estimate": 0.3870967741935483,
+          "ci_low": 0.15384615384615385,
+          "ci_high": 0.5945945945945945,
+          "bootstrap_sd": 0.11148868400123062,
+          "undefined_iterations": 2
+        },
+        "unit": "COS2025v1 polygon clipped to the AOI",
+        "min_unit_pixels": 50,
+        "majority_share": 0.5
+      }
+    }
+  },
+  "date_pairs": {
+    "note": "Second pair chosen by the same rule (relative orbit 037, scene cloud < 1 %, peak summer, processing baseline 05.xx) with dates a few days from the main pair. Its control pair is a 20-day pair ending on the second pair's after date where available.",
+    "main_pair": {
+      "data_status": "observation_derived_result",
+      "items": {
+        "before": "S2A_29SNC_20180818_1_L2A",
+        "after": "S2C_29SNC_20250821_0_L2A",
+        "control_before": "S2C_29SNC_20250801_0_L2A",
+        "control_after": "S2C_29SNC_20250821_0_L2A"
+      },
+      "dates": {
+        "before": "2018-08-18T11:30:42.942000Z",
+        "after": "2025-08-21T11:31:03.493000Z",
+        "control_before": "2025-08-01T11:31:04.794000Z",
+        "control_after": "2025-08-21T11:31:03.493000Z"
+      },
+      "joint_valid_pixels": 1024579,
+      "joint_valid_fraction": 0.9984515206087112,
+      "delta_centering": {
+        "method": "none",
+        "raw_median_delta": 0.06926247477531433
+      },
+      "abs_delta_control_p99": 0.28028517961502075,
+      "threshold": {
+        "value": 0.3,
+        "rule": "control_p99: smallest grid value >= p99(|control delta|) = 0.2803",
+        "grid": [
+          0.05,
+          0.1,
+          0.15,
+          0.2,
+          0.25,
+          0.3,
+          0.4
+        ]
+      },
+      "threshold_rule_on_curve_grid": {
+        "value": 0.3,
+        "rule": "control_p99: smallest grid value >= p99(|control delta|) = 0.2803",
+        "note": "Not used for the main result; shows how much the selected value depends on the spacing of the config grid."
+      },
+      "control_flagged_share_at_threshold": 0.008581490466312743,
+      "increase_pixels_in_patches": 226019,
+      "increase_area_ha": 2260.19,
+      "decrease_area_ha": 372.39,
+      "cos_agreement": {
+        "0.3": {
+          "pixel_level": {
+            "tp": 105497,
+            "fp": 25300,
+            "fn": 133873,
+            "tn": 384860,
+            "precision": 0.8065704870906825,
+            "recall": 0.440727743660442,
+            "f1": 0.5699967852347724
+          },
+          "increase_area_ha": 2260.19,
+          "polygon_level": {
+            "tp": 6,
+            "fp": 1,
+            "fn": 18,
+            "tn": 122,
+            "precision": 0.8571428571428571,
+            "recall": 0.25,
+            "f1": 0.3870967741935483,
+            "units_evaluated": 147,
+            "min_unit_pixels": 50,
+            "majority_share": 0.5
+          }
+        }
+      }
+    },
+    "second_pair": {
+      "data_status": "observation_derived_result",
+      "items": {
+        "before": "S2B_29SNC_20180823_1_L2A",
+        "after": "S2A_29SNC_20250823_0_L2A",
+        "control_before": "S2A_29SNC_20250803_0_L2A",
+        "control_after": "S2A_29SNC_20250823_0_L2A"
+      },
+      "dates": {
+        "before": "2018-08-23T11:30:36.056000Z",
+        "after": "2025-08-23T11:30:58.180000Z",
+        "control_before": "2025-08-03T11:31:00.640000Z",
+        "control_after": "2025-08-23T11:30:58.180000Z"
+      },
+      "joint_valid_pixels": 1024608,
+      "joint_valid_fraction": 0.9984797810884768,
+      "delta_centering": {
+        "method": "none",
+        "raw_median_delta": 0.06716988235712051
+      },
+      "abs_delta_control_p99": 0.3279228210449219,
+      "threshold": {
+        "value": 0.4,
+        "rule": "control_p99: smallest grid value >= p99(|control delta|) = 0.3279",
+        "grid": [
+          0.05,
+          0.1,
+          0.15,
+          0.2,
+          0.25,
+          0.3,
+          0.4
+        ]
+      },
+      "threshold_rule_on_curve_grid": {
+        "value": 0.35,
+        "rule": "control_p99: smallest grid value >= p99(|control delta|) = 0.3279",
+        "note": "Not used for the main result; shows how much the selected value depends on the spacing of the config grid."
+      },
+      "control_flagged_share_at_threshold": 0.006434804015427118,
+      "increase_pixels_in_patches": 118124,
+      "increase_area_ha": 1181.24,
+      "decrease_area_ha": 301.31,
+      "cos_agreement": {
+        "0.4": {
+          "pixel_level": {
+            "tp": 54324,
+            "fp": 20729,
+            "fn": 185066,
+            "tn": 389430,
+            "precision": 0.7238085086538846,
+            "recall": 0.2269267722127073,
+            "f1": 0.3455252621301794
+          },
+          "increase_area_ha": 1181.24,
+          "polygon_level": {
+            "tp": 3,
+            "fp": 1,
+            "fn": 21,
+            "tn": 122,
+            "precision": 0.75,
+            "recall": 0.125,
+            "f1": 0.21428571428571427,
+            "units_evaluated": 147,
+            "min_unit_pixels": 50,
+            "majority_share": 0.5
+          }
+        },
+        "0.3": {
+          "pixel_level": {
+            "tp": 104150,
+            "fp": 26614,
+            "fn": 135240,
+            "tn": 383545,
+            "precision": 0.7964730353920039,
+            "recall": 0.43506412130832534,
+            "f1": 0.5627387519789061
+          },
+          "increase_area_ha": 2238.6,
+          "polygon_level": {
+            "tp": 7,
+            "fp": 1,
+            "fn": 17,
+            "tn": 122,
+            "precision": 0.875,
+            "recall": 0.2916666666666667,
+            "f1": 0.43750000000000006,
+            "units_evaluated": 147,
+            "min_unit_pixels": 50,
+            "majority_share": 0.5
+          }
+        },
+        "0.35": {
+          "pixel_level": {
+            "tp": 80348,
+            "fp": 23800,
+            "fn": 159042,
+            "tn": 386359,
+            "precision": 0.771479049045589,
+            "recall": 0.33563640920673377,
+            "f1": 0.467767757860848
+          },
+          "increase_area_ha": 1726.99,
+          "polygon_level": {
+            "tp": 4,
+            "fp": 1,
+            "fn": 20,
+            "tn": 122,
+            "precision": 0.8,
+            "recall": 0.16666666666666666,
+            "f1": 0.27586206896551724,
+            "units_evaluated": 147,
+            "min_unit_pixels": 50,
+            "majority_share": 0.5
+          }
+        }
+      }
+    },
+    "increase_overlap_main_vs_second": {
+      "data_status": "observation_derived_result",
+      "note": "a = main-pair increase flags at its threshold, b = second-pair increase flags.",
+      "each_pair_at_own_threshold": {
+        "pixels_a": 226019,
+        "pixels_b": 118124,
+        "pixels_both": 116739,
+        "jaccard": 0.5133550861022673,
+        "share_of_a_also_in_b": 0.5165008251518678,
+        "share_of_b_also_in_a": 0.9882750330161525
+      },
+      "both_at_main_threshold_0.3": {
+        "pixels_a": 226019,
+        "pixels_b": 223860,
+        "pixels_both": 215787,
+        "jaccard": 0.921804247902534,
+        "share_of_a_also_in_b": 0.9547294696463572,
+        "share_of_b_also_in_a": 0.9639372822299651
+      }
+    }
+  },
+  "checks": {
+    "threshold_matches_results_json": true,
+    "increase_area_ha_matches_results_json": true,
+    "local_delta_geotiff": {
+      "path": "pipeline/data/case_studies/alqueva_olive/alqueva_olive-20261126T184505Z/delta_ndvi.tif",
+      "found": true,
+      "same_valid_mask": true,
+      "max_abs_difference": 0.0
+    },
+    "pixel_counts_match_reference_cos_json": true,
+    "polygon_counts_match_reference_cos_json": true
+  },
+  "manifest": {
+    "command": "python pipeline/run_robustness.py pipeline/case_studies/alqueva_olive.json --alt-before S2B_29SNC_20180823_1_L2A --alt-after S2A_29SNC_20250823_0_L2A --alt-control-before S2A_29SNC_20250803_0_L2A",
+    "started_at": "2026-11-26T18:50:03Z",
+    "completed_at": "2026-11-26T18:52:17Z",
+    "runtime_seconds": 134.3,
+    "random_seed": 20261126,
+    "iterations": 1000,
+    "code": {
+      "commit": "d1709f47dcd777b4196b742ceaaced09647f64fe",
+      "branch": "case-study/portugal-sentinel2",
+      "code_dirty": false,
+      "code_paths_checked": [
+        "pipeline/src/robustness.py",
+        "pipeline/run_robustness.py",
+        "pipeline/src/case_study.py",
+        "pipeline/src/reference_cos.py",
+        "pipeline/run_case_study.py",
+        "pipeline/case_studies"
+      ]
+    },
+    "environment": {
+      "python": "3.12.5",
+      "platform": "Windows-11-10.0.22631-SP0",
+      "numpy": "2.2.2",
+      "scipy": "1.15.3",
+      "rasterio": "1.5.0",
+      "pystac-client": "0.8.6",
+      "pyproj": "3.7.2",
+      "matplotlib": "3.11.0",
+      "gdal": "3.12.1"
+    },
+    "config_path": "pipeline/case_studies/alqueva_olive.json",
+    "config_sha256": "f975ee083627ea088d748b822ab92eb647b5eceefa557eb016545e1c39dec1aa",
+    "inputs": {
+      "stac": {
+        "url": "https://earth-search.aws.element84.com/v1",
+        "collection": "sentinel-2-l2a",
+        "retrieved_at": "2026-11-26T18:50:08Z",
+        "items": [
+          {
+            "id": "S2A_29SNC_20180818_1_L2A",
+            "datetime": "2018-08-18T11:30:42.942000Z",
+            "platform": "sentinel-2a",
+            "relative_orbit": "037",
+            "processing_baseline": "05.00",
+            "eo_cloud_cover": 0.007409,
+            "stac_item_url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2A_29SNC_20180818_1_L2A"
+          },
+          {
+            "id": "S2C_29SNC_20250821_0_L2A",
+            "datetime": "2025-08-21T11:31:03.493000Z",
+            "platform": "sentinel-2c",
+            "relative_orbit": "037",
+            "processing_baseline": "05.11",
+            "eo_cloud_cover": 0.006082,
+            "stac_item_url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2C_29SNC_20250821_0_L2A"
+          },
+          {
+            "id": "S2C_29SNC_20250801_0_L2A",
+            "datetime": "2025-08-01T11:31:04.794000Z",
+            "platform": "sentinel-2c",
+            "relative_orbit": "037",
+            "processing_baseline": "05.11",
+            "eo_cloud_cover": 0.006858,
+            "stac_item_url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2C_29SNC_20250801_0_L2A"
+          },
+          {
+            "id": "S2B_29SNC_20180823_1_L2A",
+            "datetime": "2018-08-23T11:30:36.056000Z",
+            "platform": "sentinel-2b",
+            "relative_orbit": "037",
+            "processing_baseline": "05.00",
+            "eo_cloud_cover": 0.285367,
+            "stac_item_url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2B_29SNC_20180823_1_L2A"
+          },
+          {
+            "id": "S2A_29SNC_20250823_0_L2A",
+            "datetime": "2025-08-23T11:30:58.180000Z",
+            "platform": "sentinel-2a",
+            "relative_orbit": "037",
+            "processing_baseline": "05.11",
+            "eo_cloud_cover": 0.009678,
+            "stac_item_url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2A_29SNC_20250823_0_L2A"
+          },
+          {
+            "id": "S2A_29SNC_20250803_0_L2A",
+            "datetime": "2025-08-03T11:31:00.640000Z",
+            "platform": "sentinel-2a",
+            "relative_orbit": "037",
+            "processing_baseline": "05.11",
+            "eo_cloud_cover": 0.006238,
+            "stac_item_url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2A_29SNC_20250803_0_L2A"
+          }
+        ]
+      },
+      "cos": {
+        "service": "https://ogcapi.dgterritorio.gov.pt",
+        "collections": [
+          "cos2018v4",
+          "cos2025v1"
+        ],
+        "retrieved_at": "2026-11-26T18:52:07Z",
+        "polygons_2018": 183,
+        "polygons_2025": 193
+      },
+      "published_files_read": {
+        "docs/case-study/data/alqueva_olive/results.json": "6d40c2554db2ce9afce82842ddf273f7013bdd06895ce93667a16c558657d973",
+        "docs/case-study/data/alqueva_olive/manifest.json": "3a8615d9c9a3d8558e6d7399df03ac689f502ef2dcfe19ef0caf053a05336b05",
+        "docs/case-study/data/alqueva_olive/reference_cos.json": "28124547282b7f07a0ecafd8dcbd2d49b85307bc3199db750565d9b8c35dd77a"
+      }
+    },
+    "outputs": {
+      "docs/case-study/data/alqueva_olive/fig_threshold_curve.png": {
+        "sha256": "bc4c2c7109721cacce05aeb9d9289ec9688fd37ea0a8c9526a0106b2f285e359",
+        "data_status": "observation_derived_result"
+      },
+      "docs/case-study/data/alqueva_olive/fig_bootstrap.png": {
+        "sha256": "8fb19f8f916ab4b6d5838b071865792f761f378807723924683b48e8d350cb27",
+        "data_status": "observation_derived_result"
+      }
+    }
+  }
+}

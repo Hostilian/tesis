@@ -1,0 +1,47 @@
+# Machine-checked proofs of the change-detection rules (formal/). No network calls
+# beyond installing the Lean toolchain pinned in formal/lean-toolchain.
+name: Formal proofs (Lean 4)
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'formal/**'
+      - 'pipeline/src/case_study.py'
+      - 'pipeline/src/robustness.py'
+      - 'pipeline/tests/test_formal_spec.py'
+      - '.github/workflows/formal.yml'
+  pull_request:
+    paths:
+      - 'formal/**'
+      - 'pipeline/src/case_study.py'
+      - 'pipeline/src/robustness.py'
+      - 'pipeline/tests/test_formal_spec.py'
+      - '.github/workflows/formal.yml'
+permissions:
+  contents: read
+jobs:
+  lean:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install elan (official installer)
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o elan-init.sh
+          sh elan-init.sh -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Build and check proofs
+        working-directory: formal
+        run: |
+          set -o pipefail
+          lake --version
+          lake build 2>&1 | tee build.log
+          grep -q "axiom audit passed" build.log
+      - name: No unfinished proofs or new axioms in sources
+        run: |
+          if grep -rnwE "sorry|admit" --include=*.lean formal/Formal formal/Formal.lean; then
+            echo "unfinished proof found"; exit 1
+          fi
+          if grep -rnE "^\s*axiom\b" --include=*.lean formal/Formal formal/Formal.lean; then
+            echo "new axiom found"; exit 1
+          fi

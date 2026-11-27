@@ -28,6 +28,7 @@ import math
 import netrc
 import os
 from pathlib import Path
+import sys
 import time
 from typing import Any, Literal, TypedDict, cast
 
@@ -291,7 +292,14 @@ class GoogleEarthEngineClient:
 
     provider: str = "gee"
 
-    def authenticate(self) -> bool:
+    def authenticate(self, interactive: bool = False) -> bool:
+        """Initialise Earth Engine from existing credentials.
+
+        The browser/gcloud login fallback runs only when ``interactive`` is
+        requested *and* a terminal is attached. Health checks, the API server
+        and CI must never start an interactive login: ``ee.Authenticate``
+        launches a ``gcloud`` subprocess that waits for user input forever.
+        """
         if self.config.mock_mode or not EE_AVAILABLE:
             self.authenticated = False
             return False
@@ -317,6 +325,9 @@ class GoogleEarthEngineClient:
             logger.warning(
                 "GEE ADC/service-account initialization failed: %s", first_exc
             )
+            if not (interactive and sys.stdin is not None and sys.stdin.isatty()):
+                self.authenticated = False
+                return False
             try:
                 ee.Authenticate(auth_mode="gcloud")
                 ee.Initialize(project=project)
@@ -907,7 +918,7 @@ class SatelliteDataIngester:
 
     def authenticate_gee(self) -> bool:
         """Authenticate Google Earth Engine using service account, ADC, gcloud, then mock fallback."""
-        self.authenticated = self.gee.authenticate()
+        self.authenticated = self.gee.authenticate(interactive=True)
         return self.authenticated
 
     def health_check(self) -> list[HealthPayload]:

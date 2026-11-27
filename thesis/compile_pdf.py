@@ -1,5 +1,4 @@
 import os
-from pathlib import Path
 import re
 from fpdf import FPDF
 
@@ -35,7 +34,7 @@ def compile_pdf():
     pdf.cell(0, 10, "CZECH UNIVERSITY OF LIFE SCIENCES PRAGUE", 0, new_x="LMARGIN", new_y="NEXT", align="C")
     pdf.set_font("Arial", "", 12)
     pdf.cell(0, 8, "Faculty of Economics and Management", 0, new_x="LMARGIN", new_y="NEXT", align="C")
-    pdf.cell(0, 8, "Department of Informatics (KII)", 0, new_x="LMARGIN", new_y="NEXT", align="C")
+    pdf.cell(0, 8, "Department of Information Engineering (KII)", 0, new_x="LMARGIN", new_y="NEXT", align="C")
     
     pdf.ln(40)
     pdf.set_font("Arial", "B", 18)
@@ -46,32 +45,22 @@ def compile_pdf():
     
     pdf.ln(60)
     pdf.set_font("Arial", "B", 12)
-    pdf.cell(0, 8, "Author: Eren Ozturk (XOZTE001@studenti.czu.cz)", 0, new_x="LMARGIN", new_y="NEXT", align="L")
-    pdf.cell(0, 8, "Supervisor: Dr. Jirí Brožek", 0, new_x="LMARGIN", new_y="NEXT", align="L")
-    pdf.cell(0, 8, "Academic Year: 2025–2026", 0, new_x="LMARGIN", new_y="NEXT", align="L")
+    pdf.cell(0, 8, "Author: Eren Öztürk", 0, new_x="LMARGIN", new_y="NEXT", align="L")
+    pdf.cell(0, 8, "Supervisor: Ing. Jiří Brožek, Ph.D.", 0, new_x="LMARGIN", new_y="NEXT", align="L")
+    pdf.cell(0, 8, "Academic Year: 2026/2027", 0, new_x="LMARGIN", new_y="NEXT", align="L")
     
     pdf.ln(20)
     pdf.cell(0, 10, "Prague, 2026", 0, new_x="LMARGIN", new_y="NEXT", align="C")
     
-    # ── ABSTRACT PAGE ──
-    pdf.add_page()
-    pdf.set_font("Arial", "B", 14)
-    pdf.cell(0, 12, "Abstract", 0, new_x="LMARGIN", new_y="NEXT", align="L")
-    pdf.ln(5)
-    pdf.set_font("Arial", "", 11)
-    abstract_text = (
-        "This thesis investigates space-based economic intelligence using open satellite APIs. "
-        "The software demonstrates spectral processing, anomaly detection, provenance and geospatial visualization. "
-        "The published anomaly records are synthetic demonstrations, not independently validated detections. "
-        "Bounded public Sentinel-2 raster access has been demonstrated separately. "
-        "Independent anomaly labels, real VIIRS-economic analysis and controlled benchmarks remain necessary "
-        "before the research hypotheses can be evaluated."
-    )
-    pdf.multi_cell(0, 6, abstract_text, new_x="LMARGIN", new_y="NEXT")
-    
+    # Declaration, AI-use note, abstract and keywords come from chapters/00_front_matter.md
+    # (included in the files list below), so no separate hardcoded abstract block here —
+    # one used to live here but would now print a second, stale abstract.
+
     # ── CHAPTERS ──
-    chapters_dir = Path(__file__).resolve().parent / "chapters"
+    # Paths relative to this script, so a build in any checkout or worktree writes only there.
+    chapters_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "chapters")
     files = [
+        "00_front_matter.md",
         "01_introduction.md",
         "02_literature_review.md",
         "03_methodology.md",
@@ -95,7 +84,9 @@ def compile_pdf():
         print(f"Processing chapter file: {filename}")
         with open(filepath, "r", encoding="utf-8") as f:
             content = f.read()
-            
+        # HTML comments are notes for authors (e.g. AI-use markers), not thesis text.
+        content = re.sub(r"<!--.*?-->", "", content, flags=re.S)
+
         pdf.add_page()
         lines = content.split("\n")
         
@@ -162,9 +153,15 @@ def compile_pdf():
         if in_table:
             render_pdf_table(pdf, table_lines)
             
-    output_path = Path(__file__).resolve().parent / "thesis-review-draft.pdf"
+    # Canonical file (what every commit and the PDF readers reference) and a
+    # separately-named draft copy for in-progress/automated review, so neither
+    # side's output path is silently dropped.
+    output_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "thesis.pdf")
+    review_draft_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "thesis-review-draft.pdf")
     pdf.output(output_path)
+    pdf.output(review_draft_path)
     print(f"Thesis PDF compiled successfully at: {output_path}")
+    print(f"Review draft copy written to: {review_draft_path}")
 
 def parse_markdown_style(text):
     text = re.sub(r"\*\*(.*?)\*\*", r"\1", text)

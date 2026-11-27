@@ -1,0 +1,54 @@
+{
+  "schema": "tesis.case_study.independent_check.v1",
+  "data_status": "observation_derived_result",
+  "case_id": "alqueva_olive",
+  "checked_run_id": "alqueva_olive-20261126T184505Z",
+  "checked_at": "2026-11-26T18:58:11Z",
+  "code_commit": "d1709f47dcd777b4196b742ceaaced09647f64fe",
+  "command": "python pipeline/verify_independent.py pipeline/case_studies/alqueva_olive.json",
+  "method": "Second implementation sharing no code with the pipeline; reads STAC items over plain HTTP and the public COGs directly.",
+  "shared_inputs": [
+    "config file",
+    "AOI grid bounds from results.json"
+  ],
+  "all_match": true,
+  "comparisons": [
+    {
+      "quantity": "joint_valid_pixels_main",
+      "independent": 1024579,
+      "published": 1024579,
+      "match": true
+    },
+    {
+      "quantity": "joint_valid_pixels_control",
+      "independent": 1023948,
+      "published": 1023948,
+      "match": true
+    },
+    {
+      "quantity": "threshold",
+      "independent": 0.3,
+      "published": 0.3,
+      "match": true
+    },
+    {
+      "quantity": "increase_area_ha",
+      "independent": 2260.19,
+      "published": 2260.19,
+      "match": true
+    },
+    {
+      "quantity": "decrease_area_ha",
+      "independent": 372.39,
+      "published": 372.39,
+      "match": true
+    },
+    {
+      "quantity": "control_flagged_share_at_threshold",
+      "independent": 0.008581490466312743,
+      "published": 0.008581490466312743,
+      "match": true
+    }
+  ],
+  "runtime_seconds": 76.0
+}

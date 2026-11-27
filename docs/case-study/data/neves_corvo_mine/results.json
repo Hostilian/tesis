@@ -1,0 +1,312 @@
+{
+  "schema": "tesis.case_study.results.v1",
+  "run_id": "neves_corvo_mine-20261126T184732Z",
+  "case_id": "neves_corvo_mine",
+  "title": "Neves-Corvo mine area, Castro Verde / Almodovar (Portugal): summer bare-soil index change 2018-2025",
+  "status": "ok",
+  "index": "bsi",
+  "dates": {
+    "before": "2018-08-18T11:30:57.426000Z",
+    "after": "2025-08-21T11:31:17.972000Z",
+    "control_before": "2025-08-01T11:31:19.275000Z",
+    "control_after": "2025-08-21T11:31:17.972000Z"
+  },
+  "aoi": {
+    "bbox_wgs84": [
+      -8.01,
+      37.545,
+      -7.925,
+      37.6
+    ],
+    "grid": {
+      "crs": "EPSG:32629",
+      "transform": [
+        10.0,
+        0.0,
+        587380.0,
+        0.0,
+        -10.0,
+        4161980.0
+      ],
+      "width": 760,
+      "height": 620,
+      "pixel_size_m": 10.0,
+      "bounds": [
+        587380.0,
+        4155780.0,
+        594980.0,
+        4161980.0
+      ]
+    },
+    "area_km2": 47.12
+  },
+  "coverage": {
+    "data_status": "observation_derived_result",
+    "grid_pixels": 471200,
+    "valid_pixels_per_item": {
+      "S2A_29SNB_20180818_1_L2A": 470524,
+      "S2C_29SNB_20250821_0_L2A": 469756,
+      "S2C_29SNB_20250801_0_L2A": 470456
+    },
+    "scl_class_counts_per_item": {
+      "S2A_29SNB_20180818_1_L2A": {
+        "dark_area_pixels": 72,
+        "vegetation": 3716,
+        "not_vegetated": 450720,
+        "water": 16088,
+        "unclassified": 604
+      },
+      "S2C_29SNB_20250821_0_L2A": {
+        "dark_area_pixels": 340,
+        "vegetation": 1532,
+        "not_vegetated": 452148,
+        "water": 16076,
+        "unclassified": 1104
+      },
+      "S2C_29SNB_20250801_0_L2A": {
+        "dark_area_pixels": 20,
+        "vegetation": 2152,
+        "not_vegetated": 452260,
+        "water": 16044,
+        "unclassified": 724
+      }
+    },
+    "joint_valid_pixels_main": 469408,
+    "joint_valid_fraction_main": 0.9961969439728353,
+    "joint_valid_pixels_control": 469572,
+    "excluded_pixels_main": 1792
+  },
+  "index_summary": {
+    "data_status": "observation_derived_result",
+    "before": {
+      "n": 470524,
+      "mean": 0.2598334848880768,
+      "std": 0.07108428329229355,
+      "p01": -0.01113530233502387,
+      "p05": 0.11452276073396207,
+      "p25": 0.23984045535326004,
+      "median": 0.27341756224632263,
+      "p75": 0.30101510137319565,
+      "p95": 0.3400834962725639,
+      "p99": 0.3630821600556374
+    },
+    "after": {
+      "n": 469756,
+      "mean": 0.20763662457466125,
+      "std": 0.052666690200567245,
+      "p01": -0.0016583351767621912,
+      "p05": 0.1112897377461195,
+      "p25": 0.1913817599415779,
+      "median": 0.2159106731414795,
+      "p75": 0.2380058728158474,
+      "p95": 0.2678390070796013,
+      "p99": 0.29024668335914616
+    },
+    "delta_main": {
+      "n": 469408,
+      "mean": 0.0016666294541209936,
+      "std": 0.047367606312036514,
+      "p01": -0.09706349596381188,
+      "p05": -0.06589226722717285,
+      "p25": -0.026810675859451294,
+      "median": 0.0,
+      "p75": 0.025853652507066727,
+      "p95": 0.07418642714619628,
+      "p99": 0.15554066047072393
+    },
+    "delta_control": {
+      "n": 469572,
+      "mean": 0.0004314940597396344,
+      "std": 0.015392420813441277,
+      "p01": -0.031718945167958736,
+      "p05": -0.016799766384065152,
+      "p25": -0.00607658177614212,
+      "median": 0.0,
+      "p75": 0.006106305867433548,
+      "p95": 0.01843296810984606,
+      "p99": 0.04018678523600092
+    },
+    "abs_delta_control_p95": 0.02372962236404419,
+    "abs_delta_control_p99": 0.04917562007904053
+  },
+  "threshold": {
+    "value": 0.05,
+    "rule": "control_p99: smallest grid value >= p99(|control delta|) = 0.0492"
+  },
+  "delta_centering": {
+    "method": "median",
+    "raw_median_delta_main": -0.054017648100852966
+  },
+  "sensitivity": [
+    {
+      "threshold": 0.03,
+      "main_valid_pixels": 469408,
+      "main_increase_pixels": 102876,
+      "main_decrease_pixels": 106235,
+      "main_flagged_share": 0.4454781341604745,
+      "control_valid_pixels": 469572,
+      "control_flagged_pixels": 13975,
+      "control_flagged_share": 0.029761144190880207
+    },
+    {
+      "threshold": 0.05,
+      "main_valid_pixels": 469408,
+      "main_increase_pixels": 51844,
+      "main_decrease_pixels": 49755,
+      "main_flagged_share": 0.21644070829640738,
+      "control_valid_pixels": 469572,
+      "control_flagged_pixels": 4536,
+      "control_flagged_share": 0.009659860468682118
+    },
+    {
+      "threshold": 0.075,
+      "main_valid_pixels": 469408,
+      "main_increase_pixels": 22887,
+      "main_decrease_pixels": 14687,
+      "main_flagged_share": 0.08004550412434386,
+      "control_valid_pixels": 469572,
+      "control_flagged_pixels": 2071,
+      "control_flagged_share": 0.0044103992571959145
+    },
+    {
+      "threshold": 0.1,
+      "main_valid_pixels": 469408,
+      "main_increase_pixels": 12521,
+      "main_decrease_pixels": 4166,
+      "main_flagged_share": 0.03554903197218624,
+      "control_valid_pixels": 469572,
+      "control_flagged_pixels": 1281,
+      "control_flagged_share": 0.002728016150877821
+    },
+    {
+      "threshold": 0.15,
+      "main_valid_pixels": 469408,
+      "main_increase_pixels": 5144,
+      "main_decrease_pixels": 1112,
+      "main_flagged_share": 0.013327425182357352,
+      "control_valid_pixels": 469572,
+      "control_flagged_pixels": 708,
+      "control_flagged_share": 0.0015077559990800133
+    },
+    {
+      "threshold": 0.2,
+      "main_valid_pixels": 469408,
+      "main_increase_pixels": 2097,
+      "main_decrease_pixels": 533,
+      "main_flagged_share": 0.005602801826982071,
+      "control_valid_pixels": 469572,
+      "control_flagged_pixels": 400,
+      "control_flagged_share": 0.0008518395475028324
+    }
+  ],
+  "change": {
+    "data_status": "observation_derived_result",
+    "min_patch_ha": 1.0,
+    "min_patch_pixels": 100,
+    "increase_pixels_raw": 51844,
+    "decrease_pixels_raw": 49755,
+    "increase_pixels_in_patches": 32699,
+    "decrease_pixels_in_patches": 28422,
+    "increase_area_ha": 326.99,
+    "decrease_area_ha": 284.22,
+    "increase_share_of_valid": 0.06966008248687709,
+    "decrease_share_of_valid": 0.060548605903606244,
+    "increase_patches": {
+      "patches_total": 4713,
+      "min_patch_pixels": 100,
+      "patches_ge_min": 46,
+      "flagged_pixels": 51844,
+      "share_of_flagged_in_patches_ge_min": 0.6307190803178767,
+      "area_ge_min_ha": 326.98999999999995,
+      "patch_area_ha_median": 2.23,
+      "patch_area_ha_p90": 7.74,
+      "patch_area_ha_max": 178.26
+    },
+    "decrease_patches": {
+      "patches_total": 4637,
+      "min_patch_pixels": 100,
+      "patches_ge_min": 54,
+      "flagged_pixels": 49755,
+      "share_of_flagged_in_patches_ge_min": 0.5712390714501056,
+      "area_ge_min_ha": 284.21999999999997,
+      "patch_area_ha_median": 2.73,
+      "patch_area_ha_p90": 11.538000000000006,
+      "patch_area_ha_max": 43.14
+    },
+    "water_pixels_either_date": 16404,
+    "water_pixels_flagged_before_exclusion": 11926,
+    "water_excluded_from_change": false,
+    "control_flagged_share_at_threshold": 0.009659860468682118
+  },
+  "resolution": {
+    "data_status": "observation_derived_result",
+    "target_area_ha": 2.23,
+    "target_source": "median area of increase patches >= min_patch_ha in this run",
+    "rows": [
+      {
+        "resolution_m": 3.0,
+        "pixels_total": 2477.7777777777774,
+        "pixels_interior": 2282.6686508035364
+      },
+      {
+        "resolution_m": 10.0,
+        "pixels_total": 223.0,
+        "pixels_interior": 167.2672619077277
+      },
+      {
+        "resolution_m": 20.0,
+        "pixels_total": 55.75,
+        "pixels_interior": 29.88363095386384
+      },
+      {
+        "resolution_m": 30.0,
+        "pixels_total": 24.77777777777778,
+        "pixels_interior": 8.866865080353675
+      },
+      {
+        "resolution_m": 60.0,
+        "pixels_total": 6.194444444444445,
+        "pixels_interior": 0.2389880957323921
+      }
+    ]
+  },
+  "web": {
+    "overlay_bounds_latlng": {
+      "before": [
+        37.54408095707688,
+        -8.010847915699442,
+        37.60075454237964,
+        -7.924011040981401
+      ],
+      "after": [
+        37.54408095707688,
+        -8.010847915699442,
+        37.60075454237964,
+        -7.924011040981401
+      ],
+      "delta": [
+        37.54408095707688,
+        -8.010847915699442,
+        37.60075454237964,
+        -7.924011040981401
+      ],
+      "change": [
+        37.54408095707688,
+        -8.010847915699442,
+        37.60075454237964,
+        -7.924011040981401
+      ]
+    },
+    "legend": {
+      "increase": {
+        "color": "#b2182b",
+        "label": "BSI increase (more bare surface in after date)"
+      },
+      "decrease": {
+        "color": "#2166ac",
+        "label": "BSI decrease (less bare surface in after date)"
+      }
+    },
+    "index_label": "BSI"
+  }
+}

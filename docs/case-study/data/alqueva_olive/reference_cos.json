@@ -1,0 +1,191 @@
+{
+  "schema": "tesis.case_study.reference_cos.v1",
+  "data_status": "observation_derived_result",
+  "case_id": "alqueva_olive",
+  "run_id": "alqueva_olive-20261126T184505Z",
+  "reference": {
+    "name": "Carta de Uso e Ocupação do Solo (COS) 2018v4 / 2025v1, Direção-Geral do Território (DGT)",
+    "license": "CC-BY (dados.gov.pt: 'Carta de Uso e Ocupação do Solo (COS) - Série 2 - (2018v4 - 2025v1)')",
+    "dataset_page": "https://dados.gov.pt/datasets/carta-de-uso-e-ocupacao-do-solo-cos-serie-2-2018v4-2025v1",
+    "service": "https://ogcapi.dgterritorio.gov.pt",
+    "collections": [
+      "cos2018v4",
+      "cos2025v1"
+    ],
+    "retrieved_at": "2026-11-26T18:47:22Z",
+    "polygons_2018": 183,
+    "polygons_2025": 193,
+    "class_codes_2025": [
+      "1.1.1.2",
+      "1.1.2.1",
+      "1.1.2.2",
+      "1.2.3.1",
+      "1.3.2.2",
+      "1.3.3.1",
+      "1.3.4.1",
+      "1.5.1.1",
+      "2.1.1.1",
+      "2.2.1.1",
+      "2.2.2.2",
+      "2.2.2.3",
+      "2.2.3.1",
+      "2.2.3.2",
+      "2.2.3.3",
+      "2.3.1.3",
+      "3.1.1.1",
+      "3.1.2.1",
+      "4.1.1.1",
+      "4.1.1.2",
+      "4.2.1.1",
+      "4.2.1.2",
+      "5.1.1.1",
+      "5.1.1.2",
+      "5.1.1.6",
+      "5.1.1.8",
+      "5.1.2.1",
+      "5.1.2.2",
+      "6.1.1.1",
+      "9.1.1.1",
+      "9.1.2.1",
+      "9.1.2.3",
+      "9.1.2.4",
+      "9.1.2.5"
+    ],
+    "independence": "Produced by DGT from orthophoto interpretation; not derived from this pipeline and not used to choose thresholds."
+  },
+  "evaluated_pixels": 1024332,
+  "agreement_matrix": [
+    {
+      "reference_category": "new_permanent_crop (non-permanent 2018 -> permanent 2025)",
+      "pixels": 239370,
+      "area_ha": 2393.7,
+      "share_of_aoi": 0.23368400089033634,
+      "share_of_all_increase_flags_in_category": 0.46676164393258973,
+      "share_of_all_decrease_flags_in_category": 0.1558581057493488,
+      "share_flagged_increase": 0.440727743660442,
+      "share_flagged_decrease": 0.024246981660191336,
+      "share_not_flagged": 0.5350252746793667
+    },
+    {
+      "reference_category": "stable_permanent_crop",
+      "pixels": 366893,
+      "area_ha": 3668.93,
+      "share_of_aoi": 0.35817781734828164,
+      "share_of_all_increase_flags_in_category": 0.4153013684690225,
+      "share_of_all_decrease_flags_in_category": 0.02838422084373909,
+      "share_flagged_increase": 0.25584025860400716,
+      "share_flagged_decrease": 0.0028809489415170093,
+      "share_not_flagged": 0.7412787924544758
+    },
+    {
+      "reference_category": "lost_permanent_crop (permanent 2018 -> other 2025)",
+      "pixels": 7909,
+      "area_ha": 79.09,
+      "share_of_aoi": 0.0077211294775522,
+      "share_of_all_increase_flags_in_category": 0.005999495617625067,
+      "share_of_all_decrease_flags_in_category": 0.000832460592389699,
+      "share_flagged_increase": 0.1714502465545581,
+      "share_flagged_decrease": 0.003919585282589455,
+      "share_not_flagged": 0.8246301681628524
+    },
+    {
+      "reference_category": "stable_non_permanent (excluding water)",
+      "pixels": 387956,
+      "area_ha": 3879.56,
+      "share_of_aoi": 0.3787404864828981,
+      "share_of_all_increase_flags_in_category": 0.11141983638543662,
+      "share_of_all_decrease_flags_in_category": 0.7967453476194313,
+      "share_flagged_increase": 0.06491200032993433,
+      "share_flagged_decrease": 0.07647774489890606,
+      "share_not_flagged": 0.8586102547711596
+    },
+    {
+      "reference_category": "water_2025",
+      "pixels": 22204,
+      "area_ha": 222.04,
+      "share_of_aoi": 0.02167656580093173,
+      "share_of_all_increase_flags_in_category": 0.0005176555953260567,
+      "share_of_all_decrease_flags_in_category": 0.01817986519509117,
+      "share_flagged_increase": 0.005269320843091335,
+      "share_flagged_decrease": 0.03049000180147721,
+      "share_not_flagged": 0.9642406773554315
+    },
+    {
+      "reference_category": "industry_logistics_2025 (COS 1.2.1.x)",
+      "pixels": 0,
+      "area_ha": 0.0,
+      "share_of_aoi": 0.0,
+      "share_of_all_increase_flags_in_category": 0.0,
+      "share_of_all_decrease_flags_in_category": 0.0,
+      "share_flagged_increase": null,
+      "share_flagged_decrease": null,
+      "share_not_flagged": null
+    },
+    {
+      "reference_category": "mining_2025 (COS 1.6.x)",
+      "pixels": 0,
+      "area_ha": 0.0,
+      "share_of_aoi": 0.0,
+      "share_of_all_increase_flags_in_category": 0.0,
+      "share_of_all_decrease_flags_in_category": 0.0,
+      "share_flagged_increase": null,
+      "share_flagged_decrease": null,
+      "share_not_flagged": null
+    },
+    {
+      "reference_category": "new_mining (not 1.6.x in 2018)",
+      "pixels": 0,
+      "area_ha": 0.0,
+      "share_of_aoi": 0.0,
+      "share_of_all_increase_flags_in_category": 0.0,
+      "share_of_all_decrease_flags_in_category": 0.0,
+      "share_flagged_increase": null,
+      "share_flagged_decrease": null,
+      "share_not_flagged": null
+    }
+  ],
+  "caveats": [
+    "COS is a photo-interpreted map with its own errors; agreement is not ground-truth accuracy.",
+    "Generalisation: COS mapping units are >= 0.5 ha (COS2018v4 and COS2025v1 share one specification); internal roads, gaps and field margins are absorbed into polygons.",
+    "Reference dates are the COS reference years, not the exact Sentinel-2 acquisition dates.",
+    "Pixel counts are spatially autocorrelated; they are not independent samples."
+  ],
+  "new_permanent_crop_vs_ndvi_increase": {
+    "domain": "pixels that are not permanent crop in COS2018v4, have a valid NDVI difference and are covered by both COS layers",
+    "pixel_level": {
+      "tp": 105497,
+      "fp": 25300,
+      "fn": 133873,
+      "tn": 384860,
+      "precision": 0.8065704870906825,
+      "recall": 0.440727743660442,
+      "f1": 0.5699967852347724
+    },
+    "polygon_level": {
+      "tp": 6,
+      "fp": 1,
+      "fn": 18,
+      "tn": 122,
+      "precision": 0.8571428571428571,
+      "recall": 0.25,
+      "f1": 0.3870967741935483,
+      "units_evaluated": 147,
+      "min_unit_pixels": 50,
+      "majority_share": 0.5
+    }
+  },
+  "stability_split_vs_cos": {
+    "data_status": "observation_derived_result",
+    "note": "Tests the within-year stability rule against COS 2025 permanent-crop classes.",
+    "stable_within_year": {
+      "pixels": 164322,
+      "share_in_permanent_crop_2025": 0.9934883947371624,
+      "share_in_new_permanent_crop": 0.4848103114616424
+    },
+    "strongly_seasonal": {
+      "pixels": 61584,
+      "share_in_permanent_crop_2025": 0.5863698363211224,
+      "share_in_new_permanent_crop": 0.4194595998960769
+    }
+  }
+}
