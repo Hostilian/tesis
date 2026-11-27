@@ -465,8 +465,7 @@ def cmd_run(args: argparse.Namespace) -> int:
     pix_area = grid.pixel_size**2
     min_px = max(1, int(np.ceil(cfg.min_patch_ha * 10_000 / pix_area)))
 
-    inc = np.nan_to_num(delta, nan=0) > threshold
-    dec = np.nan_to_num(delta, nan=0) < -threshold
+    inc, dec = cs.flag_changes(delta, threshold)
     water_either = (before.scl == 6) | (after.scl == 6)
     water_flagged = int(((inc | dec) & water_either).sum())
     if cfg.extra.get("exclude_water_from_change", False):

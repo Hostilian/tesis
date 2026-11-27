@@ -329,6 +329,18 @@ def resolve_threshold(
     )
 
 
+def flag_changes(
+    delta: NDArray[Any], threshold: float
+) -> tuple[NDArray[Any], NDArray[Any]]:
+    """Raw (increase, decrease) flags: delta > t and delta < -t, before any patch filter.
+
+    Strict inequalities, as in ``threshold_table``; NaN (no joint-valid pair) is
+    never flagged. Shared by ``run_case_study.py run`` and ``robustness.change_mask``.
+    """
+    d = np.nan_to_num(delta, nan=0.0)
+    return d > threshold, d < -threshold
+
+
 def label_patches(mask: NDArray[Any]) -> tuple[NDArray[Any], int]:
     from scipy import ndimage
 

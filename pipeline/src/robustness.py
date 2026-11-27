@@ -64,13 +64,10 @@ def change_mask(
     delta > t (increase) or delta < -t (decrease), NaN never flagged, optional
     exclusion mask (open water), then only 8-connected patches >= min_pixels.
     """
-    d = np.nan_to_num(delta, nan=0.0)
-    if direction == "increase":
-        m = d > threshold
-    elif direction == "decrease":
-        m = d < -threshold
-    else:
+    if direction not in ("increase", "decrease"):
         raise ValueError("direction must be 'increase' or 'decrease'")
+    inc, dec = cs.flag_changes(delta, threshold)
+    m = inc if direction == "increase" else dec
     if exclude is not None:
         m &= ~exclude
     return cs.keep_patches_ge(m, min_pixels)
