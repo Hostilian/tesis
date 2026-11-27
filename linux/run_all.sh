@@ -64,6 +64,15 @@ if [ "${1:-}" = "--full" ]; then
     echo
     echo "Check: \`git diff --stat docs/case-study/data\` should show only run ids, timestamps and environment fields."
     git diff --stat docs/case-study/data 2>/dev/null || true
+    echo
+    echo "Changed lines in results.json, ignoring run ids, times, paths and versions"
+    echo "(empty = every published number reproduced exactly):"
+    echo '```'
+    git diff -U0 -- 'docs/case-study/data/*/results.json' 2>/dev/null \
+      | grep -E '^[-+] ' \
+      | grep -v -E 'run_id|_utc|created|generated|timestamp|"python"|platform|commit|"path"|href|version' \
+      | head -40 || true
+    echo '```'
   } >> "$SUMMARY"
 fi
 
