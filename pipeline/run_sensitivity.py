@@ -433,7 +433,15 @@ def check_b3(loader: Loader, case: str, args: argparse.Namespace) -> dict[str, A
         cfg["control_after_item"] = p["after"]["id"]
         cfg["control_before_item"] = p["control_before"]["id"]
         v = run_variant(loader, cfg, f"2018_to_{p['target'][:4]}", fallback_grid=fb)
-        rows.append(_row(v, pub, selection=p))
+        rows.append(
+            _row(
+                v,
+                pub,
+                selection=p,
+                increase_overlap_with_published=rb.mask_overlap(base.inc, v.inc),
+                decrease_overlap_with_published=rb.mask_overlap(base.dec, v.dec),
+            )
+        )
     return {
         "rule": "after = scene closest to 21 Aug of the year (same tile, relative orbit, cloud < 1 %, baseline 05.xx; ties -> earlier); control = closest such scene to after - 20 days, ending on the after date; before item unchanged (2018-08-18)",
         "variants": rows,
