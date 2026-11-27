@@ -1,0 +1,129 @@
+/* Version 6: dark "mission control" globe view of the Portugal case study.
+   Visual language inspired by God's Eye View (HUD readouts, reticle, dark console);
+   no stylesheet was copied from it. Colours checked for >= 4.5:1 text contrast. */
+:root {
+  --space: #03060a;
+  --bg: #070c12;
+  --panel: #0c141c;
+  --panel-2: #111c26;
+  --line: #24384a;
+  --text: #e8f0f6;
+  --muted: #a9bccb;
+  --accent: #6fe3ef;
+  --hud: #8ff0c8;
+  --warn: #f0b85a;
+  --focus: #ffd24d;
+  --mono: ui-monospace, "Cascadia Mono", Consolas, "SFMono-Regular", Menlo, monospace;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin: 0; font: 14px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); }
+a { color: var(--accent); }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.skip { position: absolute; left: 8px; top: -60px; z-index: 3000; background: var(--focus); color: #0b0f14; padding: 8px 12px; border-radius: 4px; font-weight: 600; }
+.skip:focus { top: 8px; }
+/* Visible focus: yellow ring plus a dark halo, readable on imagery and on dark panels. */
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; box-shadow: 0 0 0 5px #000; }
+#map:focus-visible { outline-offset: -4px; box-shadow: none; }
+
+.bar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; padding: 10px 16px; border-bottom: 1px solid var(--line); background: linear-gradient(180deg, #0b131b, #070c12); }
+.bar .brand { margin: 0; font-family: var(--mono); letter-spacing: .12em; text-transform: uppercase; font-size: 12px; color: var(--hud); }
+.bar .tag { display: inline-block; border: 1px solid var(--hud); padding: 0 5px; margin-right: 4px; }
+.bar h1 { margin: 0; font-size: 16px; font-weight: 600; }
+.bar .spacer { flex: 1; }
+.bar nav { display: flex; flex-wrap: wrap; gap: 6px 16px; }
+.bar nav a { text-decoration: none; font-size: 13px; }
+.bar nav a:hover { text-decoration: underline; }
+
+.layout { display: grid; grid-template-columns: minmax(0, 1fr) 400px; height: calc(100vh - 49px); }
+.stage { position: relative; min-height: 420px; overflow: hidden;
+  /* Decorative star field behind the globe. */
+  background:
+    radial-gradient(1px 1px at 12% 18%, #ffffff99 50%, transparent 51%),
+    radial-gradient(1px 1px at 71% 32%, #ffffff88 50%, transparent 51%),
+    radial-gradient(1px 1px at 33% 77%, #ffffff77 50%, transparent 51%),
+    radial-gradient(1px 1px at 86% 84%, #ffffff66 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 54% 9%, #ffffffaa 50%, transparent 51%),
+    radial-gradient(1px 1px at 92% 12%, #ffffff77 50%, transparent 51%),
+    radial-gradient(1px 1px at 6% 62%, #ffffff66 50%, transparent 51%),
+    radial-gradient(ellipse at 50% 55%, #0d2233 0%, var(--space) 70%);
+}
+#map { position: absolute; inset: 0; }
+
+/* Heads-up display panels. Near-opaque background keeps text readable over any imagery. */
+.hud { position: absolute; z-index: 2; pointer-events: none; font-family: var(--mono); font-size: 12px; line-height: 1.55; color: var(--hud);
+  background: rgba(3, 8, 12, 0.88); border: 1px solid #2c5a4a; padding: 6px 9px; letter-spacing: .03em; max-width: calc(100% - 24px); }
+.hud-tl { top: 12px; left: 12px; }
+.hud-bl { bottom: 34px; left: 12px; }
+.hud-k { color: #c9d6df; margin-right: 4px; }
+.hud-note { color: #c9d6df; font-size: 11px; font-style: italic; }
+.reticle { position: absolute; z-index: 1; pointer-events: none; left: 50%; top: 50%; width: 120px; height: 120px; transform: translate(-50%, -50%); }
+.reticle span { position: absolute; width: 18px; height: 18px; border-color: rgba(143, 240, 200, 0.8); border-style: solid; border-width: 0; }
+.reticle span:nth-child(1) { left: 0; top: 0; border-left-width: 2px; border-top-width: 2px; }
+.reticle span:nth-child(2) { right: 0; top: 0; border-right-width: 2px; border-top-width: 2px; }
+.reticle span:nth-child(3) { left: 0; bottom: 0; border-left-width: 2px; border-bottom-width: 2px; }
+.reticle span:nth-child(4) { right: 0; bottom: 0; border-right-width: 2px; border-bottom-width: 2px; }
+
+.tour { position: absolute; z-index: 3; top: 12px; left: 50%; transform: translateX(-50%); display: flex; gap: 4px; background: rgba(3, 8, 12, 0.88); border: 1px solid var(--line); padding: 4px; border-radius: 6px; }
+button { font: inherit; }
+.tour button, .cases button { background: var(--panel-2); color: var(--text); border: 1px solid #5d7489; border-radius: 4px; padding: 5px 10px; cursor: pointer; font-size: 13px; }
+.tour button:hover, .cases button:hover { border-color: var(--accent); }
+.cases button[aria-pressed="true"] { background: #0e3a40; border-color: var(--accent); color: #ffffff; }
+
+/* Case markers on the globe. They are real buttons, so keyboard users can reach them. */
+.site-marker { display: flex; align-items: center; gap: 6px; background: rgba(3, 8, 12, 0.9); color: var(--hud); border: 1px solid var(--hud); border-radius: 3px; padding: 3px 8px; font-family: var(--mono); font-size: 12px; cursor: pointer; white-space: nowrap; }
+.site-marker::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--hud); box-shadow: 0 0 0 3px rgba(143, 240, 200, 0.25); }
+.site-marker[aria-pressed="true"] { color: #ffffff; border-color: #ffffff; }
+
+.panel { overflow-y: auto; background: var(--panel); border-left: 1px solid var(--line); padding: 12px 16px 40px; }
+.panel h2 { font-size: 12.5px; margin: 18px 0 6px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; font-weight: 600; font-family: var(--mono); }
+.panel h2:first-of-type { margin-top: 4px; }
+.cases { display: flex; flex-wrap: wrap; gap: 6px; }
+.muted { color: var(--muted); font-size: 12.5px; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+td, th { padding: 5px 4px; border-bottom: 1px solid var(--line); vertical-align: top; text-align: left; }
+td.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; font-family: var(--mono); font-size: 12.5px; }
+td .muted { display: block; }
+.badge { display: inline-block; font-size: 11px; padding: 0 7px; border-radius: 10px; border: 1px solid; white-space: nowrap; line-height: 1.6; }
+.b-obs { color: #9be09b; border-color: #3d6b3d; }
+.b-der { color: #8fcdff; border-color: #2e5778; }
+.b-int { color: var(--warn); border-color: #7a5a24; }
+.b-syn { color: #e3a3e3; border-color: #6b3d6b; }
+.statuses { list-style: none; padding: 0; margin: 0; font-size: 12.5px; color: var(--muted); }
+.statuses li { margin: 4px 0; }
+.sure { background: var(--panel-2); border: 1px solid var(--line); border-left: 3px solid var(--accent); padding: 8px 10px; border-radius: 4px; }
+.sure p { margin: 6px 0; }
+.sure .big { font-family: var(--mono); font-size: 15px; color: #ffffff; }
+.layer { display: flex; gap: 8px; align-items: flex-start; padding: 3px 0; cursor: pointer; }
+.layer input { margin-top: 3px; }
+input[type=range] { width: 100%; accent-color: var(--accent); }
+.legend p { margin: 6px 0 0; font-size: 12.5px; }
+.legend .sw { display: inline-block; width: 12px; height: 12px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; outline: 1px solid var(--text); }
+.note { background: #151d25; border-left: 3px solid var(--warn); padding: 8px 10px; font-size: 12.5px; margin: 16px 0 4px; }
+.err { background: #3a1d1d; border-left: 3px solid #ff7b7b; padding: 8px 10px; color: #ffe3e3; }
+code { font-size: 12px; color: #d4dde4; word-break: break-all; }
+
+/* MapLibre controls and popups: keep their text dark on white so contrast stays high. */
+.maplibregl-popup-content { color: #10171e; font-size: 13px; }
+.maplibregl-popup-content .b-obs { color: #1b5e20; }
+.maplibregl-popup-content .b-der { color: #0b4f8a; }
+.maplibregl-popup-content .b-int { color: #8a5300; }
+.maplibregl-popup-content .muted { color: #46525e; }
+.maplibregl-ctrl-attrib { background: #ffffff !important; color: #1a1a1a; }
+.maplibregl-ctrl-attrib a { color: #1a1a1a; }
+.maplibregl-ctrl-scale { background: #ffffff; color: #1a1a1a; }
+
+@media (max-width: 860px) {
+  .layout { grid-template-columns: 1fr; height: auto; }
+  .stage { height: 62vh; }
+  .panel { border-left: none; border-top: 1px solid var(--line); }
+  .hud-bl { display: none; }
+  .hud-tl { top: 52px; left: 8px; font-size: 11px; }
+  .reticle { width: 80px; height: 80px; }
+  .tour { top: 8px; left: 8px; transform: none; flex-wrap: wrap; max-width: calc(100% - 64px); gap: 3px; padding: 3px; }
+  .tour button { padding: 4px 6px; font-size: 12px; white-space: nowrap; }
+}
+@media (prefers-reduced-motion: reduce) {
+  /* The map camera jumps instead of flying (see app.js); CSS motion is switched off too. */
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
