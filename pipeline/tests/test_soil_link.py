@@ -201,6 +201,90 @@ def test_extract_features_never_raises_and_keeps_order():
     assert "OSError" in rows[0]["errors"]
 
 
+def test_scene_cache_allows_offline_threshold_sensitivity(tmp_path):
+    samples = [sl.Sample(s, 38.0, -8.0, date(2025, 10, 1)) for s in ("P1", "P2")]
+    scenes = {  # P1: one bare autumn date, one straw date; P2: green crop only
+        ("P1", "2025-10-03"): bands(0.15, 0.05, (4, 4)),
+        ("P1", "2025-07-20"): bands(0.20, 0.11, (4, 4)),
+        ("P2", "2025-10-03"): bands(0.60, 0.05, (4, 4)),
+    }
+
+    def search(s):
+        return [
+            SimpleNamespace(id=f"S2_{d}", properties={"datetime": d + "T11:00:00Z"})
+            for (sid, d) in scenes
+            if sid == s.sample_id
+        ]
+
+    calls = []
+
+    def reader(item, s):
+        calls.append(item.id)
+        return scenes[(s.sample_id, item.properties["datetime"][:10])], np.full(
+            (4, 4), 5, np.uint8
+        )
+
+    kw = dict(terrain=None, log=lambda m: None, cache_dir=tmp_path)
+    first = sl.extract_features(samples, search, reader, **kw)
+    assert len(calls) == 3 and len(list(tmp_path.rglob("*.npz"))) == 3
+
+    def offline(item, s):
+        raise AssertionError("must not download again")
+
+    again = sl.extract_features(samples, search, offline, **kw)
+    assert [r["n_scenes_used"] for r in again] == [r["n_scenes_used"] for r in first]
+
+    cache = sl.load_cache_dir(tmp_path)
+    assert sorted(cache) == ["P1", "P2"] and len(cache["P1"]) == 2
+    strict = sl.bare_availability(cache, 0.25, 0.10)
+    assert strict["per_sample"]["P1"]["bare_dates"] == 1
+    assert strict["share_any_bare_date"] == 0.5 and strict["share_usable"] == 0.5
+    assert strict["by_month"]["10"] == {"dates_read": 2, "bare": 1}
+    loose = sl.bare_availability(cache, 0.25, 0.125)  # the straw date now counts
+    assert loose["per_sample"]["P1"]["bare_dates"] == 2
+    assert loose["median_bare_dates"] == 1.0
+    # restrict to the scenes of one run
+    sub = sl.load_cache_dir(tmp_path, {"P1": ["S2_2025-10-03"]})
+    assert list(sub) == ["P1"] and len(sub["P1"]) == 1
+
+
+def test_soilgrids_point_converts_units_from_the_response():
+    """Offline: a fake transport returns the shape of the real API response."""
+    seen = {}
+
+    def fake(url, params, timeout):
+        seen["url"], seen["params"] = url, list(params)
+        layer = lambda name, mapped, target, v: {  # noqa: E731
+            "name": name,
+            "unit_measure": {
+                "d_factor": 10,
+                "mapped_units": mapped,
+                "target_units": target,
+            },
+            "depths": [{"label": "0-5cm", "values": {"mean": v}}],
+        }
+        return {
+            "type": "Feature",
+            "properties": {
+                "layers": [
+                    layer("clay", "g/kg", "%", 165),
+                    layer("soc", "dg/kg", "g/kg", None),  # no data in this cell
+                ]
+            },
+        }
+
+    out = sl.soilgrids_point(37.94, -7.90, transport=fake)
+    assert seen["url"] == sl.SOILGRIDS_URL
+    params = seen["params"]
+    assert ("property", "soc") in params and ("depth", "0-5cm") in params
+    assert out["values"]["clay"]["value"] == pytest.approx(16.5)
+    assert out["values"]["clay"]["unit"] == "%"
+    assert math.isnan(out["values"]["soc"]["value"])
+    assert "CC-BY 4.0" in out["licence"]
+    empty = sl.soilgrids_point(0, 0, transport=lambda *a: {"properties": {}})
+    assert math.isnan(empty["values"]["clay"]["value"])
+
+
 def test_terrain_errors_are_recorded_not_silent():
     rows = sl.extract_features(
         [sl.Sample("S0", 38.0, -8.0, date(2025, 10, 1))],
@@ -306,6 +390,57 @@ def test_planted_signal_screen_points_at_the_right_band():
     assert "swir16" in {r["feature"] for r in res["screen"] if r.get("q_fdr", 1) < 0.05}
 
 
+def test_nested_cv_chooses_inside_each_training_set():
+    from sklearn.dummy import DummyRegressor
+    from sklearn.linear_model import LinearRegression
+
+    rng = np.random.default_rng(0)
+    X = rng.normal(0, 1, (120, 3))
+    y = 2 * X[:, 0] + rng.normal(0, 0.3, 120)
+    groups = np.repeat(np.arange(12), 10)
+    models = {"mean": DummyRegressor(), "linear": LinearRegression()}
+    pred, chosen = sl.nested_cv_predictions(
+        models, ["mean", "linear"], X, y, groups, n_splits=5
+    )
+    assert chosen == ["linear"] * 5 and np.isfinite(pred).all()
+    # one training block only -> no inner comparison possible, first candidate
+    _, chosen = sl.nested_cv_predictions(
+        models, ["mean", "linear"], X[:20], y[:20], groups[:20], n_splits=2
+    )
+    assert chosen == ["mean", "mean"]
+
+
+def test_nested_cv_r2_is_not_flattered_by_picking_the_best_model():
+    """On noise, the max of per-model CV R2 is optimistic; nested CV is not."""
+    from sklearn.dummy import DummyRegressor
+    from sklearn.linear_model import Ridge
+
+    rng = np.random.default_rng(3)
+    X = rng.normal(0, 1, (100, 17))
+    y = rng.normal(0, 1, 100)
+    groups = np.repeat(np.arange(20), 5)
+    models = {"baseline_mean": DummyRegressor()}
+    models.update({f"ridge_{a:g}": Ridge(alpha=a) for a in np.logspace(-2, 3, 12)})
+    cands = [m for m in models if m != "baseline_mean"]
+
+    def cv_r2(c):
+        pred = sl.cross_validated_predictions(models[c], X, y, groups, 5)
+        return sl._metrics(y, pred)["r2"]
+
+    plain = max(cv_r2(c) for c in cands)
+    pred, _ = sl.nested_cv_predictions(models, cands, X, y, groups, 5)
+    assert sl._metrics(y, pred)["r2"] <= plain
+
+
+def test_evaluate_reports_nested_cv_for_the_best_model():
+    res = _evaluate("planted_signal", 1)
+    cv = res["best_model_cv"]
+    assert len(cv["chosen_per_fold"]) == res["cv_folds"]
+    assert set(cv["chosen_per_fold"]) <= {"ridge", "pls"}
+    assert cv["r2"] <= res["models"][res["best_model"]]["r2"] + 0.05
+    assert cv["r2"] > 0.2
+
+
 def test_detrend_removes_a_quadratic_surface():
     rng = np.random.default_rng(0)
     xy = rng.uniform(0, 50, (300, 2))
@@ -362,6 +497,61 @@ def test_area_of_applicability_handles_many_samples():
         rng.normal(0, 1, (20000, 17)), rng.normal(0, 1, (10, 17))
     )
     assert aoa["di_train"].shape == (20000,)
+
+
+def _cli():
+    import importlib.util
+    from pathlib import Path
+
+    path = Path(__file__).resolve().parents[1] / "run_soil_link.py"
+    spec = importlib.util.spec_from_file_location("run_soil_link", path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def _write_features(path, rows):
+    import csv
+
+    cols = ["sample_id", *sl.FEATURE_NAMES]
+    with open(path, "w", newline="", encoding="utf-8") as fh:
+        w = csv.writer(fh, lineterminator="\n")
+        w.writerow(cols)
+        for sid, vals in rows:
+            w.writerow([sid, *("" if math.isnan(v) else f"{v:.6f}" for v in vals)])
+
+
+def test_aoa_cli_flags_new_places_outside_the_training_data(tmp_path, capsys):
+    import csv
+
+    rng = np.random.default_rng(0)
+    p = len(sl.FEATURE_NAMES)
+    train = [(f"T{i}", rng.normal(0.25, 0.05, p)) for i in range(60)]
+    train.append(("T_nan", np.full(p, math.nan)))  # no bare soil: ignored
+    new = [
+        ("N_like", rng.normal(0.25, 0.05, p)),
+        ("N_far", np.full(p, 3.0)),
+        ("N_none", np.full(p, math.nan)),
+    ]
+    _write_features(tmp_path / "train.csv", train)
+    _write_features(tmp_path / "new.csv", new)
+    out = tmp_path / "aoa.csv"
+    code = _cli().main(
+        [
+            "aoa",
+            "--features",
+            str(tmp_path / "train.csv"),
+            "--new",
+            str(tmp_path / "new.csv"),
+            "--out",
+            str(out),
+        ]
+    )
+    assert code == 0
+    with open(out, newline="", encoding="utf-8") as fh:
+        got = {r["sample_id"]: r["aoa"] for r in csv.DictReader(fh)}
+    assert got == {"N_like": "inside", "N_far": "outside", "N_none": "no_features"}
+    assert "from 60 training rows" in capsys.readouterr().out
 
 
 def test_prediction_interval_covers_requested_share_on_new_data():
