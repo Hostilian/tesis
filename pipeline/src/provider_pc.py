@@ -41,6 +41,7 @@ import re
 from typing import Any, Mapping, Sequence
 
 import numpy as np
+from numpy.typing import NDArray
 
 from pipeline.src import case_study as cs
 
@@ -297,7 +298,7 @@ def band_calibration(cal: ProductCalibration, band: str) -> tuple[float, float]:
 
 
 def difference_stats(
-    a: np.ndarray, b: np.ndarray, mask: np.ndarray, tolerance: float = 0.01
+    a: NDArray[Any], b: NDArray[Any], mask: NDArray[Any], tolerance: float = 0.01
 ) -> dict[str, float | int]:
     """Statistics of ``a - b`` over ``mask`` (and finite values only)."""
     m = mask & np.isfinite(a) & np.isfinite(b)
@@ -320,7 +321,7 @@ def difference_stats(
 
 
 def flag_agreement(
-    flag_a: np.ndarray, flag_b: np.ndarray, mask: np.ndarray
+    flag_a: NDArray[Any], flag_b: NDArray[Any], mask: NDArray[Any]
 ) -> dict[str, float | int]:
     """Agreement of two boolean change flags over ``mask``, with Cohen's kappa."""
     a = flag_a[mask].astype(bool)
@@ -543,7 +544,7 @@ def grid_alignment(
 @dataclass
 class PCObservation:
     observation: cs.Observation
-    dn: dict[str, np.ndarray]
+    dn: dict[str, NDArray[Any]]
 
 
 def load_pc_ndvi(
@@ -553,8 +554,8 @@ def load_pc_ndvi(
     token: str,
 ) -> PCObservation:
     """Read red, NIR and SCL from PC on ``grid`` and compute NDVI with PC calibration."""
-    bands: dict[str, np.ndarray] = {}
-    dn: dict[str, np.ndarray] = {}
+    bands: dict[str, NDArray[Any]] = {}
+    dn: dict[str, NDArray[Any]] = {}
     for key in ("nir", "red"):
         a = pc_meta["assets"][key]
         raw = cs.read_band(_signed_asset(a, token), grid)

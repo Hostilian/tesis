@@ -45,6 +45,7 @@ import sys
 from typing import Any, Iterable, Mapping, Sequence
 
 import numpy as np
+from numpy.typing import NDArray
 
 EARTH_SEARCH_URL = "https://earth-search.aws.element84.com/v1"
 COLLECTION = "sentinel-2-l2a"
@@ -193,8 +194,8 @@ def validate_bbox(bbox: Sequence[float]) -> None:
 
 
 def to_reflectance(
-    dn: np.ndarray, scale: float, offset: float, nodata: int | None = 0
-) -> np.ndarray:
+    dn: NDArray[Any], scale: float, offset: float, nodata: int | None = 0
+) -> NDArray[Any]:
     """Convert L2A digital numbers to surface reflectance; nodata -> NaN."""
     out = dn.astype("float32") * np.float32(scale) + np.float32(offset)
     if nodata is not None:
@@ -202,7 +203,7 @@ def to_reflectance(
     return out
 
 
-def normalized_difference(a: np.ndarray, b: np.ndarray) -> np.ndarray:
+def normalized_difference(a: NDArray[Any], b: NDArray[Any]) -> NDArray[Any]:
     """(a - b) / (a + b) with NaN where the denominator is ~0 or inputs are NaN."""
     num = a - b
     den = a + b
@@ -211,7 +212,7 @@ def normalized_difference(a: np.ndarray, b: np.ndarray) -> np.ndarray:
     return np.clip(out, -1.0, 1.0).astype("float32")
 
 
-def compute_index(index: str, bands: Mapping[str, np.ndarray]) -> np.ndarray:
+def compute_index(index: str, bands: Mapping[str, NDArray[Any]]) -> NDArray[Any]:
     if index == "ndvi":
         return normalized_difference(bands["nir"], bands["red"])
     if index == "bsi":
@@ -223,12 +224,12 @@ def compute_index(index: str, bands: Mapping[str, np.ndarray]) -> np.ndarray:
 
 
 def scl_valid_mask(
-    scl: np.ndarray, valid_classes: Iterable[int] = DEFAULT_VALID_SCL
-) -> np.ndarray:
+    scl: NDArray[Any], valid_classes: Iterable[int] = DEFAULT_VALID_SCL
+) -> NDArray[Any]:
     return np.isin(scl, np.asarray(list(valid_classes), dtype=scl.dtype))
 
 
-def scl_class_counts(scl: np.ndarray) -> dict[str, int]:
+def scl_class_counts(scl: NDArray[Any]) -> dict[str, int]:
     values, counts = np.unique(scl, return_counts=True)
     return {
         SCL_LABELS.get(int(v), f"class_{int(v)}"): int(c)
@@ -237,11 +238,11 @@ def scl_class_counts(scl: np.ndarray) -> dict[str, int]:
 
 
 def difference(
-    before: np.ndarray,
-    after: np.ndarray,
-    valid_before: np.ndarray,
-    valid_after: np.ndarray,
-) -> tuple[np.ndarray, np.ndarray]:
+    before: NDArray[Any],
+    after: NDArray[Any],
+    valid_before: NDArray[Any],
+    valid_after: NDArray[Any],
+) -> tuple[NDArray[Any], NDArray[Any]]:
     """Return (after - before, joint-valid mask). Invalid pixels are NaN."""
     joint = valid_before & valid_after & np.isfinite(before) & np.isfinite(after)
     delta = np.full(before.shape, np.nan, dtype="float32")
@@ -249,7 +250,7 @@ def difference(
     return delta, joint
 
 
-def summarize(values: np.ndarray) -> dict[str, float | int]:
+def summarize(values: NDArray[Any]) -> dict[str, float | int]:
     v = values[np.isfinite(values)]
     if v.size == 0:
         return {"n": 0}
@@ -269,7 +270,7 @@ def summarize(values: np.ndarray) -> dict[str, float | int]:
 
 
 def threshold_table(
-    main_delta: np.ndarray, control_delta: np.ndarray, thresholds: Iterable[float]
+    main_delta: NDArray[Any], control_delta: NDArray[Any], thresholds: Iterable[float]
 ) -> list[dict[str, float | int]]:
     """Flagged share of the main pair vs the no-change control pair per threshold.
 
@@ -302,7 +303,7 @@ def threshold_table(
 
 
 def resolve_threshold(
-    rule: float | str, thresholds: Sequence[float], control_delta: np.ndarray
+    rule: float | str, thresholds: Sequence[float], control_delta: NDArray[Any]
 ) -> tuple[float, str]:
     """Pick the change threshold.
 
@@ -328,7 +329,7 @@ def resolve_threshold(
     )
 
 
-def label_patches(mask: np.ndarray) -> tuple[np.ndarray, int]:
+def label_patches(mask: NDArray[Any]) -> tuple[NDArray[Any], int]:
     from scipy import ndimage
 
     structure = np.ones((3, 3), dtype=bool)  # 8-connectivity
@@ -337,7 +338,7 @@ def label_patches(mask: np.ndarray) -> tuple[np.ndarray, int]:
 
 
 def patch_statistics(
-    mask: np.ndarray, pixel_area_m2: float, min_patch_ha: float
+    mask: NDArray[Any], pixel_area_m2: float, min_patch_ha: float
 ) -> dict[str, Any]:
     """Connected-patch summary of a boolean change mask."""
     labels, n = label_patches(mask)
@@ -369,7 +370,7 @@ def patch_statistics(
     }
 
 
-def keep_patches_ge(mask: np.ndarray, min_pixels: int) -> np.ndarray:
+def keep_patches_ge(mask: NDArray[Any], min_pixels: int) -> NDArray[Any]:
     labels, n = label_patches(mask)
     if n == 0:
         return np.zeros_like(mask, dtype=bool)
@@ -403,10 +404,10 @@ def resolution_table(
 
 
 def seasonal_split(
-    increase_mask: np.ndarray,
-    after_summer: np.ndarray,
-    after_other_season: np.ndarray,
-    other_valid: np.ndarray,
+    increase_mask: NDArray[Any],
+    after_summer: NDArray[Any],
+    after_other_season: NDArray[Any],
+    other_valid: NDArray[Any],
     amplitude_threshold: float,
 ) -> dict[str, int]:
     """Split NDVI-increase pixels by within-year stability of the after year.
@@ -608,7 +609,7 @@ def reference_grid(item_meta: Mapping[str, Any], bbox: Sequence[float]) -> Grid:
 
 def read_band(
     asset: Mapping[str, Any], grid: Grid, resampling: str = "nearest", attempts: int = 3
-) -> np.ndarray:
+) -> NDArray[Any]:
     """Read one asset on the reference grid, retrying transient HTTP short reads."""
     import time
 
@@ -626,7 +627,7 @@ def read_band(
 
 def _read_band_once(
     asset: Mapping[str, Any], grid: Grid, resampling: str
-) -> np.ndarray:
+) -> NDArray[Any]:
     """Read one asset on the reference grid; asserts CRS/grid compatibility."""
     import rasterio
     from rasterio.enums import Resampling
@@ -656,10 +657,10 @@ def _read_band_once(
 @dataclass
 class Observation:
     meta: dict[str, Any]
-    bands: dict[str, np.ndarray]
-    scl: np.ndarray
-    valid: np.ndarray
-    index: np.ndarray
+    bands: dict[str, NDArray[Any]]
+    scl: NDArray[Any]
+    valid: NDArray[Any]
+    index: NDArray[Any]
 
 
 def load_observation(

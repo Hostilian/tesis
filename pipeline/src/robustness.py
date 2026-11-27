@@ -25,6 +25,7 @@ from dataclasses import dataclass, field
 from typing import Any, Mapping, Sequence
 
 import numpy as np
+from numpy.typing import NDArray
 
 from pipeline.src import case_study as cs
 from pipeline.src import reference_cos as rc
@@ -52,12 +53,12 @@ def union_grid(*grids: Sequence[float]) -> list[float]:
 
 
 def change_mask(
-    delta: np.ndarray,
+    delta: NDArray[Any],
     threshold: float,
     min_pixels: int,
-    exclude: np.ndarray | None = None,
+    exclude: NDArray[Any] | None = None,
     direction: str = "increase",
-) -> np.ndarray:
+) -> NDArray[Any]:
     """Change flags exactly as ``run_case_study.py run`` builds them.
 
     delta > t (increase) or delta < -t (decrease), NaN never flagged, optional
@@ -76,8 +77,8 @@ def change_mask(
 
 
 def scores(
-    tp: np.ndarray | int, fp: np.ndarray | int, fn: np.ndarray | int
-) -> dict[str, np.ndarray]:
+    tp: NDArray[Any] | int, fp: NDArray[Any] | int, fn: NDArray[Any] | int
+) -> dict[str, NDArray[Any]]:
     """Precision, recall, F1 (NaN where undefined). Works on scalars or arrays."""
     tp_a = np.asarray(tp, dtype="float64")
     fp_a = np.asarray(fp, dtype="float64")
@@ -98,7 +99,9 @@ def _num(x: Any) -> float | None:
     return v if np.isfinite(v) else None
 
 
-def confusion(pred: np.ndarray, ref: np.ndarray, domain: np.ndarray) -> dict[str, Any]:
+def confusion(
+    pred: NDArray[Any], ref: NDArray[Any], domain: NDArray[Any]
+) -> dict[str, Any]:
     """Pixel confusion counts inside ``domain`` plus precision / recall / F1."""
     p = pred & domain
     r = ref & domain
@@ -119,14 +122,14 @@ def confusion(pred: np.ndarray, ref: np.ndarray, domain: np.ndarray) -> dict[str
 
 
 def threshold_curve(
-    delta: np.ndarray,
-    control: np.ndarray,
-    reference: np.ndarray,
-    domain: np.ndarray,
+    delta: NDArray[Any],
+    control: NDArray[Any],
+    reference: NDArray[Any],
+    domain: NDArray[Any],
     thresholds: Sequence[float],
     min_pixels: int,
     pixel_area_m2: float,
-    exclude: np.ndarray | None = None,
+    exclude: NDArray[Any] | None = None,
     direction: str = "increase",
 ) -> list[dict[str, Any]]:
     """One row per threshold: flagged area, agreement with ``reference`` and control share.
@@ -150,7 +153,7 @@ def threshold_curve(
     return rows
 
 
-def block_index(shape: tuple[int, int], block_px: int) -> np.ndarray:
+def block_index(shape: tuple[int, ...], block_px: int) -> NDArray[Any]:
     """Integer id of the square block (block_px x block_px) each pixel falls in."""
     if block_px < 1:
         raise ValueError("block_px must be >= 1")
@@ -162,8 +165,8 @@ def block_index(shape: tuple[int, int], block_px: int) -> np.ndarray:
 
 
 def group_counts(
-    pred: np.ndarray, ref: np.ndarray, domain: np.ndarray, groups: np.ndarray
-) -> np.ndarray:
+    pred: NDArray[Any], ref: NDArray[Any], domain: NDArray[Any], groups: NDArray[Any]
+) -> NDArray[Any]:
     """(tp, fp, fn) per group for groups that contain at least one domain pixel."""
     g = groups[domain]
     p = pred[domain]
@@ -176,7 +179,7 @@ def group_counts(
     return np.stack([tp, fp, fn], axis=1)[present]
 
 
-def percentile_ci(values: np.ndarray, level: float = 0.95) -> tuple[float, float]:
+def percentile_ci(values: NDArray[Any], level: float = 0.95) -> tuple[float, float]:
     lo = (1 - level) / 2 * 100
     v = values[np.isfinite(values)]
     if v.size == 0:
@@ -186,7 +189,7 @@ def percentile_ci(values: np.ndarray, level: float = 0.95) -> tuple[float, float
 
 
 def bootstrap_counts(
-    counts: np.ndarray, iterations: int, seed: int, level: float = 0.95
+    counts: NDArray[Any], iterations: int, seed: int, level: float = 0.95
 ) -> dict[str, Any]:
     """Resample rows of ``counts`` (tp, fp, fn per unit) with replacement.
 
@@ -213,7 +216,7 @@ def bootstrap_counts(
         "ci_method": "percentile",
         "totals": {"tp": int(tot[0]), "fp": int(tot[1]), "fn": int(tot[2])},
     }
-    draws: dict[str, np.ndarray] = {}
+    draws: dict[str, NDArray[Any]] = {}
     for k in ("precision", "recall", "f1"):
         lo, hi = percentile_ci(boot[k], level)
         out[k] = {
@@ -229,9 +232,9 @@ def bootstrap_counts(
 
 
 def block_bootstrap(
-    pred: np.ndarray,
-    ref: np.ndarray,
-    domain: np.ndarray,
+    pred: NDArray[Any],
+    ref: NDArray[Any],
+    domain: NDArray[Any],
     block_px: int,
     iterations: int = DEFAULT_ITERATIONS,
     seed: int = DEFAULT_SEED,
@@ -245,13 +248,13 @@ def block_bootstrap(
 
 
 def polygon_unit_labels(
-    units: np.ndarray,
-    pred: np.ndarray,
-    ref: np.ndarray,
-    valid: np.ndarray,
+    units: NDArray[Any],
+    pred: NDArray[Any],
+    ref: NDArray[Any],
+    valid: NDArray[Any],
     min_pixels: int,
     share: float = 0.5,
-) -> tuple[np.ndarray, np.ndarray]:
+) -> tuple[NDArray[Any], NDArray[Any]]:
     """Per-unit (detected, reference-positive) labels, same rule as
     ``reference_cos.polygon_agreement``."""
     inside = valid & (units > 0)
@@ -265,8 +268,8 @@ def polygon_unit_labels(
 
 
 def unit_bootstrap(
-    unit_pred: np.ndarray,
-    unit_ref: np.ndarray,
+    unit_pred: NDArray[Any],
+    unit_ref: NDArray[Any],
     iterations: int = DEFAULT_ITERATIONS,
     seed: int = DEFAULT_SEED,
     level: float = 0.95,
@@ -278,7 +281,7 @@ def unit_bootstrap(
     return bootstrap_counts(counts, iterations, seed, level)
 
 
-def mask_overlap(a: np.ndarray, b: np.ndarray) -> dict[str, Any]:
+def mask_overlap(a: NDArray[Any], b: NDArray[Any]) -> dict[str, Any]:
     """Overlap of two boolean masks (e.g. increase flags of two date pairs)."""
     na, nb, both = int(a.sum()), int(b.sum()), int((a & b).sum())
     union = int((a | b).sum())
@@ -314,10 +317,10 @@ class PairResult:
     after_id: str
     control_before_id: str
     control_after_id: str
-    delta: np.ndarray
-    control: np.ndarray
-    joint: np.ndarray
-    water_either: np.ndarray
+    delta: NDArray[Any]
+    control: NDArray[Any]
+    joint: NDArray[Any]
+    water_either: NDArray[Any]
     threshold: float
     threshold_rule: str
     threshold_grid: list[float]
@@ -423,12 +426,12 @@ def compute_pair(
 
 @dataclass
 class CosReference:
-    perm18: np.ndarray
-    perm25: np.ndarray
-    covered: np.ndarray
-    water25: np.ndarray
-    mining25: np.ndarray
-    units25: np.ndarray
+    perm18: NDArray[Any]
+    perm25: NDArray[Any]
+    covered: NDArray[Any]
+    water25: NDArray[Any]
+    mining25: NDArray[Any]
+    units25: NDArray[Any]
     retrieved_at: str
     polygons_2018: int
     polygons_2025: int
@@ -465,8 +468,8 @@ def load_cos(bbox: Sequence[float], grid: cs.Grid) -> CosReference:
 
 
 def reference_definition(
-    index: str, cos: CosReference, valid: np.ndarray
-) -> tuple[np.ndarray, np.ndarray, dict[str, str]]:
+    index: str, cos: CosReference, valid: NDArray[Any]
+) -> tuple[NDArray[Any], NDArray[Any], dict[str, str]]:
     """(reference positives, evaluation domain, description) for a case index."""
     ev = valid & cos.covered
     if index == "ndvi":
