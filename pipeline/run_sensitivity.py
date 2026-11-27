@@ -385,6 +385,21 @@ def _row(v: Variant, pub: Mapping[str, Any], **extra: Any) -> dict[str, Any]:
     }
 
 
+def at_threshold(v: Variant, t: float) -> dict[str, Any]:
+    """The variant's change numbers at a fixed threshold (e.g. the published one)."""
+    s, _, _ = sv.change_summary(
+        v.delta,
+        v.control,
+        v.joint,
+        v.water,
+        t,
+        float(v.cfg_raw.get("min_patch_ha", 1.0)),
+        v.grid.pixel_size**2,
+        bool(v.cfg_raw.get("exclude_water_from_change", False)),
+    )
+    return s
+
+
 def _baseline(loader: Loader, case: str, **kw: Any) -> Variant:
     v = run_variant(loader, base_config(case), "published_settings", **kw)
     v.summary["reproduces_published_results_json"] = reproduces(v, published(case))
@@ -438,6 +453,7 @@ def check_b3(loader: Loader, case: str, args: argparse.Namespace) -> dict[str, A
                 v,
                 pub,
                 selection=p,
+                at_published_threshold=at_threshold(v, pub["threshold"]),
                 increase_overlap_with_published=rb.mask_overlap(base.inc, v.inc),
                 decrease_overlap_with_published=rb.mask_overlap(base.dec, v.dec),
             )
@@ -470,7 +486,16 @@ def check_b4(loader: Loader, case: str, args: argparse.Namespace) -> dict[str, A
             loader, cfg, f"after_{p['after']['datetime'][:10]}", fallback_grid=fb
         )
         ov = rb.mask_overlap(base.inc, v.inc)
-        rows.append(_row(v, pub, selection=p, increase_overlap_with_published=ov))
+        rows.append(
+            _row(
+                v,
+                pub,
+                selection=p,
+                at_published_threshold=at_threshold(v, pub["threshold"]),
+                increase_overlap_with_published=ov,
+                decrease_overlap_with_published=rb.mask_overlap(base.dec, v.dec),
+            )
+        )
     return {
         "rule": "after = scene closest to each target date in summer 2025 other than the published after item (same tile, orbit, cloud < 1 %, baseline 05.xx); control = closest such scene to after - 20 days; before item unchanged",
         "variants": rows,
