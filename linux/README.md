@@ -11,7 +11,7 @@ Every number below was measured on 27 November 2026 unless it says "estimate".
 | Operating system | any 64-bit Linux with Python 3.10+, or Docker | Ubuntu 22.04/24.04, Python 3.12 | The published runs used Python 3.12.5 |
 | CPU | 2 cores | 8–16 cores | Model checks with many repetitions use every core |
 | RAM | 4 GB | 16–32 GB | Tests + soil checks peaked at 198 MB on GitHub's Ubuntu 24.04 machine (27 Nov). A full case-study rerun and large soil sets need more |
-| Free disk | 5 GB | 20–50 GB | Python environment about 1.5 GB (estimate); case-study outputs 14 MB (measured) |
+| Free disk | 5 GB | 20–50 GB | Python environment 652 MB and case-study outputs 14 MB (both measured) |
 | GPU | not needed | optional, only for later foundation-model tests | Nothing in the current pipeline uses a GPU |
 | Network | outbound HTTPS to 4 public servers | same | Satellite images are read from public cloud storage |
 
@@ -66,4 +66,8 @@ python pipeline/run_soil_link.py evaluate --samples /private/samples.csv --featu
   - the machine check had 9 OK, 1 warning (RAM under 16 GB) and 0 failures;
   - the whole job took 65 s, and the tests plus soil checks inside it took 17 s;
   - peak memory was 198 MB.
-- The `--full` rerun on Linux has not been done yet. Start it from the Actions tab: "Linux run kit" → Run workflow → full.
+- **Full rerun on Linux** (GitHub run 46027765446, 27 Nov 2026):
+  - every step passed: both case studies from live satellite data, both robustness checks and both independent re-implementations;
+  - 5 min 30 s wall time, 415 MB peak memory, 652 MB Python environment;
+  - **every published number reproduced exactly**. The only changed result line is a map-overlay longitude: −7.924011040981401 on Windows, −7.924011040981397 on Linux. That is 4 × 10⁻¹⁵ degrees, below a nanometre, from floating-point rounding in the coordinate library.
+- To repeat it: Actions tab → "Linux run kit" → Run workflow → tick "full".
