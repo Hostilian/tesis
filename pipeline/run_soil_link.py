@@ -216,7 +216,10 @@ def cmd_aoa(args: argparse.Namespace) -> int:
     if keep.sum() < 5:
         print(f"only {int(keep.sum())} training rows with all features; need >= 5")
         return 1
-    has = np.isfinite(Xn).any(axis=1)
+    # A place without bare-soil spectra cannot be judged; terrain alone (or a
+    # median fill of missing spectra) would wrongly make it look familiar.
+    spectral = [i for i, k in enumerate(names) if k in sl.FEATURE_NAMES]
+    has = np.isfinite(Xn[:, spectral]).all(axis=1)
     res = sl.area_of_applicability(Xt[keep], Xn[has], groups)
     rows = []
     j = 0

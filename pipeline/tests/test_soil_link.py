@@ -513,12 +513,13 @@ def _cli():
 def _write_features(path, rows):
     import csv
 
-    cols = ["sample_id", *sl.FEATURE_NAMES]
+    cols = ["sample_id", *sl.FEATURE_NAMES, "elevation_m"]
     with open(path, "w", newline="", encoding="utf-8") as fh:
         w = csv.writer(fh, lineterminator="\n")
         w.writerow(cols)
-        for sid, vals in rows:
-            w.writerow([sid, *("" if math.isnan(v) else f"{v:.6f}" for v in vals)])
+        for i, (sid, vals) in enumerate(rows):
+            cells = ["" if math.isnan(v) else f"{v:.6f}" for v in vals]
+            w.writerow([sid, *cells, 100 + i])  # terrain always present
 
 
 def test_aoa_cli_flags_new_places_outside_the_training_data(tmp_path, capsys):
